@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.1 2005/06/30 01:10:45 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.2 2005/06/30 23:40:26 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -33,10 +33,11 @@ if ( !$viewerCanEdit ) { //!$gBitSystem->verifyPermission( 'bit_p_edit_article' 
     die;
 }
 
-/*if ($gBitSystem->isPackageActive( 'categories' )) {
-    include_once( CATEGORIES_PKG_PATH . 'categorize_inc.php' );
+if ($gBitSystem->isPackageActive( 'categories' )) {
+	$cat_type = BITARTICLE_CONTENT_TYPE_GUID;
+	$cat_objid = $gContent->mContentId;
     include_once( CATEGORIES_PKG_PATH . 'categorize_list_inc.php' );
-}*/
+}
 
 if ($gBitSystem->isPackageActive( 'quicktags' )) {
     include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
@@ -96,6 +97,15 @@ if ( isset( $_REQUEST["save"] ) ) {
     
 	
 	if ($gContent->store($_REQUEST)) {
+		if ( $gBitSystem->isPackageActive('categories') ) {
+			$cat_desc = $gLibertySystem->mContentTypes[BITARTICLE_CONTENT_TYPE_GUID]['content_description'].' by '.$gBitUser->getDisplayName( FALSE, array( 'real_name' => $gContent->mInfo['creator_real_name'], 'user' => $gContent->mInfo['creator_user'], 'user_id'=>$gContent->mInfo['user_id'] ) );
+			$cat_name = $gContent->getTitle();
+			$cat_href = $gContent->getDisplayUrl();
+			$cat_objid = $gContent->mContentId;
+			$cat_content_id = $gContent->mContentId;
+			$cat_obj_type = BITARTICLE_CONTENT_TYPE_GUID;
+			include_once( CATEGORIES_PKG_PATH.'categorize_inc.php' );
+		}
 		header ( "location: " . ARTICLES_PKG_URL. "index.php" );
 	}
    

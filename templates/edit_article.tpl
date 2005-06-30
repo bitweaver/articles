@@ -201,9 +201,9 @@
 
 				{jstab title="Article Image"}
 					{legend legend="Upload custom article image"}
-						{if $gBitSystem->isFeatureActive( 'feature_wiki_attachments' )}
+						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) *}
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
-						{/if}
+						{*/if*}
 						{if $gContent->mInfo.image_attachment_id}
 							<div class="row">
 								{formlabel label="Own Image"}

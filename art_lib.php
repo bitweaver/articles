@@ -462,8 +462,8 @@ class ArtLib extends BitBase {
 
 			$add = 1;
 
-			if ($userlib->object_has_one_permission($res["topic_id"], 'topic')) {
-				if (!$userlib->object_has_permission($user, $res["topic_id"], 'topic', 'bit_p_topic_read')) {
+			if ($gBitUser->object_has_one_permission($res["topic_id"], 'topic')) {
+				if (!$gBitUser->object_has_permission($user, $res["topic_id"], 'topic', 'bit_p_topic_read')) {
 					$add = 0;
 				}
 			}
@@ -472,7 +472,7 @@ class ArtLib extends BitBase {
 			} else {
 				$res["isEmpty"] = 'n';
 			}
-			if (strlen($res["image_data"]) > 0) {
+			if( !empty( $res["image_data"] ) ) {
 				$res['image_data'] = $this->mDb->db_byte_decode( $res['image_data'] );
 				$res["hasImage"] = 'y';
 			} else {

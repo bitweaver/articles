@@ -91,9 +91,6 @@
 									<option value="7" {if $article.rating eq 7}selected="selected"{/if}>{tr}7{/tr}</option>
 									<option value="6" {if $article.rating eq 6}selected="selected"{/if}>{tr}6{/tr}</option>
 									*}
-									{repeat count=5}
-									<option value="5" {if $article.rating eq 5}selected="selected"{/if}>{$count}</option>
-									{/repeat}
 									<option value="5" {if $article.rating eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
 									<option value="4" {if $article.rating eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
 									<option value="3" {if $article.rating eq 3 or !$article.rating}selected="selected"{/if}>{tr}3{/tr}</option>
@@ -158,8 +155,6 @@
 							</div>
 						{/if}
 
-						{include file="bitpackage:liberty/edit_format.tpl"}
-
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;
 							<input type="submit" name="save" value="{tr}Save{/tr}" />
@@ -199,7 +194,7 @@
 					{/jstab}
 				{/if}
 
-				{jstab title="Article Image"}
+				{jstab title="Advanced"}
 					{legend legend="Upload custom article image"}
 						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) *}
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
@@ -223,12 +218,16 @@
 							{/forminput}
 						</div>
 					{/legend}
+
+					{legend legend="Content Format"}
+						{include file="bitpackage:liberty/edit_format.tpl"}
+					{/legend}
 				{/jstab}
 			{/jstabs}
 		{/form}
 
 		<br /><br />
-		{include file="bitpackage:liberty/edit_help.tpl"}
+		{include file="bitpackage:liberty/edit_help_inc.tpl"}
 
 	</div><!-- end .body -->
 </div><!-- end .article -->

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.1 2005/06/30 01:10:45 bitweaver Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.2 2005/08/06 19:26:02 lsces Exp $
 *
 * Copyright (c) 2004 bitweaver.org
 * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.1 2005/06/30 01:10:45 bitweaver Exp $
+* $Id: BitArticle.php,v 1.2 2005/08/06 19:26:02 lsces Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.1 $ $Date: 2005/06/30 01:10:45 $ $Author: bitweaver $
+* @version $Revision: 1.2 $ $Date: 2005/08/06 19:26:02 $ $Author: lsces $
 *
 * @class BitArticle
 */
@@ -162,7 +162,7 @@ class BitArticle extends LibertyAttachable {
     {
         if ($this->verify($pParamHash ) && LibertyAttachable::store($pParamHash ) ) {
             $table = BIT_DB_PREFIX."tiki_articles";
-            $this->mDb->StartTrans();
+            $this->StartTrans();
             if ($this->mArticleId ) {
                 $locId = array("name" => "article_id", "value" => $pParamHash['article_id'] );
                 $result = $this->associateUpdate($table, $pParamHash['article_store'], $locId );
@@ -180,7 +180,7 @@ class BitArticle extends LibertyAttachable {
             }
             
             
-            $this->mDb->CompleteTrans();
+            $this->CompleteTrans();
             $this->load();
         }
         return(count($this->mErrors ) == 0 );
@@ -366,14 +366,14 @@ class BitArticle extends LibertyAttachable {
     {
         $ret = FALSE;
         if ($this->isValid() ) {
-           /* $this->mDb->StartTrans();
+           /* $this->StartTrans();
             $query = "DELETE FROM `".BIT_DB_PREFIX."tiki_samples` WHERE `content_id` = ?";
             $result = $this->query($query, array($this->mContentId ) );
             if (LibertyAttachable::expunge() ) {
                 $ret = TRUE;
-                $this->mDb->CompleteTrans();
+                $this->CompleteTrans();
             } else {
-                $this->mDb->RollbackTrans();
+                $this->RollbackTrans();
             }*/
         }
         return $ret;

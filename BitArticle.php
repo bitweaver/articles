@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.4 2005/08/07 16:33:54 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.5 2005/08/07 22:16:24 lsces Exp $
 *
 * Copyright (c) 2004 bitweaver.org
 * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.4 2005/08/07 16:33:54 lsces Exp $
+* $Id: BitArticle.php,v 1.5 2005/08/07 22:16:24 lsces Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.4 $ $Date: 2005/08/07 16:33:54 $ $Author: lsces $
+* @version $Revision: 1.5 $ $Date: 2005/08/07 22:16:24 $ $Author: lsces $
 *
 * @class BitArticle
 */
@@ -165,7 +165,7 @@ class BitArticle extends LibertyAttachable {
             $this->mDb->StartTrans();
             if ($this->mArticleId ) {
                 $locId = array("name" => "article_id", "value" => $pParamHash['article_id'] );
-                $result = $this->associateUpdate($table, $pParamHash['article_store'], $locId );
+                $result = $this->mDb->associateUpdate($table, $pParamHash['article_store'], $locId );
             } else {
                 $pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
                 if (isset($pParamHash['article_id'] ) && is_numeric($pParamHash['article_id'] ) ) {
@@ -176,7 +176,7 @@ class BitArticle extends LibertyAttachable {
                 }
                 $this->mArticleId = $pParamHash['article_store']['article_id'];
                 
-                $result = $this->associateInsert($table, $pParamHash['article_store'] );
+                $result = $this->mDb->associateInsert($table, $pParamHash['article_store'] );
             }
             
             
@@ -444,7 +444,7 @@ class BitArticle extends LibertyAttachable {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON (top.topic_id = ta.topic_id) 
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON (type.article_type_id = ta.article_type_id)
 					".(!empty($mid ) ? $mid.' AND ' : ' WHERE ')." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'   
-					ORDER BY ".$this->convert_sortmode($sort_mode);
+					ORDER BY ".$this->mDb->convert_sortmode($sort_mode);
 		
         $query_cant = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."tiki_articles` ta 
 						INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id` = ta.`content_id`) ".

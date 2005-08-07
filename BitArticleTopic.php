@@ -31,7 +31,7 @@ class BitArticleTopic extends BitBase
 			$sql = "SELECT at.*".
 				   "FROM `".BIT_DB_PREFIX."tiki_article_topics` at ".
 			   	   $whereSQL;
-			$rs = $this->getDb()->query($sql, $bindVars);
+			$rs = $this->mDb->query($sql, $bindVars);
 			
 			$this->mInfo = $rs->fields;
 			$this->mTopicId = $this->mInfo['topic_id'];
@@ -88,7 +88,7 @@ class BitArticleTopic extends BitBase
 		
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['topic_id']) {
-				$topicId = $this->getDb()->GenID('tiki_article_topics_topic_id_seq');
+				$topicId = $this->mDb->GenID('tiki_article_topics_topic_id_seq');
 			} else {
 				$topicId = $this->mTopicId;
 			}
@@ -116,10 +116,10 @@ class BitArticleTopic extends BitBase
 			}
 			
 			if ($iParamHash['topic_id']) {
-				$this->getDb()->associateUpdate(BIT_DB_PREFIX."tiki_article_topics", $iParamHash, array('name' => 'topic_id', 'value'=> $iParamHash['topic_id']));				
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."tiki_article_topics", $iParamHash, array('name' => 'topic_id', 'value'=> $iParamHash['topic_id']));				
 			} else {
 				$iParamHash['topic_id'] = $topicId;
-				$this->getDb()->associateInsert(BIT_DB_PREFIX."tiki_article_topics", $iParamHash);	
+				$this->mDb->associateInsert(BIT_DB_PREFIX."tiki_article_topics", $iParamHash);	
 			}			
 		}
 		$this->mTopicId = $iParamHash['topic_id'];
@@ -186,7 +186,7 @@ class BitArticleTopic extends BitBase
 				@unlink($this->getTopicImageStoragePath());
 			}			
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_article_topics` SET `has_topic_image` = 'n' WHERE `topic_id` = ?";
-			$rs = $this->getDb()->query($sql, array($this->mTopicId));
+			$rs = $this->mDb->query($sql, array($this->mTopicId));
 			$this->mInfo['has_topic_image'] = 'n';
 		}
 	}
@@ -201,7 +201,7 @@ class BitArticleTopic extends BitBase
 	
 	function setActivation($iIsActive = FALSE) {
 		$sql = "UPDATE `".BIT_DB_PREFIX."tiki_article_topics` SET `active` = '".($iIsActive ? 'y' : 'n')."' WHERE `topic_id` = ?";
-		$rs = $this->getDb()->query($sql, array($this->mTopicId));
+		$rs = $this->mDb->query($sql, array($this->mTopicId));
 		$this->mInfo['active'] = ($iIsActive ? 'y' : 'n');
 	}
 	
@@ -211,7 +211,7 @@ class BitArticleTopic extends BitBase
 		}
 		
 		$sql = "SELECT `article_id` FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `topic_id` = ?";
-		$rs = $this->getDb()->query($sql, array($this->mTopicId));
+		$rs = $this->mDb->query($sql, array($this->mTopicId));
 		
 		$ret = array();
 		while ($row = $rs->fetchRow()) {
@@ -235,11 +235,11 @@ class BitArticleTopic extends BitBase
 			}
 		} else {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `topic_id` = ? WHERE `topic_id` = ?";
-			$rs = $this->getDb()->query($sql, array(NULL, $this->mTopicId));
+			$rs = $this->mDb->query($sql, array(NULL, $this->mTopicId));
 		}
 		
 		$sql = "DELETE FROM `".BIT_DB_PREFIX."tiki_article_topics` WHERE `topic_id` = ?";
-		$rs = $this->getDb()->query($sql, array($this->mTopicId));
+		$rs = $this->mDb->query($sql, array($this->mTopicId));
 	}
 }
 

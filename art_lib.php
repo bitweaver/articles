@@ -96,7 +96,7 @@ class ArtLib extends BitBase {
         if ( $count_admin_pvs == 'y' || $bit_p_admin != 'y' ) {
             $query = "update `" . BIT_DB_PREFIX . "tiki_articles` set `reads`=`reads`+1 where `article_id`=?";
 
-            $result = $this->getDb()->query( $query, array( $article_id ) );
+            $result = $this->mDb->query( $query, array( $article_id ) );
         }
 
         return true;
@@ -106,7 +106,7 @@ class ArtLib extends BitBase {
         if ( $article_id ) {
             $query = "delete from `" . BIT_DB_PREFIX . "tiki_articles` where `article_id`=?";
 
-            $result = $this->getDb()->query( $query, array( $article_id ) );
+            $result = $this->mDb->query( $query, array( $article_id ) );
             $this->remove_object( 'article', $article_id );
             return true;
         }
@@ -116,7 +116,7 @@ class ArtLib extends BitBase {
         if ( $sub_id ) {
             $query = "delete from `" . BIT_DB_PREFIX . "tiki_submissions` where `sub_id`=?";
 
-            $result = $this->getDb()->query( $query, array( ( int ) $sub_id ) );
+            $result = $this->mDb->query( $query, array( ( int ) $sub_id ) );
 
             return true;
         }
@@ -135,7 +135,7 @@ class ArtLib extends BitBase {
         $hash = md5( $title . $heading . $body );
         $now = date( "U" );
         $query = "select `name` from `" . BIT_DB_PREFIX . "tiki_topics` where `topic_id` = ?";
-        $topic_name = $this->getDb()->getOne( $query, array( ( int ) $topic_id ) );
+        $topic_name = $this->mDb->getOne( $query, array( ( int ) $topic_id ) );
         $size = strlen( $body );
 
         if ( $sub_id ) {
@@ -163,17 +163,17 @@ class ArtLib extends BitBase {
                 `rating` = ?
                 where `sub_id` = ?";
 
-            $result = $this->getDb()->query( $query, array( $title, $author_name, ( int ) $topic_id, $topic_name, ( int ) $size, $use_image, $isfloat, $imgname, $imgtype, ( int ) $imgsize, $this->mDb->db_byte_encode( $imgdata ), ( int ) $image_x, ( int ) $image_y, $heading, $body, ( int ) $publish_date, ( int ) $now, $user, $type, ( float ) $rating, ( int ) $sub_id ) );
+            $result = $this->mDb->query( $query, array( $title, $author_name, ( int ) $topic_id, $topic_name, ( int ) $size, $use_image, $isfloat, $imgname, $imgtype, ( int ) $imgsize, $this->mDb->db_byte_encode( $imgdata ), ( int ) $image_x, ( int ) $image_y, $heading, $body, ( int ) $publish_date, ( int ) $now, $user, $type, ( float ) $rating, ( int ) $sub_id ) );
         } else {
             // Insert the article
             $query = "insert into `" . BIT_DB_PREFIX . "tiki_submissions`(`title`,`author_name`,`topic_id`,`use_image`,`image_name`,`image_size`,`image_type`,`image_data`,`publish_date`,`created`,`heading`,`body`,`hash`,`author`,`reads`,`votes`,`points`,`size`,`topic_name`,`image_x`,`image_y`,`type`,`rating`,`isfloat`)
                          values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            $result = $this->getDb()->query( $query, array( $title, $author_name, ( int ) $topic_id, $use_image, $imgname, ( int ) $imgsize, $imgtype, $this->mDb->db_byte_encode( $imgdata ), ( int ) $publish_date, ( int ) $now, $heading, $body, $hash, $user, 0, 0, 0, ( int ) $size, $topic_name, ( int ) $image_x, ( int ) $image_y, $type, ( float ) $rating, $isfloat ) );
+            $result = $this->mDb->query( $query, array( $title, $author_name, ( int ) $topic_id, $use_image, $imgname, ( int ) $imgsize, $imgtype, $this->mDb->db_byte_encode( $imgdata ), ( int ) $publish_date, ( int ) $now, $heading, $body, $hash, $user, 0, 0, 0, ( int ) $size, $topic_name, ( int ) $image_x, ( int ) $image_y, $type, ( float ) $rating, $isfloat ) );
         }
 
         $query = "select max(`sub_id`) from `" . BIT_DB_PREFIX . "tiki_submissions` where `created` = ? and `title`=? and `hash`=?";
-        $id = $this->getDb()->getOne( $query, array( ( int ) $now, $title, $hash ) );
+        $id = $this->mDb->getOne( $query, array( ( int ) $now, $title, $hash ) );
         $emails = $notificationlib->get_mail_events( 'article_submitted', '*' );
         $foo = parse_url( $_SERVER["REQUEST_URI"] );
         $machine = httpPrefix() . $foo["path"];
@@ -201,24 +201,24 @@ class ArtLib extends BitBase {
 
         $query = "insert into `" . BIT_DB_PREFIX . "tiki_topics`(`name`,`image_name`,`image_type`,`image_size`,`image_data`,`active`,`created`)
                      values(?,?,?,?,?,?,?)";
-        $result = $this->getDb()->query( $query, array( $name, $imagename, $imagetype, ( int ) $imagesize, $this->mDb->db_byte_encode( $imagedata ), 'y', ( int ) $now ) );
+        $result = $this->mDb->query( $query, array( $name, $imagename, $imagetype, ( int ) $imagesize, $this->mDb->db_byte_encode( $imagedata ), 'y', ( int ) $now ) );
 
         $query = "select max(`topic_id`) from `" . BIT_DB_PREFIX . "tiki_topics` where `created`=? and `name`=?";
-        $topic_id = $this->getDb()->getOne( $query, array( ( int ) $now, $name ) );
+        $topic_id = $this->mDb->getOne( $query, array( ( int ) $now, $name ) );
         return $topic_id;
     }
 
     function remove_topic( $topic_id, $all = 0 ) {
         $query = "delete from `" . BIT_DB_PREFIX . "tiki_topics` where `topic_id`=?";
 
-        $result = $this->getDb()->query( $query, array( $topic_id ) );
+        $result = $this->mDb->query( $query, array( $topic_id ) );
 
         if ( $all == 1 ) {
             $query = "delete from `" . BIT_DB_PREFIX . "tiki_articles` where `topic_id`=?";
-            $result = $this->getDb()->query( $query, array( $topic_id ) );
+            $result = $this->mDb->query( $query, array( $topic_id ) );
         } else {
             $query = "update `" . BIT_DB_PREFIX . "tiki_articles` set `topic_id`=?, `topic_name`=? where `topic_id`=?";
-            $result = $this->getDb()->query( $query, array( null, null, $topic_id ) );
+            $result = $this->mDb->query( $query, array( null, null, $topic_id ) );
         }
 
         return true;
@@ -227,7 +227,7 @@ class ArtLib extends BitBase {
     function replace_topic_name( $topic_id, $name ) {
         $query = "update `" . BIT_DB_PREFIX . "tiki_topics` set `name` = ? where
 			`topic_id` = ?";
-        $result = $this->getDb()->query( $query, array( $name, $topic_id ) );
+        $result = $this->mDb->query( $query, array( $name, $topic_id ) );
 
         return true;
     }
@@ -238,7 +238,7 @@ class ArtLib extends BitBase {
         $query = "update `" . BIT_DB_PREFIX . "tiki_topics` set `image_name` = ?,
 			`image_type` = ?, `image_size` = ?,  `image_data` = ?
 				where `topic_id` = ?";
-        $result = $this->getDb()->query( $query, array( $imagename, $imagetype,
+        $result = $this->mDb->query( $query, array( $imagename, $imagetype,
                 $imagesize, $this->mDb->db_byte_encode( $imagedata ), $topic_id ) );
 
         return true;
@@ -247,19 +247,19 @@ class ArtLib extends BitBase {
     function activate_topic( $topic_id ) {
         $query = "update `" . BIT_DB_PREFIX . "tiki_topics` set `active`=? where `topic_id`=?";
 
-        $result = $this->getDb()->query( $query, array( 'y', $topic_id ) );
+        $result = $this->mDb->query( $query, array( 'y', $topic_id ) );
     }
 
     function deactivate_topic( $topic_id ) {
         $query = "update `" . BIT_DB_PREFIX . "tiki_topics` set `active`=? where `topic_id`=?";
 
-        $result = $this->getDb()->query( $query, array( 'n', $topic_id ) );
+        $result = $this->mDb->query( $query, array( 'n', $topic_id ) );
     }
 
     function get_topic( $topic_id ) {
         $query = "select `topic_id`,`name`,`image_name`,`image_size`,`image_type` from `" . BIT_DB_PREFIX . "tiki_topics` where `topic_id`=?";
 
-        $result = $this->getDb()->query( $query, array( $topic_id ) );
+        $result = $this->mDb->query( $query, array( $topic_id ) );
 
         $res = $result->fetchRow();
         return $res;
@@ -268,14 +268,14 @@ class ArtLib extends BitBase {
 	function get_topic_id($topic) {
     	$topic_id = '';
 	    $query = "select `topic_id`  from `tiki_topics` where `name` = ?";
-    	$topic_id = $this->getDb()->getOne($query, array($topic) );
+    	$topic_id = $this->mDb->getOne($query, array($topic) );
 	    return $topic_id;
 	}
 
     function list_active_topics() {
         $query = "select * from `" . BIT_DB_PREFIX . "tiki_topics` where `active`=?";
 
-        $result = $this->getDb()->query( $query, array( 'y' ) );
+        $result = $this->mDb->query( $query, array( 'y' ) );
 
         $ret = array();
 
@@ -304,15 +304,15 @@ class ArtLib extends BitBase {
 		if ($creator_edit == 'on') {$creator_edit = 'y';} else {$creator_edit = 'n';}
 
 		$query = "select count(*) from `".BIT_DB_PREFIX."tiki_article_types` where `type`=?";
-		$rowcnt = $this->getDb()->getOne($query,array($type));
+		$rowcnt = $this->mDb->getOne($query,array($type));
 
 		// if the type already exists, delete it first
 		if ($rowcnt > 0) {
 			$query = "delete from `".BIT_DB_PREFIX."tiki_article_types` where `type`=?";
-			$result = $this->getDb()->query($query,array($type));
+			$result = $this->mDb->query($query,array($type));
 		}
 */
-        $result = $this->getDb()->query( "insert into `" . BIT_DB_PREFIX . "tiki_article_types`(`type`) values(?)", array( $type ) );
+        $result = $this->mDb->query( "insert into `" . BIT_DB_PREFIX . "tiki_article_types`(`type`) values(?)", array( $type ) );
 
         return true;
     }
@@ -404,18 +404,18 @@ class ArtLib extends BitBase {
 			`show_size` = ?,
 			`creator_edit` = ?
 			where `type` = ?";
-        $result = $this->getDb()->query( $query, array( $use_ratings, $show_pre_publ, $show_post_expire, $heading_only, $allow_comments, $comment_can_rate_article, $show_image, $show_avatar, $show_author, $show_pubdate, $show_expdate, $show_reads, $show_size, $creator_edit, $type ) );
+        $result = $this->mDb->query( $query, array( $use_ratings, $show_pre_publ, $show_post_expire, $heading_only, $allow_comments, $comment_can_rate_article, $show_image, $show_avatar, $show_author, $show_pubdate, $show_expdate, $show_reads, $show_size, $creator_edit, $type ) );
     }
 
     function remove_type( $type ) {
         $query = "delete from `" . BIT_DB_PREFIX . "tiki_article_types` where `type`=?";
-        $result = $this->getDb()->query( $query, array( $type ) );
+        $result = $this->mDb->query( $query, array( $type ) );
     }
 
     function get_type( $type ) {
         $query = "select * from `" . BIT_DB_PREFIX . "tiki_article_types` where `type`=?";
 
-        $result = $this->getDb()->query( $query, array( $type ) );
+        $result = $this->mDb->query( $query, array( $type ) );
 
         $res = $result->fetchRow();
         return $res;
@@ -450,11 +450,11 @@ class ArtLib extends BitBase {
 
 		$query = "SELECT art.*,	u.`avatar_attachment_id`, arttype.`use_ratings`, arttype.`show_pre_publ`, arttype.`show_post_expire`, arttype.`heading_only`, arttype.`allow_comments`, arttype.`show_image`, arttype.`show_avatar`, arttype.`show_author`, arttype.`show_pubdate`, arttype.`show_expdate`, arttype.`show_reads`, arttype.`show_size`, arttype.`creator_edit`
 				  FROM `".BIT_DB_PREFIX."tiki_articles` art INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON ( art.`content_id`=tc.`content_id` ), `".BIT_DB_PREFIX."tiki_article_types` arttype, `".BIT_DB_PREFIX."users_users` u $mid
-				  ORDER BY ".$this->getDb()->convert_sortmode( $sort_mode );
+				  ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
 
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."tiki_articles` art  INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON ( art.`content_id`=tc.`content_id` ), `".BIT_DB_PREFIX."tiki_article_types` arttype, `".BIT_DB_PREFIX."users_users` u $mid";
-		$result = $this->getDb()->query( $query, $bindvars, $maxRecords, $offset );
-		$cant = $this->getDb()->getOne($query_cant,$bindvars);
+		$result = $this->mDb->query( $query, $bindvars, $maxRecords, $offset );
+		$cant = $this->mDb->getOne($query_cant,$bindvars);
 		$ret = array();
 
 		while ($res = $result->fetchRow()) {
@@ -524,10 +524,10 @@ class ArtLib extends BitBase {
 		$bindvars[] = $date;
 		}
 
-		$query = "select * from `".BIT_DB_PREFIX."tiki_submissions` $mid order by ".$this->getDb()->convert_sortmode($sort_mode);
+		$query = "select * from `".BIT_DB_PREFIX."tiki_submissions` $mid order by ".$this->mDb->convert_sortmode($sort_mode);
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."tiki_submissions` $mid";
-		$result = $this->getDb()->query($query,$bindvars,$maxRecords,$offset);
-		$cant = $this->getDb()->getOne($query_cant,$bindvars);
+		$result = $this->mDb->query($query,$bindvars,$maxRecords,$offset);
+		$cant = $this->mDb->getOne($query_cant,$bindvars);
 		$ret = array();
 
 		while ($res = $result->fetchRow()) {
@@ -560,7 +560,7 @@ class ArtLib extends BitBase {
 				  FROM `".BIT_DB_PREFIX."tiki_articles` art, `".BIT_DB_PREFIX."tiki_article_types` arttype, `".BIT_DB_PREFIX."users_users` uu
 				   where art.`type` = arttype.`type` AND art.`author` = uu.`login` AND art.`article_id`=?";
 		//$query = "select * from `".BIT_DB_PREFIX."tiki_articles` where `article_id`=?";
-		$result = $this->getDb()->query($query,array((int)$article_id));
+		$result = $this->mDb->query($query,array((int)$article_id));
 		if ($result->numRows()) {
 		$res = $result->fetchRow();
 		$res["image_data"] = $this->mDb->db_byte_decode( $res["image_data"] );
@@ -573,7 +573,7 @@ class ArtLib extends BitBase {
 
 	function get_submission($sub_id) {
 		$query = "select * from `".BIT_DB_PREFIX."tiki_submissions` where `sub_id`=?";
-		$result = $this->getDb()->query($query,array((int) $sub_id));
+		$result = $this->mDb->query($query,array((int) $sub_id));
 		if ($result->numRows()) {
 		$res = $result->fetchRow();
 		$res["entrating"] = floor($res["rating"]);
@@ -593,7 +593,7 @@ class ArtLib extends BitBase {
 		if(empty($imgdata)) $imgdata='';
 		// Fixed query. -rlpowell
 		$query = "select `name`  from `".BIT_DB_PREFIX."tiki_topics` where `topic_id` = ?";
-		$topic_name = $this->getDb()->getOne($query, array($topic_id) );
+		$topic_name = $this->mDb->getOne($query, array($topic_id) );
 		$size = strlen($body);
 
 		// Fixed query. -rlpowell
@@ -603,7 +603,7 @@ class ArtLib extends BitBase {
 			$query.= " `image_type` = ?, `image_size` = ?, `image_data` = ?, `isfloat` = ?, `image_x` = ?, `image_y` = ?, `heading` = ?, `body` = ?, ";
 			$query.= " `publish_date` = ?, `expire_date` = ?, `created` = ?, `author` = ?, `type` = ?, `rating` = ?  where `article_id` = ?";
 
-			$result = $this->getDb()->query($query, array( $title, $author_name, (int) $topic_id, $topic_name, (int) $size, $use_image, $imgname, $imgtype, (int) $imgsize, $this->mDb->db_byte_encode( $imgdata ), $isfloat, (int) $image_x, (int) $image_y, $heading, $body, (int) $publish_date, (int) $expire_date, (int) $now, $user, $type, (float) $rating, (int) $article_id ) );
+			$result = $this->mDb->query($query, array( $title, $author_name, (int) $topic_id, $topic_name, (int) $size, $use_image, $imgname, $imgtype, (int) $imgsize, $this->mDb->db_byte_encode( $imgdata ), $isfloat, (int) $image_x, (int) $image_y, $heading, $body, (int) $publish_date, (int) $expire_date, (int) $now, $user, $type, (float) $rating, (int) $article_id ) );
 		} else {
 		// Fixed query. -rlpowell
 		// Insert the article
@@ -611,11 +611,11 @@ class ArtLib extends BitBase {
 		$query.= " `publish_date`, `expire_date`, `created`, `heading`, `body`, `hash`, `author`, `reads`, `votes`, `points`, `size`, `topic_name`, `image_x`, `image_y`, `type`, `rating`, `isfloat`) ";
 		$query.= " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		$result = $this->getDb()->query($query, array( $title, $author_name, (int) $topic_id, $use_image, $imgname, (int) $imgsize, $imgtype, $this->mDb->db_byte_encode( $imgdata ), (int) $publish_date, (int) $expire_date, (int) $now, $heading, $body, $hash, $user, 0, 0, 0, (int) $size, $topic_name, (int) $image_x, (int) $image_y, $type, (float) $rating, $isfloat));
+		$result = $this->mDb->query($query, array( $title, $author_name, (int) $topic_id, $use_image, $imgname, (int) $imgsize, $imgtype, $this->mDb->db_byte_encode( $imgdata ), (int) $publish_date, (int) $expire_date, (int) $now, $heading, $body, $hash, $user, 0, 0, 0, (int) $size, $topic_name, (int) $image_x, (int) $image_y, $type, (float) $rating, $isfloat));
 
 		// Fixed query. -rlpowell
 		$query2 = "select max(`article_id`) from `".BIT_DB_PREFIX."tiki_articles` where `created` = ? and `title`=? and `hash`=?";
-		$article_id = $this->getDb()->getOne($query2, array( (int) $now, $title, $hash ) );
+		$article_id = $this->mDb->getOne($query2, array( (int) $now, $title, $hash ) );
 		}
 
 		return $article_id;
@@ -625,7 +625,7 @@ class ArtLib extends BitBase {
 	function get_topic_image($topic_id) {
 		// Fixed query. -rlpowell
 		$query = "select `image_name` ,`image_size`,`image_type`, `image_data` from `".BIT_DB_PREFIX."tiki_topics` where `topic_id`=?";
-		$result = $this->getDb()->query($query, array((int) $topic_id));
+		$result = $this->mDb->query($query, array((int) $topic_id));
 		$res = $result->fetchRow();
 		$res['image_data'] = $this->mDb->db_byte_decode( $res['image_data'] );
 		return $res;
@@ -634,7 +634,7 @@ class ArtLib extends BitBase {
 	/*shared*/
 	function get_article_image($id) {
 		$query = "select `image_name` ,`image_size`,`image_type`, `image_data` from `".BIT_DB_PREFIX."tiki_articles` where `article_id`=?";
-		$result = $this->getDb()->query($query, array((int) $id));
+		$result = $this->mDb->query($query, array((int) $id));
 		$res = $result->fetchRow();
 		$res['image_data'] = $this->mDb->db_byte_decode( $res['image_data'] );
 		return $res;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.3 2005/08/07 10:39:37 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.4 2005/08/07 16:33:54 lsces Exp $
 *
 * Copyright (c) 2004 bitweaver.org
 * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.3 2005/08/07 10:39:37 lsces Exp $
+* $Id: BitArticle.php,v 1.4 2005/08/07 16:33:54 lsces Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.3 $ $Date: 2005/08/07 10:39:37 $ $Author: lsces $
+* @version $Revision: 1.4 $ $Date: 2005/08/07 16:33:54 $ $Author: lsces $
 *
 * @class BitArticle
 */
@@ -89,7 +89,7 @@ class BitArticle extends LibertyAttachable {
 			"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON (tat.attachment_id = ta.image_attachment_id) " .
 			"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON (tf.file_id = tat.foreign_id) " .
             "WHERE ta.`$lookupColumn`=?";
-            $result = $this->getDb()->query($query, array($lookupId ) );
+            $result = $this->mDb->query($query, array($lookupId ) );
             
             if ($result && $result->numRows() ) {
                 $this->mInfo = $result->fields;
@@ -141,7 +141,7 @@ class BitArticle extends LibertyAttachable {
 		
 		if (!empty($this->mArticleId)) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
-			$rs = $this->getDb()->query($sql, array($pStatusId, $this->mArticleId));
+			$rs = $this->mDb->query($sql, array($pStatusId, $this->mArticleId));
 			return $pStatusId;
 		}
 	}
@@ -162,7 +162,7 @@ class BitArticle extends LibertyAttachable {
     {
         if ($this->verify($pParamHash ) && LibertyAttachable::store($pParamHash ) ) {
             $table = BIT_DB_PREFIX."tiki_articles";
-            $this->getDb()->StartTrans();
+            $this->mDb->StartTrans();
             if ($this->mArticleId ) {
                 $locId = array("name" => "article_id", "value" => $pParamHash['article_id'] );
                 $result = $this->associateUpdate($table, $pParamHash['article_store'], $locId );
@@ -172,7 +172,7 @@ class BitArticle extends LibertyAttachable {
                     // if pParamHash['article_id'] is set, some is requesting a particular article_id. Use with caution!
                     $pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
                 } else {
-                    $pParamHash['article_store']['article_id'] = $this->getDb()->GenID('tiki_articles_article_id_seq');
+                    $pParamHash['article_store']['article_id'] = $this->mDb->GenID('tiki_articles_article_id_seq');
                 }
                 $this->mArticleId = $pParamHash['article_store']['article_id'];
                 
@@ -180,7 +180,7 @@ class BitArticle extends LibertyAttachable {
             }
             
             
-            $this->getDb()->CompleteTrans();
+            $this->mDb->CompleteTrans();
             $this->load();
         }
         return(count($this->mErrors ) == 0 );
@@ -366,14 +366,14 @@ class BitArticle extends LibertyAttachable {
     {
         $ret = FALSE;
         if ($this->isValid() ) {
-           /* $this->getDb()->StartTrans();
+           /* $this->mDb->StartTrans();
             $query = "DELETE FROM `".BIT_DB_PREFIX."tiki_samples` WHERE `content_id` = ?";
-            $result = $this->getDb()->query($query, array($this->mContentId ) );
+            $result = $this->mDb->query($query, array($this->mContentId ) );
             if (LibertyAttachable::expunge() ) {
                 $ret = TRUE;
-                $this->getDb()->CompleteTrans();
+                $this->mDb->CompleteTrans();
             } else {
-                $this->getDb()->RollbackTrans();
+                $this->mDb->RollbackTrans();
             }*/
         }
         return $ret;
@@ -449,7 +449,7 @@ class BitArticle extends LibertyAttachable {
         $query_cant = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."tiki_articles` ta 
 						INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id` = ta.`content_id`) ".
 						(!empty($mid ) ? $mid.' AND ' : ' WHERE ')." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
-        $result = $this->getDb()->query($query,$bindvars,$max_records,$offset);
+        $result = $this->mDb->query($query,$bindvars,$max_records,$offset);
         $ret = array();
 		$comment = &new LibertyComment();
         while ($res = $result->fetchRow()) {
@@ -465,7 +465,7 @@ class BitArticle extends LibertyAttachable {
         }
         $pParamHash["data"] = $ret;
         
-        $pParamHash["cant"] = $this->getDb()->getOne($query_cant,$bindvars);
+        $pParamHash["cant"] = $this->mDb->getOne($query_cant,$bindvars);
         
         LibertyContent::postGetList($pParamHash );
 		
@@ -490,11 +490,11 @@ class BitArticle extends LibertyAttachable {
 
     function listTypes() {
         $query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
-        $result = $this->getDb()->query( $query, array() );
+        $result = $this->mDb->query( $query, array() );
         $ret = array();
 
         while ( $res = $result->fetchRow() ) {
-			$res['article_cnt'] = $this->getDb()->getOne( "select count(*) from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
+			$res['article_cnt'] = $this->mDb->getOne( "select count(*) from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
             $ret[] = $res;
         }
 

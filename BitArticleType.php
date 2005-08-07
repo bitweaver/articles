@@ -27,12 +27,12 @@ class BitArticleType extends BitBase
 		
 		if ($this->mTypeId) {
 			$sql = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_types` WHERE `article_type_id` = ?";
-			$rs = $this->query($sql, array($this->mTypeId));
+			$rs = $this->getDb()->query($sql, array($this->mTypeId));
 			
 			$ret = array();			
 			if (!empty($rs->fields)) {
 				$ret = $rs->fields;
-				$ret['num_articles'] = $this->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'tiki_articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
+				$ret['num_articles'] = $this->getDb()->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'tiki_articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
 			}
 		}
 		$this->mInfo = $ret;
@@ -90,7 +90,7 @@ class BitArticleType extends BitBase
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['article_type_id']) {
 				if (empty($this->mTopicId)) {
-					$typeId = $this->GenID('tiki_article_types_article_type_id_seq');
+					$typeId = $this->getDb()->GenID('tiki_article_types_article_type_id_seq');
 				} else {
 					$typeId = $this->mTopicId;
 				}
@@ -99,10 +99,10 @@ class BitArticleType extends BitBase
 			}
 			
 			if ($iParamHash['article_type_id']) {
-				$this->associateUpdate(BIT_DB_PREFIX."tiki_article_types", $iParamHash, array('name' => 'article_type_id', 'value'=> $iParamHash['article_type_id']));				
+				$this->getDb()->associateUpdate(BIT_DB_PREFIX."tiki_article_types", $iParamHash, array('name' => 'article_type_id', 'value'=> $iParamHash['article_type_id']));				
 			} else {
 				$iParamHash['article_type_id'] = $typeId;
-				$this->associateInsert(BIT_DB_PREFIX."tiki_article_types", $iParamHash);	
+				$this->getDb()->associateInsert(BIT_DB_PREFIX."tiki_article_types", $iParamHash);	
 			}			
 		}
 		$this->mTypeId = $iParamHash['article_type_id'];
@@ -121,7 +121,7 @@ class BitArticleType extends BitBase
 		}
 		
 		$sql = "DELETE FROM `".BIT_DB_PREFIX."tiki_article_types` WHERE `article_type_id` = ?";
-		$rs = $this->query($sql, array($iTypeId));
+		$rs = $this->getDb()->query($sql, array($iTypeId));
 	}
 	
 	function listTypes() {

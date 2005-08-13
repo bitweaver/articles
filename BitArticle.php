@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.5 2005/08/07 22:16:24 lsces Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.6 2005/08/13 10:10:43 squareing Exp $
 *
 * Copyright (c) 2004 bitweaver.org
 * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.5 2005/08/07 22:16:24 lsces Exp $
+* $Id: BitArticle.php,v 1.6 2005/08/13 10:10:43 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.5 $ $Date: 2005/08/07 22:16:24 $ $Author: lsces $
+* @version $Revision: 1.6 $ $Date: 2005/08/13 10:10:43 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -232,6 +232,10 @@ class BitArticle extends LibertyAttachable {
 			$pParamHash['article_store']['article_type_id'] = (int)$pParamHash['article_type_id'];
 		}
 		
+		if (!empty($pParamHash['edit']) ) {
+			$pParamHash['content_store']['data'] = $pParamHash['edit'];
+		}
+		
 		// check some lengths, if too long, then truncate
 		/* DrewSlater - Killed article description storage. Any reason to use this instead of just a substr of the article body?
         if ($this->isValid() && !empty($this->mInfo['description'] ) && empty($pParamHash['description'] ) ) {
@@ -334,7 +338,7 @@ class BitArticle extends LibertyAttachable {
 		
 		$data = $previewData;
 		$this->verify($data);
-		$data = array_merge($data['content_store'], $data['article_store']);
+		$data = array_merge($previewData,$data['content_store'], $data['article_store']);
 		if (empty($data['user_id'])) {
 			$data['user_id'] = $gBitUser->mUserId;
 		}
@@ -351,7 +355,7 @@ class BitArticle extends LibertyAttachable {
 			$data['topic_id'] = 1;
 		}
 		if (empty($data['parsed_data'])) {
-			$data['parsed_data'] = $this->parseData($data['data']);
+			$data['parsed_data'] = $this->parseData($data['data'],$data['format_guid']);
 		}
 		
 		$articleType = &new BitArticleType($data['article_type_id']);

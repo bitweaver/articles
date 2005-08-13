@@ -6,10 +6,6 @@
 
 {strip}
 <div class="floaticon">{bithelp}</div>
-{if $preview}
-	{include file="bitpackage:articles/article_display.tpl"}
-{/if}
-
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
@@ -21,6 +17,11 @@
 		{/if}
 		
 	</div>
+
+	{if $preview}
+		<h2>Preview</h2>
+		<div class="preview">{include file="bitpackage:articles/article_display.tpl"}</div>
+	{/if}
 
 	<div class="body">
 		{form enctype="multipart/form-data"}

@@ -128,11 +128,11 @@ class BitArticleType extends BitBase
 		global $gBitSystem;
 		
 		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
-        $result = $gBitSystem->query( $query, array() );
+		$result = $gBitSystem->mDb->query( $query, array() );
         $ret = array();
 
         while ( $res = $result->fetchRow() ) {
-			$res['article_cnt'] = $gBitSystem->getOne( "select count(*) from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
+			$res['article_cnt'] = $gBitSystem->mDb->getOne( "select count(*) from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
             $ret[] = $res;
         }
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.3 2005/08/13 22:03:40 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -62,28 +62,30 @@
 
 					<td colspan="10">
 						{if $art_list_title eq 'y'}
-							{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-								<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$listpages[changes].article_id}">
-							{/if}
-							{$listpages[changes].title}
-							{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-								</a>
-							{/if}
+							<h2>
+								{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+									<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$listpages[changes].article_id}">
+								{/if}
+								{$listpages[changes].title}
+								{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+									</a>
+								{/if}
+							</h2>
 						{/if}
+
 						{if $art_list_author eq 'y'}
-							&nbsp;&nbsp;&nbsp;
-							{tr}created by{/tr} {displayname user=$listpages[changes].author_name}
+							{tr}Created by {displayname user=$listpages[changes].author_name}{/tr}
 						{/if}
+
 						{if $art_list_date eq 'y' or $art_list_expire eq 'y'}<br />{/if}
-						{if $art_list_date eq 'y'}
-							{$listpages[changes].publish_date|bit_short_datetime}
+						{if $art_list_date eq 'y' and $art_list_expire eq 'y'}
+							{tr}Displayed from <strong>{$listpages[changes].publish_date|bit_short_datetime}</strong> until <strong>{$listpages[changes].expire_date|bit_short_datetime}</strong>{/tr}
+						{elseif $art_list_date eq 'y'}
+							{tr}Displayed from <strong>{$listpages[changes].publish_date|bit_short_datetime}</strong>{/tr}
+						{elseif $art_list_expire eq 'y'}
+							{tr}Displayed until <strong>{$listpages[changes].expire_date|bit_short_datetime}</strong>{/tr}
 						{/if}
-						{if $art_list_date eq 'y' && $art_list_expire eq 'y'}
-						&nbsp;&nbsp;&nbsp;--&gt;&nbsp;&nbsp;&nbsp;
-						{/if}
-						{if $art_list_expire eq 'y'}
-							{$listpages[changes].expire_date|bit_short_datetime}
-						{/if}
+
 						{if $art_list_status eq 'y'}
 							{$listpages[changes].status_name}
 						{/if}

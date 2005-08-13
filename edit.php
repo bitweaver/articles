@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.4 2005/08/13 10:10:44 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.5 2005/08/13 22:03:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -31,26 +31,26 @@ if ($gBitUser->hasPermission('bit_p_admin_articles') || $gBitUser->hasPermission
 
 // Now check permissions to access this page
 if ( !$viewerCanEdit ) { //!$gBitSystem->verifyPermission( 'bit_p_edit_article' ) && ( $article_data["author_name"] != $gBitUser->mUserId || $article_data["creator_edit"] != 'y' ) ) {
-    $smarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
-    $gBitSystem->display( "error.tpl" );
-    die;
+	$smarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
+	$gBitSystem->display( "error.tpl" );
+	die;
 }
 
 if ($gBitSystem->isPackageActive( 'categories' )) {
 	$cat_type = BITARTICLE_CONTENT_TYPE_GUID;
 	$cat_objid = $gContent->mContentId;
-    include_once( CATEGORIES_PKG_PATH . 'categorize_list_inc.php' );
+	include_once( CATEGORIES_PKG_PATH . 'categorize_list_inc.php' );
 }
 
 if ($gBitSystem->isPackageActive( 'quicktags' )) {
-    include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
+	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
 }
 
 
 // If we are in preview mode then preview it!
 if (isset($_REQUEST["preview"])) {
 	$article = $gContent->preparePreview($_REQUEST);
-    $smarty->assign('preview', 'y');
+	$smarty->assign('preview', 'y');
 	$smarty->assign_by_ref('article', $article);
 } else {
 	$smarty->assign_by_ref('article', $gContent->mInfo);
@@ -61,10 +61,10 @@ if ( !$gBitUser->hasPermission( 'bit_p_use_HTML' )) {
 }
 
 if ( isset( $_REQUEST["template_id"] ) && $_REQUEST["template_id"] > 0 ) {
-    $template_data = $tikilib->get_template( $_REQUEST["template_id"] );
+	$template_data = $tikilib->get_template( $_REQUEST["template_id"] );
 
-    $_REQUEST["preview"] = 1;
-    $_REQUEST["body"] = $template_data["content"].$_REQUEST["data"];
+	$_REQUEST["preview"] = 1;
+	$_REQUEST["body"] = $template_data["content"].$_REQUEST["data"];
 }
 
 $publish_date = date( "U" );
@@ -74,30 +74,30 @@ $expire_date = mktime ( $cur_time["hours"], $cur_time["minutes"], 0, $cur_time["
 $smarty->assign('author_name', $gBitUser->getDisplayName());
 
 if ( isset( $_REQUEST["allowhtml"] ) ) {
-    if ( $_REQUEST["allowhtml"] == "on" ) {
-        $smarty->assign( 'allowhtml', 'y' );
-    }
+	if ( $_REQUEST["allowhtml"] == "on" ) {
+		$smarty->assign( 'allowhtml', 'y' );
+	}
 }
 
 if ( isset( $_REQUEST["save"] ) ) {
-    
+	
 
-    if ( isset( $_REQUEST["use_image"] ) && $_REQUEST["use_image"] == 'on' ) {
-        $use_image = 'y';
-    } else {
-        $use_image = 'n';
-    }
+	if ( isset( $_REQUEST["use_image"] ) && $_REQUEST["use_image"] == 'on' ) {
+		$use_image = 'y';
+	} else {
+		$use_image = 'n';
+	}
 
-    if ( isset( $_REQUEST["isfloat"] ) && $_REQUEST["isfloat"] == 'on' ) {
-        $isfloat = 'y';
-    } else {
-        $isfloat = 'n';
-    }
+	if ( isset( $_REQUEST["isfloat"] ) && $_REQUEST["isfloat"] == 'on' ) {
+		$isfloat = 'y';
+	} else {
+		$isfloat = 'n';
+	}
 
-    if ( !isset( $_REQUEST["rating"] ) )
-        $_REQUEST['rating'] = 0;
-    if ( !isset( $_REQUEST['topic_id'] ) || $_REQUEST['topic_id'] == '' ) $_REQUEST['topic_id'] = 0;
-    
+	if ( !isset( $_REQUEST["rating"] ) )
+		$_REQUEST['rating'] = 0;
+	if ( !isset( $_REQUEST['topic_id'] ) || $_REQUEST['topic_id'] == '' ) $_REQUEST['topic_id'] = 0;
+	
 	
 	if ($gContent->store($_REQUEST)) {
 		if ( $gBitSystem->isPackageActive('categories') ) {
@@ -113,12 +113,12 @@ if ( isset( $_REQUEST["save"] ) ) {
 	}
    
 	/*$cat_type = 'article';
-    $cat_objid = $artid;
-    $cat_desc = substr( $_REQUEST["heading"], 0, 200 );
-    $cat_name = $_REQUEST["title"];
-    $cat_href = ARTICLES_PKG_URL . "read_article.php?article_id=" . $cat_objid;*/
+	$cat_objid = $artid;
+	$cat_desc = substr( $_REQUEST["heading"], 0, 200 );
+	$cat_name = $_REQUEST["title"];
+	$cat_href = ARTICLES_PKG_URL . "read_article.php?article_id=" . $cat_objid;*/
 
-    
+	
 }
 
 // Get a topic list
@@ -129,7 +129,7 @@ $types = BitArticleType::listTypes();
 $smarty->assign_by_ref( 'types', $types );
 
 /*if ( $feature_cms_templates == 'y' && $bit_p_use_content_templates == 'y' ) {
-    $templates = $tikilib->list_templates( 'cms', 0, -1, 'name_asc', '' );
+	$templates = $tikilib->list_templates( 'cms', 0, -1, 'name_asc', '' );
 }*/
 
 // WYSIWYG and Quicktag variable

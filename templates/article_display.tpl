@@ -1,14 +1,14 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.3 2005/08/13 22:03:40 squareing Exp $ *}
 {strip}
 <div class="post">
 	<div class="floaticon">
-			{if $gContent->viewerCanEdit()}
-				<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
-			{/if}
-			<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
-			{if $bit_p_remove_article eq 'y'}
-				<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article.article_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
-			{/if}
+		{if $gContent->viewerCanEdit()}
+			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
+		{/if}
+		<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
+		{if $bit_p_remove_article eq 'y'}
+			<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article.article_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
+		{/if}
 	</div><!-- end .footer -->
 
 	<div class="header">
@@ -51,7 +51,7 @@
 
 		{if $showDescriptionsOnly}
 			<div class="content">
-				{$article.parsed_data|truncate:$descriptionLength:"..."}
+				{$article.parsed_description}
 			</div>
 		{else}
 			<div class="content">
@@ -67,13 +67,12 @@
 				{if $showDescriptionsOnly}&nbsp;|&nbsp;{/if} 
 				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
 					{$article.num_comments} Comment{if $article.num_comments > 1 || $article.num_comments == 0}s{/if}
-					{if $showDescriptionsOnly}</a>{/if}					
+				{if $showDescriptionsOnly}</a>{/if}					
 			{/if}
+
 			{if $article.show_reads}
 				 {if $showDescriptionsOnly || $gBitSystem->isFeatureActive('feature_article_comments')}&nbsp;|&nbsp;{/if}{$article.hits} {tr}reads{/tr}&nbsp;&nbsp;&nbsp;
 			{/if}
-			
-			
 		</div>
 	</div><!-- end .body -->
 </div><!-- end .article -->

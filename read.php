@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.1 2005/06/30 01:10:46 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.2 2005/08/13 22:03:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -23,7 +23,6 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
 $gContent->addHit();
 $smarty->assign_by_ref('article', $gContent->mInfo);
-$gContent->mInfo['parsed_data'] = $gContent->parseData();
 
 $topics = BitArticleTopic::listTopics();
 $smarty->assign_by_ref( 'topics', $topics );

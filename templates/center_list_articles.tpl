@@ -1,7 +1,8 @@
 <div class="display articles">
 	<div class="header">
-		<h1>{tr}News{/tr}</h1>
+		<h1>{tr}Articles{/tr}</h1>
 	</div>
+
 	{foreach from=$articles item=article}
 		{include file="bitpackage:articles/article_display.tpl"}
 	{foreachelse}

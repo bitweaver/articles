@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -38,7 +38,7 @@
 							<tr class="{cycle values="odd,even}">
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
-									<a href="{$gBitLoc.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a>
+									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a>
 								</td>
 								<td style="text-align:center;"><input title="{tr}Rate{/tr}" type="checkbox" name="use_ratings[{$types[user].article_type_id}]" {if $types[user].use_ratings eq 'y'}checked="checked"{/if} /></td>
 								<td style="text-align:center;"><input title="{tr}Before publication date{/tr}" type="checkbox" name="show_pre_publ[{$types[user].article_type_id}]" {if $types[user].show_pre_publ eq 'y'}checked="checked"{/if} /></td>
@@ -111,7 +111,7 @@
 				{form legend="Modify Article Types"}
 					{section name=user loop=$types}
 						<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
-						<h2><a href="{$gBitLoc.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a></h2>
+						<h2><a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a></h2>
 
 						<ul>
 							<li><label><input type="checkbox" name="use_ratings[{$types[user].article_type_id}]" {if $types[user].use_ratings eq 'y'}checked="checked"{/if} /> {tr}Rate{/tr}</label></li>
@@ -130,7 +130,7 @@
 							<li><label><input type="checkbox" name="creator_edit[{$types[user].article_type_id}]" {if $types[user].creator_edit eq 'y'}checked="checked"{/if} />{tr}Author can edit{/tr}</label></li>
 							<li>
 								{if $types[user].num_articles eq 0}
-									<a title="{tr}Remove{/tr}" href="{$gBitLoc.ARTICLES_PKG_URL}admin/admin_types.php?remove_type={$types[user].article_type_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
+									<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php?remove_type={$types[user].article_type_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
 								{else}
 									{$types[user].num_articles}
 								{/if}

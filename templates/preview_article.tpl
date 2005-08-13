@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/preview_article.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/preview_article.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 <h2>{tr}Preview{/tr} {$title}</h2>
 <div class="display articles">
 <div class="articleheader">
@@ -10,10 +10,10 @@
 <div class="articleheading">
 {tr}Rating{/tr}: 
 {repeat count=$rating}
-<img src="{$gBitLoc.IMG_PKG_URL}icons/blue.gif" class="icon" alt="" />
+<img src="{$smarty.const.IMG_PKG_URL}icons/blue.gif" class="icon" alt="" />
 {/repeat}
 {if $rating > $entrating}
-<img src="{$gBitLoc.IMG_PKG_URL}icons/bluehalf.gif" class="icon" alt="" />
+<img src="{$smarty.const.IMG_PKG_URL}icons/bluehalf.gif" class="icon" alt="" />
 {/if}
 ({$rating}/10)
 </div>

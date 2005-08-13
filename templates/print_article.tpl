@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/print_article.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/print_article.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 {* Index we display a wiki page here *}
 
 {include file="bitpackage:kernel/header.tpl"}
@@ -29,9 +29,9 @@
 	<div class="articletrailer">
 		({$size} bytes
 			{if $bit_p_edit_article}
-				[<a href="{$gBitLoc.ARTICLES_PKG_URL}edit.php?article_id={$article_id}">{tr}Edit{/tr}</a>] 
+				[<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article_id}">{tr}Edit{/tr}</a>] 
 			{/if}{if $bit_p_remove_article}
-				[<a href="{$gBitLoc.ARTICLES_PKG_URL}list.php?remove={$article_id}">{tr}Remove{/tr}</a>]
+				[<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article_id}">{tr}Remove{/tr}</a>]
 			{/if}
 		)
 	</div> {* end articletrailer *}

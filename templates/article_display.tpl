@@ -1,13 +1,13 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 {strip}
 <div class="post">
 	<div class="floaticon">
 			{if $gContent->viewerCanEdit()}
-				<a href="{$gBitLoc.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
+				<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 			{/if}
-			<a style="display:none;" href="{$gBitLoc.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
+			<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
 			{if $bit_p_remove_article eq 'y'}
-				<a href="{$gBitLoc.ARTICLES_PKG_URL}list.php?remove={$article.article_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
+				<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article.article_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
 			{/if}
 	</div><!-- end .footer -->
 
@@ -42,7 +42,7 @@
 		<div class="introduction">
 			{if $article.show_image eq 'y' && $article.img_url}
 				<div class="image">
-					<a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">
+					<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">
 						<img class="icon" alt="{$article.topic_name}" src="{$article.img_url}"/>
 					</a>					
 				</div>
@@ -61,11 +61,11 @@
 
 		<div class="footer">
 			{if $showDescriptionsOnly}
-				<a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
+				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
 			{/if}
 			{if $gBitSystem->isFeatureActive('feature_article_comments')}
 				{if $showDescriptionsOnly}&nbsp;|&nbsp;{/if} 
-				{if $showDescriptionsOnly}<a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
+				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
 					{$article.num_comments} Comment{if $article.num_comments > 1 || $article.num_comments == 0}s{/if}
 					{if $showDescriptionsOnly}</a>{/if}					
 			{/if}

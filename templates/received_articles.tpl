@@ -1,9 +1,9 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/received_articles.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/received_articles.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin articles">
 <div class="header">
-<h1><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php">{tr}Received articles{/tr}</a></h1>
+<h1><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php">{tr}Received articles{/tr}</a></h1>
 </div>
 
 <div class="body">
@@ -40,7 +40,7 @@
 
 {if $received_article_id > 0}
 <h2>{tr}Edit received article{/tr}</h2>
-<form action="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php" method="post">
+<form action="{$smarty.const.ARTICLES_PKG_URL}received_articles.php" method="post">
 <input type="hidden" name="received_article_id" value="{$received_article_id|escape}" />
 <input type="hidden" name="created" value="{$created|escape}" />
 <input type="hidden" name="image_name" value="{$image_name|escape}" />
@@ -55,7 +55,7 @@
 <option value="{$types[t].type|escape}" {if $type eq $types[t].type}selected="selected"{/if}>{$types[t].type}</option>
 {/section}
 </select>
-{if $bit_p_admin_cms eq 'y'}<a href="{$gBitLoc.ARTICLES_PKG_URL}article_types.php">{tr}Admin types{/tr}</a>{/if}
+{if $bit_p_admin_cms eq 'y'}<a href="{$smarty.const.ARTICLES_PKG_URL}article_types.php">{tr}Admin types{/tr}</a>{/if}
 </td></tr>
 <tr id="isreview" {if $type ne 'Review'}style="display:none;"{else}style="display:block;"{/if}><td>{tr}Rating{/tr}</td><td>
 <select name="rating">
@@ -120,7 +120,7 @@
 <table class="find">
 <tr><td>{tr}Find{/tr}</td>
    <td>
-   <form method="get" action="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php">
+   <form method="get" action="{$smarty.const.ARTICLES_PKG_URL}received_articles.php">
      <input type="text" name="find" />
      <input type="submit" name="search" value="{tr}find{/tr}" />
      <input type="hidden" name="sort_mode" value="{$sort_mode|escape}" />
@@ -131,11 +131,11 @@
 
 <table class="data">
 <tr>
-<th><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_article_id_desc'}received_article_id_asc{else}received_article_id_desc{/if}">{tr}ID{/tr}</a></th>
-<th><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'title_desc'}title_asc{else}title_desc{/if}">{tr}title{/tr}</a></th>
-<th><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_date_desc'}received_date_asc{else}received_date_desc{/if}">{tr}Date{/tr}</a></th>
-<th><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_from_site_desc'}received_from_site_asc{else}received_from_site_desc{/if}">{tr}Site{/tr}</a></th>
-<th><a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_from_user_desc'}received_from_user_asc{else}received_from_user_desc{/if}">{tr}User{/tr}</a></th>
+<th><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_article_id_desc'}received_article_id_asc{else}received_article_id_desc{/if}">{tr}ID{/tr}</a></th>
+<th><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'title_desc'}title_asc{else}title_desc{/if}">{tr}title{/tr}</a></th>
+<th><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_date_desc'}received_date_asc{else}received_date_desc{/if}">{tr}Date{/tr}</a></th>
+<th><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_from_site_desc'}received_from_site_asc{else}received_from_site_desc{/if}">{tr}Site{/tr}</a></th>
+<th><a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'received_from_user_desc'}received_from_user_asc{else}received_from_user_desc{/if}">{tr}User{/tr}</a></th>
 <th>{tr}action{/tr}</th>
 </tr>
 {cycle values="even,odd" print=false}
@@ -147,8 +147,8 @@
 <td>{$channels[user].received_from_site}</td>
 <td>{$channels[user].received_from_user}</td>
 <td>
-   <a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;received_article_id={$channels[user].received_article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}edit{/tr}" title="{tr}edit{/tr}" /></a>
-   <a href="{$gBitLoc.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$channels[user].received_article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}remove{/tr}" title="{tr}remove{/tr}" /></a>
+   <a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;received_article_id={$channels[user].received_article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}edit{/tr}" title="{tr}edit{/tr}" /></a>
+   <a href="{$smarty.const.ARTICLES_PKG_URL}received_articles.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$channels[user].received_article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}remove{/tr}" title="{tr}remove{/tr}" /></a>
 </td>
 </tr>
 {sectionelse}

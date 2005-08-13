@@ -1,4 +1,4 @@
-{popup_init src="`$gBitLoc.THEMES_PKG_URL`overlib.js"}
+{popup_init src="`$smarty.const.THEMES_PKG_URL`overlib.js"}
 <div class="floaticon">{bithelp}</div>
 {if $preview}
 	{include file="bitpackage:articles/submission_display.tpl"}
@@ -6,11 +6,11 @@
 
 <div class="admin articles">
 <div class="header">
-<h1><a href="{$gBitLoc.ARTICLES_PKG_URL}edit_submission.php">{tr}Edit{/tr}: {$title}</a></h1>
+<h1><a href="{$smarty.const.ARTICLES_PKG_URL}edit_submission.php">{tr}Edit{/tr}: {$title}</a></h1>
 </div>
 
 <div class="body">
-<form enctype="multipart/form-data" method="post" action="{$gBitLoc.ARTICLES_PKG_URL}edit_submission.php" id="tikieditsubmission">
+<form enctype="multipart/form-data" method="post" action="{$smarty.const.ARTICLES_PKG_URL}edit_submission.php" id="tikieditsubmission">
 <input type="hidden" name="sub_id" value="{$sub_id|escape}" />
 <input type="hidden" name="image_data" value="{$image_data|escape}" />
 <input type="hidden" name="use_image" value="{$use_image|escape}" />
@@ -27,7 +27,7 @@
 {/section}
 <option value="" {if $topic_id eq 0}selected="selected"{/if}>{tr}None{/tr}</option>
 </select>
-{if $bit_p_admin_cms eq 'y'}<a href="{$gBitLoc.ARTICLES_PKG_URL}admin/admin_topics.php">{tr}Admin topics{/tr}</a>{/if}
+{if $bit_p_admin_cms eq 'y'}<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php">{tr}Admin topics{/tr}</a>{/if}
 </td></tr>
 
 <tr><td>{tr}Type{/tr}</td><td>
@@ -36,7 +36,7 @@
 <option value="{$types[t].type|escape}" {if $type eq $types[t].type}selected="selected"{/if}>{$types[t].type}</option>
 {/section}
 </select>
-{if $bit_p_admin_cms eq 'y'}<a href="{$gBitLoc.ARTICLES_PKG_URL}article_types.php">{tr}Admin types{/tr}</a>{/if}
+{if $bit_p_admin_cms eq 'y'}<a href="{$smarty.const.ARTICLES_PKG_URL}article_types.php">{tr}Admin types{/tr}</a>{/if}
 </td></tr>
 <tr id="isreview" {if $type ne 'Review'}style="display:none;"{else}style="display:block;"{/if}><td>{tr}Rating{/tr}</td><td>
 <select name="rating">
@@ -69,7 +69,7 @@
   <tr><td>Image: </td><td>{$image_name} [{$image_type}] ({$image_size} bytes)</td></tr>
   {if $tempimg ne 'n'}
     <tr><td>Image:</td><td>
-    <img class="icon" alt="{tr}Article image{/tr}" src="{$gBitLoc.TEMP_PKG_URL}{$tempimg}" {if $image_x > 0}width="{$image_x}"{/if}{if $image_y > 0 }height="{$image_y}"{/if} />
+    <img class="icon" alt="{tr}Article image{/tr}" src="{$smarty.const.TEMP_PKG_URL}{$tempimg}" {if $image_x > 0}width="{$image_x}"{/if}{if $image_y > 0 }height="{$image_y}"{/if} />
     </td></tr>
   {/if}
 {/if}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.2 2005/08/13 09:34:08 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -58,9 +58,9 @@
 					</td>
 					<td>{$topics[user].arts} ({$topics[user].subs})</td>
 					<td align="right" nowrap="nowrap">
-						<a href="{$gBitLoc.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic{/tr}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic{/tr}</a>
 						<br />
-						<a href="{$gBitLoc.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic &amp; articles{/tr}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic &amp; articles{/tr}</a>
 						<br />
 						{smartlink ititle='edit' ibiticon='liberty/edit' ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
 						{smartlink ititle='permissions' ibiticon='liberty/permissions' ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}

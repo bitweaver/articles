@@ -1,11 +1,11 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/submission_display.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/submission_display.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 <div class="display articles">
 <div class="header">
 <h1>{$title}</h1>
 {if ($show_author eq 'y') or ($show_pubdate eq 'y') or ($show_expdate eq 'y') or ($show_reads eq 'y')}
   <div class="date">
     {if $show_author eq 'y'}
-      {tr}By{/tr} <a href="{$gBitLoc.USERS_PKG_URL}index.php?fHomepage={$author}">{$author_name}</a>
+      {tr}By{/tr} <a href="{$smarty.const.USERS_PKG_URL}index.php?fHomepage={$author}">{$author_name}</a>
     {/if}
     {if $show_pubdate eq 'y'}
       {tr}on{/tr} {$publish_date|bit_short_datetime}
@@ -25,10 +25,10 @@
   <div class="articlerating">
     {tr}Rating{/tr}:
     {repeat count=$rating}
-    <img src="{$gBitLoc.IMG_PKG_URL}icons/blue.gif" alt="" />
+    <img src="{$smarty.const.IMG_PKG_URL}icons/blue.gif" alt="" />
     {/repeat}
     {if $rating > $entrating}
-      <img src="{$gBitLoc.IMG_PKG_URL}icons/bluehalf.gif" alt="" />
+      <img src="{$smarty.const.IMG_PKG_URL}icons/bluehalf.gif" alt="" />
     {/if}
     {$rating}/10
   </div>
@@ -37,7 +37,7 @@
 <div class="introduction">
 {if $show_image eq 'y'}
   {if !$parsed_body}
-    <a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$article_id}">
+    <a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article_id}">
   {/if}
   {if $hasImage eq 'y'}
     <div class="introductionimage">
@@ -58,7 +58,7 @@
     {/section}
     {if ($show_avatar eq 'y') AND ($iconShown != "TRUE") AND ($avatar_lib_name) }
         <div class="introductionimage">
-      <a href="{$gBitLoc.USERS_PKG_URL}index.php?fHomepage={$author}"><img alt="{$author}" class="icon" src="{$avatar_lib_name}" /></a>
+      <a href="{$smarty.const.USERS_PKG_URL}index.php?fHomepage={$author}"><img alt="{$author}" class="icon" src="{$avatar_lib_name}" /></a>
         </div>
     {/if}
   {/if}
@@ -80,18 +80,18 @@
 <div class="footer">
   <div class="footericon">
   {if $bit_p_edit_article eq 'y'}
-    <a href="{$gBitLoc.ARTICLES_PKG_URL}edit.php?article_id={$article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" title="{tr}Edit{/tr}" /></a>
+    <a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" title="{tr}Edit{/tr}" /></a>
   {/if}
-    <a href="{$gBitLoc.ARTICLES_PKG_URL}print.php?article_id={$article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/print.gif" alt="{tr}Print{/tr}" title="{tr}Print{/tr}" /></a>
+    <a href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/print.gif" alt="{tr}Print{/tr}" title="{tr}Print{/tr}" /></a>
   {if $bit_p_remove_article eq 'y'}
-    <a href="{$gBitLoc.ARTICLES_PKG_URL}list.php?remove={$article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" title="{tr}Remove{/tr}" /></a>
+    <a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" title="{tr}Remove{/tr}" /></a>
   {/if}
   </div>
 
 {if $parsed_body eq ''}
   {if ($size > 0) or (($gBitSystemPrefs.feature_article_comments eq 'y') and ($bit_p_read_comments eq 'y'))}
     {if ($heading_only ne 'y')}
-      <a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$article_id}">{tr}Read More{/tr}</a>
+      <a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article_id}">{tr}Read More{/tr}</a>
     {else}&nbsp;
     {/if}
     {if ($gBitSystemPrefs.feature_article_comments eq 'y')

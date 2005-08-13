@@ -1,7 +1,7 @@
 <table class="find">
 <tr><td>{tr}Find{/tr}</td>
    <td>
-   <form method="get" action="{$gBitLoc.ARTICLES_PKG_URL}list.php">
+   <form method="get" action="{$smarty.const.ARTICLES_PKG_URL}list.php">
      <input type="text" name="find" value="{$find|escape}" />
      <input type="submit" value="{tr}find{/tr}" name="search" />
      <input type="hidden" name="sort_mode" value="{$sort_mode|escape}" />

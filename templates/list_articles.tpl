@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -63,7 +63,7 @@
 					<td colspan="10">
 						{if $art_list_title eq 'y'}
 							{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-								<a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$listpages[changes].article_id}">
+								<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$listpages[changes].article_id}">
 							{/if}
 							{$listpages[changes].title}
 							{if $gBitUser->hasPermission( 'bit_p_read_article' )}
@@ -102,10 +102,10 @@
 					{/if}
 					<td>
 					{if $bit_p_edit_article eq 'y' or ($listpages[changes].author eq $user and $listpages[changes].creator_edit eq 'y')}
-						<a title="{tr}Edit{/tr}" href="{$gBitLoc.ARTICLES_PKG_URL}edit.php?article_id={$listpages[changes].article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" /></a>
+						<a title="{tr}Edit{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$listpages[changes].article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" /></a>
 					{/if}
 					{if $bit_p_remove_article eq 'y'}
-						<a title="{tr}Remove{/tr}" href="{$gBitLoc.ARTICLES_PKG_URL}list.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$listpages[changes].article_id}"><img class="icon" src="{$gBitLoc.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" /></a>
+						<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}list.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$listpages[changes].article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" /></a>
 					{/if}
 					</td>
 				</tr>

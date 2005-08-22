@@ -1,5 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.2 2005/08/13 09:34:08 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.3 2005/08/22 20:48:49 squareing Exp $ *}
 {strip}
+
+{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
+
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin articles">
@@ -35,20 +38,21 @@
 		<table class="data">
 			<caption>{tr}List of Topics{/tr}</caption>
 			<tr>
-				<th>{tr}Name{/tr}</th>
 				<th>{tr}Image{/tr}</th>
+				<th>{tr}Name{/tr}</th>
 				<th>{tr}Active{/tr}</th>
 				<th>{tr}Articles (sub){/tr}</th>
 				<th>{tr}Actions{/tr}</th>
 			</tr>
+
 			{section name=user loop=$topics}
 				<tr class="{cycle values="even,odd"}">
-					<td>{$topics[user].topic_name}</td>
 					<td>
 						{if $topics[user].has_topic_image == 'y'}
 							<img class="icon" alt="{tr}topic image{/tr}" src="{$topics[user].topic_image_url}" />
 						{/if}
 					</td>
+					<td>{$topics[user].topic_name}</td>
 					<td style="text-align:center;">
 						{if $topics[user].active eq 'n'}
 							{smartlink ititle='activate' ibiticon='liberty/inactive' fActivateTopic=1 topic_id=`$topics[user].topic_id`}
@@ -58,12 +62,12 @@
 					</td>
 					<td>{$topics[user].arts} ({$topics[user].subs})</td>
 					<td align="right" nowrap="nowrap">
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic{/tr}</a>
-						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{tr}remove topic &amp; articles{/tr}</a>
-						<br />
 						{smartlink ititle='edit' ibiticon='liberty/edit' ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
 						{smartlink ititle='permissions' ibiticon='liberty/permissions' ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
+						<br />
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic"}</a>
+						<br />
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic and Articles"}</a>
 					</td>
 				</tr>
 			{sectionelse}

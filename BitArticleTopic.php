@@ -167,7 +167,7 @@ class BitArticleTopic extends BitBase
         $ret = array();
 
         while ( $res = $result->fetchRow() ) {
-			$res["num_articles"] = $gBitSystem->getOne( "SELECT COUNT(*) ".
+			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) ".
 												  "FROM `" . BIT_DB_PREFIX . "tiki_articles` ".
 												  "WHERE `topic_id`= ?", array( $res["topic_id"] ) );
 			if ($res['has_topic_image'] == 'y') {

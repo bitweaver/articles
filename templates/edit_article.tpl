@@ -1,10 +1,10 @@
-<script type="text/javascript">
-	function charCounter(textareaId,counterId,maxLimit) {literal}{{/literal}
-		document.getElementById(counterId).value = maxLimit - document.getElementById(textareaId).value.length;
-	{literal}}{/literal}
-</script>
+<script type="text/javascript">//<![CDATA[
+	function charCounter( textareaId, counterId, maxLimit ) {ldelim}
+		document.getElementById( counterId ).value = maxLimit - document.getElementById( textareaId ).value.length;
+	{rdelim}
+//]]></script>
+{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
 
-{strip}
 <div class="floaticon">{bithelp}</div>
 <div class="admin articles">
 	<div class="header">
@@ -24,7 +24,7 @@
 	{/if}
 
 	<div class="body">
-		{form enctype="multipart/form-data"}
+		{form enctype="multipart/form-data" id="writearticle"}
 			<input type="hidden" name="article_id" value="{$gContent->mArticleId}" />
 			
 			{jstabs}
@@ -33,7 +33,7 @@
 						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
-								<input type="text" name="title" id="title" value="{$article.title|escape}" size="60" />
+								<input type="text" name="title" id="title" value="{$article.title|escape}" size="50" />
 								{formhelp note=""}
 							{/forminput}
 						</div>
@@ -50,63 +50,50 @@
 							{formlabel label="Topic" for="topic_id"}
 							{forminput}
 								<select name="topic_id" id="topic_id">
+									<option value="">{tr}None{/tr}</option>
 									{section name=t loop=$topics}
-										<option value="{$topics[t].topic_id|escape}" {if $article.topic_id eq $topics[t].topic_id}selected="selected"{/if}>{$topics[t].topic_name}</option>
+										<option value="{$topics[t].topic_id}" {if $article.topic_id eq $topics[t].topic_id}selected="selected"{/if}>{$topics[t].topic_name|escape}</option>
 									{/section}
-									<option value="" {if $article.topic_id eq 0}selected="selected"{/if}>{tr}None{/tr}</option>
 								</select>
 								{formhelp note=""}
 							{/forminput}
 						</div>
 
 						<div class="row">
-							{formlabel label="Type" for="type"}
+							{formlabel label="Type" for="article_type_id"}
 							{forminput}
 								<select id="article_type_id" name="article_type_id">
 									{section name=t loop=$types}
-										<option value="{$types[t].article_type_id}" {if $article.article_type_id eq $types[t].article_type_id}selected="selected"{/if}>{tr}{$types[t].type_name}{/tr}</option>
+										<option value="{$types[t].article_type_id}" {if $article.article_type_id eq $types[t].article_type_id}selected="selected"{/if}>{tr}{$types[t].type_name}{/tr} {if $types[t].use_ratings eq 'y'}{assign var=rat value=TRUE} &nbsp; [ {tr}uses rating{/tr} ]{/if}</option>
 									{/section}
 								</select>
 								{formhelp note=""}
 							{/forminput}
 						</div>
 
-						<div class="row">
-							{formlabel label="Rating" for="rating"}
-							{forminput}
-								<select name="rating" id="rating">
-									{* rating options were xs-ive - xing
-									<option value="9.5" {if $article.rating eq "9.5"}selected="selected"{/if}>{tr}9.5{/tr}</option>
-									<option value="8.5" {if $article.rating eq "8.5"}selected="selected"{/if}>{tr}8.5{/tr}</option>
-									<option value="7.5" {if $article.rating eq "7.5"}selected="selected"{/if}>{tr}7.5{/tr}</option>
-									<option value="6.5" {if $article.rating eq "6.5"}selected="selected"{/if}>{tr}6.5{/tr}</option>
-									<option value="5.5" {if $article.rating eq "5.5"}selected="selected"{/if}>{tr}5.5{/tr}</option>
-									<option value="4.5" {if $article.rating eq "4.5"}selected="selected"{/if}>{tr}4.5{/tr}</option>
-									<option value="3.5" {if $article.rating eq "3.5"}selected="selected"{/if}>{tr}3.5{/tr}</option>
-									<option value="2.5" {if $article.rating eq "2.5"}selected="selected"{/if}>{tr}2.5{/tr}</option>
-									<option value="1.5" {if $article.rating eq "1.5"}selected="selected"{/if}>{tr}1.5{/tr}</option>
-									<option value="0.5" {if $article.rating eq "0.5"}selected="selected"{/if}>{tr}0.5{/tr}</option>
-									<option value="10" {if $article.rating eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
-									<option value="9" {if $article.rating eq 9}selected="selected"{/if}>{tr}9{/tr}</option>
-									<option value="8" {if $article.rating eq 8}selected="selected"{/if}>{tr}8{/tr}</option>
-									<option value="7" {if $article.rating eq 7}selected="selected"{/if}>{tr}7{/tr}</option>
-									<option value="6" {if $article.rating eq 6}selected="selected"{/if}>{tr}6{/tr}</option>
-									*}
-									<option value="5" {if $article.rating eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-									<option value="4" {if $article.rating eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
-									<option value="3" {if $article.rating eq 3 or !$article.rating}selected="selected"{/if}>{tr}3{/tr}</option>
-									<option value="2" {if $article.rating eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-									<option value="1" {if $article.rating eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
-								</select>
-								{formhelp note="Rating is only used when the article type allows it."}{*(we shouldn't use hide since you can't edit this page if you don't have js enabled)    (can't get js to enable/disable this as needed)*}
-							{/forminput}
-						</div>
+						{if $rat}
+							<div id="ratingedit" class="row">
+								{formlabel label="Rating" for="rating"}
+								{forminput}
+									<select name="rating" id="rating">
+										<option value="5" {if $article.rating eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
+										<option value="4" {if $article.rating eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
+										<option value="3" {if $article.rating eq 3 or !$article.rating}selected="selected"{/if}>{tr}3{/tr}</option>
+										<option value="2" {if $article.rating eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
+										<option value="1" {if $article.rating eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
+									</select>
+									{formhelp note="Rating is only used when the article type allows it."}{*(we shouldn't use hide since you can't edit this page if you don't have js enabled)    (can't get js to enable/disable this as needed)*}
+								{/forminput}
+							</div>
+						{/if}
+
+						{include file="bitpackage:liberty/edit_format.tpl"}
 
 						{if $gBitSystemPrefs.feature_cms_templates eq 'y' and $gBitUser->hasPermission( 'bit_p_use_content_templates' )}
 							<div class="row">
 								{formlabel label="Apply template" for="template"}
 								{forminput}
-										<select name="template_id" onchange="javascript:document.getElementById('editpageform').submit();">
+										<select name="template_id" onchange="javascript:document.getElementById('writearticle').submit();">
 											<option value="0">{tr}none{/tr}</option>
 											{section name=ix loop=$templates}
 												<option value="{$templates[ix].template_id|escape}">{tr}{$templates[ix].name}{/tr}</option>
@@ -135,13 +122,13 @@
 						<div class="row">
 							{forminput}
 								<textarea id="{$textarea_id}" name="edit" rows="{$rows|default:20}" cols="{$cols|default:80}"
-									onKeyDown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
-									onKeyUp  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
+									onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
+									onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
 								>{$article.data|escape:html}</textarea>
 								{capture name=artCount}
 									{$article.data|count_characters:true}
 								{/capture}
-								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystemPrefs.article_description_length-$smarty.capture.artCount}">
+								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystemPrefs.article_description_length-$smarty.capture.artCount}" />
 								{formhelp note="If the article body exceeds the specified maximum body length, a seperate page will be provided with the full body of the article."}
 							{/forminput}
 						</div>
@@ -154,6 +141,10 @@
 									{formhelp note=""}
 								{/forminput}
 							</div>
+						{/if}
+
+						{if $serviceEditTpls.access_control }
+							{include file=$serviceEditTpls.access_control"}
 						{/if}
 
 						<div class="row submit">
@@ -187,10 +178,10 @@
 					{/legend}
 				{/jstab}
 
-				{if $gBitSystem->isPackageActive( 'categories' )}
+				{if $serviceEditTpls.categorization }
 					{jstab title="Categorize"}
 						{legend legend="Categorize"}
-							{include file="bitpackage:categories/categorize.tpl"}
+							{include file=$serviceEditTpls.categorization"}
 						{/legend}
 					{/jstab}
 				{/if}
@@ -214,15 +205,17 @@
 							{formlabel label="Custom Image" for="upload"}
 							{forminput}
 								<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-								<input type="file" name="article_image"/>
+								<input type="file" id="upload" name="article_image"/>
 								{formhelp note="Use a custom image file for the article."}
 							{/forminput}
 						</div>
 					{/legend}
 
-					{legend legend="Content Format"}
-						{include file="bitpackage:liberty/edit_format.tpl"}
-					{/legend}
+					{if $serviceEditTpls.menu}
+						{legend legend="Insert Link in Menu"}
+							{include file=$serviceEditTpls.menu"}
+						{/legend}
+					{/if}
 				{/jstab}
 			{/jstabs}
 		{/form}
@@ -232,4 +225,3 @@
 
 	</div><!-- end .body -->
 </div><!-- end .article -->
-{/strip}

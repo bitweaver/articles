@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.5 2005/08/13 22:03:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.6 2005/08/22 20:48:49 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -52,7 +52,9 @@ if (isset($_REQUEST["preview"])) {
 	$article = $gContent->preparePreview($_REQUEST);
 	$smarty->assign('preview', 'y');
 	$smarty->assign_by_ref('article', $article);
+	$gContent->invokeServices( 'content_preview_function' );
 } else {
+	$gContent->invokeServices( 'content_edit_function' );
 	$smarty->assign_by_ref('article', $gContent->mInfo);
 }
 

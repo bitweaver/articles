@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.3 2005/08/13 22:03:40 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.4 2005/08/22 22:08:25 squareing Exp $ *}
 {strip}
 <div class="post">
 	<div class="floaticon">
@@ -27,16 +27,12 @@
 
 	<div class="body">
 		{if $article.use_ratings eq 'y'}
-			<div class="rating">
-				{tr}Rating{/tr}:
+			<span class="rating">
 				{repeat count=$article.rating}
-					{biticon ipackage=articles iname=rating_full}
+					{biticon ipackage=articles iname=rating iexplain="Article Rating"}
 				{/repeat}
-				{*if $article.rating > $article.entrating}
-					{biticon ipackage=articles iname=rating_half}
-				{/if*}
-				{$article.rating}/5
-			</div>
+				&nbsp; ( {$article.rating} / 5 )
+			</span>
 		{/if}
 
 		<div class="introduction">
@@ -60,24 +56,28 @@
 		{/if}
 
 		<div class="footer">
-			{if $showDescriptionsOnly}
-				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
-			{/if}
-			{if $gBitSystem->isFeatureActive('feature_article_comments')}
-				{if $showDescriptionsOnly}&nbsp;|&nbsp;{/if} 
-				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
-					{$article.num_comments} Comment{if $article.num_comments > 1 || $article.num_comments == 0}s{/if}
-				{if $showDescriptionsOnly}</a>{/if}					
+			{if $article.show_reads}
+				{assign var=spacer value=TRUE}
+				{$article.hits} {tr}reads{/tr}
 			{/if}
 
-			{if $article.show_reads}
-				 {if $showDescriptionsOnly || $gBitSystem->isFeatureActive('feature_article_comments')}&nbsp;|&nbsp;{/if}{$article.hits} {tr}reads{/tr}&nbsp;&nbsp;&nbsp;
+			{if $showDescriptionsOnly}
+				{if $spacer}&nbsp; &bull; &nbsp;{/if}
+				{assign var=spacer value=TRUE}
+				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
+			{/if}
+
+			{if $article.allow_comments}
+				{if $spacer}&nbsp; &bull; &nbsp;{/if}
+				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
+					{tr}{$article.num_comments} Comment(s){/tr}
+				{if $showDescriptionsOnly}</a>{/if}					
 			{/if}
 		</div>
 	</div><!-- end .body -->
 </div><!-- end .article -->
 
-{if $print_page ne 'y' and $gBitSystem->isFeatureActive('feature_article_comments') and !$preview && !$showDescriptionsOnly}
+{if $print_page ne 'y' and $article.allow_comments and !$preview && !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/comments.tpl"}
 {/if}
 {/strip}

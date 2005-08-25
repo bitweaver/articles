@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.7 2005/08/13 22:03:39 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.8 2005/08/25 11:24:22 squareing Exp $
 *
 * Copyright (c) 2004 bitweaver.org
 * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.7 2005/08/13 22:03:39 squareing Exp $
+* $Id: BitArticle.php,v 1.8 2005/08/25 11:24:22 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.7 $ $Date: 2005/08/13 22:03:39 $ $Author: squareing $
+* @version $Revision: 1.8 $ $Date: 2005/08/25 11:24:22 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -49,8 +49,7 @@ class BitArticle extends LibertyAttachable {
     /**
 	* During initialisation, be sure to call our base constructors
 	**/
-    function BitArticle($pArticleId=NULL, $pContentId=NULL )
-    {
+    function BitArticle($pArticleId=NULL, $pContentId=NULL ) {
         $this->mArticleId = $pArticleId;
 		$this->mTypeId  = NULL;
 		$this->mTopicId = NULL;
@@ -64,7 +63,7 @@ class BitArticle extends LibertyAttachable {
         ) );
         $this->mContentId = $pContentId;
         $this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
-}
+	}
 
     /**
 	* Load the data from the database
@@ -103,7 +102,7 @@ class BitArticle extends LibertyAttachable {
                 $this->mInfo['editor'] = (isset($result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
                 $this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ) );
-				$this->mInfo['parsed_description'] = $this->parseData($this->mInfo['description']);
+//				$this->mInfo['parsed_description'] = $this->parseData($this->mInfo['description']);
 
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
 					$parts = preg_split( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] );

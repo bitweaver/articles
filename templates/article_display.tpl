@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.4 2005/08/22 22:08:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.5 2005/08/25 11:24:22 squareing Exp $ *}
 {strip}
-<div class="post">
+<div class="{$outer_div|default:"post"}">
 	<div class="floaticon">
 		{if $gContent->viewerCanEdit()}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
@@ -38,9 +38,9 @@
 		<div class="introduction">
 			{if $article.show_image eq 'y' && $article.img_url}
 				<div class="image">
-					<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">
+					{if $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
 						<img class="icon" alt="{$article.topic_name}" src="{$article.img_url}"/>
-					</a>					
+					{if $article.read_more}</a>{/if}
 				</div>
 			{/if}
 		</div><!-- end .introduction -->
@@ -61,7 +61,7 @@
 				{$article.hits} {tr}reads{/tr}
 			{/if}
 
-			{if $showDescriptionsOnly}
+			{if $showDescriptionsOnly and $article.read_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
 				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
@@ -71,7 +71,7 @@
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
 					{tr}{$article.num_comments} Comment(s){/tr}
-				{if $showDescriptionsOnly}</a>{/if}					
+				{if $showDescriptionsOnly}</a>{/if}
 			{/if}
 		</div>
 	</div><!-- end .body -->

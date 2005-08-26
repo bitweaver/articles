@@ -1,8 +1,8 @@
 <?php
-require_once (KERNEL_PKG_PATH."BitBase.php");
-require_once(ARTICLES_PKG_PATH.'BitArticle.php');
+require_once( KERNEL_PKG_PATH."BitBase.php" );
+require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
-define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', 100);
+define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', 100 );
 
 class BitArticleTopic extends BitBase
 {

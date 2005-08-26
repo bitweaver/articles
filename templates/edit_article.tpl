@@ -193,10 +193,10 @@
 						{*/if*}
 						{if $gContent->mInfo.image_attachment_id}
 							<div class="row">
-								{formlabel label="Own Image"}
+								{formlabel label="Custom Image"}
 								{forminput}
-									<img alt="{tr}Article image{/tr}" border="0" src="{$gContent->mImage.image_url}"/><br />
-									{formhelp note=""}
+									<img alt="{tr}Article image{/tr}" border="0" src="{$article.img_url}"/><br />
+									{formhelp note="You can replace this image by uploading a new one."}
 								{/forminput}
 							</div>
 						{/if}

@@ -11,7 +11,7 @@
 			$gContent = new BitArticle( NULL, $_REQUEST['content_id'] );
 		} else {
 			$gContent = new BitArticle();
-			$gContent->mInfo['expire_date'] = strtotime("+1 day");
+			$gContent->mInfo['expire_date'] = strtotime("+1 year");
 		}
 
 		if( empty( $gContent->mArticleId ) && empty( $gContent->mContentId )  ) {

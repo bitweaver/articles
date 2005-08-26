@@ -161,8 +161,8 @@
 							{formlabel label="Publish Date" for=""}
 							{forminput}
 								{html_select_date prefix="publish_" time=$gContent->mInfo.publish_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
-								<span dir="ltr">{html_select_time prefix="publish_" time=$publish_dateSite display_seconds=false}&nbsp;{$siteTimeZone}</span>
-								{formhelp note=""}
+								<span dir="ltr">{html_select_time prefix="publish_" time=$gContent->mInfo.publish_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
+								{formhelp note="If the article type allows it, this article will not be displayed <strong>before</strong> this date."}
 							{/forminput}
 						</div>
 
@@ -171,8 +171,8 @@
 							{formlabel label="Expiration Date" for=""}
 							{forminput}
 								{html_select_date prefix="expire_" time=$gContent->mInfo.expire_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
-								<span dir="ltr">{html_select_time prefix="expire_" time=$expire_dateSite display_seconds=false}&nbsp;{$siteTimeZone}</span>
-								{formhelp note=""}
+								<span dir="ltr">{html_select_time prefix="expire_" time=$gContent->mInfo.expire_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
+								{formhelp note="If the article type allows it, this article will not be displayed <strong>after</strong> this date."}
 							{/forminput}
 						</div>
 					{/legend}

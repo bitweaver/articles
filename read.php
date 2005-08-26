@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.2 2005/08/13 22:03:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.3 2005/08/26 09:17:14 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,18 +24,24 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 $gContent->addHit();
 $smarty->assign_by_ref('article', $gContent->mInfo);
 
+// get all the services that want to display something on this page
+$displayHash = array( 'perm_name' => 'bit_p_view' );
+$gContent->invokeServices( 'content_display_function', $displayHash );
+
 $topics = BitArticleTopic::listTopics();
 $smarty->assign_by_ref( 'topics', $topics );
 
 $section = 'cms';
 
-if ( $gBitSystem->isFeatureActive('feature_article_comments') ) {
-	$maxComments = $gBitSystem->getPreference( 'article_comments_per_page' );
-	$comments_return_url = $_SERVER['PHP_SELF']."?article_id=".$gContent->mArticleId;
-	$commentsParentId = $gContent->mInfo['content_id'];
-	include_once ( LIBERTY_PKG_PATH . 'comments_inc.php' );
+// Comments engine!
+if( $gContent->mInfo['allow_comments'] == 'y' ) {
+	$comments_vars = Array( 'article' );
+	$comments_prefix_var='article:';
+	$comments_object_var='article';
+	$commentsParentId = $gContent->mContentId;
+	$comments_return_url = ARTICLES_PKG_URL.'read.php?article_id='.$gContent->mArticleId;
+	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
-
 
 if ( $feature_theme_control == 'y' ) {
 	$cat_type = 'article';
@@ -48,8 +54,6 @@ if ( isset( $_REQUEST['mode'] ) && $_REQUEST['mode'] == 'mobile' ) {
 	HAWBIT_read_article( $article_data, $pages );
 }
 
-
 // Display the Index Template
 $gBitSystem->display( 'bitpackage:articles/read_article.tpl' );
-
 ?>

@@ -1,5 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.5 2005/08/25 11:24:22 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.6 2005/08/26 08:47:35 squareing Exp $ *}
 {strip}
+{assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
+{assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
+
+{if $serviceNavTpls.categorization}
+	{include file=$serviceNavTpls.categorization"}
+{/if}
+
 <div class="{$outer_div|default:"post"}">
 	<div class="floaticon">
 		{if $gContent->viewerCanEdit()}
@@ -25,7 +32,7 @@
 		{/if}
 	</div>
 
-	<div class="body">
+	<div class="body"{if $user_dbl eq 'y' and $gBitUser->hasPermission( 'bit_p_edit_article' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		{if $article.use_ratings eq 'y'}
 			<span class="rating">
 				{repeat count=$article.rating}
@@ -69,7 +76,7 @@
 
 			{if $article.allow_comments}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
-				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#bitcomments">{/if}
+				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#editcomments">{/if}
 					{tr}{$article.num_comments} Comment(s){/tr}
 				{if $showDescriptionsOnly}</a>{/if}
 			{/if}
@@ -79,5 +86,9 @@
 
 {if $print_page ne 'y' and $article.allow_comments and !$preview && !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/comments.tpl"}
+{/if}
+
+{if $serviceViewTpls.categorization}
+	{include file=$serviceViewTpls.categorization"}
 {/if}
 {/strip}

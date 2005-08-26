@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.10 2005/08/26 10:57:54 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.11 2005/08/26 20:17:40 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.10 2005/08/26 10:57:54 squareing Exp $
+* $Id: BitArticle.php,v 1.11 2005/08/26 20:17:40 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.10 $ $Date: 2005/08/26 10:57:54 $ $Author: squareing $
+* @version $Revision: 1.11 $ $Date: 2005/08/26 20:17:40 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -39,43 +39,43 @@ define( 'ARTICLE_STATUS_APPROVED', 300 );
 define( 'ARTICLE_STATUS_RETIRED', 400 );
 
 class BitArticle extends LibertyAttachable {
-    /**
+	/**
 	* Primary key for articles
 	* @public
 	*/
-    var $mArticleId;
-    var $mTypeId;
+	var $mArticleId;
+	var $mTypeId;
 	var $mTopicId;
-    /**
+	/**
 	* During initialisation, be sure to call our base constructors
 	**/
-    function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
-        $this->mArticleId = $pArticleId;
+	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
+		$this->mArticleId = $pArticleId;
 		$this->mTypeId  = NULL;
 		$this->mTopicId = NULL;
 
-        LibertyAttachable::LibertyAttachable();
-        $this->registerContentType( BITARTICLE_CONTENT_TYPE_GUID, array( 'content_description' => 'Article',
+		LibertyAttachable::LibertyAttachable();
+		$this->registerContentType( BITARTICLE_CONTENT_TYPE_GUID, array( 'content_description' => 'Article',
 			'handler_class' => 'BitArticle',
 			'handler_package' => 'articles',
 			'handler_file' => 'BitArticle.php',
 			'maintainer_url' => 'http://www.bitweaver.org'
- ));
-        $this->mContentId = $pContentId;
-        $this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
+		) );
+		$this->mContentId = $pContentId;
+		$this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
 	}
 
-    /**
+	/**
 	* Load the data from the database
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
 	**/
-    function load() {
-        if( !empty( $this->mArticleId )|| !empty( $this->mContentId ) ) {
-            // LibertyContent::load()assumes you have joined already, and will not execute any sql!
-            // This is a significant performance optimization
-            $lookupColumn = !empty( $this->mArticleId )? 'article_id' : 'content_id';
-            $lookupId = !empty( $this->mArticleId )? $this->mArticleId : $this->mContentId;
-            $query = "select ta.*, tc.*, tatype.*, tatopic.*, " .
+	function load() {
+		if( !empty( $this->mArticleId )|| !empty( $this->mContentId ) ) {
+			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
+			// This is a significant performance optimization
+			$lookupColumn = !empty( $this->mArticleId )? 'article_id' : 'content_id';
+			$lookupId = !empty( $this->mArticleId )? $this->mArticleId : $this->mContentId;
+			$query = "select ta.*, tc.*, tatype.*, tatopic.*, " .
 				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
 				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
 				"tf.storage_path as image_storage_path " .
@@ -88,20 +88,22 @@ class BitArticle extends LibertyAttachable {
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )" .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )" .
 				"WHERE ta.`$lookupColumn`=?";
-            $result = $this->mDb->query( $query, array( $lookupId ));
+			$result = $this->mDb->query( $query, array( $lookupId ));
 
 			global $gBitSystem;
-            if( $result && $result->numRows() ) {
-                $this->mInfo = $result->fields;
-                $this->mContentId = $result->fields['content_id'];
-                $this->mArticleId = $result->fields['article_id'];
-                $this->mTopicId   = $result->fields['topic_id'];
+			if( $result && $result->numRows() ) {
+				$this->mInfo = $result->fields;
+				$this->mContentId = $result->fields['content_id'];
+				$this->mArticleId = $result->fields['article_id'];
+				$this->mTopicId   = $result->fields['topic_id'];
 				$this->mTypeId	  = $result->fields['article_type_id'];
 
-                $this->mInfo['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
-                $this->mInfo['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
-                $this->mInfo['display_url'] = $this->getDisplayUrl();
+				$this->mInfo['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
+				$this->mInfo['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
+				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ));
+
+				// i think parsed_description is only necessary on the articles home page - xing
 //				$this->mInfo['parsed_description'] = $this->parseData( $this->mInfo['description'] );
 
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
@@ -111,10 +113,10 @@ class BitArticle extends LibertyAttachable {
 					$this->mInfo['parsed_description'] = $this->parseData( substr( $this->mInfo['data'], 0, $gBitSystem->mPrefs['article_description_length'] ));
 				}
 
-                if( $gBitSystem->isPackageActive( 'categories' ) ) {
-                    /*global $categlib;
-                    $this->mInfo['categs'] = $categlib->get_object_categories_details( 'blogpost',$this->mInfo['post_id'] );*/
-                }
+				if( $gBitSystem->isPackageActive( 'categories' ) ) {
+					/*global $categlib;
+					$this->mInfo['categs'] = $categlib->get_object_categories_details( 'blogpost',$this->mInfo['post_id'] );*/
+				}
 
 			/* - i don't think this is used anywhere - xing
 			$this->mInfo['publish_date_string'] = date( 'Y-m-d H:i', $this->mInfo['publish_date'] );
@@ -133,11 +135,11 @@ class BitArticle extends LibertyAttachable {
 			*/
 			$comment = &new LibertyComment();
 			$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
-                LibertyAttachable::load();
-            }
-        }
-        return( count( $this->mInfo ));
-    }
+				LibertyAttachable::load();
+			}
+		}
+		return( count( $this->mInfo ));
+	}
 
 	function setStatus( $pStatusId ) {
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
@@ -154,7 +156,7 @@ class BitArticle extends LibertyAttachable {
 		}
 	}
 
-    /**
+	/**
 	* Any method named Store inherently implies data will be written to the database
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
 	* This is the ONLY method that should be called in order to store( create or update )an sample!
@@ -166,34 +168,34 @@ class BitArticle extends LibertyAttachable {
 	*
 	* @access public
 	**/
-    function store( &$pParamHash )
-    {
-        if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
-            $table = BIT_DB_PREFIX."tiki_articles";
-            $this->mDb->StartTrans();
-            if( $this->mArticleId ) {
-                $locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
-                $result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
-            } else {
-                $pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
-                if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
-                    // if pParamHash['article_id'] is set, some is requesting a particular article_id. Use with caution!
-                    $pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
-                } else {
-                    $pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
-                }
-                $this->mArticleId = $pParamHash['article_store']['article_id'];
+	function store( &$pParamHash )
+	{
+		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
+			$table = BIT_DB_PREFIX."tiki_articles";
+			$this->mDb->StartTrans();
+			if( $this->mArticleId ) {
+				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
+				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
+			} else {
+				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
+				if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
+					// if pParamHash['article_id'] is set, some is requesting a particular article_id. Use with caution!
+					$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
+				} else {
+					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
+				}
+				$this->mArticleId = $pParamHash['article_store']['article_id'];
 
-                $result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
-            }
+				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
+			}
 
-            $this->mDb->CompleteTrans();
-            $this->load();
-        }
-        return( count( $this->mErrors )== 0 );
-    }
+			$this->mDb->CompleteTrans();
+			$this->load();
+		}
+		return( count( $this->mErrors )== 0 );
+	}
 
-    /**
+	/**
 	* Make sure the data is safe to store
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
 	* This function is responsible for data integrity and validation before any operations are performed with the $pParamHash
@@ -205,26 +207,26 @@ class BitArticle extends LibertyAttachable {
 	*
 	* @access private
 	**/
-    function verify( &$pParamHash ) {
-        global $gBitUser, $gBitSystem;
+	function verify( &$pParamHash ) {
+		global $gBitUser, $gBitSystem;
 
-        // make sure we're all loaded up of we have a mArticleId
-        if( $this->mArticleId && empty( $this->mInfo ) ) {
-            $this->load();
-        }
+		// make sure we're all loaded up of we have a mArticleId
+		if( $this->mArticleId && empty( $this->mInfo ) ) {
+			$this->load();
+		}
 
-        if( !empty( $this->mInfo['content_id'] ) ) {
-            $pParamHash['content_id'] = $this->mInfo['content_id'];
-        }
+		if( !empty( $this->mInfo['content_id'] ) ) {
+			$pParamHash['content_id'] = $this->mInfo['content_id'];
+		}
 
-        // It is possible a derived class set this to something different
+		// It is possible a derived class set this to something different
 		if( empty( $pParamHash['content_type_guid'] )&& !empty( $this->mContentTypeGuid ) ) {
-            $pParamHash['content_type_guid'] = $this->mContentTypeGuid;
-        }
+			$pParamHash['content_type_guid'] = $this->mContentTypeGuid;
+		}
 
-        if( !empty( $pParamHash['content_id'] ) ) {
-            $pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
-        }
+		if( !empty( $pParamHash['content_id'] ) ) {
+			$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
+		}
 
 		if( !empty( $pParamHash['author_name'] ) ) {
 			$pParamHash['article_store']['author_name'] = $pParamHash['author_name'];
@@ -249,15 +251,15 @@ class BitArticle extends LibertyAttachable {
 
 		// check some lengths, if too long, then truncate
 		/* DrewSlater - Killed article description storage. Any reason to use this instead of just a substr of the article body?
-        if( $this->isValid()&& !empty( $this->mInfo['description'] )&& empty( $pParamHash['description'] ) ) {
-            // someone has deleted the description, we need to null it out
-            $pParamHash['article_store']['description'] = '';
-        } else if( empty( $pParamHash['description'] ) ) {
-            $bodyText = $pParamHash['content_store']['data'];
+		if( $this->isValid()&& !empty( $this->mInfo['description'] )&& empty( $pParamHash['description'] ) ) {
+			// someone has deleted the description, we need to null it out
+			$pParamHash['article_store']['description'] = '';
+		} else if( empty( $pParamHash['description'] ) ) {
+			$bodyText = $pParamHash['content_store']['data'];
 			$pParamHash['article_store']['description'] = substr( $bodyText,0, DEFAULT_ARTICLE_DESCR_LEN ).( strlen( $bodyText )> DEFAULT_ARTICLE_DESCR_LEN ? '...' : '' );
-        } else {
-            $pParamHash['article_store']['description'] = $pParamHash['description'];
-        }*/
+		} else {
+			$pParamHash['article_store']['description'] = $pParamHash['description'];
+		}*/
 
 		if( !empty( $pParamHash['rating'] ) ) {
 			$pParamHash['article_store']['rating'] =( int )( $pParamHash['rating'] );
@@ -267,25 +269,26 @@ class BitArticle extends LibertyAttachable {
 			// TODO: need to store the article image attachment
 		}
 
-        // check for name issues, first truncate length if too long
-        if( !empty( $pParamHash['title'] ) ) {
-            if( empty( $this->mArticleId ) ) {
-                if( empty( $pParamHash['title'] ) ) {
-                    $this->mErrors['title'] = 'You must enter a name for this page.';
-                } else {
-                    $pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, 160 );
-                }
-            } else {
-                $pParamHash['content_store']['title'] =( isset( $pParamHash['title'] ))? substr( $pParamHash['title'], 0, 160 ): '';
-            }
-        } else if( empty( $pParamHash['title'] ) ) {
-            // no name specified
-            $this->mErrors['title'] = 'You must specify a name';
-        }
+		// check for name issues, first truncate length if too long
+		if( !empty( $pParamHash['title'] ) ) {
+			if( empty( $this->mArticleId ) ) {
+				if( empty( $pParamHash['title'] ) ) {
+					$this->mErrors['title'] = 'You must enter a name for this page.';
+				} else {
+					$pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, 160 );
+				}
+			} else {
+				$pParamHash['content_store']['title'] =( isset( $pParamHash['title'] ))? substr( $pParamHash['title'], 0, 160 ): '';
+			}
+		} else if( empty( $pParamHash['title'] ) ) {
+			// no name specified
+			$this->mErrors['title'] = 'You must specify a name';
+		}
 
 		if( !empty( $pParamHash['publish_Month'] ) ) {
 			$dateString = $pParamHash['publish_Year'].'-'.$pParamHash['publish_Month'].'-'.$pParamHash['publish_Day'].' '.$pParamHash['publish_Hour'].':'.$pParamHash['publish_Minute'];
-			$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
+			$timestamp = strtotime( $dateString );
+			//$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['publish_date'] = $timestamp;
 			}
@@ -296,7 +299,8 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['expire_Month'] ) ) {
 			$dateString = $pParamHash['expire_Year'].'-'.$pParamHash['expire_Month'].'-'.$pParamHash['expire_Day'].' '.$pParamHash['expire_Hour'].':'.$pParamHash['expire_Minute'];
-			$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
+			$timestamp = strtotime( $dateString );
+			//$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['expire_date'] = $timestamp;
 			}
@@ -329,8 +333,8 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-        return( count( $this->mErrors )== 0 );
-    }
+		return( count( $this->mErrors )== 0 );
+	}
 
 	function viewerCanEdit() {
 		global $gBitUser;
@@ -372,64 +376,62 @@ class BitArticle extends LibertyAttachable {
 		$data = array_merge( $data, $articleType->mInfo, $articleTopic->mInfo );
 
 		return $data;
-
 	}
 
-    function expunge()
-    {
-        $ret = FALSE;
-        if( $this->isValid() ) {
-           /* $this->mDb->StartTrans();
-            $query = "DELETE FROM `".BIT_DB_PREFIX."tiki_samples` WHERE `content_id` = ?";
-            $result = $this->mDb->query( $query, array( $this->mContentId ));
-            if( LibertyAttachable::expunge() ) {
-                $ret = TRUE;
-                $this->mDb->CompleteTrans();
-            } else {
-                $this->mDb->RollbackTrans();
-            }*/
-        }
-        return $ret;
-    }
+	function expunge()
+	{
+		$ret = FALSE;
+		if( $this->isValid() ) {
+		   /* $this->mDb->StartTrans();
+			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_samples` WHERE `content_id` = ?";
+			$result = $this->mDb->query( $query, array( $this->mContentId ));
+			if( LibertyAttachable::expunge() ) {
+				$ret = TRUE;
+				$this->mDb->CompleteTrans();
+			} else {
+				$this->mDb->RollbackTrans();
+			}*/
+		}
+		return $ret;
+	}
 
-    function isValid()
-    {
-        return( !empty( $this->mArticleId ));
-    }
+	function isValid() {
+		return( !empty( $this->mArticleId ));
+	}
 
 	/*function prepGetList( &$pParamHash ) {
 
 		parent::prepGetList( $pParamHash );
 	}*/
-    /**
+	/**
 	* This function generates a list of records from the tiki_content database for use in a list page
 	**/
-    function getList( &$pParamHash ) {
+	function getList( &$pParamHash ) {
 		global $gBitSystem;
 
-        LibertyContent::prepGetList( $pParamHash );
+		LibertyContent::prepGetList( $pParamHash );
 
-        $find = $pParamHash['find'];
-        $sort_mode = $pParamHash['sort_mode'];
-        $max_records = $pParamHash['max_records'];
-        $offset = $pParamHash['offset'];
+		$find = $pParamHash['find'];
+		$sort_mode = $pParamHash['sort_mode'];
+		$max_records = $pParamHash['max_records'];
+		$offset = $pParamHash['offset'];
 
-        if( is_array( $find ) ) {
-            // you can use an array of pages
-            $mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0,count( $find ),'?' ))." )";
-            $bindvars = $find;
-        } else if( is_string( $find ) ) {
-            // or a string
-            $mid = " WHERE UPPER( tc.`title` )like ? ";
-            $bindvars = array( '%' . strtoupper( $find ). '%' );
-        } else if( !empty( $pUserId ) ) {
-            // or a string
-            $mid = " WHERE tc.`creator_user_id` = ? ";
-            $bindvars = array( $pUserId );
-        } else {
-            $mid = "";
-            $bindvars = array();
-        }
+		if( is_array( $find ) ) {
+			// you can use an array of pages
+			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0,count( $find ),'?' ))." )";
+			$bindvars = $find;
+		} else if( is_string( $find ) ) {
+			// or a string
+			$mid = " WHERE UPPER( tc.`title` )like ? ";
+			$bindvars = array( '%' . strtoupper( $find ). '%' );
+		} else if( !empty( $pUserId ) ) {
+			// or a string
+			$mid = " WHERE tc.`creator_user_id` = ? ";
+			$bindvars = array( $pUserId );
+		} else {
+			$mid = "";
+			$bindvars = array();
+		}
 
 		if( !empty( $pParamHash['show_expired'] ) ) {
 
@@ -452,7 +454,7 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-        $query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name
+		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
@@ -461,13 +463,13 @@ class BitArticle extends LibertyAttachable {
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
 			ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
 
-        $query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
+		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )".
 			( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
-        $result = $this->mDb->query( $query,$bindvars,$max_records,$offset );
-        $ret = array();
+		$result = $this->mDb->query( $query,$bindvars,$max_records,$offset );
+		$ret = array();
 		$comment = &new LibertyComment();
-        while( $res = $result->fetchRow() ) {
+		while( $res = $result->fetchRow() ) {
 			if( $res['image_attachment_id'] ) {
 				$res['img_url'] = '';
 			} elseif( $res['has_topic_image'] == 'y' ) {
@@ -484,46 +486,42 @@ class BitArticle extends LibertyAttachable {
 			$res['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] ), $res['format_guid'] );
 
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
-            $ret[] = $res;
-        }
+			$ret[] = $res;
+		}
 
-        $pParamHash["data"] = $ret;
+		$pParamHash["data"] = $ret;
 
-        $pParamHash["cant"] = $this->mDb->getOne( $query_cant,$bindvars );
+		$pParamHash["cant"] = $this->mDb->getOne( $query_cant,$bindvars );
 
-        LibertyContent::postGetList( $pParamHash );
+		LibertyContent::postGetList( $pParamHash );
 
-        return $pParamHash;
-    }
+		return $pParamHash;
+	}
 
-    /**
+	/**
 	* Generates the URL to the sample page
 	* @param pExistsHash the hash that was returned by LibertyContent::pageExists
 	* @return the link to display the page.
 	*/
-    function getDisplayUrl()
-    {
-        $ret = NULL;
-        if( !empty( $this->mArticleId ) ) {
-            $ret = ARTICLES_PKG_URL."read.php?article_id=".$this->mArticleId;
-        }
-        return $ret;
-    }
+	function getDisplayUrl() {
+		$ret = NULL;
+		if( !empty( $this->mArticleId ) ) {
+			$ret = ARTICLES_PKG_URL."read.php?article_id=".$this->mArticleId;
+		}
+		return $ret;
+	}
 
+	function listTypes() {
+		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
+		$result = $this->mDb->query( $query, array());
+		$ret = array();
 
-
-    function listTypes() {
-        $query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
-        $result = $this->mDb->query( $query, array());
-        $ret = array();
-
-        while( $res = $result->fetchRow() ) {
+		while( $res = $result->fetchRow() ) {
 			$res['article_cnt'] = $this->mDb->getOne( "select count( * )from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ));
-            $ret[] = $res;
-        }
+			$ret[] = $res;
+		}
 
-        return $ret;
-    }
-
+		return $ret;
+	}
 }
 ?>

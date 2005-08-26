@@ -17,7 +17,7 @@
 		{if $gBitUser->hasPermission( 'bit_p_submit_article ' ) ||
 			$gBitUser->hasPermission( 'bit_p_approve_submission ' ) ||
 			$gBitUser->hasPermission( 'bit_p_remove_submission ' )}
-			<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list_submissions.php">{biticon ipackage=liberty iname=list iexplain="view submissions" iforce=icon} {tr}View submissions{/tr}</a></li>
+			<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$smarty.const.ARTICLE_STATUS_PENDING}">{biticon ipackage=liberty iname=list iexplain="view submissions" iforce=icon} {tr}View submissions{/tr}</a></li>
 		{/if}
 	{/if}
 	{if $gBitUser->hasPermission( 'bit_p_admin_articles' )}

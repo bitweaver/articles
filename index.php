@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.3 2005/08/25 11:24:22 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.4 2005/08/26 10:15:15 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -19,7 +19,10 @@ if( !empty( $_REQUEST['article_id'] ) ) {
 
 require_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
+// only display approved articles
+$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 $articles = $gContent->getList( $_REQUEST );
+
 foreach( $articles['data'] as $key => $article ) {
 	if( strlen( $article['parsed_description'] ) != strlen( $article['parsed_data'] ) ) {
 		$articles['data'][$key]['read_more'] = TRUE;

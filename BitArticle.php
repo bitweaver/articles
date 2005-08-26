@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.9 2005/08/26 10:15:15 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.10 2005/08/26 10:57:54 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.9 2005/08/26 10:15:15 squareing Exp $
+* $Id: BitArticle.php,v 1.10 2005/08/26 10:57:54 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.9 $ $Date: 2005/08/26 10:15:15 $ $Author: squareing $
+* @version $Revision: 1.10 $ $Date: 2005/08/26 10:57:54 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -116,6 +116,7 @@ class BitArticle extends LibertyAttachable {
                     $this->mInfo['categs'] = $categlib->get_object_categories_details( 'blogpost',$this->mInfo['post_id'] );*/
                 }
 
+			/* - i don't think this is used anywhere - xing
 			$this->mInfo['publish_date_string'] = date( 'Y-m-d H:i', $this->mInfo['publish_date'] );
 			$this->mInfo['publish_year'] = date( 'Y', $this->mInfo['publish_date'] );
 			$this->mInfo['publish_month'] = date( 'm', $this->mInfo['publish_date'] );
@@ -129,6 +130,7 @@ class BitArticle extends LibertyAttachable {
 			$this->mInfo['expire_day'] = date( 'd', $this->mInfo['expire_date'] );
 			$this->mInfo['expire_hour'] = date( 'H', $this->mInfo['expire_date'] );
 			$this->mInfo['expire_minute'] = date( 'i', $this->mInfo['expire_date'] );
+			*/
 			$comment = &new LibertyComment();
 			$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
                 LibertyAttachable::load();
@@ -184,7 +186,6 @@ class BitArticle extends LibertyAttachable {
 
                 $result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
             }
-
 
             $this->mDb->CompleteTrans();
             $this->load();
@@ -284,22 +285,21 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['publish_Month'] ) ) {
 			$dateString = $pParamHash['publish_Year'].'-'.$pParamHash['publish_Month'].'-'.$pParamHash['publish_Day'].' '.$pParamHash['publish_Hour'].':'.$pParamHash['publish_Minute'];
-			$timestamp = strtotime( $dateString );
+			$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['publish_date'] = $timestamp;
 			}
 		}
+		if( !empty( $pParamHash['publish_date'] ) ) {
+			$pParamHash['article_store']['publish_date'] = $pParamHash['publish_date'];
+		}
 
 		if( !empty( $pParamHash['expire_Month'] ) ) {
 			$dateString = $pParamHash['expire_Year'].'-'.$pParamHash['expire_Month'].'-'.$pParamHash['expire_Day'].' '.$pParamHash['expire_Hour'].':'.$pParamHash['expire_Minute'];
-			$timestamp = strtotime( $dateString );
+			$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['expire_date'] = $timestamp;
 			}
-		}
-
-		if( !empty( $pParamHash['publish_date'] ) ) {
-			$pParamHash['article_store']['publish_date'] = $pParamHash['publish_date'];
 		}
 		if( !empty( $pParamHash['expire_date'] ) ) {
 			$pParamHash['article_store']['expire_date'] = $pParamHash['expire_date'];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.2 2005/08/26 10:15:15 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.3 2005/08/26 10:57:54 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -70,5 +70,5 @@ $smarty->assign_by_ref( 'control', $_REQUEST["control"] );
 $smarty->assign_by_ref( 'listpages', $listarticles["data"] );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "articles" ));
+$gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ));
 ?>

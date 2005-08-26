@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.7 2005/08/26 09:17:14 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.8 2005/08/26 09:33:42 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -71,7 +71,6 @@ $smarty->assign_by_ref( 'types', $types );
 	$templates = $tikilib->list_templates( 'cms', 0, -1, 'name_asc', '' );
 }*/
 $smarty->assign_by_ref( 'templates', $templates["data"] );
-
 
 // WYSIWYG and Quicktag variable
 $smarty->assign( 'textarea_id', 'editarticle' );

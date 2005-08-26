@@ -1,21 +1,20 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.2 2005/08/22 21:11:07 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.3 2005/08/26 09:33:42 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // Initialization
 require_once( '../../bit_setup_inc.php' );
-require_once( ARTICLES_PKG_PATH . 'art_lib.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
 
-$gContent = &new BitArticleType(!empty($_REQUEST['article_type_id']) ? $_REQUEST['article_type_id'] : NULL);
-
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'bit_p_admin_cms' );
+
+$gContent = &new BitArticleType( !empty( $_REQUEST['article_type_id'] ) ? $_REQUEST['article_type_id'] : NULL );
 
 if( isset( $_REQUEST["add_type"] ) ) {
     $gContent->storeType( $_REQUEST );
@@ -51,5 +50,5 @@ $types = BitArticleType::listTypes();
 $smarty->assign( 'types', $types );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Articles') );
+$gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Edit Article Types') );
 ?>

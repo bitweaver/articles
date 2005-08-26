@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.6 2005/08/26 08:47:35 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.7 2005/08/26 20:53:00 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -13,7 +13,7 @@
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 		{/if}
 		<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
-		{if $bit_p_remove_article eq 'y'}
+		{if $gBitUser->hasPermission( 'bit_p_remove_article' )}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?remove={$article.article_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a>
 		{/if}
 	</div><!-- end .footer -->
@@ -84,7 +84,7 @@
 	</div><!-- end .body -->
 </div><!-- end .article -->
 
-{if $print_page ne 'y' and $article.allow_comments and !$preview && !$showDescriptionsOnly}
+{if $print_page ne 'y' and $article.allow_comments and !$preview && !$showDescriptionsOnly and $article.status_id eq $smarty.const.ARTICLE_STATUS_APPROVED}
 	{include file="bitpackage:liberty/comments.tpl"}
 {/if}
 

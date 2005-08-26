@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.11 2005/08/26 20:17:40 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.12 2005/08/26 20:53:00 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.11 2005/08/26 20:17:40 squareing Exp $
+* $Id: BitArticle.php,v 1.12 2005/08/26 20:53:00 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.11 $ $Date: 2005/08/26 20:17:40 $ $Author: squareing $
+* @version $Revision: 1.12 $ $Date: 2005/08/26 20:53:00 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -93,6 +93,13 @@ class BitArticle extends LibertyAttachable {
 			global $gBitSystem;
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
+
+				if( $this->mInfo['image_attachment_id'] ) {
+					$this->mInfo['img_url'] = '';
+				} elseif( $this->mInfo['has_topic_image'] == 'y' ) {
+					$this->mInfo['img_url'] = BitArticleTopic::getTopicImageStorageUrl( $this->mInfo['topic_id'] );
+				}
+
 				$this->mContentId = $result->fields['content_id'];
 				$this->mArticleId = $result->fields['article_id'];
 				$this->mTopicId   = $result->fields['topic_id'];
@@ -287,8 +294,8 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['publish_Month'] ) ) {
 			$dateString = $pParamHash['publish_Year'].'-'.$pParamHash['publish_Month'].'-'.$pParamHash['publish_Day'].' '.$pParamHash['publish_Hour'].':'.$pParamHash['publish_Minute'];
-			$timestamp = strtotime( $dateString );
-			//$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
+			//$timestamp = strtotime( $dateString );
+			$timestamp = $gBitSystem->mServerTimestamp->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['publish_date'] = $timestamp;
 			}
@@ -299,8 +306,8 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['expire_Month'] ) ) {
 			$dateString = $pParamHash['expire_Year'].'-'.$pParamHash['expire_Month'].'-'.$pParamHash['expire_Day'].' '.$pParamHash['expire_Hour'].':'.$pParamHash['expire_Minute'];
-			$timestamp = strtotime( $dateString );
-			//$timestamp = $gBitSystem->getUTCFromDisplayDate( strtotime( $dateString ) );
+			//$timestamp = strtotime( $dateString );
+			$timestamp = $gBitSystem->mServerTimestamp->getUTCFromDisplayDate( strtotime( $dateString ) );
 			if( $timestamp !== -1 ) {
 				$pParamHash['expire_date'] = $timestamp;
 			}

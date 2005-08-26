@@ -6,52 +6,52 @@
 // replaced type_name with article_type_id
 
 $tables = array('tiki_articles' => "
-article_id I4 AUTO PRIMARY,
-content_id I4 NOTNULL,
-description X,
-author_name C(250),
-topic_id I4,
-image_attachment_id I4,
-publish_date I4,
-expire_date I4,
-article_type_id I4,
-topic_id I4,
-rating F,
-status_id I4
+	article_id I4 AUTO PRIMARY,
+	content_id I4 NOTNULL,
+	description X,
+	author_name C(250),
+	topic_id I4,
+	image_attachment_id I4,
+	publish_date I4,
+	expire_date I4,
+	article_type_id I4,
+	topic_id I4,
+	rating F,
+	status_id I4
 ",
 
 'tiki_article_status' => "
-status_id	I4 PRIMARY,
-status_name C(64)
+	status_id	I4 PRIMARY,
+	status_name C(64)
 ",
 
 'tiki_article_types' => "
-article_type_id I4 AUTO PRIMARY,
-type_name C(50),
-use_ratings C(1),
-show_pre_publ C(1),
-show_post_expire C(1) DEFAULT 'y',
-heading_only C(1),
-allow_comments C(1) DEFAULT 'y',
-show_image C(1) DEFAULT 'y',
-show_avatar C(1),
-show_author C(1) DEFAULT 'y',
-show_pubdate C(1) DEFAULT 'y',
-show_expdate C(1),
-show_reads C(1) DEFAULT 'y',
-show_size C(1) DEFAULT 'y',
-creator_edit C(1),
-comment_can_rate_article C(1)
+	article_type_id I4 AUTO PRIMARY,
+	type_name C(50),
+	use_ratings C(1),
+	show_pre_publ C(1),
+	show_post_expire C(1) DEFAULT 'y',
+	heading_only C(1),
+	allow_comments C(1) DEFAULT 'y',
+	show_image C(1) DEFAULT 'y',
+	show_avatar C(1),
+	show_author C(1) DEFAULT 'y',
+	show_pubdate C(1) DEFAULT 'y',
+	show_expdate C(1),
+	show_reads C(1) DEFAULT 'y',
+	show_size C(1) DEFAULT 'y',
+	creator_edit C(1),
+	comment_can_rate_article C(1)
 ",
 
 // tiki_topics renamed to tiki_article_topics
 // name renamed to topic_name
 'tiki_article_topics' => "
-topic_id I4 AUTO PRIMARY,
-topic_name C(40),
-has_topic_image C(1),
-active C(1),
-created I8
+	topic_id I4 AUTO PRIMARY,
+	topic_name C(40),
+	has_topic_image C(1),
+	active C(1),
+	created I8
 "
 
 );

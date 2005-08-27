@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.15 2005/08/27 19:39:42 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.16 2005/08/27 20:26:28 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.15 2005/08/27 19:39:42 squareing Exp $
+* $Id: BitArticle.php,v 1.16 2005/08/27 20:26:28 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.15 $ $Date: 2005/08/27 19:39:42 $ $Author: squareing $
+* @version $Revision: 1.16 $ $Date: 2005/08/27 20:26:28 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -381,8 +381,8 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['status_id'] ) ) {
 			if( $pParamHash['status_id'] > ARTICLE_STATUS_PENDING ) {
-				if( $gBitUser->hasPermission( 'bit_p_approve_submission' )||
-					$gBitUser->hasPermission( 'bit_p_admin_received_articles' )||
+				if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
+					$gBitUser->hasPermission( 'bit_p_admin_received_articles' ) ||
 					$gTikiuser->hasPermission( 'bit_p_autoapprove_submission' ) ) {
 					$pParamHash['article_store']['status_id'] =( int )( $pParamHash['status_id'] );
 				} else {
@@ -394,8 +394,8 @@ class BitArticle extends LibertyAttachable {
 		} elseif( !empty( $this->mInfo['status_id'] ) ) {
 			$pParamHash['article_store']['status_id'] = $this->mInfo['status_id'];
 		} else {
-			if( $gBitUser->hasPermission( 'bit_p_approve_submission' )||
-				$gBitUser->hasPermission( 'bit_p_admin_received_articles' )||
+			if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
+				$gBitUser->hasPermission( 'bit_p_admin_received_articles' ) ||
 				$gBitUser->hasPermission( 'bit_p_autoapprove_submission' ) ) {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_APPROVED;
 			} else {

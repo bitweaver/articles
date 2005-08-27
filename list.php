@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.3 2005/08/26 10:57:54 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.4 2005/08/27 20:26:28 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -42,32 +42,32 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 			}
 		}
 		if( !empty( $errors ) ) {
-			$smarty->assign_by_ref( 'errors', $errors );
+			$smarty->assign( 'errors', $errors );
 		}
 	}
 }
 
-if( !isset( $_REQUEST["type"] ) ) {
-    $_REQUEST["type"] = '';
-}
-if( !isset( $_REQUEST["topic"] ) ) {
-    $_REQUEST["topic"] = '';
+$article = new BitArticle();
+// change the status of an article first
+if( !empty( $_REQUEST['action'] ) ) {
+	if( !empty( $_REQUEST['article_id'] ) && !empty( $_REQUEST['set_status_id'] ) && $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
+		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'] );
+	}
 }
 
-$article = new BitArticle();
 if( empty( $_REQUEST['status_id'] ) || ( !$gBitUser->hasPermission( 'bit_p_view_submissions' ) && !$gBitUser->hasPermission( 'bit_p_admin_articles' ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 $listarticles = $article->getList( $_REQUEST );
 
 $topics = BitArticleTopic::listTopics();
-$smarty->assign_by_ref( 'topics', $topics );
+$gBitSmarty->assign( 'topics', $topics );
 
 $types = BitArticleType::listTypes();
-$smarty->assign_by_ref( 'types', $types );
+$gBitSmarty->assign( 'types', $types );
 
-$smarty->assign_by_ref( 'control', $_REQUEST["control"] );
-$smarty->assign_by_ref( 'listpages', $listarticles["data"] );
+$gBitSmarty->assign( 'control', $_REQUEST["control"] );
+$gBitSmarty->assign( 'listpages', $listarticles["data"] );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ));

@@ -3,6 +3,8 @@
 		<h1>{tr}Articles{/tr}</h1>
 	</div>
 
+	{formfeedback success=$smarty.request.feedback}
+
 	{foreach from=$articles item=article}
 		{include file="bitpackage:articles/article_display.tpl"}
 	{foreachelse}

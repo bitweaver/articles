@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.5 2005/08/27 09:48:36 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.6 2005/08/27 20:26:28 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -99,12 +99,17 @@
 					{if $art_list_reads eq 'y'}
 						<td style="text-align:right;">{$article.hits}</td>
 					{/if}
-					<td>
-						{if $bit_p_edit_article eq 'y' or ($article.author eq $user and $article.creator_edit eq 'y')}
-							<a title="{tr}Edit{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" /></a>
+					<td style="text-align:right;">
+						{if $article.status_id eq $smarty.const.ARTICLE_STATUS_PENDING and $gBitUser->hasPermission( 'bit_p_approve_submission' )}
+							{smartlink ititle="Approve Article" ibiticon="liberty/success" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
 						{/if}
-						{if $bit_p_remove_article eq 'y'}
-							<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}list.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" /></a>
+
+						{if $gBitUser->hasPermission( 'bit_p_edit_article' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}
+							{smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" article_id=$article.article_id}
+						{/if}
+
+						{if $gBitUser->hasPermission( 'bit_p_remove_article' )}
+							{smartlink ititle="Remove" ibiticon="liberty/delete" remove=$article.article_id offset=$offset sort_mode=$sort_mode}
 						{/if}
 					</td>
 				</tr>

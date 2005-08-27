@@ -424,7 +424,7 @@ class ArtLib extends BitBase {
 	// CMS functions -ARTICLES- & -SUBMISSIONS- ////
 	/*shared*/
 	function list_articles( $offset = 0, $maxRecords = -1, $sort_mode = 'publish_date_desc', $find = '', $date = '', $type = '', $topic_id = '', $pUser = NULL ) {
-		global $gBitUser;
+		global $gBitUser, $gBitSystem;
 
 		$mid = " WHERE art.`article_type_id` = arttype.`article_type_id` AND tc.`user_id` = u.`user_id` ";
 		$bindvars=array();
@@ -482,7 +482,7 @@ class ArtLib extends BitBase {
 
 			// Determine if the article would be displayed in the view page
 			$res["disp_article"] = 'y';
-			$now = date("U");
+			$now = $gBitSystem->getUTCTime();
 			//if ($date) {
 			   if (($res["show_pre_publ"] != 'y') and ($now < $res["publish_date"])) {
 				   $res["disp_article"] = 'n';
@@ -584,12 +584,13 @@ class ArtLib extends BitBase {
 	}
 
 	function replace_article($title, $author_name, $topic_id, $use_image, $imgname, $imgsize, $imgtype, $imgdata, $heading, $body, $publish_date, $expire_date, $user, $article_id, $image_x, $image_y, $type, $rating = 0, $isfloat = 'n') {
-
+		global $gBitSystem;
+		
 		if ($expire_date < $publish_date) {
 		   $expire_date = $publish_date;
 		}
 		$hash = md5($title . $heading . $body);
-		$now = date("U");
+		$now = $gBitSystem->getUTCTime();
 		if(empty($imgdata)) $imgdata='';
 		// Fixed query. -rlpowell
 		$query = "select `name`  from `".BIT_DB_PREFIX."tiki_topics` where `topic_id` = ?";

@@ -74,7 +74,8 @@ class BitArticleTopic extends BitBase
 		}
 
 		if (empty($iParamHash['created'])) {
-			$cleanHash['created'] = date("U");
+			global $gBitSystem;
+			$cleanHash['created'] = $gBitSystem->getUTCTime();
 		}
 
 		$iParamHash = $cleanHash;
@@ -135,6 +136,7 @@ class BitArticleTopic extends BitBase
 	}
 
 	function getTopicImageStorageUrl($iTopicId = NULL, $iBasePathOnly = FALSE, $iForceRefresh = NULL) {
+		global $gBitSystem;
 		if (!is_dir(BIT_ROOT_PATH.'/storage/articles')) {
 			mkdir(BIT_ROOT_PATH.'/storage/articles');
 		}
@@ -152,7 +154,7 @@ class BitArticleTopic extends BitBase
 			}
 		}
 
-		return '/storage/articles/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".date('U') : '');
+		return '/storage/articles/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
 	}
 
 	function listTopics() {

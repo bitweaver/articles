@@ -1,9 +1,9 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.7 2005/08/26 20:53:00 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.8 2005/08/27 11:09:53 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
 
-{if $serviceNavTpls.categorization}
+{if $serviceNavTpls.categorization and !$showDescriptionsOnly}
 	{include file=$serviceNavTpls.categorization"}
 {/if}
 
@@ -88,7 +88,7 @@
 	{include file="bitpackage:liberty/comments.tpl"}
 {/if}
 
-{if $serviceViewTpls.categorization}
+{if $serviceViewTpls.categorization and !$showDescriptionsOnly}
 	{include file=$serviceViewTpls.categorization"}
 {/if}
 {/strip}

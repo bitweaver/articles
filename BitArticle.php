@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.14 2005/08/27 09:48:36 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.15 2005/08/27 19:39:42 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.14 2005/08/27 09:48:36 squareing Exp $
+* $Id: BitArticle.php,v 1.15 2005/08/27 19:39:42 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.14 $ $Date: 2005/08/27 09:48:36 $ $Author: squareing $
+* @version $Revision: 1.15 $ $Date: 2005/08/27 19:39:42 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -149,7 +149,7 @@ class BitArticle extends LibertyAttachable {
 		return( count( $this->mInfo ));
 	}
 
-	function setStatus( $pStatusId ) {
+	function setStatus( $pStatusId, $pArticleId = NULL ) {
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
 		if( !in_array( $pStatusId, $validStatuses ) ) {
@@ -157,9 +157,13 @@ class BitArticle extends LibertyAttachable {
 			return FALSE;
 		}
 
-		if( !empty( $this->mArticleId ) ) {
+		if( empty( $pArticleId ) && !empty( $this->mArticleId ) ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		if( !empty( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
-			$rs = $this->mDb->query( $sql, array( $pStatusId, $this->mArticleId ));
+			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
 			return $pStatusId;
 		}
 	}
@@ -484,7 +488,7 @@ class BitArticle extends LibertyAttachable {
 
 		if( is_array( $find ) ) {
 			// you can use an array of pages
-			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0,count( $find ),'?' ))." )";
+			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindvars = $find;
 		} else if( is_string( $find ) ) {
 			// or a string
@@ -499,20 +503,13 @@ class BitArticle extends LibertyAttachable {
 			$bindvars = array();
 		}
 
-		if( !empty( $pParamHash['show_expired'] ) ) {
-
-		} else {
-			$timestamp = date( "" );
+		if( empty( $pParamHash['show_expired'] ) ) {
+			$timestamp = $gBitSystem->getUTCTime();
 			$artMid = " AND ta.`publish_date` < $timestamp AND ta.`expire_date` > $timestamp ";
 		}
 
 		if( !empty( $pParamHash['status_id'] ) ) {
-			if( $mid == "" ) {
-				$mid .= " WHERE ";
-			} else {
-				$mid .= " AND ";
-			}
-			$mid .= " ta.`status_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
 			if( is_array( $bindvars ) ) {
 				$bindvars[] = $pParamHash['status_id'];
 			} else {
@@ -532,7 +529,7 @@ class BitArticle extends LibertyAttachable {
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )".
 			( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
-		$result = $this->mDb->query( $query,$bindvars,$max_records,$offset );
+		$result = $this->mDb->query( $query, $bindvars, $max_records, $offset );
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
@@ -557,7 +554,7 @@ class BitArticle extends LibertyAttachable {
 
 		$pParamHash["data"] = $ret;
 
-		$pParamHash["cant"] = $this->mDb->getOne( $query_cant,$bindvars );
+		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindvars );
 
 		LibertyContent::postGetList( $pParamHash );
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.2 2005/08/27 09:48:36 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -19,7 +19,7 @@
 				<div class="row">
 					{formlabel label="Maximum Articles" for="articles-maxhome"}
 					{forminput}
-						<input size="5" type="text" name="maxArticles" id="articles-maxhome" value="{$gBitSystemPrefs.maxArticles|escape}" />
+						<input size="5" type="text" name="max_articles" id="articles-maxhome" value="{$gBitSystemPrefs.max_articles|escape}" />
 						{formhelp note="Number of articles shown on the main articles page."}
 					{/forminput}
 				</div>

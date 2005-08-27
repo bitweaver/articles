@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.4 2005/08/26 10:15:15 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.5 2005/08/27 09:48:36 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -23,9 +23,6 @@
 				{if $art_list_expire eq 'y'}
 					<li>{smartlink ititle='Expire Date' isort='expire_date' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
-				{if $art_list_status eq 'y'}
-					<li>{smartlink ititle='Status' isort='status_id' offset=$offset type=$find_type topic=$find_topic}</li>
-				{/if}
 			</ul>
 		</div>
 
@@ -43,11 +40,11 @@
 				{if $art_list_topic eq 'y'}
 					<th>{smartlink ititle='Topic' isort='topic_name' offset=$offset type=$find_type topic=$find_topic}</th>
 				{/if}
-				{if $art_list_reads eq 'y'}
-					<th>{smartlink ititle='Reads' isort='hits' offset=$offset type=$find_type topic=$find_topic}</th>
-				{/if}
 				{if $art_list_status eq 'y'}
 					<th>{smartlink ititle='Status' isort='status_id' offset=$offset type=$find_type topic=$find_topic}</th>
+				{/if}
+				{if $art_list_reads eq 'y'}
+					<th>{smartlink ititle='Reads' isort='hits' offset=$offset type=$find_type topic=$find_topic}</th>
 				{/if}
 				<th>{tr}Action{/tr}</th>
 			</tr>
@@ -78,16 +75,13 @@
 						{/if}
 
 						{if $art_list_date eq 'y' or $art_list_expire eq 'y'}<br />{/if}
+
 						{if $art_list_date eq 'y' and $art_list_expire eq 'y'}
 							{tr}Displayed from <strong>{$article.publish_date|bit_short_datetime}</strong> until <strong>{$article.expire_date|bit_short_datetime}</strong>{/tr}
 						{elseif $art_list_date eq 'y'}
 							{tr}Displayed from <strong>{$article.publish_date|bit_short_datetime}</strong>{/tr}
 						{elseif $art_list_expire eq 'y'}
 							{tr}Displayed until <strong>{$article.expire_date|bit_short_datetime}</strong>{/tr}
-						{/if}
-
-						{if $art_list_status eq 'y'}
-							{$article.status_name}
 						{/if}
 					</td>
 				</tr>
@@ -99,16 +93,19 @@
 					{if $art_list_topic eq 'y'}
 						<td>{$article.topic_name}</td>
 					{/if}
+					{if $art_list_status eq 'y'}
+						<td>{$article.status_name}</td>
+					{/if}
 					{if $art_list_reads eq 'y'}
 						<td style="text-align:right;">{$article.hits}</td>
 					{/if}
 					<td>
-					{if $bit_p_edit_article eq 'y' or ($article.author eq $user and $article.creator_edit eq 'y')}
-						<a title="{tr}Edit{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" /></a>
-					{/if}
-					{if $bit_p_remove_article eq 'y'}
-						<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}list.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" /></a>
-					{/if}
+						{if $bit_p_edit_article eq 'y' or ($article.author eq $user and $article.creator_edit eq 'y')}
+							<a title="{tr}Edit{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/edit.gif" alt="{tr}Edit{/tr}" /></a>
+						{/if}
+						{if $bit_p_remove_article eq 'y'}
+							<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}list.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;remove={$article.article_id}"><img class="icon" src="{$smarty.const.KERNEL_PKG_URL}icons/delete.gif" alt="{tr}Remove{/tr}" /></a>
+						{/if}
 					</td>
 				</tr>
 			{foreachelse}

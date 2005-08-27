@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.13 2005/08/26 22:18:11 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.14 2005/08/27 09:48:36 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.13 2005/08/26 22:18:11 squareing Exp $
+* $Id: BitArticle.php,v 1.14 2005/08/27 09:48:36 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.13 $ $Date: 2005/08/26 22:18:11 $ $Author: squareing $
+* @version $Revision: 1.14 $ $Date: 2005/08/27 09:48:36 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -55,7 +55,8 @@ class BitArticle extends LibertyAttachable {
 		$this->mTopicId = NULL;
 
 		LibertyAttachable::LibertyAttachable();
-		$this->registerContentType( BITARTICLE_CONTENT_TYPE_GUID, array( 'content_description' => 'Article',
+		$this->registerContentType( BITARTICLE_CONTENT_TYPE_GUID, array(
+			'content_description' => 'Article',
 			'handler_class' => 'BitArticle',
 			'handler_package' => 'articles',
 			'handler_file' => 'BitArticle.php',

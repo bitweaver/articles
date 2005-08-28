@@ -188,11 +188,12 @@
 				{/if}
 
 				{jstab title="Advanced"}
-					{legend legend="Upload custom article image"}
+					{legend legend="Custom article image"}
 						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) *}
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
 						{*/if*}
-						{if $article.image_attachment_id or $article.preview_img_path}
+
+						{if $article.img_url}
 							<div class="row">
 								{formlabel label="Custom Image"}
 								{forminput}
@@ -201,6 +202,14 @@
 								{/forminput}
 							</div>
 						{/if}
+
+						<div class="row">
+							{formlabel label="Use Existing Image" for="existing_attachment_id_input"}
+							{forminput}
+								<input type="text" name="image_attachment_id" id="existing_attachment_id_input" value="{$article.image_attachment_id}" size="6"/><br />
+								<a href="{$smarty.const.LIBERTY_PKG_URL}attachment_browser.php" title="{tr}Opens attachment browser in new window{/tr}" onkeypress="popUpWin(this.href,'standard',600,400);" onclick="popUpWin(this.href,'standard',600,400);return false;">{tr}Attachment Browser{/tr}</a>
+							{/forminput}
+						</div>
 
 						<div class="row">
 							{formlabel label="Custom Image" for="upload"}

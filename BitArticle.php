@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.18 2005/08/28 18:14:38 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.19 2005/08/28 19:38:53 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.18 2005/08/28 18:14:38 squareing Exp $
+* $Id: BitArticle.php,v 1.19 2005/08/28 19:38:53 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.18 $ $Date: 2005/08/28 18:14:38 $ $Author: squareing $
+* @version $Revision: 1.19 $ $Date: 2005/08/28 19:38:53 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -76,7 +76,7 @@ class BitArticle extends LibertyAttachable {
 			// This is a significant performance optimization
 			$lookupColumn = !empty( $this->mArticleId )? 'article_id' : 'content_id';
 			$lookupId = !empty( $this->mArticleId )? $this->mArticleId : $this->mContentId;
-			$query = "select ta.*, tc.*, tatype.*, tatopic.*, " .
+			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
 				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
 				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
 				"tf.storage_path as image_storage_path " .
@@ -96,13 +96,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo = $result->fields;
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-				if( BitArticle::getArticleImageStorageUrl( $this->mInfo['article_id'] ) ) {
-					$this->mInfo['img_url'] = BitArticle::getArticleImageStorageUrl( $this->mInfo['article_id'] );
-				} elseif( $this->mInfo['image_attachment_id'] ) {
-					$this->mInfo['img_url'] = 'test';
-				} elseif( $this->mInfo['has_topic_image'] == 'y' ) {
-					$this->mInfo['img_url'] = BitArticleTopic::getTopicImageStorageUrl( $this->mInfo['topic_id'] );
-				}
+				$this->mInfo['img_url'] = BitArticle::getImageUrl( $this->mInfo );
 
 				$this->mContentId = $result->fields['content_id'];
 				$this->mArticleId = $result->fields['article_id'];
@@ -313,6 +307,13 @@ class BitArticle extends LibertyAttachable {
 			$pParamHash['article_store']['author_name'] = $pParamHash['author_name'];
 		}
 
+		// if no image attachment id is given, we set it null. this way a user can remove an attached image
+		if( !empty( $pParamHash['image_attachment_id'] ) ) {
+			$pParamHash['article_store']['image_attachment_id'] = ( int )$pParamHash['image_attachment_id'];
+		} else {
+			$pParamHash['article_store']['image_attachment_id'] = NULL;
+		}
+
 		if( !empty( $pParamHash['topic_id'] ) ) {
 			$pParamHash['article_store']['topic_id'] =( int )$pParamHash['topic_id'];
 		}
@@ -454,31 +455,43 @@ class BitArticle extends LibertyAttachable {
 			$data['parsed_data'] = $this->parseData( $data['data'],$data['format_guid'] );
 		}
 
-		// store the image in temp/articles/
-		$tmpImagePath = TEMP_PKG_PATH.'articles/'.'temp_'.$_FILES['article_image']['name'];
-		$tmpImageName = preg_replace( "/\..*?$/", "", $_FILES['article_image']['name'] );
-		if( !is_dir( TEMP_PKG_PATH.'articles' ) ) {
-			mkdir( TEMP_PKG_PATH.'articles' );
+		if( !empty( $data['image_attachment_id'] ) ) {
+			$data['image_attachment_id'] = ( int )$data['image_attachment_id'];
+			$query = "SELECT tf.storage_path AS image_storage_path
+				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = ta.foreign_id )
+				WHERE ta.attachment_id=?";
+			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
+			$data['img_url'] = BitArticle::getImageUrl( $data );
 		}
 
-		if( !empty( $_FILES['article_image'] ) && !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
-			$this->mErrors['article_image'] = "Error during attachment of article image";
-		} else {
-			$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
-			$pFileHash['source_file'] = $tmpImagePath;
-			$pFileHash['dest_path'] = 'temp/articles/';
-			// remove the extension
-			$pFileHash['dest_base_name'] = $tmpImageName;
-			$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-			$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-			$pFileHash['type'] = $_FILES['article_image']['type'];
-
-			if( !( $resizeFunc( $pFileHash ) ) ) {
-				$this->mErrors[] = 'Error while resizing article image';
+		if( !empty( $_FILES['article_image'] ) ) {
+			// store the image in temp/articles/
+			$tmpImagePath = TEMP_PKG_PATH.'articles/'.'temp_'.$_FILES['article_image']['name'];
+			$tmpImageName = preg_replace( "/(.*)\..*?$/", "$1", $_FILES['article_image']['name'] );
+			if( !is_dir( TEMP_PKG_PATH.'articles' ) ) {
+				mkdir( TEMP_PKG_PATH.'articles' );
 			}
-			@unlink( $tmpImagePath );
-			$data['img_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
-			$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
+
+			if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
+				$this->mErrors['article_image'] = "Error during attachment of article image";
+			} else {
+				$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+				$pFileHash['source_file'] = $tmpImagePath;
+				$pFileHash['dest_path'] = 'temp/articles/';
+				// remove the extension
+				$pFileHash['dest_base_name'] = $tmpImageName;
+				$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+				$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+				$pFileHash['type'] = $_FILES['article_image']['type'];
+
+				if( !( $resizeFunc( $pFileHash ) ) ) {
+					$this->mErrors[] = 'Error while resizing article image';
+				}
+				@unlink( $tmpImagePath );
+				$data['img_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
+				$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
+			}
 		}
 
 		$articleType = &new BitArticleType( $data['article_type_id'] );
@@ -486,6 +499,20 @@ class BitArticle extends LibertyAttachable {
 		$data = array_merge( $data, $articleType->mInfo, $articleTopic->mInfo );
 
 		return $data;
+	}
+
+	function getImageUrl( $pParamHash ) {
+		$ret = NULL;
+		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
+		if( !empty( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
+			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
+		} elseif( !empty( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
+			// TODO: clean up the avatar url stuff. shouldn't be hardcoded.
+			$ret = BIT_ROOT_URL.preg_replace( "/(.*)\/.*?$/", "$1/avatar.jpg", $pParamHash['image_storage_path'] );
+		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
+			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
+		}
+		return $ret;
 	}
 
 	function expunge() {
@@ -555,12 +582,15 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name
+		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name,
+			tf.storage_path as image_storage_path
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.topic_id = ta.topic_id )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.article_type_id = ta.article_type_id )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
 			ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
 
@@ -572,13 +602,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-			if( BitArticle::getArticleImageStorageUrl( $res['article_id'] ) ) {
-				$res['img_url'] = BitArticle::getArticleImageStorageUrl( $res['article_id'] );
-			} elseif( $res['image_attachment_id'] ) {
-				$res['img_url'] = 'test';
-			} elseif( $res['has_topic_image'] == 'y' ) {
-				$res['img_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
-			}
+			$res['img_url'] = BitArticle::getImageUrl( $res );
 
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );

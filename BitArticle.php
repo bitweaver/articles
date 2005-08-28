@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.17 2005/08/28 09:42:03 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.18 2005/08/28 18:14:38 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.17 2005/08/28 09:42:03 squareing Exp $
+* $Id: BitArticle.php,v 1.18 2005/08/28 18:14:38 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.17 $ $Date: 2005/08/28 09:42:03 $ $Author: squareing $
+* @version $Revision: 1.18 $ $Date: 2005/08/28 18:14:38 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -89,14 +89,17 @@ class BitArticle extends LibertyAttachable {
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )" .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )" .
 				"WHERE ta.`$lookupColumn`=?";
-			$result = $this->mDb->query( $query, array( $lookupId ));
+			$result = $this->mDb->query( $query, array( $lookupId ) );
 
 			global $gBitSystem;
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 
-				if( $this->mInfo['image_attachment_id'] ) {
-					$this->mInfo['img_url'] = BitArticle::getArticleImageStorageUrl( $this->mInfo['image_attachment_id'] );
+				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
+				if( BitArticle::getArticleImageStorageUrl( $this->mInfo['article_id'] ) ) {
+					$this->mInfo['img_url'] = BitArticle::getArticleImageStorageUrl( $this->mInfo['article_id'] );
+				} elseif( $this->mInfo['image_attachment_id'] ) {
+					$this->mInfo['img_url'] = 'test';
 				} elseif( $this->mInfo['has_topic_image'] == 'y' ) {
 					$this->mInfo['img_url'] = BitArticleTopic::getTopicImageStorageUrl( $this->mInfo['topic_id'] );
 				}
@@ -106,8 +109,8 @@ class BitArticle extends LibertyAttachable {
 				$this->mTopicId   = $result->fields['topic_id'];
 				$this->mTypeId	  = $result->fields['article_type_id'];
 
-				$this->mInfo['creator'] =( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
-				$this->mInfo['editor'] =( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
+				$this->mInfo['creator'] = ( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
+				$this->mInfo['editor'] = ( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ));
 
@@ -188,7 +191,6 @@ class BitArticle extends LibertyAttachable {
 
 			if( $this->mArticleId ) {
 				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
-				$this->storeArticleImage( $pParamHash );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
 			} else {
 				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
@@ -199,9 +201,11 @@ class BitArticle extends LibertyAttachable {
 					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
 				}
 				$this->mArticleId = $pParamHash['article_store']['article_id'];
-				$this->storeArticleImage( $pParamHash );
 				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
 			}
+
+			// we need to store any custom image that has been uploaded
+			$this->storeImage( $pParamHash, $_FILES['article_image'] );
 
 			$this->mDb->CompleteTrans();
 			$this->load();
@@ -209,32 +213,30 @@ class BitArticle extends LibertyAttachable {
 		return( count( $this->mErrors )== 0 );
 	}
 
-	function storeArticleImage( &$pParamHash ) {
+	function storeImage( &$pParamHash, $pFileHash ) {
 		global $gBitSystem;
 		if( !empty( $this->mArticleId ) ) {
-			if( !empty( $_FILES['article_image'] ) && $_FILES['article_image']['tmp_name'] ) {
-				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$_FILES['article_image']['name'];
-				if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
+			if( !empty( $pFileHash['tmp_name'] ) ) {
+				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$pFileHash['name'];
+				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
 					$this->mErrors['article_image'] = "Error during attachment of article image";
 				} else {
 					$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
-					$pFileHash['source_file'] = $tmpImagePath;
-					$pFileHash['dest_path'] = 'storage/articles/';
-					$pFileHash['dest_base_name'] = 'article_'.$this->mArticleId;
-					$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$pFileHash['type'] = $_FILES['article_image']['type'];
+					$storeHash['source_file'] = $tmpImagePath;
+					$storeHash['dest_path'] = 'storage/articles/';
+					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
+					$storeHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+					$storeHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+					$storeHash['type'] = $pFileHash['type'];
 
-					if( !( $resizeFunc( $pFileHash ) ) ) {
+					if( !( $resizeFunc( $storeHash ) ) ) {
 						$this->mErrors[] = 'Error while resizing article image';
 					}
 					@unlink( $tmpImagePath );
-					$pParamHash['article_store']['image_attachment_id'] = $this->mArticleId;
 				}
 			} elseif( !empty( $pParamHash['preview_img_path'] ) && is_file( $pParamHash['preview_img_path'] ) ) {
 				// if this article has been previewed with an image, we can copy it to the destination place
 				rename( $pParamHash['preview_img_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
-				$pParamHash['article_store']['image_attachment_id'] = $this->mArticleId;
 			}
 		}
 	}
@@ -248,7 +250,7 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
-	function getArticleImageStorageUrl( $pImageId = NULL, $pBasePathOnly = FALSE, $iForceRefresh = NULL ) {
+	function getArticleImageStorageUrl( $pImageId = NULL, $pBasePathOnly = FALSE ) {
 		global $gBitSystem;
 		if( !is_dir( STORAGE_PKG_PATH.'articles' ) ) {
 			mkdir( STORAGE_PKG_PATH.'articles' );
@@ -267,7 +269,11 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-		return STORAGE_PKG_URL.'articles/article_'.$pImageId.'.jpg'.( $iForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pImageId.'.jpg' ) ) {
+			return STORAGE_PKG_URL.'articles/article_'.$pImageId.'.jpg';
+		} else {
+			return FALSE;
+		}
 	}
 
 	/**
@@ -338,10 +344,6 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['rating'] ) ) {
 			$pParamHash['article_store']['rating'] =( int )( $pParamHash['rating'] );
-		}
-
-		if( !empty( $_FILES['article_image'] ) ) {
-			// TODO: need to store the article image attachment
 		}
 
 		// check for name issues, first truncate length if too long
@@ -454,18 +456,19 @@ class BitArticle extends LibertyAttachable {
 
 		// store the image in temp/articles/
 		$tmpImagePath = TEMP_PKG_PATH.'articles/'.'temp_'.$_FILES['article_image']['name'];
+		$tmpImageName = preg_replace( "/\..*?$/", "", $_FILES['article_image']['name'] );
 		if( !is_dir( TEMP_PKG_PATH.'articles' ) ) {
 			mkdir( TEMP_PKG_PATH.'articles' );
 		}
 
-		if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
+		if( !empty( $_FILES['article_image'] ) && !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
 			$this->mErrors['article_image'] = "Error during attachment of article image";
 		} else {
 			$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 			$pFileHash['source_file'] = $tmpImagePath;
 			$pFileHash['dest_path'] = 'temp/articles/';
 			// remove the extension
-			$pFileHash['dest_base_name'] = preg_replace( "/\..*?$/", "", $_FILES['article_image']['name'] );
+			$pFileHash['dest_base_name'] = $tmpImageName;
 			$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 			$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 			$pFileHash['type'] = $_FILES['article_image']['type'];
@@ -474,8 +477,8 @@ class BitArticle extends LibertyAttachable {
 				$this->mErrors[] = 'Error while resizing article image';
 			}
 			@unlink( $tmpImagePath );
-			$data['img_url'] = TEMP_PKG_URL.'articles/'.$_FILES['article_image']['name'];
-			$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$_FILES['article_image']['name'];
+			$data['img_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
+			$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
 		}
 
 		$articleType = &new BitArticleType( $data['article_type_id'] );
@@ -488,15 +491,15 @@ class BitArticle extends LibertyAttachable {
 	function expunge() {
 		$ret = FALSE;
 		if( $this->isValid() ) {
-		   /* $this->mDb->StartTrans();
-			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_samples` WHERE `content_id` = ?";
-			$result = $this->mDb->query( $query, array( $this->mContentId ));
+			$this->mDb->StartTrans();
+			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `content_id` = ?";
+			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyAttachable::expunge() ) {
 				$ret = TRUE;
 				$this->mDb->CompleteTrans();
 			} else {
 				$this->mDb->RollbackTrans();
-			}*/
+			}
 		}
 		return $ret;
 	}
@@ -506,10 +509,9 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/*function prepGetList( &$pParamHash ) {
-
-		parent::prepGetList( $pParamHash );
 	}*/
 	/**
+
 	* This function generates a list of records from the tiki_content database for use in a list page
 	**/
 	function getList( &$pParamHash ) {
@@ -569,8 +571,11 @@ class BitArticle extends LibertyAttachable {
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
-			if( $res['image_attachment_id'] ) {
-				$res['img_url'] = BitArticle::getArticleImageStorageUrl( $res['image_attachment_id'] );
+			// if a custom image for the article exists, use that, then use an attachment, then use the topic image
+			if( BitArticle::getArticleImageStorageUrl( $res['article_id'] ) ) {
+				$res['img_url'] = BitArticle::getArticleImageStorageUrl( $res['article_id'] );
+			} elseif( $res['image_attachment_id'] ) {
+				$res['img_url'] = 'test';
 			} elseif( $res['has_topic_image'] == 'y' ) {
 				$res['img_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
 			}
@@ -589,7 +594,6 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		$pParamHash["data"] = $ret;
-
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindvars );
 
 		LibertyContent::postGetList( $pParamHash );
@@ -607,19 +611,6 @@ class BitArticle extends LibertyAttachable {
 		if( !empty( $this->mArticleId ) ) {
 			$ret = ARTICLES_PKG_URL."read.php?article_id=".$this->mArticleId;
 		}
-		return $ret;
-	}
-
-	function listTypes() {
-		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
-		$result = $this->mDb->query( $query, array());
-		$ret = array();
-
-		while( $res = $result->fetchRow() ) {
-			$res['article_cnt'] = $this->mDb->getOne( "select count( * )from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ));
-			$ret[] = $res;
-		}
-
 		return $ret;
 	}
 }

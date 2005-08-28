@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.4 2005/08/27 20:26:28 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.5 2005/08/28 18:14:38 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,15 +13,42 @@ $gBitSystem->verifyPackage( 'articles' );
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'bit_p_read_article' );
 
-/* mass-remove:
-   the checkboxes are sent as the array $_REQUEST["checked[]"], values are the wiki-PageNames,
-   e.g. $_REQUEST["checked"][3]="HomePage"
-   $_REQUEST["submit_mult"] holds the value of the "with selected do..."-option list
-   we look if any page's checkbox is on and if remove_articles is selected.
-   then we check permission to delete articles.
-   if so, we call histlib's method remove_all_versions for all the checked articles.
-*/
-if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["submit_mult"] == "remove_articles" ) {
+// nuke articles if requested
+if( !empty( $_REQUEST['action'] ) ) {
+	if( $_REQUEST['action'] == 'remove' && !empty( $_REQUEST['remove_article_id'] ) ) {
+		$tmpArt = new BitArticle( $_REQUEST['remove_article_id'] );
+		$tmpArt->load();
+		// depending on what the status of the article is, we need to check different permissions
+		if( $tmpArt->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
+			$gBitSystem->verifyPermission( 'bit_p_remove_submission' );
+		} else {
+			$gBitSystem->verifyPermission( 'bit_p_remove_article' );
+		}
+
+		if( isset( $_REQUEST["confirm"] ) ) {
+			if( $tmpArt->expunge() ) {
+				header( "Location: ".ARTICLES_PKG_URL.'list.php?status_id='.( !empty( $_REQUEST['status_id'] ) ? $_REQUEST['status_id'] : '' ) );
+				die;
+			} else {
+				$feedback['error'] = $tmpArt->mErrors;
+			}
+		}
+		$gBitSystem->setBrowserTitle( 'Confirm removal of '.$tmpArt->mInfo['title'] );
+		$formHash['remove'] = TRUE;
+		$formHash['action'] = 'remove';
+		$formHash['status_id'] = ( !empty( $_REQUEST['status_id'] ) ? $_REQUEST['status_id'] : '' );
+		$formHash['remove_article_id'] = $_REQUEST['remove_article_id'];
+		$msgHash = array(
+			'label' => 'Remove Article',
+			'confirm_item' => $tmpArt->mInfo['title'],
+			'warning' => 'This will remove the above article. This cannot be undone.',
+		);
+		$gBitSystem->confirmDialog( $formHash, $msgHash );
+	}
+}
+
+/* this is a messed up version of a multiple articles removal section
+if( isset( $_REQUEST["multi_article"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["multi_article"] == "remove_articles" ) {
 	// Now check permissions to remove the selected articles
 	$gBitSystem->verifyPermission( 'bit_p_remove_article' );
 
@@ -38,7 +65,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		foreach( $_REQUEST["checked"] as $deleteId ) {
 			$tmpPage = new BitArticle( $deleteId );
 			if( !$tmpPage->load()|| !$tmpPage->expunge() ) {
-				array_merge( $errors, array_values( $tmpPage->mErrors ));
+				array_merge( $errors, array_values( $tmpPage->mErrors ) );
 			}
 		}
 		if( !empty( $errors ) ) {
@@ -46,6 +73,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		}
 	}
 }
+*/
 
 $article = new BitArticle();
 // change the status of an article first

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.21 2005/08/28 20:34:20 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.22 2005/08/28 20:40:43 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.21 2005/08/28 20:34:20 squareing Exp $
+* $Id: BitArticle.php,v 1.22 2005/08/28 20:40:43 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.21 $ $Date: 2005/08/28 20:34:20 $ $Author: squareing $
+* @version $Revision: 1.22 $ $Date: 2005/08/28 20:40:43 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -71,11 +71,11 @@ class BitArticle extends LibertyAttachable {
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
 	**/
 	function load() {
-		if( !empty( $this->mArticleId )|| !empty( $this->mContentId ) ) {
+		if( !empty( $this->mArticleId ) || !empty( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
-			$lookupColumn = !empty( $this->mArticleId )? 'article_id' : 'content_id';
-			$lookupId = !empty( $this->mArticleId )? $this->mArticleId : $this->mContentId;
+			$lookupColumn = !empty( $this->mArticleId ) ? 'article_id' : 'content_id';
+			$lookupId = !empty( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
 				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
 				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
@@ -136,7 +136,7 @@ class BitArticle extends LibertyAttachable {
 			return FALSE;
 		}
 
-		if( empty( $pArticleId ) && !empty( $this->mArticleId ) ) {
+		if( empty( $pArticleId ) && $this->isValid() ) {
 			$pArticleId = $this->mArticleId;
 		}
 
@@ -165,7 +165,7 @@ class BitArticle extends LibertyAttachable {
 			$table = BIT_DB_PREFIX."tiki_articles";
 			$this->mDb->StartTrans();
 
-			if( $this->mArticleId ) {
+			if( $this->isValid() ) {
 				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
 			} else {
@@ -191,7 +191,7 @@ class BitArticle extends LibertyAttachable {
 
 	function storeImage( &$pParamHash, $pFileHash ) {
 		global $gBitSystem;
-		if( !empty( $this->mArticleId ) ) {
+		if( $this->isValid() ) {
 			if( !empty( $pFileHash['tmp_name'] ) ) {
 				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$pFileHash['name'];
 				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
@@ -238,7 +238,7 @@ class BitArticle extends LibertyAttachable {
 
 		$ret = NULL;
 		if( !$pArticleId ) {
-			if( $this->mArticleId ) {
+			if( $this->isValid() ) {
 				$pArticleId = $this->mArticleId;
 			} else {
 				return NULL;
@@ -331,7 +331,7 @@ class BitArticle extends LibertyAttachable {
 
 		// check for name issues, first truncate length if too long
 		if( !empty( $pParamHash['title'] ) ) {
-			if( empty( $this->mArticleId ) ) {
+			if( !$this->isValid() ) {
 				if( empty( $pParamHash['title'] ) ) {
 					$this->mErrors['title'] = 'You must enter a name for this page.';
 				} else {
@@ -498,14 +498,14 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	function expungeImage( $pArticleId = NULL, $pImagePath) {
-		if( empty( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
-
 		if( is_file( $pImagePath) ) {
 			if( !@unlink( $pImagePath) ) {
 				$this->mErrors['remove_preview_image'] = tra( 'The preview image could not be removed' );
 			}
+		}
+
+		if( empty( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
 		}
 
 		if( $image = is_file( BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
@@ -522,6 +522,8 @@ class BitArticle extends LibertyAttachable {
 			$this->mDb->StartTrans();
 			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
+			// remove article image if it exists
+			$this->expungeImage();
 			if( LibertyAttachable::expunge() ) {
 				$ret = TRUE;
 				$this->mDb->CompleteTrans();
@@ -633,7 +635,7 @@ class BitArticle extends LibertyAttachable {
 	*/
 	function getDisplayUrl() {
 		$ret = NULL;
-		if( !empty( $this->mArticleId ) ) {
+		if( $this->isValid() ) {
 			$ret = ARTICLES_PKG_URL."read.php?article_id=".$this->mArticleId;
 		}
 		return $ret;

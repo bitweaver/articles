@@ -9,7 +9,7 @@
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
-			<h1>{tr}Edit Article {$gContent->mInfo.title}{/tr}</h1>
+			<h1>{tr}Edit Article {$article.title}{/tr}</h1>
 		{elseif $gBitUser->hasPermission('bit_p_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('bit_p_autoapprove_submission')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
@@ -26,6 +26,7 @@
 	<div class="body">
 		{form enctype="multipart/form-data" id="writearticle"}
 			<input type="hidden" name="article_id" value="{$gContent->mArticleId}" />
+			<input type="hidden" name="preview_img_path" value="{$article.preview_img_path}" />
 			
 			{jstabs}
 				{jstab title="Article Body"}
@@ -160,8 +161,8 @@
 							<input type="hidden" name="publishDateInput" value="1" />
 							{formlabel label="Publish Date" for=""}
 							{forminput}
-								{html_select_date prefix="publish_" time=$gContent->mInfo.publish_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
-								<span dir="ltr">{html_select_time prefix="publish_" time=$gContent->mInfo.publish_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
+								{html_select_date prefix="publish_" time=$article.publish_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
+								<span dir="ltr">{html_select_time prefix="publish_" time=$article.publish_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
 								{formhelp note="If the article type allows it, this article will not be displayed <strong>before</strong> this date."}
 							{/forminput}
 						</div>
@@ -170,8 +171,8 @@
 							<input type="hidden" name="expireDateInput" value="1" />
 							{formlabel label="Expiration Date" for=""}
 							{forminput}
-								{html_select_date prefix="expire_" time=$gContent->mInfo.expire_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
-								<span dir="ltr">{html_select_time prefix="expire_" time=$gContent->mInfo.expire_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
+								{html_select_date prefix="expire_" time=$article.expire_date start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
+								<span dir="ltr">{html_select_time prefix="expire_" time=$article.expire_date display_seconds=false}&nbsp;{$siteTimeZone}</span>
 								{formhelp note="If the article type allows it, this article will not be displayed <strong>after</strong> this date."}
 							{/forminput}
 						</div>
@@ -191,7 +192,7 @@
 						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) *}
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
 						{*/if*}
-						{if $gContent->mInfo.image_attachment_id}
+						{if $article.image_attachment_id or $article.preview_img_path}
 							<div class="row">
 								{formlabel label="Custom Image"}
 								{forminput}

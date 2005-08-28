@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.9 2005/08/27 20:26:28 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.10 2005/08/28 09:42:03 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -32,11 +32,12 @@ if ( !$viewerCanEdit ) {
 }
 
 // If we are in preview mode then preview it!
-if (isset($_REQUEST["preview"])) {
-	$article = $gContent->preparePreview($_REQUEST);
-	$gBitSmarty->assign('preview', 'y');
+if( isset( $_REQUEST["preview"] ) ) {
+	$article['preview_img_path'] = !empty( $_REQUEST['preview_img_path'] ) ? $_REQUEST['preview_img_path'] : NULL;
+	$article = $gContent->preparePreview( $_REQUEST );
+	$gBitSmarty->assign( 'preview', 'y' );
 	$gContent->invokeServices( 'content_preview_function' );
-	$gBitSmarty->assign_by_ref('article', $article);
+	$gBitSmarty->assign_by_ref( 'article', $article );
 } else {
 	$gContent->invokeServices( 'content_edit_function' );
 	$gBitSmarty->assign_by_ref('article', $gContent->mInfo);

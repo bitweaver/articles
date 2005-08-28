@@ -15,18 +15,19 @@
 		{else}
 			<h1>{tr}Submit Article{/tr}</h1>
 		{/if}
-		
 	</div>
+
+	{formfeedback hash=$feedback}
 
 	{if $preview}
 		<h2>Preview</h2>
-		<div class="preview">{include file="bitpackage:articles/article_display.tpl"}</div>
+		<div class="preview">{include file="bitpackage:articles/article_display.tpl" outer_div='display article'}</div>
 	{/if}
 
 	<div class="body">
 		{form enctype="multipart/form-data" id="writearticle"}
 			<input type="hidden" name="article_id" value="{$gContent->mArticleId}" />
-			<input type="hidden" name="preview_img_path" value="{$article.preview_img_path}" />
+			<input type="hidden" name="preview_image_path" value="{$article.preview_image_path}" />
 			
 			{jstabs}
 				{jstab title="Article Body"}
@@ -189,15 +190,17 @@
 
 				{jstab title="Advanced"}
 					{legend legend="Custom article image"}
-						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) *}
+						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) }
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
-						{*/if*}
+						{/if*}
 
 						{if $article.image_url}
 							<div class="row">
 								{formlabel label="Custom Image"}
 								{forminput}
-									<img alt="{tr}Article image{/tr}" border="0" src="{$article.image_url}"/><br />
+									<img alt="{tr}Article image{/tr}" title="{$article.title}" src="{$article.image_url}"/>
+									<br />
+									<input type="submit" name="remove_image" value="{tr}Remove Image{/tr}" />
 									{formhelp note="You can replace this image by uploading a new one."}
 								{/forminput}
 							</div>

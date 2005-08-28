@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.20 2005/08/28 19:42:45 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.21 2005/08/28 20:34:20 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.20 2005/08/28 19:42:45 squareing Exp $
+* $Id: BitArticle.php,v 1.21 2005/08/28 20:34:20 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.20 $ $Date: 2005/08/28 19:42:45 $ $Author: squareing $
+* @version $Revision: 1.21 $ $Date: 2005/08/28 20:34:20 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -108,9 +108,6 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ));
 
-				// i think parsed_description is only necessary on the articles home page - xing
-//				$this->mInfo['parsed_description'] = $this->parseData( $this->mInfo['description'] );
-
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
 					$parts = preg_split( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] );
 					$this->mInfo['parsed_description'] = $this->parseData( $parts[0] );
@@ -123,21 +120,6 @@ class BitArticle extends LibertyAttachable {
 					$this->mInfo['categs'] = $categlib->get_object_categories_details( 'blogpost',$this->mInfo['post_id'] );*/
 				}
 
-			/* - i don't think this is used anywhere - xing
-			$this->mInfo['publish_date_string'] = date( 'Y-m-d H:i', $this->mInfo['publish_date'] );
-			$this->mInfo['publish_year'] = date( 'Y', $this->mInfo['publish_date'] );
-			$this->mInfo['publish_month'] = date( 'm', $this->mInfo['publish_date'] );
-			$this->mInfo['publish_day'] = date( 'd', $this->mInfo['publish_date'] );
-			$this->mInfo['publish_hour'] = date( 'H', $this->mInfo['publish_date'] );
-			$this->mInfo['publish_minute'] = date( 'i', $this->mInfo['publish_date'] );
-
-			$this->mInfo['expire_date_string'] = date( 'Y-m-d H:i', $this->mInfo['expire_date'] );
-			$this->mInfo['expire_year'] = date( 'Y', $this->mInfo['expire_date'] );
-			$this->mInfo['expire_month'] = date( 'm', $this->mInfo['expire_date'] );
-			$this->mInfo['expire_day'] = date( 'd', $this->mInfo['expire_date'] );
-			$this->mInfo['expire_hour'] = date( 'H', $this->mInfo['expire_date'] );
-			$this->mInfo['expire_minute'] = date( 'i', $this->mInfo['expire_date'] );
-			*/
 			$comment = &new LibertyComment();
 			$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 				LibertyAttachable::load();
@@ -204,7 +186,7 @@ class BitArticle extends LibertyAttachable {
 			$this->mDb->CompleteTrans();
 			$this->load();
 		}
-		return( count( $this->mErrors )== 0 );
+		return ( count( $this->mErrors ) == 0 );
 	}
 
 	function storeImage( &$pParamHash, $pFileHash ) {
@@ -228,15 +210,15 @@ class BitArticle extends LibertyAttachable {
 					}
 					@unlink( $tmpImagePath );
 				}
-			} elseif( !empty( $pParamHash['preview_img_path'] ) && is_file( $pParamHash['preview_img_path'] ) ) {
+			} elseif( !empty( $pParamHash['preview_image_path'] ) && is_file( $pParamHash['preview_image_path'] ) ) {
 				// if this article has been previewed with an image, we can copy it to the destination place
-				rename( $pParamHash['preview_img_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
+				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
 			}
 		}
 	}
 
-	function getArticleImageStoragePath( $pImageId = NULL, $pBasePathOnly = FALSE ) {
-		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $pImageId, $pBasePathOnly );
+	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $pArticleId, $pBasePathOnly );
 		$ret = NULL;
 		if( $relativeUrl ) {
 			$ret = BIT_ROOT_PATH.$relativeUrl;
@@ -244,7 +226,7 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
-	function getArticleImageStorageUrl( $pImageId = NULL, $pBasePathOnly = FALSE ) {
+	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
 		global $gBitSystem;
 		if( !is_dir( STORAGE_PKG_PATH.'articles' ) ) {
 			mkdir( STORAGE_PKG_PATH.'articles' );
@@ -255,16 +237,16 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		$ret = NULL;
-		if( !$pImageId ) {
+		if( !$pArticleId ) {
 			if( $this->mArticleId ) {
-				$pImageId = $this->mArticleId;
+				$pArticleId = $this->mArticleId;
 			} else {
 				return NULL;
 			}
 		}
 
-		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pImageId.'.jpg' ) ) {
-			return STORAGE_PKG_URL.'articles/article_'.$pImageId.'.jpg';
+		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pArticleId.'.jpg' ) ) {
+			return STORAGE_PKG_URL.'articles/article_'.$pArticleId.'.jpg';
 		} else {
 			return FALSE;
 		}
@@ -429,7 +411,7 @@ class BitArticle extends LibertyAttachable {
 
 		$data = $previewData;
 		$this->verify( $data );
-		$data = array_merge( $previewData,$data['content_store'], $data['article_store'] );
+		$data = array_merge( $previewData, $data['content_store'], $data['article_store'] );
 
 		if( empty( $data['user_id'] ) ) {
 			$data['user_id'] = $gBitUser->mUserId;
@@ -490,7 +472,7 @@ class BitArticle extends LibertyAttachable {
 				}
 				@unlink( $tmpImagePath );
 				$data['image_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
-				$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
+				$data['preview_image_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
 			}
 		}
 
@@ -513,6 +495,25 @@ class BitArticle extends LibertyAttachable {
 			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
 		}
 		return $ret;
+	}
+
+	function expungeImage( $pArticleId = NULL, $pImagePath) {
+		if( empty( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		if( is_file( $pImagePath) ) {
+			if( !@unlink( $pImagePath) ) {
+				$this->mErrors['remove_preview_image'] = tra( 'The preview image could not be removed' );
+			}
+		}
+
+		if( $image = is_file( BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
+			if( !@unlink( $image ) ) {
+				$this->mErrors['remove_image'] = tra( 'The article image could not be removed' );
+			}
+		}
+		return ( count( $this->mErrors ) == 0 );
 	}
 
 	function expunge() {

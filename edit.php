@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.10 2005/08/28 09:42:03 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.11 2005/08/28 20:34:20 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -14,6 +14,9 @@ include_once( LIBERTY_PKG_PATH.'edit_help_inc.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
 
+// initiate feedback array
+$gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
+
 include_once('lookup_article_inc.php');
 
 if( $gBitUser->hasPermission('bit_p_admin_articles' ) || $gBitUser->hasPermission( 'bit_p_edit_article' ) ) {
@@ -25,17 +28,31 @@ if( $gBitUser->hasPermission('bit_p_admin_articles' ) || $gBitUser->hasPermissio
 }
 
 // Now check permissions to access this page
-if ( !$viewerCanEdit ) {
+if( !$viewerCanEdit ) {
 	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
 	$gBitSystem->display( "error.tpl" );
 	die;
 }
 
+// content templates
+if( !empty( $_REQUEST["template_id"] ) && $_REQUEST["template_id"] > 0 ) {
+	$template_data = $tikilib->get_template( $_REQUEST["template_id"] );
+	$_REQUEST["preview"] = 1;
+	$_REQUEST["body"] = $template_data["content"].$_REQUEST["data"];
+}
+
+// if we want to remove a custom image, just nuke all custom image settings at once
+if( !empty( $_REQUEST['remove_image'] ) ) {
+	$_REQUEST['image_attachment_id'] = NULL;
+	$gContent->expungeImage( $gContent->mArticleId, !empty( $_REQUEST['preview_image_path'] ) ? $_REQUEST['preview_image_path'] : NULL );
+	// set the preview mode to maintain all settings
+	$_REQUEST['preview'] = 1;
+}
+
 // If we are in preview mode then preview it!
-if( isset( $_REQUEST["preview"] ) ) {
-	$article['preview_img_path'] = !empty( $_REQUEST['preview_img_path'] ) ? $_REQUEST['preview_img_path'] : NULL;
+if( !empty( $_REQUEST['preview'] ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );
-	$gBitSmarty->assign( 'preview', 'y' );
+	$gBitSmarty->assign( 'preview', TRUE );
 	$gContent->invokeServices( 'content_preview_function' );
 	$gBitSmarty->assign_by_ref( 'article', $article );
 } else {
@@ -43,16 +60,9 @@ if( isset( $_REQUEST["preview"] ) ) {
 	$gBitSmarty->assign_by_ref('article', $gContent->mInfo);
 }
 
-if ( isset( $_REQUEST["template_id"] ) && $_REQUEST["template_id"] > 0 ) {
-	$template_data = $tikilib->get_template( $_REQUEST["template_id"] );
-
-	$_REQUEST["preview"] = 1;
-	$_REQUEST["body"] = $template_data["content"].$_REQUEST["data"];
-}
-
 $gBitSmarty->assign( 'author_name', $gBitUser->getDisplayName() );
 
-if ( isset( $_REQUEST["save"] ) ) {
+if( !empty( $_REQUEST["save"] ) ) {
 	if( empty( $_REQUEST["rating"] ) ) $_REQUEST['rating'] = 0;
 	if( empty( $_REQUEST['topic_id'] ) ) $_REQUEST['topic_id'] = 0;
 

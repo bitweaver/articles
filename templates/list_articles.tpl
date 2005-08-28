@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.7 2005/08/28 18:14:38 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.8 2005/08/28 19:42:45 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -57,7 +57,7 @@
 					<tr class="{cycle advance=false}">
 						{if $art_list_img eq 'y'}
 							<td rowspan="2">
-								{if $article.img_url}<img src="{$article.img_url}"/>{/if}
+								{if $article.image_url}<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />{/if}
 							</td>
 						{/if}
 

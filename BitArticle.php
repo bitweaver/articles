@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.19 2005/08/28 19:38:53 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.20 2005/08/28 19:42:45 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.19 2005/08/28 19:38:53 squareing Exp $
+* $Id: BitArticle.php,v 1.20 2005/08/28 19:42:45 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.19 $ $Date: 2005/08/28 19:38:53 $ $Author: squareing $
+* @version $Revision: 1.20 $ $Date: 2005/08/28 19:42:45 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -96,7 +96,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo = $result->fields;
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-				$this->mInfo['img_url'] = BitArticle::getImageUrl( $this->mInfo );
+				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo );
 
 				$this->mContentId = $result->fields['content_id'];
 				$this->mArticleId = $result->fields['article_id'];
@@ -462,7 +462,7 @@ class BitArticle extends LibertyAttachable {
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = ta.foreign_id )
 				WHERE ta.attachment_id=?";
 			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
-			$data['img_url'] = BitArticle::getImageUrl( $data );
+			$data['image_url'] = BitArticle::getImageUrl( $data );
 		}
 
 		if( !empty( $_FILES['article_image'] ) ) {
@@ -489,7 +489,7 @@ class BitArticle extends LibertyAttachable {
 					$this->mErrors[] = 'Error while resizing article image';
 				}
 				@unlink( $tmpImagePath );
-				$data['img_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
+				$data['image_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
 				$data['preview_img_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
 			}
 		}
@@ -602,7 +602,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-			$res['img_url'] = BitArticle::getImageUrl( $res );
+			$res['image_url'] = BitArticle::getImageUrl( $res );
 
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );

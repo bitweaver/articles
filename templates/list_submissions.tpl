@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/list_submissions.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/Attic/list_submissions.tpl,v 1.3 2005/08/28 19:42:45 squareing Exp $ *}
 <div class="listing articles">
 <div class="header">
 <h1><a href="{$smarty.const.ARTICLES_PKG_URL}list_submissions.php">{tr}Submissions{/tr}</a></h1>
@@ -42,7 +42,7 @@
 {/if}{if $art_list_date eq 'y'}
 	<td>{$listpages[changes].publish_date|bit_short_datetime}</td>
 {/if}{if $art_list_img eq 'y'}
-	<td>{$listpages[changes].img_url}</td>
+	<td>{$listpages[changes].image_url}</td>
 {/if}
 {if $art_list_author eq 'y'}
 <td>{$listpages[changes].author}</td>

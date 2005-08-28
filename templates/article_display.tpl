@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.8 2005/08/27 11:09:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.9 2005/08/28 19:42:45 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -43,10 +43,10 @@
 		{/if}
 
 		<div class="introduction">
-			{if $article.show_image eq 'y' && $article.img_url}
+			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">
 					{if $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
-						<img class="icon" alt="{$article.topic_name}" src="{$article.img_url}"/>
+						<img class="icon" alt="{$article.topic_name}" src="{$article.image_url}"/>
 					{if $article.read_more}</a>{/if}
 				</div>
 			{/if}

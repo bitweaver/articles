@@ -193,11 +193,11 @@
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
 						{*/if*}
 
-						{if $article.img_url}
+						{if $article.image_url}
 							<div class="row">
 								{formlabel label="Custom Image"}
 								{forminput}
-									<img alt="{tr}Article image{/tr}" border="0" src="{$article.img_url}"/><br />
+									<img alt="{tr}Article image{/tr}" border="0" src="{$article.image_url}"/><br />
 									{formhelp note="You can replace this image by uploading a new one."}
 								{/forminput}
 							</div>

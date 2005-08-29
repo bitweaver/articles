@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.22 2005/08/28 20:40:43 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.23 2005/08/29 11:08:50 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.22 2005/08/28 20:40:43 squareing Exp $
+* $Id: BitArticle.php,v 1.23 2005/08/29 11:08:50 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.22 $ $Date: 2005/08/28 20:40:43 $ $Author: squareing $
+* @version $Revision: 1.23 $ $Date: 2005/08/29 11:08:50 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -490,7 +490,11 @@ class BitArticle extends LibertyAttachable {
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
 		} elseif( !empty( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
 			// TODO: clean up the avatar url stuff. shouldn't be hardcoded.
-			$ret = BIT_ROOT_URL.preg_replace( "/(.*)\/.*?$/", "$1/avatar.jpg", $pParamHash['image_storage_path'] );
+			// perhaps we should make a copy of the image file and reduce it to article size settings.
+			$image = preg_replace( "/(.*)\/.*?$/", "$1/avatar.jpg", $pParamHash['image_storage_path'] );
+			if( is_file( BIT_ROOT_PATH.$image ) ) {
+				$ret =  BIT_ROOT_URL.$image;
+			}
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
 			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
 		}

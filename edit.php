@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.11 2005/08/28 20:34:20 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.12 2005/08/30 20:04:17 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -57,10 +57,11 @@ if( !empty( $_REQUEST['preview'] ) ) {
 	$gBitSmarty->assign_by_ref( 'article', $article );
 } else {
 	$gContent->invokeServices( 'content_edit_function' );
+	if( empty( $gContent->mInfo['author_name'] ) ) {
+		$gContent->mInfo['author_name'] = $gBitUser->getDisplayName();
+	}
 	$gBitSmarty->assign_by_ref('article', $gContent->mInfo);
 }
-
-$gBitSmarty->assign( 'author_name', $gBitUser->getDisplayName() );
 
 if( !empty( $_REQUEST["save"] ) ) {
 	if( empty( $_REQUEST["rating"] ) ) $_REQUEST['rating'] = 0;

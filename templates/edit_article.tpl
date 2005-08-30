@@ -43,7 +43,7 @@
 						<div class="row">
 							{formlabel label="Author Name" for="author_name"}
 							{forminput}
-								<input type="text" name="author_name" id="author_name" value="{if $article.author_name|escape}{$article.author_name|escape}{else}{$author_name|escape}{/if}" />
+								<input type="text" name="author_name" id="author_name" value="{$article.author_name|escape}" />
 								{formhelp note=""}
 							{/forminput}
 						</div>

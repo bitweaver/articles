@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.23 2005/08/29 11:08:50 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.24 2005/08/30 20:04:17 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.23 2005/08/29 11:08:50 squareing Exp $
+* $Id: BitArticle.php,v 1.24 2005/08/30 20:04:17 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.23 $ $Date: 2005/08/29 11:08:50 $ $Author: squareing $
+* @version $Revision: 1.24 $ $Date: 2005/08/30 20:04:17 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -125,7 +125,7 @@ class BitArticle extends LibertyAttachable {
 				LibertyAttachable::load();
 			}
 		}
-		return( count( $this->mInfo ));
+		return( count( $this->mInfo ) );
 	}
 
 	function setStatus( $pStatusId, $pArticleId = NULL ) {
@@ -501,7 +501,7 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
-	function expungeImage( $pArticleId = NULL, $pImagePath) {
+	function expungeImage( $pArticleId=NULL, $pImagePath=NULL ) {
 		if( is_file( $pImagePath) ) {
 			if( !@unlink( $pImagePath) ) {
 				$this->mErrors['remove_preview_image'] = tra( 'The preview image could not be removed' );

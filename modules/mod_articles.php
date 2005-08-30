@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.2 2005/08/30 22:24:00 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.3 2005/08/30 22:25:50 squareing Exp $
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 global $module_rows, $module_params, $module_title;
 
@@ -11,7 +11,6 @@ if( !empty( $module_params['status'] ) && in_array( $module_params['status'], $s
 	$status_id = ARTICLE_STATUS_APPROVED;
 }
 
-vd($status_id);
 $getHash['status_id']     = $status_id;
 $getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->mPrefs['max_articles'];
 $getHash['sort_mode']     = !empty( $module_params['sort_mode'] ) ? $module_params['sort_mode'] : 'last_modified_desc';

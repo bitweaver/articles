@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.24 2005/08/30 20:04:17 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.25 2005/08/30 22:55:05 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.24 2005/08/30 20:04:17 squareing Exp $
+* $Id: BitArticle.php,v 1.25 2005/08/30 22:55:05 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.24 $ $Date: 2005/08/30 20:04:17 $ $Author: squareing $
+* @version $Revision: 1.25 $ $Date: 2005/08/30 22:55:05 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -553,6 +553,7 @@ class BitArticle extends LibertyAttachable {
 
 		LibertyContent::prepGetList( $pParamHash );
 
+		$bindvars = array();
 		$find = $pParamHash['find'];
 		$sort_mode = $pParamHash['sort_mode'];
 		$max_records = $pParamHash['max_records'];
@@ -564,7 +565,7 @@ class BitArticle extends LibertyAttachable {
 			$bindvars = $find;
 		} else if( is_string( $find ) ) {
 			// or a string
-			$mid = " WHERE UPPER( tc.`title` )like ? ";
+			$mid = " WHERE UPPER( tc.`title` ) LIKE ? ";
 			$bindvars = array( '%' . strtoupper( $find ). '%' );
 		} else if( !empty( $pUserId ) ) {
 			// or a string
@@ -572,21 +573,21 @@ class BitArticle extends LibertyAttachable {
 			$bindvars = array( $pUserId );
 		} else {
 			$mid = "";
-			$bindvars = array();
+		}
+
+		if( !empty( $pParamHash['status_id'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
+			$bindvars[] = $pParamHash['status_id'];
+		}
+
+		if( !empty( $pParamHash['topic'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) LIKE ? ";
+			$bindvars[] = strtoupper( $pParamHash['topic'] );
 		}
 
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
 			$artMid = " AND ta.`publish_date` < $timestamp AND ta.`expire_date` > $timestamp ";
-		}
-
-		if( !empty( $pParamHash['status_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
-			if( is_array( $bindvars ) ) {
-				$bindvars[] = $pParamHash['status_id'];
-			} else {
-				$bindvars = array( $pParamHash['status_id'] );
-			}
 		}
 
 		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name,

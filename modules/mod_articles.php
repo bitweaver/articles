@@ -1,28 +1,21 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.1 2005/06/30 01:10:46 bitweaver Exp $
-include_once( ARTICLES_PKG_PATH . 'art_lib.php' );
-global $artlib, $gQueryUsername, $module_rows, $module_params;
+// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.2 2005/08/30 22:24:00 squareing Exp $
+include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
+global $module_rows, $module_params, $module_title;
 
-$smarty->assign( 'title', isset( $module_params["title"] ) ? $module_params["title"] : 'Articles' );
-
-if ( isset( $module_params["type"] ) ) {
-    $type = $module_params["type"];
+$articles = new BitArticle();
+$stati = array( 'pending', 'approved' );
+if( !empty( $module_params['status'] ) && in_array( $module_params['status'], $stati ) ) {
+	$status_id = constant( 'ARTICLE_STATUS_'.strtoupper( $module_params['status'] ) );
 } else {
-    $type = '';
-} 
-if ( isset( $module_params["topic_id"] ) ) {
-    $topic_id = $module_params["topic_id"];
-} else {
-    $topic_id = '';
-} 
-/*
-$smarty->assign('type', isset($module_params["type"]) ? $module_params["type"] : '');
-$smarty->assign('topic_id', isset($module_params["topic_id"]) ? $module_params["topic_id"] : '');
+	$status_id = ARTICLE_STATUS_APPROVED;
+}
 
-function list_articles($offset = 0, $maxRecords = -1, $sort_mode = 'publish_date_desc', $find = '', $date = '', $user, $type = '', $topic_id = '') {
-*/
+vd($status_id);
+$getHash['status_id']     = $status_id;
+$getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->mPrefs['max_articles'];
+$getHash['sort_mode']     = !empty( $module_params['sort_mode'] ) ? $module_params['sort_mode'] : 'last_modified_desc';
+$articles = $articles->getList( $getHash );
 
-$ranking = $artlib->list_articles( 0, $module_rows, 'publish_date_desc', '', '', $user, $type, $topic_id, $gQueryUsername );
-$smarty->assign( 'modArticles', $ranking["data"] );
-
+$smarty->assign( 'modArticles', $articles['data'] );
 ?>

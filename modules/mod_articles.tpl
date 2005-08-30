@@ -1,16 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.1 2005/06/30 01:10:46 bitweaver Exp $ *}
-
-{if $gBitSystemPrefs.feature_articles eq 'y'}
+{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.2 2005/08/30 22:24:00 squareing Exp $ *}
+{strip}
 {bitmodule title="$moduleTitle" name="articles"}
-  <table class="mother">
-    {section name=ix loop=$modArticles}
-    <tr>
-      {if $nonums != 'y'}
-        <td width="1%">{$smarty.section.ix.index_next}</td>
-      {/if}
-      <td><a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$modArticles[ix].article_id}">{$modArticles[ix].title}</a></td>
-    </tr>
-    {/section}
-  </table>
+	<ol>
+		{foreach item=modArt from=$modArticles}
+			<li><a href="{$gBitLoc.ARTICLES_PKG_URL}read.php?article_id={$modArt.article_id}">{$modArt.title}</a></li>
+		{/foreach}
+	</ol>
 {/bitmodule}
-{/if}
+{/strip}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.3 2005/08/22 21:11:07 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.4 2005/08/31 08:13:21 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -38,7 +38,7 @@
 							<tr class="{cycle values="odd,even}">
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
-									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a>
+									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a>
 								</td>
 								<td style="text-align:center;"><input title="{tr}Rate{/tr}" type="checkbox" name="use_ratings[{$types[user].article_type_id}]"                                   {if $types[user].use_ratings eq 'y'}checked="checked"{/if} /></td>
 								<td style="text-align:center;"><input title="{tr}Before publication date{/tr}" type="checkbox" name="show_pre_publ[{$types[user].article_type_id}]"              {if $types[user].show_pre_publ eq 'y'}checked="checked"{/if} /></td>
@@ -94,7 +94,7 @@
 					<dd>{tr}Show author's name{/tr}</dd>
 					<dt>10 {tr}Show publish date{/tr}</dt>
 					<dd>{tr}Show publication date{/tr}</dd>
-					<dt>11 {tr}Show expiratio date{/tr}</dt>
+					<dt>11 {tr}Show expiration date{/tr}</dt>
 					<dd>{tr}Show expiration date{/tr}</dd>
 					<dt>12 {tr}Show reads{/tr}</dt>
 					<dd>{tr}Show the number of times an article has been read{/tr}</dd>
@@ -111,7 +111,7 @@
 				{form legend="Modify Article Types"}
 					{section name=user loop=$types}
 						<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
-						<h2><a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a></h2>
+						<h2><a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a></h2>
 
 						<ul>
 							<li><label><input type="checkbox" name="use_ratings[{$types[user].article_type_id}]" {if $types[user].use_ratings eq 'y'}checked="checked"{/if} /> {tr}Rate{/tr}</label></li>

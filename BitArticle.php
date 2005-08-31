@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.25 2005/08/30 22:55:05 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.26 2005/08/31 07:54:22 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.25 2005/08/30 22:55:05 squareing Exp $
+* $Id: BitArticle.php,v 1.26 2005/08/31 07:54:22 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.25 $ $Date: 2005/08/30 22:55:05 $ $Author: squareing $
+* @version $Revision: 1.26 $ $Date: 2005/08/31 07:54:22 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -560,13 +560,13 @@ class BitArticle extends LibertyAttachable {
 		$offset = $pParamHash['offset'];
 
 		if( is_array( $find ) ) {
-			// you can use an array of pages
+			// you can use an array of articles
 			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindvars = $find;
 		} else if( is_string( $find ) ) {
 			// or a string
 			$mid = " WHERE UPPER( tc.`title` ) LIKE ? ";
-			$bindvars = array( '%' . strtoupper( $find ). '%' );
+			$bindvars = array( '%'.strtoupper( $find ).'%' );
 		} else if( !empty( $pUserId ) ) {
 			// or a string
 			$mid = " WHERE tc.`creator_user_id` = ? ";
@@ -577,11 +577,21 @@ class BitArticle extends LibertyAttachable {
 
 		if( !empty( $pParamHash['status_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
-			$bindvars[] = $pParamHash['status_id'];
+			$bindvars[] = ( int )$pParamHash['status_id'];
+		}
+
+		if( !empty( $pParamHash['type_id'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`type_id` = ? ";
+			$bindvars[] = ( int )$pParamHash['type_id'];
+		}
+
+		if( !empty( $pParamHash['topic_id'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
+			$bindvars[] = ( int )$pParamHash['topic_id'];
 		}
 
 		if( !empty( $pParamHash['topic'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) LIKE ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
 			$bindvars[] = strtoupper( $pParamHash['topic'] );
 		}
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.28 2005/09/01 20:02:03 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.29 2005/09/01 20:04:00 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.28 2005/09/01 20:02:03 squareing Exp $
+* $Id: BitArticle.php,v 1.29 2005/09/01 20:04:00 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.28 $ $Date: 2005/09/01 20:02:03 $ $Author: squareing $
+* @version $Revision: 1.29 $ $Date: 2005/09/01 20:04:00 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -603,6 +603,8 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
+		// TODO: make sure only active topics are selected - SQL seems quite tricky - xing
+		// if this is fixed here, we can include the UI for de/activation in admin_topics.tpl
 		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.`status_name`,
 			tf.`storage_path` as image_storage_path
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta

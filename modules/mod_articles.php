@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.4 2005/08/30 23:09:01 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.5 2005/09/01 09:43:33 squareing Exp $
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 global $module_rows, $module_params, $module_title;
 
@@ -11,13 +11,13 @@ if( !empty( $module_params['status'] ) && in_array( $module_params['status'], $s
 	$status_id = ARTICLE_STATUS_APPROVED;
 }
 
-$sortPattern = array(
-	"/^last_modified_asc$/",
-	"/^last_modified_desc/",
-	"/^created_asc$/",
-	"/^created_desc$/",
+$sortOptions = array(
+	"last_modified_asc",
+	"last_modified_desc",
+	"created_asc",
+	"created_desc",
 );
-if( !empty( $module_params['sort_mode'] ) && preg_match( $sort_pattern, $module_params['sort_mode'] ) ) {
+if( !empty( $module_params['sort_mode'] ) && in_array( $module_params['sort_mode'], $sortOptions ) ) {
 	$sort_mode = $module_params['sort_mode'];
 } else {
 	$sort_mode = 'last_modified_desc';

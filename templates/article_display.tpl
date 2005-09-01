@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.10 2005/08/31 10:39:12 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.11 2005/09/01 23:24:45 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -38,7 +38,10 @@
 				{repeat count=$article.rating}
 					{biticon ipackage=articles iname=rating iexplain="Article Rating"}
 				{/repeat}
-				&nbsp; ( {$article.rating} / 5 )
+				{math assign=rating_off equation="5-x" x=$article.rating}
+				{repeat count=$rating_off}
+					{biticon ipackage=articles iname=rating_off iexplain="Article Rating"}
+				{/repeat}
 			</span>
 		{/if}
 

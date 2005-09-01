@@ -168,12 +168,12 @@ class BitArticleTopic extends BitBase
 
         $ret = array();
 
-        while ( $res = $result->fetchRow() ) {
+        while( $res = $result->fetchRow() ) {
 			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) ".
 												  "FROM `" . BIT_DB_PREFIX . "tiki_articles` ".
 												  "WHERE `topic_id`= ?", array( $res["topic_id"] ) );
-			if ($res['has_topic_image'] == 'y') {
-				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl($res['topic_id']);
+			if( $res['has_topic_image'] == 'y' ) {
+				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
 			}
 
             $ret[] = $res;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.26 2005/08/31 07:54:22 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.27 2005/09/01 08:00:38 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.26 2005/08/31 07:54:22 squareing Exp $
+* $Id: BitArticle.php,v 1.27 2005/09/01 08:00:38 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.26 $ $Date: 2005/08/31 07:54:22 $ $Author: squareing $
+* @version $Revision: 1.27 $ $Date: 2005/09/01 08:00:38 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -555,9 +555,6 @@ class BitArticle extends LibertyAttachable {
 
 		$bindvars = array();
 		$find = $pParamHash['find'];
-		$sort_mode = $pParamHash['sort_mode'];
-		$max_records = $pParamHash['max_records'];
-		$offset = $pParamHash['offset'];
 
 		if( is_array( $find ) ) {
 			// you can use an array of articles
@@ -575,13 +572,17 @@ class BitArticle extends LibertyAttachable {
 			$mid = "";
 		}
 
+		if( !empty( $pParamHash['sort_mode'] ) ) {
+			$pParamHash['sort_mode'] = 'publish_date_desc';
+		}
+
 		if( !empty( $pParamHash['status_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['status_id'];
 		}
 
 		if( !empty( $pParamHash['type_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`type_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`article_type_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['type_id'];
 		}
 
@@ -597,7 +598,9 @@ class BitArticle extends LibertyAttachable {
 
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
-			$artMid = " AND ta.`publish_date` < $timestamp AND ta.`expire_date` > $timestamp ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`publish_date` < ? AND ta.`expire_date` > ? ";
+			$bindvars[] = ( int )$timestamp;
+			$bindvars[] = ( int )$timestamp;
 		}
 
 		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.status_name,
@@ -610,12 +613,12 @@ class BitArticle extends LibertyAttachable {
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
-			ORDER BY ".$this->mDb->convert_sortmode( $sort_mode );
+			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )".
 			( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
-		$result = $this->mDb->query( $query, $bindvars, $max_records, $offset );
+		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {

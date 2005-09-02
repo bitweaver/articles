@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.2 2005/08/26 09:33:42 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.3 2005/09/02 20:34:21 squareing Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -33,7 +33,7 @@ for( $i = 0; $i < count( $topics ); $i++ ) {
 			$topics[$i]["individual_bit_p_topic_read"] = 'n';
 		} 
 
-		if( $bit_p_admin == 'y' || $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'bit_p_admin_cms' ) ) {
+		if( $gBitUser->isAdim() || $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'bit_p_admin_cms' ) ) {
 			$topics[$i]["individual_bit_p_topic_read"] = 'y';
 		} 
 	} else {

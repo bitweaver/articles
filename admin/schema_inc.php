@@ -58,13 +58,13 @@ $tables = array(
 
 global $gBitInstaller;
 
-$gBitInstaller->makePackageHomeable(ARTICLES_PKG_NAME);
+$gBitInstaller->makePackageHomeable( ARTICLES_PKG_NAME );
 
-foreach(array_keys($tables ) AS $tableName ) {
-    $gBitInstaller->registerSchemaTable(ARTICLES_PKG_DIR, $tableName, $tables[$tableName] );
+foreach( array_keys( $tables ) AS $tableName ) {
+    $gBitInstaller->registerSchemaTable( ARTICLES_PKG_DIR, $tableName, $tables[$tableName] );
 }
 
-$gBitInstaller->registerPackageInfo(ARTICLES_PKG_DIR, array(
+$gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
 	'description' => "This package manages news articles to create a slashdot-like news site.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 	'version' => '0.1',
@@ -72,14 +72,21 @@ $gBitInstaller->registerPackageInfo(ARTICLES_PKG_DIR, array(
 	'dependencies' => '',
 ) );
 
-$indices = array();
-$gBitInstaller->registerSchemaIndexes(ARTICLES_PKG_DIR, $indices );
+$sequences = array (
+	'tiki_article_topics_topic_id_seq' => array( 'start' => 1 ),
+	'tiki_article_types_article_type_id_seq' => array( 'start' => 1 ),
+	'tiki_articles_article_id_seq' => array( 'start' => 1 ),
+);
+$gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
 
-$gBitInstaller->registerSchemaDefault(ARTICLES_PKG_DIR, array(
+// $indices = array();
+// $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_DIR, $indices );
+
+$gBitInstaller->registerSchemaDefault( ARTICLES_PKG_DIR, array(
 	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`) VALUES ('Article')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`,`use_ratings`) VALUES ('Review','y')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`,`show_post_expire`) VALUES ('Event','n')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`,`show_post_expire`,`heading_only`,`allow_comments`) VALUES ('Classified','n','y','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `use_ratings`) VALUES ('Review','y')",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `show_post_expire`) VALUES ('Event','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `show_post_expire`,`heading_only`,`allow_comments`) VALUES ('Classified','n','y','n')",
 	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (  0, 'Denied') ",
 	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (100, 'Draft') ",
 	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (200, 'Pending Approval') ",
@@ -88,7 +95,7 @@ $gBitInstaller->registerSchemaDefault(ARTICLES_PKG_DIR, array(
 ) );
 
 // ### Default UserPermissions
-$gBitInstaller->registerUserPermissions(ARTICLES_PKG_NAME, array(
+$gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
 	array('bit_p_edit_article', 'Can edit articles', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_remove_article', 'Can remove articles', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_read_article', 'Can read articles', 'basic', ARTICLES_PKG_NAME),
@@ -104,7 +111,7 @@ $gBitInstaller->registerUserPermissions(ARTICLES_PKG_NAME, array(
 ) );
 
 // ### Default Preferences
-$gBitInstaller->registerPreferences(ARTICLES_PKG_NAME, array(
+$gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
 //	array(ARTICLES_PKG_NAME, 'feature_article_comments','n'),
 //	array(ARTICLES_PKG_NAME, 'article_comments_default_ordering','points_desc'),
 //	array(ARTICLES_PKG_NAME, 'article_comments_per_page','10'),

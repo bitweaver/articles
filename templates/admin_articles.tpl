@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.2 2005/08/27 09:48:36 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.3 2005/09/03 09:39:09 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -34,34 +34,6 @@
 				
 				<div class="row submit">
 					<input type="submit" name="settingsTabSubmit" value="{tr}Change preferences{/tr}" />
-				</div>
-			{/legend}
-		{/jstab}
-
-		{jstab title="Article Comments"}
-			{legend legend="Article Comment Settings"}
-				<div class="row">
-					{formlabel label="Default number of comments per page" for="articles-commentsnumber"}
-					{forminput}
-						<input size="5" type="text" name="article_comments_per_page" id="articles-commentsnumber" value="{$gBitSystemPrefs.article_comments_per_page|escape}" />
-						{formhelp note="Number of comments visible below a given article."}
-					{/forminput}
-				</div>
-				
-				<div class="row">
-					{formlabel label="Comments default ordering" for="articles-commentsorder"}
-					{forminput}
-						<select name="article_comments_default_ordering" id="articles-commentsorder">
-							<option value="comment_date_desc" {if $gBitSystemPrefs.article_comments_default_ordering eq 'comment_date_desc'}selected="selected"{/if}>{tr}Newest first{/tr}</option>
-							<option value="comment_date_asc" {if $gBitSystemPrefs.article_comments_default_ordering eq 'comment_date_asc'}selected="selected"{/if}>{tr}Oldest first{/tr}</option>
-							<option value="points_desc" {if $gBitSystemPrefs.article_comments_default_ordering eq 'points_desc'}selected="selected"{/if}>{tr}Points{/tr}</option>
-						</select>
-						{formhelp note="Set the default order of comments for articles."}
-					{/forminput}
-				</div>
-				
-				<div class="row submit">
-					<input type="submit" name="commentsTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}
 		{/jstab}

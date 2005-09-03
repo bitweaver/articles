@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.4 2005/08/26 10:57:54 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.5 2005/09/03 07:55:58 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -36,7 +36,7 @@ $smarty->assign_by_ref( 'article', $gContent->mInfo );
 $displayHash = array( 'perm_name' => 'bit_p_view' );
 $gContent->invokeServices( 'content_display_function', $displayHash );
 
-$topics = BitArticleTopic::listTopics();
+$topics = BitArticleTopic::getTopicList();
 $smarty->assign_by_ref( 'topics', $topics );
 
 // Comments engine!

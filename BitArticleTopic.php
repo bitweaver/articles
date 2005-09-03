@@ -157,7 +157,7 @@ class BitArticleTopic extends BitBase
 		return '/storage/articles/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
 	}
 
-	function listTopics() {
+	function getTopicList() {
 		global $gBitSystem;
 
         $query = "SELECT tat.* " .

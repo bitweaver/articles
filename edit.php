@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.12 2005/08/30 20:04:17 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.13 2005/09/03 07:55:58 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -77,10 +77,10 @@ if( !empty( $_REQUEST["save"] ) ) {
 }
 
 // Get a topic list
-$topics = BitArticleTopic::listTopics();
+$topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign_by_ref( 'topics', $topics );
 // get list of valid types
-$types = BitArticleType::listTypes();
+$types = BitArticleType::getTypesList();
 $gBitSmarty->assign_by_ref( 'types', $types );
 
 /*if ( $feature_cms_templates == 'y' && $bit_p_use_content_templates == 'y' ) {

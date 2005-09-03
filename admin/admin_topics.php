@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.3 2005/09/02 20:34:21 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.4 2005/09/03 07:55:58 squareing Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -21,7 +21,7 @@ if( isset( $_REQUEST["fSubmitAddTopic"] ) ) {
 	$gContent->removeTopic( TRUE );
 }
 
-$topics = BitArticleTopic::listTopics();
+$topics = BitArticleTopic::getTopicList();
 
 for( $i = 0; $i < count( $topics ); $i++ ) {
 	if( $gBitUser->object_has_one_permission( $topics[$i]["topic_id"], 'topic' ) ) {

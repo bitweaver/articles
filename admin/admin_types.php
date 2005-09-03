@@ -1,5 +1,5 @@
-<?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.3 2005/08/26 09:33:42 squareing Exp $
+<?php
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.4 2005/09/03 07:55:58 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -29,24 +29,24 @@ if( isset( $_REQUEST["add_type"] ) ) {
 		'allow_comments',
 		'comment_can_rate_article',
 		'show_image',
-		'show_avatar',	
-		'show_author',	
+		'show_avatar',
+		'show_author',
 		'show_pubdate',
 		'show_expdate',
-		'show_reads',	
-		'show_size',		
+		'show_reads',
+		'show_size',
 		'creator_edit',
-	);	
+	);
 	foreach( array_keys( $_REQUEST["type_array"] ) as $this_type ) {
 		$storeHash['article_type_id'] = $this_type;
 		foreach( $options as $option ) {
 			$storeHash[$option] = !empty( $_REQUEST[$option][$this_type] ) ? 'y' : 'n';
 		}
         $gContent->storeType( $storeHash );
-    } 
-} 
+    }
+}
 
-$types = BitArticleType::listTypes();
+$types = BitArticleType::getTypesList();
 $smarty->assign( 'types', $types );
 
 // Display the template

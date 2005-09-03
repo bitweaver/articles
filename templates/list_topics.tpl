@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_topics.tpl,v 1.1 2005/09/02 20:57:50 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_topics.tpl,v 1.2 2005/09/03 08:26:45 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
 <div class="listing articles">
 	<div class="header">
-		<h1>{tr}Admin Topics{/tr}</h1>
+		<h1>{tr}Article Topics{/tr}</h1>
 	</div>
 
 	<div class="body">

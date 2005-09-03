@@ -112,9 +112,6 @@ $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
-//	array(ARTICLES_PKG_NAME, 'feature_article_comments','n'),
-//	array(ARTICLES_PKG_NAME, 'article_comments_default_ordering','points_desc'),
-//	array(ARTICLES_PKG_NAME, 'article_comments_per_page','10'),
 	array(ARTICLES_PKG_NAME, 'art_list_author','y'),
 	array(ARTICLES_PKG_NAME, 'art_list_date','y'),
 	array(ARTICLES_PKG_NAME, 'art_list_img','y'),
@@ -124,11 +121,8 @@ $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
 	array(ARTICLES_PKG_NAME, 'art_list_topic','y'),
 	array(ARTICLES_PKG_NAME, 'art_list_type','y'),
 	array(ARTICLES_PKG_NAME, 'art_list_expire','y'),
-//	array(ARTICLES_PKG_NAME, 'art_list_visible','y'),
-//	array(ARTICLES_PKG_NAME, 'art_list_status', 'n'),
 	array(ARTICLES_PKG_NAME, 'max_articles','10'),
 	array(ARTICLES_PKG_NAME, 'feature_cms_rankings','y'),
-//	array(ARTICLES_PKG_NAME, 'feature_cms_templates','n'),
 	array(ARTICLES_PKG_NAME, 'feature_article_submissions', 'y'),
 	array(ARTICLES_PKG_NAME, 'article_description_length', '500')
 ) );

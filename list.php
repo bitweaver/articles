@@ -1,11 +1,12 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.6 2005/09/03 07:55:58 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.7 2005/09/03 09:50:25 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // Initialization
 require_once( '../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
@@ -91,7 +92,7 @@ $listarticles = $article->getList( $_REQUEST );
 $topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign( 'topics', $topics );
 
-$types = BitArticleType::getTypesList();
+$types = BitArticleType::getTypeList();
 $gBitSmarty->assign( 'types', $types );
 
 $gBitSmarty->assign( 'control', $_REQUEST["control"] );

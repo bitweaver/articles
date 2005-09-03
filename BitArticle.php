@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.29 2005/09/01 20:04:00 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.30 2005/09/03 09:50:25 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.29 2005/09/01 20:04:00 squareing Exp $
+* $Id: BitArticle.php,v 1.30 2005/09/03 09:50:25 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.29 $ $Date: 2005/09/01 20:04:00 $ $Author: squareing $
+* @version $Revision: 1.30 $ $Date: 2005/09/03 09:50:25 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -126,6 +126,13 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 		return( count( $this->mInfo ) );
+	}
+
+	function getStatusList() {
+		global $gBitSystem;
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_status`";
+		$result = $gBitSystem->mDb->query( $query );
+		return $result->getRows();
 	}
 
 	function setStatus( $pStatusId, $pArticleId = NULL ) {

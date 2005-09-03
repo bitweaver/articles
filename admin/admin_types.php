@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.4 2005/09/03 07:55:58 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.5 2005/09/03 09:50:25 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -46,7 +46,7 @@ if( isset( $_REQUEST["add_type"] ) ) {
     }
 }
 
-$types = BitArticleType::getTypesList();
+$types = BitArticleType::getTypeList();
 $smarty->assign( 'types', $types );
 
 // Display the template

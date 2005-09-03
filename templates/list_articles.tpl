@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.8 2005/08/28 19:42:45 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9 2005/09/03 09:50:25 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -30,6 +30,8 @@
 		</div>
 
 		<div class="clear"></div>
+
+		{include file="bitpackage:articles/article_filter_inc.tpl"}
 
 		{form}
 			<table class="data">

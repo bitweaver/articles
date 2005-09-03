@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.2 2005/08/27 09:48:36 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.3 2005/09/03 09:44:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,7 +12,11 @@ $formCmsSettings = array(
 		'label' => 'Spellchecker',
 		'note' => 'Allows users to check their spelling before submitting.',
 	),
-	/*
+	'display_article_filter_bar' => array(
+		'label' => 'Articles Filter',
+		'note' => 'Allows admins to quickly filter articles based on status, topic and type.',
+	),
+	/* this is controlled by the individual article type settings
 	'feature_article_comments' => array(
 		'label' => 'Comments',
 		'note' => 'Allows users to post comments in reponse to a given article.',

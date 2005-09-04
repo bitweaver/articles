@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.31 2005/09/04 10:21:58 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.32 2005/09/04 10:39:43 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.31 2005/09/04 10:21:58 squareing Exp $
+* $Id: BitArticle.php,v 1.32 2005/09/04 10:39:43 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.31 $ $Date: 2005/09/04 10:21:58 $ $Author: squareing $
+* @version $Revision: 1.32 $ $Date: 2005/09/04 10:39:43 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -567,14 +567,14 @@ class BitArticle extends LibertyAttachable {
 			// you can use an array of articles
 			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindvars = $find;
-		} else if( is_string( $find ) ) {
+		} elseif( is_string( $find ) ) {
 			// or a string
 			$mid = " WHERE UPPER( tc.`title` ) LIKE ? ";
 			$bindvars = array( '%'.strtoupper( $find ).'%' );
-		} else if( !empty( $pUserId ) ) {
-			// or a string
+		} elseif( !empty( $pParamHash['user_id'] ) ) {
+			// or gate on a user
 			$mid = " WHERE tc.`creator_user_id` = ? ";
-			$bindvars = array( $pUserId );
+			$bindvars = array( $pParamHash['user_id'] );
 		} else {
 			$mid = "";
 		}
@@ -610,8 +610,6 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		// TODO: make sure only active topics are selected - SQL seems quite tricky - xing
-		// if this is fixed here, we can include the UI for de/activation in admin_topics.tpl
 		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.`status_name`,
 			tf.`storage_path` as image_storage_path
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta
@@ -632,7 +630,6 @@ class BitArticle extends LibertyAttachable {
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
-			// if a custom image for the article exists, use that, then use an attachment, then use the topic image
 			$res['image_url'] = BitArticle::getImageUrl( $res );
 
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {

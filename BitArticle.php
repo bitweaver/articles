@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.30 2005/09/03 09:50:25 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.31 2005/09/04 10:21:58 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.30 2005/09/03 09:50:25 squareing Exp $
+* $Id: BitArticle.php,v 1.31 2005/09/04 10:21:58 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.30 $ $Date: 2005/09/03 09:50:25 $ $Author: squareing $
+* @version $Revision: 1.31 $ $Date: 2005/09/04 10:21:58 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -596,11 +596,11 @@ class BitArticle extends LibertyAttachable {
 		if( !empty( $pParamHash['topic_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['topic_id'];
-		}
-
-		if( !empty( $pParamHash['topic'] ) ) {
+		} elseif( !empty( $pParamHash['topic'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
 			$bindvars[] = strtoupper( $pParamHash['topic'] );
+		} else {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." top.`active` != 'n' OR top.`active` IS NULL ";
 		}
 
 		if( empty( $pParamHash['show_expired'] ) ) {
@@ -625,8 +625,9 @@ class BitArticle extends LibertyAttachable {
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
-			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )".
-			( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
+			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
+			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
 		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		$comment = &new LibertyComment();

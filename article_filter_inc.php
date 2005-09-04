@@ -1,6 +1,8 @@
 <?php
 if( $gBitSystem->isFeatureActive( 'display_article_filter_bar' ) && ( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) ) {
-	$filter = array();
+	$filter['topic'][]  = '';
+	$filter['type'][]   = '';
+	$filter['status'][] = '';
 
 	$_topics = BitArticleTopic::getTopicList();
 	foreach( $_topics as $topic ) {

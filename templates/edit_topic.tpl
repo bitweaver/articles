@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.2 2005/09/01 20:09:51 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.3 2005/09/04 10:43:21 squareing Exp $ *}
 
 {strip}
 <div class="floaticon">{bithelp}</div>
@@ -22,7 +22,6 @@
 				{/forminput}
 			</div>
 
-			{* SQL in BitArticle.php needs sorting out first
 			<div class="row">
 				{formlabel label="Topic Enabled" for="topic_enabled"}
 				{forminput}
@@ -30,7 +29,6 @@
 					{formhelp note=""}
 				{/forminput}
 			</div>
-			*}
 
 			<div class="row">
 				{formlabel label="Upload Image" for="t-image"}

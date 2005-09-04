@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.3 2005/09/03 09:39:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.4 2005/09/04 10:25:37 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -28,7 +28,7 @@
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
 						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystemPrefs.article_description_length|escape}" />
-						{formhelp note="The length article bodies are truncated for their abbreviated listings"}
+						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body."}
 					{/forminput}
 				</div>
 				

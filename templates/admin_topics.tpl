@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.5 2005/09/04 09:39:02 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.6 2005/09/04 18:07:52 squareing Exp $ *}
 {strip}
 
 {assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
@@ -70,7 +70,7 @@
 						{/if}
 					</td>
 
-					<td align="right" nowrap="nowrap">
+					<td align="right">
 						{smartlink ititle='edit' ibiticon='liberty/edit' ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
 						{smartlink ititle='permissions' ibiticon='liberty/permissions' ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
 						<br />

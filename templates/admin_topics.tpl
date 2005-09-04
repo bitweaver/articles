@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.4 2005/09/01 20:02:03 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.5 2005/09/04 09:39:02 squareing Exp $ *}
 {strip}
 
 {assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
@@ -40,7 +40,7 @@
 			<tr>
 				<th>{tr}Image{/tr}</th>
 				<th>{tr}Title{/tr} [ {tr}Number of Articles{/tr} ]</th>
-				{*<th>{tr}Active{/tr}</th>*}
+				<th>{tr}Active{/tr}</th>
 				<th>{tr}Actions{/tr}</th>
 			</tr>
 
@@ -62,7 +62,6 @@
 						
 					</td>
 
-					{*
 					<td style="text-align:center;">
 						{if $topics[user].active eq 'n'}
 							{smartlink ititle='activate' ibiticon='liberty/inactive' fActivateTopic=1 topic_id=`$topics[user].topic_id`}
@@ -70,7 +69,6 @@
 							{smartlink ititle='deactivate' ibiticon='liberty/active' fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{/if}
 					</td>
-					*}
 
 					<td align="right" nowrap="nowrap">
 						{smartlink ititle='edit' ibiticon='liberty/edit' ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.33 2005/09/04 10:58:39 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.34 2005/09/04 18:03:04 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.33 2005/09/04 10:58:39 squareing Exp $
+* $Id: BitArticle.php,v 1.34 2005/09/04 18:03:04 squareing Exp $
 */
 
 /**
@@ -19,7 +19,7 @@
 *
 * @author wolffy <wolff_borg@yahoo.com.au>
 *
-* @version $Revision: 1.33 $ $Date: 2005/09/04 10:58:39 $ $Author: squareing $
+* @version $Revision: 1.34 $ $Date: 2005/09/04 18:03:04 $ $Author: squareing $
 *
 * @class BitArticle
 */
@@ -41,13 +41,17 @@ define( 'ARTICLE_STATUS_RETIRED', 400 );
 class BitArticle extends LibertyAttachable {
 	/**
 	* Primary key for articles
-	* @public
+	* @access public
 	*/
 	var $mArticleId;
 	var $mTypeId;
 	var $mTopicId;
+
 	/**
-	* During initialisation, be sure to call our base constructors
+	* initiate the articles class
+	* @param $pArticleId article id of the article we want to view
+	* @param $pContentId content id of the article we want to view
+	* @access private
 	**/
 	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
 		$this->mArticleId = $pArticleId;
@@ -68,7 +72,7 @@ class BitArticle extends LibertyAttachable {
 
 	/**
 	* Load the data from the database
-	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
+	* @access public
 	**/
 	function load() {
 		if( !empty( $this->mArticleId ) || !empty( $this->mContentId ) ) {
@@ -128,42 +132,10 @@ class BitArticle extends LibertyAttachable {
 		return( count( $this->mInfo ) );
 	}
 
-	function getStatusList() {
-		global $gBitSystem;
-		$query = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_status`";
-		$result = $gBitSystem->mDb->query( $query );
-		return $result->getRows();
-	}
-
-	function setStatus( $pStatusId, $pArticleId = NULL ) {
-		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
-
-		if( !in_array( $pStatusId, $validStatuses ) ) {
-			$this->mErrors[] = "Invalid article status";
-			return FALSE;
-		}
-
-		if( empty( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
-
-		if( !empty( $pArticleId ) ) {
-			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
-			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
-			return $pStatusId;
-		}
-	}
-
 	/**
-	* Any method named Store inherently implies data will be written to the database
-	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
-	* This is the ONLY method that should be called in order to store( create or update )an sample!
-	* It is very smart and will figure out what to do for you. It should be considered a black box.
-	*
-	* @param array pParams hash of values that will be used to store the page
-	*
+	* store article data after submission
+	* @param array pParamHash of values that will be used to store the page
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
-	*
 	* @access public
 	**/
 	function store( &$pParamHash ) {
@@ -196,79 +168,11 @@ class BitArticle extends LibertyAttachable {
 		return ( count( $this->mErrors ) == 0 );
 	}
 
-	function storeImage( &$pParamHash, $pFileHash ) {
-		global $gBitSystem;
-		if( $this->isValid() ) {
-			if( !empty( $pFileHash['tmp_name'] ) ) {
-				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$pFileHash['name'];
-				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
-					$this->mErrors['article_image'] = "Error during attachment of article image";
-				} else {
-					$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
-					$storeHash['source_file'] = $tmpImagePath;
-					$storeHash['dest_path'] = 'storage/articles/';
-					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
-					$storeHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$storeHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$storeHash['type'] = $pFileHash['type'];
-
-					if( !( $resizeFunc( $storeHash ) ) ) {
-						$this->mErrors[] = 'Error while resizing article image';
-					}
-					@unlink( $tmpImagePath );
-				}
-			} elseif( !empty( $pParamHash['preview_image_path'] ) && is_file( $pParamHash['preview_image_path'] ) ) {
-				// if this article has been previewed with an image, we can copy it to the destination place
-				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
-			}
-		}
-	}
-
-	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
-		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $pArticleId, $pBasePathOnly );
-		$ret = NULL;
-		if( $relativeUrl ) {
-			$ret = BIT_ROOT_PATH.$relativeUrl;
-		}
-		return $ret;
-	}
-
-	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
-		global $gBitSystem;
-		if( !is_dir( STORAGE_PKG_PATH.'articles' ) ) {
-			mkdir( STORAGE_PKG_PATH.'articles' );
-		}
-
-		if( $pBasePathOnly ) {
-			return 'storage/articles';
-		}
-
-		$ret = NULL;
-		if( !$pArticleId ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
-			}
-		}
-
-		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pArticleId.'.jpg' ) ) {
-			return STORAGE_PKG_URL.'articles/article_'.$pArticleId.'.jpg';
-		} else {
-			return FALSE;
-		}
-	}
-
 	/**
 	* Make sure the data is safe to store
 	* @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
-	* This function is responsible for data integrity and validation before any operations are performed with the $pParamHash
-	* NOTE: This is a PRIVATE METHOD!!!! do not call outside this class, under penalty of death!
-	*
 	* @param array pParams reference to hash of values that will be used to store the page, they will be modified where necessary
-	*
 	* @return bool TRUE on success, FALSE if verify failed. If FALSE, $this->mErrors will have reason why
-	*
 	* @access private
 	**/
 	function verify( &$pParamHash ) {
@@ -401,6 +305,91 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		return( count( $this->mErrors )== 0 );
+	}
+
+	/**
+	* store article image
+	* @param array pParamHash of values that will be used to store the page
+	* @param array pFileHash hash returned by $_FILES[<name>]
+	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
+	* @access public
+	**/
+	function storeImage( &$pParamHash, $pFileHash ) {
+		global $gBitSystem;
+		if( $this->isValid() ) {
+			if( !empty( $pFileHash['tmp_name'] ) ) {
+				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$pFileHash['name'];
+				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
+					$this->mErrors['article_image'] = "Error during attachment of article image";
+				} else {
+					$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+					$storeHash['source_file'] = $tmpImagePath;
+					$storeHash['dest_path'] = 'storage/articles/';
+					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
+					$storeHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+					$storeHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+					$storeHash['type'] = $pFileHash['type'];
+
+					if( !( $resizeFunc( $storeHash ) ) ) {
+						$this->mErrors[] = 'Error while resizing article image';
+					}
+					@unlink( $tmpImagePath );
+				}
+			} elseif( !empty( $pParamHash['preview_image_path'] ) && is_file( $pParamHash['preview_image_path'] ) ) {
+				// if this article has been previewed with an image, we can copy it to the destination place
+				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
+			}
+		}
+		return ( count( $this->mErrors ) == 0 );
+	}
+
+	/**
+	* work out the path to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return path on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $pArticleId, $pBasePathOnly );
+		$ret = NULL;
+		if( $relativeUrl ) {
+			$ret = BIT_ROOT_PATH.$relativeUrl;
+		}
+		return $ret;
+	}
+
+	/**
+	* work out the URL to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+		global $gBitSystem;
+		if( !is_dir( STORAGE_PKG_PATH.'articles' ) ) {
+			mkdir( STORAGE_PKG_PATH.'articles' );
+		}
+
+		if( $pBasePathOnly ) {
+			return 'storage/articles';
+		}
+
+		$ret = NULL;
+		if( !$pArticleId ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pArticleId.'.jpg' ) ) {
+			return STORAGE_PKG_URL.'articles/article_'.$pArticleId.'.jpg';
+		} else {
+			return FALSE;
+		}
 	}
 
 	function viewerCanEdit() {
@@ -655,8 +644,8 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	* Generates the URL to the sample page
-	* @return the link to display the page.
+	* Generates the URL to the article
+	* @return the link to the full article
 	*/
 	function getDisplayUrl() {
 		$ret = NULL;
@@ -665,5 +654,44 @@ class BitArticle extends LibertyAttachable {
 		}
 		return $ret;
 	}
+
+	/**
+	* get a list of all available statuses
+	* @return an array of available statuses
+	* @access public
+	**/
+	function getStatusList() {
+		global $gBitSystem;
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_status`";
+		$result = $gBitSystem->mDb->query( $query );
+		return $result->getRows();
+	}
+
+	/**
+	* set the status of an article
+	* @param $pStatusId new status id of the article
+	* @param $pArticleId of the article that is being changed - if not set, it will attemtp to change the currently loaded article
+	* @return new status of article on success - else returns NULL
+	* @access public
+	**/
+	function setStatus( $pStatusId, $pArticleId = NULL ) {
+		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
+
+		if( !in_array( $pStatusId, $validStatuses ) ) {
+			$this->mErrors[] = "Invalid article status";
+			return FALSE;
+		}
+
+		if( empty( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		if( !empty( $pArticleId ) ) {
+			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
+			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
+			return $pStatusId;
+		}
+	}
+
 }
 ?>

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.11 2005/09/01 23:24:45 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.12 2005/09/05 22:34:10 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -87,7 +87,7 @@
 	</div><!-- end .body -->
 </div><!-- end .article -->
 
-{if $print_page ne 'y' and $article.allow_comments and !$preview && !$showDescriptionsOnly and $article.status_id eq $smarty.const.ARTICLE_STATUS_APPROVED}
+{if $print_page ne 'y' and $article.allow_comments eq 'y' and !$preview && !$showDescriptionsOnly and $article.status_id eq $smarty.const.ARTICLE_STATUS_APPROVED}
 	{include file="bitpackage:liberty/comments.tpl"}
 {/if}
 

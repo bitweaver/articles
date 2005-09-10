@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.5 2005/09/04 10:42:48 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.6 2005/09/10 07:25:37 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -12,7 +12,6 @@
 		
 		{jstabs}
 			{jstab title="Article Types"}
-
 				{form legend="Modify Article Types"}
 					<table class="data">
 						<caption>{tr}Article Types{/tr}</caption>
@@ -32,11 +31,11 @@
 								{foreach from=$artTypes item=artType key=key}
 									<td style="text-align:center;"><input title="{$artType.name}" type="checkbox" name="{$key}[{$types[user].article_type_id}]" {if $types[user].$key eq 'y'}checked="checked"{/if} /></td>
 								{/foreach}
-								<td>
-									{if $types[user].num_articles eq 0}
+								<td style="text-align:center;">
+									{if $types[user].article_cnt eq 0}
 										{smartlink ititle="remove" ibiticon="liberty/delete" remove_type=`$types[user].article_type_id`}
 									{else}
-										{$types[user].num_articles}
+										{$types[user].article_cnt}
 									{/if}
 								</td>
 							</tr>
@@ -81,10 +80,10 @@
 								<li><label><input type="checkbox" name="{$key}[{$types[user].article_type_id}]" {if $types[user].$key eq 'y'}checked="checked"{/if} /> {$artType.name}</label></li>
 							{/foreach}
 							<li>
-								{if $types[user].num_articles eq 0}
+								{if $types[user].article_cnt eq 0}
 									<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php?remove_type={$types[user].article_type_id}">{biticon ipackage=liberty iname=delete iexplain=remove}</a> {tr}Remove Type{/tr}
 								{else}
-									{$types[user].num_articles}
+									{tr}Number of Entries{/tr}: {$types[user].article_cnt}
 								{/if}
 							</li>
 						</ul>

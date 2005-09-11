@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.34 2005/09/04 18:03:04 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.35 2005/09/11 07:45:22 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.34 2005/09/04 18:03:04 squareing Exp $
+* $Id: BitArticle.php,v 1.35 2005/09/11 07:45:22 squareing Exp $
 */
 
 /**
@@ -16,11 +16,8 @@
 * and builds on core bitweaver functionality, such as the Liberty CMS engine.
 *
 * @date created 2004/8/15
-*
 * @author wolffy <wolff_borg@yahoo.com.au>
-*
-* @version $Revision: 1.34 $ $Date: 2005/09/04 18:03:04 $ $Author: squareing $
-*
+* @version $Revision: 1.35 $ $Date: 2005/09/11 07:45:22 $ $Author: squareing $
 * @class BitArticle
 */
 
@@ -48,7 +45,7 @@ class BitArticle extends LibertyAttachable {
 	var $mTopicId;
 
 	/**
-	* initiate the articles class
+	* Initiate the articles class
 	* @param $pArticleId article id of the article we want to view
 	* @param $pContentId content id of the article we want to view
 	* @access private
@@ -133,7 +130,7 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	* store article data after submission
+	* Store article data after submission
 	* @param array pParamHash of values that will be used to store the page
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
 	* @access public
@@ -308,7 +305,7 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	* store article image
+	* Store article image
 	* @param array pParamHash of values that will be used to store the page
 	* @param array pFileHash hash returned by $_FILES[<name>]
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
@@ -344,7 +341,7 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	* work out the path to the image for this article
+	* Work out the path to the image for this article
 	* @param $pArticleId id of the article we need the image path for
 	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
 	* @return path on success, FALSE on failure
@@ -360,7 +357,7 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	* work out the URL to the image for this article
+	* Work out the URL to the image for this article
 	* @param $pArticleId id of the article we need the image path for
 	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
 	* @return URL on success, FALSE on failure
@@ -392,6 +389,11 @@ class BitArticle extends LibertyAttachable {
 		}
 	}
 
+	/**
+	* Work out if a given user has the right to edit an article
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
 	function viewerCanEdit() {
 		global $gBitUser;
 
@@ -402,6 +404,12 @@ class BitArticle extends LibertyAttachable {
 		return FALSE;
 	}
 
+	/**
+	* Deal with images and text, modify them apprpriately that they can be returned to the form.
+	* @param $previewData data submitted by form - generally $_REQUEST
+	* @return array of data compatible with article form
+	* @access public
+	**/
 	function preparePreview( $previewData ) {
 		global $gBitSystem, $gBitUser;
 
@@ -479,6 +487,12 @@ class BitArticle extends LibertyAttachable {
 		return $data;
 	}
 
+	/**
+	* Get the URL for any given article image
+	* @param $pParamHash pass in full set of data returned from article query
+	* @return url to image
+	* @access public
+	**/
 	function getImageUrl( $pParamHash ) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
@@ -497,10 +511,17 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
+	/**
+	* Remove a custom article image - will result in the usage of the default image if a topic with image is selected
+	* @param $pArticleId ID of the article that needs the image removed
+	* @param $pImagePath path to the image that needs removing - generally used during preview - will override article id
+	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
+	* @access public
+	**/
 	function expungeImage( $pArticleId=NULL, $pImagePath=NULL ) {
 		if( is_file( $pImagePath) ) {
 			if( !@unlink( $pImagePath) ) {
-				$this->mErrors['remove_preview_image'] = tra( 'The preview image could not be removed' );
+				$this->mErrors['remove_image'] = tra( 'The image could not be removed because the path supplied does not exist.' );
 			}
 		}
 
@@ -510,12 +531,17 @@ class BitArticle extends LibertyAttachable {
 
 		if( $image = is_file( BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
 			if( !@unlink( $image ) ) {
-				$this->mErrors['remove_image'] = tra( 'The article image could not be removed' );
+				$this->mErrors['remove_image'] = tra( 'The article image could not be removed because this article doesn\'t seem to have an article associated with it.' );
 			}
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}
 
+	/**
+	* Removes currently loaded article
+	* @return bool TRUE on success, FALSE on failure
+	* @access public
+	**/
 	function expunge() {
 		$ret = FALSE;
 		if( $this->isValid() ) {
@@ -534,15 +560,21 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
+	/**
+	* Check if there is an article loaded
+	* @return bool TRUE on success, FALSE on failure
+	* @access public
+	**/
 	function isValid() {
 		return( !empty( $this->mArticleId ) );
 	}
 
-	/*function prepGetList( &$pParamHash ) {
-	}*/
 	/**
-
 	* This function generates a list of records from the tiki_content database for use in a list page
+	* @param $pParamHash contains an array of conditions to sort by
+	* @return array['data'] which contains all articles that match pParamHash conditions
+	* @return array['cant'] which contains the number of articles that matched the pParamHash conditions
+	* @access public
 	**/
 	function getList( &$pParamHash ) {
 		global $gBitSystem;
@@ -693,5 +725,9 @@ class BitArticle extends LibertyAttachable {
 		}
 	}
 
+	/*
+	function prepGetList( &$pParamHash ) {
+	}
+	*/
 }
 ?>

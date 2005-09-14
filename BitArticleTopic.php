@@ -4,8 +4,7 @@ require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', 100 );
 
-class BitArticleTopic extends BitBase
-{
+class BitArticleTopic extends BitBase {
 	var $mTopicId;
 
 	function BitArticleTopic($iTopicId = NULL, $iTopicName = NULL) {
@@ -94,9 +93,9 @@ class BitArticleTopic extends BitBase
 				$topicId = $this->mTopicId;
 			}
 
-			if (!empty($_FILES['upload']) && $_FILES['upload']['tmp_name']) {
-				$tmpImagePath = $this->getTopicImageStoragePath($topicId, TRUE).$_FILES['upload']['name'];
-				if (!move_uploaded_file($_FILES['upload']['tmp_name'], $tmpImagePath)) {
+			if( !empty( $_FILES['upload'] ) && $_FILES['upload']['tmp_name'] ) {
+				$tmpImagePath = $this->getTopicImageStoragePath( $topicId, TRUE).$_FILES['upload']['name'];
+				if( !move_uploaded_file( $_FILES['upload']['tmp_name'], $tmpImagePath ) ) {
 					$this->mErrors['topic_image'] = "Error during attachment of topic image";
 				} else {
 					global $gBitSystem;
@@ -104,57 +103,57 @@ class BitArticleTopic extends BitBase
 					$pFileHash['dest_base_name'] = 'topic_'.$topicId;
 					$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 					$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$pFileHash['source_file'] = $tmpImagePath; //$this->getTopicImageStoragePath($newTopicId);
-					$pFileHash['dest_path'] = '/storage/articles/';
+					$pFileHash['source_file'] = $tmpImagePath;
+					$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
 					$pFileHash['type'] = $_FILES['upload']['type'];
 
-					if (!($resizeFunc( $pFileHash ))) {
+					if( !( $resizeFunc( $pFileHash ) ) ) {
 						$this->mErrors[] = 'Error while resizing topic image';
 					}
-					@unlink($tmpImagePath);
+					@unlink( $tmpImagePath );
 					$iParamHash['has_topic_image'] = 'y';
 				}
 			}
 
-			if ($iParamHash['topic_id']) {
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."tiki_article_topics", $iParamHash, array('name' => 'topic_id', 'value'=> $iParamHash['topic_id']));
+			if( $iParamHash['topic_id'] ) {
+				$this->mDb->associateUpdate( BIT_DB_PREFIX."tiki_article_topics", $iParamHash, array( 'name' => 'topic_id', 'value'=> $iParamHash['topic_id'] ) );
 			} else {
 				$iParamHash['topic_id'] = $topicId;
-				$this->mDb->associateInsert(BIT_DB_PREFIX."tiki_article_topics", $iParamHash);
+				$this->mDb->associateInsert( BIT_DB_PREFIX."tiki_article_topics", $iParamHash );
 			}
 		}
 		$this->mTopicId = $iParamHash['topic_id'];
 	}
 
-	function getTopicImageStoragePath($iTopicId = NULL, $iBasePathOnly = FALSE) {
-		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl($iTopicId, $iBasePathOnly);
+	function getTopicImageStoragePath( $iTopicId = NULL, $iBasePathOnly = FALSE ) {
+		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $iTopicId, $iBasePathOnly );
 		$ret = NULL;
-		if ($relativeUrl) {
+		if( $relativeUrl ) {
 			$ret = BIT_ROOT_PATH.$relativeUrl;
 		}
 		return $ret;
 	}
 
-	function getTopicImageStorageUrl($iTopicId = NULL, $iBasePathOnly = FALSE, $iForceRefresh = NULL) {
+	function getTopicImageStorageUrl( $iTopicId = NULL, $iBasePathOnly = FALSE, $iForceRefresh = NULL ) {
 		global $gBitSystem;
-		if (!is_dir(BIT_ROOT_PATH.'/storage/articles')) {
-			mkdir(BIT_ROOT_PATH.'/storage/articles');
+		if( !is_dir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME ) ) {
+			mkdir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME );
 		}
 
-		if ($iBasePathOnly) {
-			return '/storage/articles';
+		if( $iBasePathOnly ) {
+			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
 		}
 
 		$ret = NULL;
-		if (!$iTopicId) {
-			if ($this->mTopicId) {
+		if( !$iTopicId ) {
+			if( $this->mTopicId ) {
 				$iTopicId = $this->mTopicId;
 			} else {
 				return NULL;
 			}
 		}
 
-		return '/storage/articles/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
+		return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
 	}
 
 	function getTopicList() {
@@ -169,9 +168,7 @@ class BitArticleTopic extends BitBase
         $ret = array();
 
         while( $res = $result->fetchRow() ) {
-			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) ".
-												  "FROM `" . BIT_DB_PREFIX . "tiki_articles` ".
-												  "WHERE `topic_id`= ?", array( $res["topic_id"] ) );
+			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
 			if( $res['has_topic_image'] == 'y' ) {
 				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
 			}
@@ -183,9 +180,9 @@ class BitArticleTopic extends BitBase
     }
 
 	function removeTopicImage() {
-		if ($this->mTopicId) {
-			if (file_exists($this->getTopicImageStoragePath())) {
-				@unlink($this->getTopicImageStoragePath());
+		if( $this->mTopicId ) {
+			if( file_exists($this->getTopicImageStoragePath() ) ) {
+				@unlink( $this->getTopicImageStoragePath() );
 			}
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_article_topics` SET `has_topic_image` = 'n' WHERE `topic_id` = ?";
 			$rs = $this->mDb->query($sql, array($this->mTopicId));

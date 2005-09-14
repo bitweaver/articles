@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.36 2005/09/11 12:52:15 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.37 2005/09/14 12:53:11 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.36 2005/09/11 12:52:15 squareing Exp $
+* $Id: BitArticle.php,v 1.37 2005/09/14 12:53:11 squareing Exp $
 */
 
 /**
@@ -17,7 +17,7 @@
 *
 * @date created 2004/8/15
 * @author wolffy <wolff_borg@yahoo.com.au>
-* @version $Revision: 1.36 $ $Date: 2005/09/11 12:52:15 $ $Author: squareing $
+* @version $Revision: 1.37 $ $Date: 2005/09/14 12:53:11 $ $Author: squareing $
 * @class BitArticle
 */
 
@@ -321,7 +321,7 @@ class BitArticle extends LibertyAttachable {
 				} else {
 					$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 					$storeHash['source_file'] = $tmpImagePath;
-					$storeHash['dest_path'] = 'storage/articles/';
+					$storeHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
 					$storeHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 					$storeHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
@@ -334,7 +334,7 @@ class BitArticle extends LibertyAttachable {
 				}
 			} elseif( !empty( $pParamHash['preview_image_path'] ) && is_file( $pParamHash['preview_image_path'] ) ) {
 				// if this article has been previewed with an image, we can copy it to the destination place
-				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.'articles/article_'.$this->mArticleId.'.jpg' );
+				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$this->mArticleId.'.jpg' );
 			}
 		}
 		return ( count( $this->mErrors ) == 0 );
@@ -365,12 +365,12 @@ class BitArticle extends LibertyAttachable {
 	**/
 	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
 		global $gBitSystem;
-		if( !is_dir( STORAGE_PKG_PATH.'articles' ) ) {
-			mkdir( STORAGE_PKG_PATH.'articles' );
+		if( !is_dir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME ) ) {
+			mkdir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME );
 		}
 
 		if( $pBasePathOnly ) {
-			return 'storage/articles';
+			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
 		}
 
 		$ret = NULL;
@@ -382,8 +382,8 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-		if( is_file( STORAGE_PKG_PATH.'articles/article_'.$pArticleId.'.jpg' ) ) {
-			return STORAGE_PKG_URL.'articles/article_'.$pArticleId.'.jpg';
+		if( is_file( STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg' ) ) {
+			return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg';
 		} else {
 			return FALSE;
 		}
@@ -410,12 +410,12 @@ class BitArticle extends LibertyAttachable {
 	* @return array of data compatible with article form
 	* @access public
 	**/
-	function preparePreview( $previewData ) {
+	function preparePreview( $pParamHash ) {
 		global $gBitSystem, $gBitUser;
 
-		$data = $previewData;
+		$data = $pParamHash;
 		$this->verify( $data );
-		$data = array_merge( $previewData, $data['content_store'], $data['article_store'] );
+		$data = array_merge( $pParamHash, $data['content_store'], $data['article_store'] );
 
 		if( empty( $data['user_id'] ) ) {
 			$data['user_id'] = $gBitUser->mUserId;
@@ -451,12 +451,12 @@ class BitArticle extends LibertyAttachable {
 			$data['image_url'] = BitArticle::getImageUrl( $data );
 		}
 
-		if( !empty( $_FILES['article_image'] ) ) {
+		if( !empty( $_FILES['article_image']['name'] ) ) {
 			// store the image in temp/articles/
-			$tmpImagePath = TEMP_PKG_PATH.'articles/'.'temp_'.$_FILES['article_image']['name'];
+			$tmpImagePath = TEMP_PKG_PATH.ARTICLES_PKG_NAME.'/'.'temp_'.$_FILES['article_image']['name'];
 			$tmpImageName = preg_replace( "/(.*)\..*?$/", "$1", $_FILES['article_image']['name'] );
-			if( !is_dir( TEMP_PKG_PATH.'articles' ) ) {
-				mkdir( TEMP_PKG_PATH.'articles' );
+			if( !is_dir( TEMP_PKG_PATH.ARTICLES_PKG_NAME ) ) {
+				mkdir( TEMP_PKG_PATH.ARTICLES_PKG_NAME );
 			}
 
 			if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
@@ -464,7 +464,7 @@ class BitArticle extends LibertyAttachable {
 			} else {
 				$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 				$pFileHash['source_file'] = $tmpImagePath;
-				$pFileHash['dest_path'] = 'temp/articles/';
+				$pFileHash['dest_path'] = TEMP_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 				// remove the extension
 				$pFileHash['dest_base_name'] = $tmpImageName;
 				$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
@@ -475,9 +475,11 @@ class BitArticle extends LibertyAttachable {
 					$this->mErrors[] = 'Error while resizing article image';
 				}
 				@unlink( $tmpImagePath );
-				$data['image_url'] = TEMP_PKG_URL.'articles/'.$tmpImageName.'.jpg';
-				$data['preview_image_path'] = TEMP_PKG_PATH.'articles/'.$tmpImageName.'.jpg';
+				$data['image_url'] = $data['preview_image_url'] = TEMP_PKG_URL.ARTICLES_PKG_NAME.'/'.$tmpImageName.'.jpg';
+				$data['preview_image_path'] = TEMP_PKG_PATH.ARTICLES_PKG_NAME.'/'.$tmpImageName.'.jpg';
 			}
+		} elseif( !empty( $data['preview_image_path'] ) && is_file( $data['preview_image_path'] ) ) {
+			$data['image_url'] = $data['preview_image_url'];
 		}
 
 		$articleType = &new BitArticleType( $data['article_type_id'] );
@@ -501,6 +503,7 @@ class BitArticle extends LibertyAttachable {
 		} elseif( !empty( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
 			// TODO: clean up the avatar url stuff. shouldn't be hardcoded.
 			// perhaps we should make a copy of the image file and reduce it to article size settings.
+			// this will be necessary as soon as we allow custom image sizes for article image
 			$image = preg_replace( "/(.*)\/.*?$/", "$1/avatar.jpg", $pParamHash['image_storage_path'] );
 			if( is_file( BIT_ROOT_PATH.$image ) ) {
 				$ret =  BIT_ROOT_URL.$image;
@@ -625,6 +628,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
+		// someone better at SQL please get this working without an additional db call - xing
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`publish_date` < ? AND ta.`expire_date` > ? ";

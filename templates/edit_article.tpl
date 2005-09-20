@@ -211,7 +211,7 @@
 							{formlabel label="Use Existing Image" for="existing_attachment_id_input"}
 							{forminput}
 								<input type="text" name="image_attachment_id" id="existing_attachment_id_input" value="{$article.image_attachment_id}" size="6"/><br />
-								<a href="{$smarty.const.LIBERTY_PKG_URL}attachment_browser.php" title="{tr}Opens attachment browser in new window{/tr}" onkeypress="popUpWin(this.href,'standard',600,400);" onclick="popUpWin(this.href,'standard',600,400);return false;">{tr}Attachment Browser{/tr}</a>
+								{jspopup href="`$smarty.const.LIBERTY_PKG_URL`attachment_browser.php" title="Attachment browser"}
 							{/forminput}
 						</div>
 

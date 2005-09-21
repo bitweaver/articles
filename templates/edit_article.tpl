@@ -144,7 +144,7 @@
 							</div>
 						{/if}
 
-						{include file="bitpackage:liberty/edit_service_minis_inc.tpl}
+						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;
@@ -177,7 +177,7 @@
 					{/legend}
 				{/jstab}
 
-				{include file="bitpackage:liberty/edit_service_tabs_inc.tpl}
+				{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
 
 				{jstab title="Advanced"}
 					{legend legend="Custom article image"}

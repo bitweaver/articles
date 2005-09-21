@@ -1,7 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.6 2005/09/04 18:07:52 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.7 2005/09/21 21:45:05 squareing Exp $ *}
 {strip}
-
-{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
 
 <div class="floaticon">{bithelp}</div>
 

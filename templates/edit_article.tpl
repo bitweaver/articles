@@ -3,8 +3,6 @@
 		document.getElementById( counterId ).value = maxLimit - document.getElementById( textareaId ).value.length;
 	{rdelim}
 //]]></script>
-{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
-
 <div class="floaticon">{bithelp}</div>
 <div class="admin articles">
 	<div class="header">
@@ -146,9 +144,7 @@
 							</div>
 						{/if}
 
-						{if $serviceEditTpls.access_control }
-							{include file=$serviceEditTpls.access_control"}
-						{/if}
+						{include file="bitpackage:liberty/edit_service_minis_inc.tpl}
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;
@@ -181,13 +177,7 @@
 					{/legend}
 				{/jstab}
 
-				{if $serviceEditTpls.categorization }
-					{jstab title="Categorize"}
-						{legend legend="Categorize"}
-							{include file=$serviceEditTpls.categorization"}
-						{/legend}
-					{/jstab}
-				{/if}
+				{include file="bitpackage:liberty/edit_service_tabs_inc.tpl}
 
 				{jstab title="Advanced"}
 					{legend legend="Custom article image"}
@@ -224,12 +214,6 @@
 							{/forminput}
 						</div>
 					{/legend}
-
-					{if $serviceEditTpls.menu}
-						{legend legend="Insert Link in Menu"}
-							{include file=$serviceEditTpls.menu"}
-						{/legend}
-					{/if}
 				{/jstab}
 			{/jstabs}
 		{/form}

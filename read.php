@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.5 2005/09/03 07:55:58 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.6 2005/09/26 07:15:08 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -30,14 +30,14 @@ if( $gContent->mInfo['status_id'] != ARTICLE_STATUS_APPROVED && !( $gBitUser->ha
 }
 
 $gContent->addHit();
-$smarty->assign_by_ref( 'article', $gContent->mInfo );
+$gBitSmarty->assign_by_ref( 'article', $gContent->mInfo );
 
 // get all the services that want to display something on this page
 $displayHash = array( 'perm_name' => 'bit_p_view' );
 $gContent->invokeServices( 'content_display_function', $displayHash );
 
 $topics = BitArticleTopic::getTopicList();
-$smarty->assign_by_ref( 'topics', $topics );
+$gBitSmarty->assign_by_ref( 'topics', $topics );
 
 // Comments engine!
 if( $gContent->mInfo['allow_comments'] == 'y' ) {

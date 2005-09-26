@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.6 2005/09/03 09:50:25 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7 2005/09/26 07:15:08 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -36,7 +36,7 @@ foreach( $articles['data'] as $key => $article ) {
 		$articles['data'][$key]['read_more'] = TRUE;
 	}
 }
-$smarty->assign_by_ref( 'articles', $articles['data'] );
+$gBitSmarty->assign_by_ref( 'articles', $articles['data'] );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/center_list_articles.tpl', tra( 'Articles' ) );

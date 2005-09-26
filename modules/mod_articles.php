@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.5 2005/09/01 09:43:33 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.6 2005/09/26 07:15:08 squareing Exp $
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 global $module_rows, $module_params, $module_title;
 
@@ -29,5 +29,5 @@ $getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem-
 $getHash['topic']         = !empty( $module_params['topic'] ) ? $module_params['topic'] : NULL;
 $articles = $articles->getList( $getHash );
 
-$smarty->assign( 'modArticles', $articles['data'] );
+$gBitSmarty->assign( 'modArticles', $articles['data'] );
 ?>

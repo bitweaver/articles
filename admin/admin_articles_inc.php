@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.3 2005/09/03 09:44:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.4 2005/09/26 07:15:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -27,7 +27,7 @@ $formCmsSettings = array(
 		'note' => 'Use customised templates for the creation of articles to standardise and simplify posts.',
 	),
 );
-$smarty->assign( 'formCmsSettings',$formCmsSettings );
+$gBitSmarty->assign( 'formCmsSettings',$formCmsSettings );
 
 $formArticleListing = array(
 	"art_list_title" => array(
@@ -77,7 +77,7 @@ $formArticleListing = array(
 		'note' => 'This will indicate whether a given article has been submitted or has been approved.',
 	),
 );
-$smarty->assign('formArticleListing', $formArticleListing);
+$gBitSmarty->assign('formArticleListing', $formArticleListing);
 
 $processForm = set_tab();
 

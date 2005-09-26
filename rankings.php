@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.1 2005/06/30 01:10:46 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.2 2005/09/26 07:15:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,7 +24,7 @@ $allrankings = array(
         ) 
     );
 
-$smarty->assign( 'allrankings', $allrankings );
+$gBitSmarty->assign( 'allrankings', $allrankings );
 
 if ( !isset( $_REQUEST["which"] ) ) {
     $which = 'cms_ranking_top_articles';
@@ -32,7 +32,7 @@ if ( !isset( $_REQUEST["which"] ) ) {
     $which = $_REQUEST["which"];
 } 
 
-$smarty->assign( 'which', $which );
+$gBitSmarty->assign( 'which', $which );
 // Get the page from the request var or default it to HomePage
 if ( !isset( $_REQUEST["limit"] ) ) {
     $limit = 10;
@@ -40,7 +40,7 @@ if ( !isset( $_REQUEST["limit"] ) ) {
     $limit = $_REQUEST["limit"];
 } 
 
-$smarty->assign_by_ref( 'limit', $limit );
+$gBitSmarty->assign_by_ref( 'limit', $limit );
 // Rankings:
 // Top Pages
 // Last pages
@@ -53,8 +53,8 @@ $rank["title"] = $rk["title"];
 $rank["y"] = $rk["y"];
 $rankings[] = $rank;
 
-$smarty->assign_by_ref( 'rankings', $rankings );
-$smarty->assign( 'rpage', ARTICLES_PKG_URL . 'rankings.php' );
+$gBitSmarty->assign_by_ref( 'rankings', $rankings );
+$gBitSmarty->assign( 'rpage', ARTICLES_PKG_URL . 'rankings.php' );
 
 
 // Display the template

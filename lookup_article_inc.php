@@ -19,6 +19,6 @@
 		} else {
 			$gContent->load();
 		}
-		$smarty->assign_by_ref( 'gContent', $gContent );
+		$gBitSmarty->assign_by_ref( 'gContent', $gContent );
 	}
 ?>

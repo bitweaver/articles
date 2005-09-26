@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem, $gBitUser, $smarty;
+global $gBitSystem, $gBitUser, $gBitSmarty;
 $gBitSystem->registerPackage( 'articles', dirname( __FILE__ ).'/' );
 
 if( $gBitSystem->isPackageActive( 'articles' ) ) {

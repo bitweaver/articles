@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.6 2005/09/04 10:42:48 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.7 2005/09/26 07:15:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -68,7 +68,7 @@ $artTypes = array(
 		'desc' => tra( 'The person who submits an article of this type can edit it' ),
 	),
 );
-$smarty->assign( 'artTypes', $artTypes );
+$gBitSmarty->assign( 'artTypes', $artTypes );
 
 $gContent = &new BitArticleType( !empty( $_REQUEST['article_type_id'] ) ? $_REQUEST['article_type_id'] : NULL );
 
@@ -87,7 +87,7 @@ if( isset( $_REQUEST["add_type"] ) ) {
 }
 
 $types = BitArticleType::getTypeList();
-$smarty->assign( 'types', $types );
+$gBitSmarty->assign( 'types', $types );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Edit Article Types') );

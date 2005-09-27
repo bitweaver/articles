@@ -156,12 +156,17 @@ class BitArticleTopic extends BitBase {
 		return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
 	}
 
-	function getTopicList() {
+	function getTopicList( $pOptionHash=NULL ) {
 		global $gBitSystem;
 
-        $query = "SELECT tat.* " .
-				 "FROM `".BIT_DB_PREFIX."tiki_article_topics` tat " .
-				 "ORDER BY tat.`topic_name`";
+		$where = '';
+		if( !empty( $pOptionHash['active'] ) ) {
+			$where = " WHERE tat.`active` = 'y' ";
+		}
+
+        $query = "SELECT tat.*
+				 FROM `".BIT_DB_PREFIX."tiki_article_topics` tat
+				 $where ORDER BY tat.`topic_name`";
 
 		$result = $gBitSystem->mDb->query( $query, array() );
 

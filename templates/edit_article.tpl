@@ -47,18 +47,24 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
-							{formlabel label="Topic" for="topic_id"}
-							{forminput}
-								<select name="topic_id" id="topic_id">
-									<option value="">{tr}None{/tr}</option>
-									{section name=t loop=$topics}
-										<option value="{$topics[t].topic_id}" {if $article.topic_id eq $topics[t].topic_id}selected="selected"{/if}>{$topics[t].topic_name|escape}</option>
-									{/section}
-								</select>
-								{formhelp note=""}
-							{/forminput}
-						</div>
+						{if $topics or $gBitUser->hasPermission( 'bit_p_admin_articles' )}
+							<div class="row">
+								{formlabel label="Topic" for="topic_id"}
+								{forminput}
+									{if $topics}
+										<select name="topic_id" id="topic_id">
+											<option value="">{tr}None{/tr}</option>
+											{section name=t loop=$topics}
+												<option value="{$topics[t].topic_id}" {if $article.topic_id eq $topics[t].topic_id}selected="selected"{/if}>{$topics[t].topic_name|escape}</option>
+											{/section}
+										</select>
+									{else}
+										{tr}No Topics set{/tr}. {smartlink ititle="Article Topics" ifile="admin/admin_topics.php"}
+									{/if}
+									{formhelp note=""}
+								{/forminput}
+							</div>
+						{/if}
 
 						<div class="row">
 							{formlabel label="Type" for="article_type_id"}

@@ -104,7 +104,7 @@ class BitArticleTopic extends BitBase {
 					$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 					$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 					$pFileHash['source_file'] = $tmpImagePath;
-					$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
+					$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 					$pFileHash['type'] = $_FILES['upload']['type'];
 
 					if( !( $resizeFunc( $pFileHash ) ) ) {

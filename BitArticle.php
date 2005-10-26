@@ -1,6 +1,6 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.37 2005/09/14 12:53:11 squareing Exp $
+* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.38 2005/10/26 10:58:14 squareing Exp $
 *
 * Copyright( c )2004 bitweaver.org
 * Copyright( c )2003 tikwiki.org
@@ -8,7 +8,7 @@
 * All Rights Reserved. See copyright.txt for details and a complete list of authors.
 * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
 *
-* $Id: BitArticle.php,v 1.37 2005/09/14 12:53:11 squareing Exp $
+* $Id: BitArticle.php,v 1.38 2005/10/26 10:58:14 squareing Exp $
 */
 
 /**
@@ -17,7 +17,7 @@
 *
 * @date created 2004/8/15
 * @author wolffy <wolff_borg@yahoo.com.au>
-* @version $Revision: 1.37 $ $Date: 2005/09/14 12:53:11 $ $Author: squareing $
+* @version $Revision: 1.38 $ $Date: 2005/10/26 10:58:14 $ $Author: squareing $
 * @class BitArticle
 */
 
@@ -108,6 +108,9 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['editor'] = ( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ));
+
+				/* get the "ago" time */
+				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $result->fields['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
 
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
 					$parts = preg_split( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] );
@@ -657,6 +660,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
+			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
 
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
@@ -729,7 +733,7 @@ class BitArticle extends LibertyAttachable {
 		}
 	}
 
-	/*
+	/* TODO: write this function...
 	function prepGetList( &$pParamHash ) {
 	}
 	*/

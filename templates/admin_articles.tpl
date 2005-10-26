@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.4 2005/09/04 10:25:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.5 2005/10/26 10:58:16 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -15,7 +15,7 @@
 						{/forminput}
 					</div>
 				{/foreach}
-				
+
 				<div class="row">
 					{formlabel label="Maximum Articles" for="articles-maxhome"}
 					{forminput}
@@ -23,15 +23,23 @@
 						{formhelp note="Number of articles shown on the main articles page."}
 					{/forminput}
 				</div>
-				
+
 				<div class="row">
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
 						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystemPrefs.article_description_length|escape}" />
-						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body."}
+						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body.<br />Changing this value might influence existing articles."}
 					{/forminput}
 				</div>
-				
+
+				<div class="row">
+					{formlabel label="Display Time since Publishing" for="articles-date-format"}
+					{forminput}
+						{html_options options=$articleDateFormat values=$articleDateFormat name=article_date_display_format id=article-date-format selected=$gBitSystem->mPrefs.article_date_display_format}
+						{formhelp note="Display the time since the article has been published instead of the full date. Pick the timespan for which this is true."}
+					{/forminput}
+				</div>
+
 				<div class="row submit">
 					<input type="submit" name="settingsTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
@@ -49,7 +57,7 @@
 						{/forminput}
 					</div>
 				{/foreach}
-				
+
 				<div class="row submit">
 					<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>

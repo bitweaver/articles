@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.4 2005/09/26 07:15:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.5 2005/10/26 10:58:15 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -16,18 +16,23 @@ $formCmsSettings = array(
 		'label' => 'Articles Filter',
 		'note' => 'Allows admins to quickly filter articles based on status, topic and type.',
 	),
-	/* this is controlled by the individual article type settings
-	'feature_article_comments' => array(
-		'label' => 'Comments',
-		'note' => 'Allows users to post comments in reponse to a given article.',
-	),
-	*/
 	'feature_cms_templates' => array(
 		'label' => 'Use Templates',
 		'note' => 'Use customised templates for the creation of articles to standardise and simplify posts.',
 	),
 );
 $gBitSmarty->assign( 'formCmsSettings',$formCmsSettings );
+
+$articleDateFormat = array(
+	'' => tra( 'never' ),
+	'always' => tra( 'always' ),
+	'year' => tra( 'up to a year' ),
+	'month' => tra( 'up to a month' ),
+	'week' => tra( 'up to a week' ),
+	'day' => tra( 'up to a day' ),
+	'hour' => tra( 'up to an hour' ),
+);
+$gBitSmarty->assign( 'articleDateFormat', $articleDateFormat );
 
 $formArticleListing = array(
 	"art_list_title" => array(
@@ -50,12 +55,6 @@ $formArticleListing = array(
 		'label' => 'Expiration Date',
 		'note' => 'Display when the article will expire.',
 	),
-	/*
-	"art_list_visible" => array(
-		'label' => 'List Visible',
-		'note' => 'Indicate whether an article is visible or not. (is this what this setting does???)',
-	),
-	*/
 	"art_list_author" => array(
 		'label' => 'Author',
 		'note' => 'Display the name of the author of an article.',
@@ -82,17 +81,12 @@ $gBitSmarty->assign('formArticleListing', $formArticleListing);
 $processForm = set_tab();
 
 if( $processForm ) {
-	
 	$featureToggles = array_merge( $formArticleListing,$formCmsSettings );
 	foreach( $featureToggles as $item => $data ) {
 		simple_set_toggle( $item );
 	}
+	simple_set_value( "article_date_display_format" );
 	simple_set_int( "max_articles" );
 	simple_set_int( "article_description_length" );
-	/* we have global options for comments in liberty now
-	simple_set_int( "article_comments_per_page" );
-	simple_set_value( "article_comments_default_ordering" );
-	*/
 }
-
 ?>

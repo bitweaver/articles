@@ -1,7 +1,9 @@
 <div class="display articles">
-	<div class="header">
-		<h1>{tr}Articles{/tr}</h1>
-	</div>
+	{if !$articles}
+		<div class="header">
+			<h1>{tr}Articles{/tr}</h1>
+		</div>
+	{/if}
 
 	{formfeedback success=$smarty.request.feedback}
 

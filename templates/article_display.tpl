@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.12 2005/09/05 22:34:10 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13 2005/10/26 10:58:16 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -23,10 +23,16 @@
 		{if $article.show_author || $article.show_pubdate}
 			<div class="date">
 				{if $article.show_author}
-					{tr}By{/tr} {displayname user=$article.author_name}&nbsp;
+					{* can't really use the link here since it only works when the user uses his login name *}
+					{displayname user=$article.author_name nolink=true}&nbsp;
 				{/if}
+
 				{if $article.show_pubdate}
-					{tr}on{/tr} {$article.publish_date|bit_short_datetime}
+					{if $article.time_difference.orientation eq 'past'}
+						&bull; {tr}{$article.time_difference.strings.0} {$article.time_difference.strings.1} ago{/tr}
+					{else}
+						&bull; {$article.publish_date|bit_short_datetime}
+					{/if}
 				{/if}
 			</div><!-- end .date -->
 		{/if}

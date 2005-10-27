@@ -72,12 +72,14 @@ $gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
 	'dependencies' => '',
 ) );
 
+/* commented these out because these sequences are automatically generated
 $sequences = array (
 	'tiki_article_topics_topic_id_seq' => array( 'start' => 1 ),
 	'tiki_article_types_article_type_id_seq' => array( 'start' => 1 ),
 	'tiki_articles_article_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
+*/
 
 // $indices = array();
 // $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_DIR, $indices );

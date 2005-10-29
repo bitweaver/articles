@@ -117,7 +117,7 @@
 						{*<div class="row">
 							{formlabel label="Introduction" for="heading"}
 							{forminput}
-								<textarea class="wikiedit" name="description" id="heading" rows="7" cols="80">{$article.description|escape}</textarea>
+								<textarea class="wikiedit" name="description" id="heading" rows="7" cols="50">{$article.description|escape}</textarea>
 								{formhelp note="The introduction is shown on your articles home page. If you provide text in the body part or this article, a link to the full text will be provided."}
 							{/forminput}
 						</div>*}
@@ -128,7 +128,7 @@
 
 						<div class="row">
 							{forminput}
-								<textarea id="{$textarea_id}" name="edit" rows="{$rows|default:20}" cols="{$cols|default:80}"
+								<textarea id="{$textarea_id}" name="edit" rows="{$rows|default:20}" cols="{$cols|default:50}"
 									onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
 									onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
 								>{$article.data|escape:html}</textarea>

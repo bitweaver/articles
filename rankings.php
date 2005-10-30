@@ -1,9 +1,13 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.2 2005/09/26 07:15:08 squareing Exp $
-// Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-// All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
-// Initialization
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.3 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ * @subpackage functions
+ */
+
+/**
+ * Initialization
+ */
 require_once( '../bit_setup_inc.php' );
 
 include_once( KERNEL_PKG_PATH . 'rank_lib.php' );

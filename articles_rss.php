@@ -1,4 +1,13 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ * @subpackage functions
+ */
+
+/**
+ * Initialization
+ */
 require_once( "../bit_setup_inc.php" );
 require_once( RSS_PKG_PATH."rss_inc.php" );
 require_once( ARTICLES_PKG_PATH."BitArticle.php" );

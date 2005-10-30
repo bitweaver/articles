@@ -1,5 +1,13 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.6 2005/09/26 07:15:08 squareing Exp $
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.7 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ * @subpackage modules
+ */
+
+/**
+ * Initialization
+ */
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 global $module_rows, $module_params, $module_title;
 

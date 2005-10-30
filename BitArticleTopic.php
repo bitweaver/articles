@@ -1,9 +1,20 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.13 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ */
+
+/**
+ * Required setup
+ */
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', 100 );
 
+/**
+ * @package article
+ */
 class BitArticleTopic extends BitBase {
 	var $mTopicId;
 

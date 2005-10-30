@@ -1,26 +1,27 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.38 2005/10/26 10:58:14 squareing Exp $
-*
-* Copyright( c )2004 bitweaver.org
-* Copyright( c )2003 tikwiki.org
-* Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-* All Rights Reserved. See copyright.txt for details and a complete list of authors.
-* Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
-*
-* $Id: BitArticle.php,v 1.38 2005/10/26 10:58:14 squareing Exp $
-*/
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.39 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ *
+ * Copyright( c )2004 bitweaver.org
+ * Copyright( c )2003 tikwiki.org
+ * Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: BitArticle.php,v 1.39 2005/10/30 19:48:40 lsces Exp $
+ *
+ * Article class is used when accessing BitArticles. It is based on TikiSample
+ * and builds on core bitweaver functionality, such as the Liberty CMS engine.
+ *
+ * created 2004/8/15
+ * @author wolffy <wolff_borg@yahoo.com.au>
+ * @version $Revision: 1.39 $ $Date: 2005/10/30 19:48:40 $ $Author: lsces $
+ */
 
 /**
-* Article class is used when accessing BitArticles. It is based on TikiSample
-* and builds on core bitweaver functionality, such as the Liberty CMS engine.
-*
-* @date created 2004/8/15
-* @author wolffy <wolff_borg@yahoo.com.au>
-* @version $Revision: 1.38 $ $Date: 2005/10/26 10:58:14 $ $Author: squareing $
-* @class BitArticle
-*/
-
+ * Required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
@@ -35,6 +36,9 @@ define( 'ARTICLE_STATUS_PENDING', 200 );
 define( 'ARTICLE_STATUS_APPROVED', 300 );
 define( 'ARTICLE_STATUS_RETIRED', 400 );
 
+/**
+ * @package article
+ */
 class BitArticle extends LibertyAttachable {
 	/**
 	* Primary key for articles
@@ -578,8 +582,9 @@ class BitArticle extends LibertyAttachable {
 	/**
 	* This function generates a list of records from the tiki_content database for use in a list page
 	* @param $pParamHash contains an array of conditions to sort by
-	* @return array['data'] which contains all articles that match pParamHash conditions
-	* @return array['cant'] which contains the number of articles that matched the pParamHash conditions
+	* @return array
+	* ['data'] which contains all articles that match pParamHash conditions
+	* ['cant'] which contains the number of articles that matched the pParamHash conditions
 	* @access public
 	**/
 	function getList( &$pParamHash ) {

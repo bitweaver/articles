@@ -1,7 +1,18 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.7 2005/10/30 19:48:40 lsces Exp $
+ * @package article
+ */
+
+/**
+ * Required setup
+ */
 require_once (KERNEL_PKG_PATH."BitBase.php");
 require_once(ARTICLES_PKG_PATH.'BitArticle.php');
 
+/**
+ * @package article
+ */
 class BitArticleType extends BitBase
 {
 	var $mTypeId;

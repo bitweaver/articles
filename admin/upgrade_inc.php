@@ -48,7 +48,7 @@ array( 'DATADICT' => array(
 			'article_type_id' => array( '`article_type_id`', 'I4' ),
 		),
 		'tiki_article_types' => array(
-			'article_type_id' => array( '`article_type_id`', 'I4 AUTO' ),
+			'article_type_id' => array( '`article_type_id`', 'I4' ),
 		),
 		'tiki_article_topics' => array(
 			'has_topic_image' => array( '`has_topic_image`', 'C(1)' ),
@@ -76,10 +76,13 @@ array( 'PHP' => '
 		mkdir_p( $tempDir );
 	}
 
-	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );
-	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_id_seq", $max_articles + 1 );
-	$max_topics = $gBitSystem->mDb->getOne( "SELECT MAX(`topic_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_topics`" );
-	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_topics_id_seq", $max_topics + 1 );
+//	currently no sequences are generated in schema_inc
+//	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );
+//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_id_seq", $max_articles + 1 );
+//	$max_topics = $gBitSystem->mDb->getOne( "SELECT MAX(`topic_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_topics`" );
+//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_topics_id_seq", $max_topics + 1 );
+//	$max_types = $gBitSystem->mDb->getOne( "SELECT MAX(`article_type_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_types`" );
+//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_types_id_seq", $max_types + 1 );
 
 	// tiki_articles
 	$query = "
@@ -184,12 +187,66 @@ array( 'PHP' => '
 	}'
 ),
 
+// STEP 4
+array( 'QUERY' =>
+	array( 'SQL92' => array(
+	"UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `article_type_id`= (SELECT `article_type_id` FROM `".BIT_DB_PREFIX."tiki_article_types` tat WHERE tat.`type_name`=`".BIT_DB_PREFIX."tiki_articles`.`type_name`)",
+
+	// insert default values for status table
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (  0, 'Denied') ",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (100, 'Draft') ",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (200, 'Pending Approval') ",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (300, 'Approved') ",
+	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (400, 'Retired') "
+
+//	// add in permissions not in TW 1.8 - may get failures on some duplicates
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_userfiles', 'Can upload personal files', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_user_group_perms', 'Can assign permissions to personal groups', 'editors', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_user_group_members', 'Can assign users to personal groups', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_user_group_subgroups', 'Can include other groups in groups', 'editors', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_configure_modules', 'Can configure modules', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_cache_bookmarks', 'Can cache user bookmarks', 'admin', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_usermenu', 'Can create items in personal menu', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_tasks', 'Can use tasks', 'registered', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_assume_users', 'Can assume the identity of other users', 'admin', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_admin_users', 'Can edit the information for other users', 'admin', 'users')",
+//	"INSERT INTO `".BIT_DB_PREFIX."users_permissions` (`perm_name`,`perm_desc`, `level`, `package`) VALUES ('bit_p_view_tabs_and_tools', 'Can view tab and tool links', 'basic', 'users')",
+//
+//	// update comments on user pages
+//	"UPDATE `".BIT_DB_PREFIX."tiki_comments` SET `objectType`='".BITUSER_CONTENT_TYPE_GUID."' WHERE `objectType`='wiki page' AND `object` LIKE 'UserPage%'",
+//	"UPDATE `".BIT_DB_PREFIX."tiki_comments` SET `parent_id`=(SELECT `content_id` FROM `".BIT_DB_PREFIX."tiki_content` WHERE `content_type_guid`='".BITUSER_CONTENT_TYPE_GUID."' AND `title`=`".BIT_DB_PREFIX."tiki_comments`.`object` ) WHERE `parent_id`=0 AND `objectType`='".BITUSER_CONTENT_TYPE_GUID."'",
+//
+//	// update comments on wiki pages
+//	"UPDATE `".BIT_DB_PREFIX."tiki_comments` SET `objectType`='".BITPAGE_CONTENT_TYPE_GUID."' WHERE `objectType`='wiki page'",
+//
+//	// set parent ID = content ID of parent comment
+//	// this will only work correctly for TW DB upgrades, and will corrupt the DB if run more then once
+//	"create temporary table `".BIT_DB_PREFIX."tiki_comments_temp` as (select * from `".BIT_DB_PREFIX."tiki_comments`) ",
+//	"UPDATE `".BIT_DB_PREFIX."tiki_comments` SET `parent_id`=(SELECT i_tcm.`content_id` FROM `".BIT_DB_PREFIX."tiki_content` as i_tcn, `".BIT_DB_PREFIX."tiki_comments_temp` as i_tcm WHERE  i_tcm.`content_id` = i_tcn.`content_id` and `".BIT_DB_PREFIX."tiki_comments`.`parent_id` = i_tcm.`comment_id` ) where  parent_id != 0 and  `objectType`='".BITPAGE_CONTENT_TYPE_GUID."' ",
+//	// parent ID = 0 indicates a root comment in TW, but now needs to = content ID of wiki page it is the root comment for
+//	"UPDATE `".BIT_DB_PREFIX."tiki_comments` SET `parent_id`=(SELECT `content_id` FROM `".BIT_DB_PREFIX."tiki_content` WHERE `content_type_guid`='".BITPAGE_CONTENT_TYPE_GUID."' AND `title`=`".BIT_DB_PREFIX."tiki_comments`.`object` ) WHERE `parent_id`=0 AND `objectType`='".BITPAGE_CONTENT_TYPE_GUID."'",
+//
+//	"INSERT INTO `".BIT_DB_PREFIX."tiki_preferences` (`name`, `value`, `package`) VALUES( 'feature_wiki_books', 'y', 'wiki' )",
+//	"INSERT INTO `".BIT_DB_PREFIX."tiki_preferences` (`name`, `value`, `package`) VALUES( 'feature_history', 'y', 'wiki' )",
+//	"INSERT INTO `".BIT_DB_PREFIX."tiki_preferences` (`name`, `value`, `package`) VALUES( 'feature_listPages', 'y', 'wiki' )",
+//
+//	"UPDATE `".BIT_DB_PREFIX."tiki_categorized_objects` SET `object_type`='".BITPAGE_CONTENT_TYPE_GUID."', `object_id`=(SELECT tc.`content_id` FROM `".BIT_DB_PREFIX."tiki_content` tc WHERE tc.`title`=`".BIT_DB_PREFIX."tiki_categorized_objects`.`objId` AND `".BIT_DB_PREFIX."tiki_categorized_objects`.`object_type`='wiki page')",
+//
+//
+//	// update user watches
+//	"update `".BIT_DB_PREFIX."tiki_user_watches` as `tw` set `object` = (select `tp`.`page_id` from `tiki_pages` as `tp`, `tiki_content` as `tc` where `tp`.`content_id` = `tc`.`content_id` and   `tc`.`title` = `tw`.`title` )",
+
+
+	),
+)),
+
 		),
 	),
 );
 
 // to test this upgrader you need to uncomment the following
-/** /
+/**/
 if( isset( $upgrades[$gUpgradeFrom][$gUpgradeTo] ) ) {
 	$gBitSystem->registerUpgrade( ARTICLES_PKG_NAME, $upgrades[$gUpgradeFrom][$gUpgradeTo] );
 }

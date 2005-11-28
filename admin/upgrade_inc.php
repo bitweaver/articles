@@ -48,7 +48,10 @@ array( 'DATADICT' => array(
 			'article_type_id' => array( '`article_type_id`', 'I4' ),
 		),
 		'tiki_article_types' => array(
-			'article_type_id' => array( '`article_type_id`', 'I4 AUTO PRIMARY' ),
+			'article_type_id' => array( '`article_type_id`', 'I4 AUTO' ),
+		),
+		'tiki_article_topics' => array(
+			'has_topic_image' => array( '`has_topic_image`', 'C(1)' ),
 		),
 	)),
 	// CREATE
@@ -186,7 +189,7 @@ array( 'PHP' => '
 );
 
 // to test this upgrader you need to uncomment the following
-/**/
+/** /
 if( isset( $upgrades[$gUpgradeFrom][$gUpgradeTo] ) ) {
 	$gBitSystem->registerUpgrade( ARTICLES_PKG_NAME, $upgrades[$gUpgradeFrom][$gUpgradeTo] );
 }

@@ -68,15 +68,8 @@ array( 'DATADICT' => array(
 array( 'PHP' => '
 	global $gBitSystem;
 	require_once( ARTICLES_PKG_PATH."BitArticle.php" );
-	// work out what resizer to use
-	$resizeFunc = ( $gBitSystem->getPreference( "image_processor" ) == "imagick" ) ? "liberty_imagick_resize_image" : "liberty_gd_resize_image";
-	// make sure we have a place to store the images
-	$tempDir = TEMP_PKG_PATH.ARTICLES_PKG_NAME;
-	if( !is_dir( $tempDir ) ) {
-		mkdir_p( $tempDir );
-	}
 
-//	currently no sequences are generated in schema_inc
+//	is this needed?
 //	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );
 //	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_id_seq", $max_articles + 1 );
 //	$max_topics = $gBitSystem->mDb->getOne( "SELECT MAX(`topic_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_topics`" );
@@ -118,6 +111,16 @@ array( 'PHP' => '
 	}
 
 	// article images and state
+	// work out what resizer to use
+	$resizeFunc = ( $gBitSystem->getPreference( "image_processor" ) == "imagick" ) ? "liberty_imagick_resize_image" : "liberty_gd_resize_image";
+	// make sure we have a place to store the images
+	$tempDir = TEMP_PKG_PATH.ARTICLES_PKG_NAME;
+	$storageDir = STORAGE_PKG_PATH.ARTICLES_PKG_NAME;
+	if( !is_dir( $tempDir ) || !is_dir( $storageDir ) ) {
+		mkdir_p( $tempDir );
+		mkdir_p( $storageDir );
+	}
+
 	$query = "
 		SELECT
 			ta.`state`,
@@ -136,7 +139,7 @@ array( 'PHP' => '
 					fwrite( $handle, $rs->fields["image_data"] );
 					fclose( $handle );
 				} else {
-					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["article_image_create"] = "Error while creating article image";
+					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["article_image_create"][] = "Error while creating article image: ".$rs->fields["image_name"];
 				}
 				$storeHash["source_file"] = $tmpImagePath;
 				$storeHash["dest_path"] = STORAGE_PKG_NAME."/".ARTICLES_PKG_NAME."/";
@@ -146,7 +149,7 @@ array( 'PHP' => '
 				$storeHash["type"] = $rs->fields["image_type"];
 
 				if( $resizeFunc( $storeHash ) ) {
-					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["article_image_resize"] = "Error while resizing article image";
+					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["article_image_resize"][] = "Error while resizing article image: ".$rs->fields["image_name"];
 				}
 
 				@unlink( $tmpImagePath );
@@ -181,7 +184,7 @@ array( 'PHP' => '
 					fwrite( $handle, $rs->fields["image_data"] );
 					fclose( $handle );
 				} else {
-					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["topic_image_create"] = "Error while creating topic image";
+					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["topic_image_create"][] = "Error while creating topic image: ".$rs->fields["image_name"];
 				}
 
 				$storeHash["source_file"] = $tmpImagePath;
@@ -192,7 +195,7 @@ array( 'PHP' => '
 				$storeHash["type"] = $rs->fields["image_type"];
 
 				if( $resizeFunc( $storeHash ) ) {
-					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["topic_image_resize"] = "Error while resizing topic image";
+					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["topic_image_resize"][] = "Error while resizing topic image: ".$rs->fields["image_name"];
 				}
 
 				$gBitSystem->mDb->query( "UPDATE `'.BIT_DB_PREFIX.'tiki_article_topics` SET `has_topic_image`=? WHERE `topic_id`=?", array( "y", $rs->fields["topic_id"] ) );
@@ -216,8 +219,8 @@ array( 'PHP' => '
 			$typeId++;
 			$rs->MoveNext();
 		}
-	}'
-),
+	}
+'),
 
 // STEP 4
 array( 'QUERY' =>
@@ -252,6 +255,15 @@ array( 'DATADICT' => array(
 		'tiki_articles' => array( '`title`', '`state`', '`topicName`', '`size`', '`useImage`', '`image_name`', '`image_size`', '`image_type`', '`image_x`', '`image_y`', '`image_data`', '`created`', '`heading`', '`body`', '`hash`', '`author`', '`reads`', '`votes`', '`points`', '`type`', '`isfloat`' ),
 	)),
 )),
+
+/*
+// STEP 7
+array( 'DATADICT' => array(
+	array( 'CREATEINDEX' => array(
+		'tiki_articles_articles_idx' => array( 'tiki_articles', '`article_id`', array() ),
+	)),
+)),
+*/
 
 		),
 	),

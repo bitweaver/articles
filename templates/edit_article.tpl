@@ -96,7 +96,7 @@
 
 						{include file="bitpackage:liberty/edit_format.tpl"}
 
-						{if $gBitSystemPrefs.feature_cms_templates eq 'y' and $gBitUser->hasPermission( 'bit_p_use_content_templates' )}
+						{if $gBitSystem->isFeatureActive( 'feature_cms_templates' ) and $gBitUser->hasPermission( 'bit_p_use_content_templates' )}
 							<div class="row">
 								{formlabel label="Apply template" for="template"}
 								{forminput}

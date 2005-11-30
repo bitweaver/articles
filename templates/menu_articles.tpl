@@ -15,10 +15,10 @@
 	{if $gBitUser->hasPermission( 'bit_p_edit_article') || $gBitUser->hasPermission('bit_p_submit_article') }
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}edit.php">{biticon ipackage=liberty iname=new iexplain="new article" iforce=icon} {tr}{if $gBitUser->hasPermission('bit_p_edit_article')}Write{else}Submit{/if} article{/tr}</a></li>
 	{/if}
-	{if $gBitSystemPrefs.feature_cms_rankings eq 'y' && $gBitUser->hasPermission( 'bit_p_read_article ' )}
+	{if $gBitSystem->isFeatureActive( 'feature_cms_rankings' ) && $gBitUser->hasPermission( 'bit_p_read_article ' )}
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}rankings.php">{biticon ipackage=liberty iname=list iexplain="article rankings" iforce=icon} {tr}Article rankings{/tr}</a></li>
 	{/if}
-	{if $gBitSystemPrefs.feature_comm eq 'y' && $gBitUser->hasPermission( 'bit_p_send_articles ' )}
+	{if $gBitSystem->isFeatureActive( 'feature_comm' ) && $gBitUser->hasPermission( 'bit_p_send_articles ' )}
 		<li><a class="item" href="{$smarty.const.XMLRPC_PKG_URL}send_objects.php">{biticon ipackage=liberty iname=spacer iexplain="send articles" iforce=icon} {tr}Send articles{/tr}</a></li>
 	{/if}
 	{if $gBitUser->hasPermission( 'bit_p_admin_articles' )}

@@ -253,6 +253,7 @@ array( 'PHP' => '' ),
 array( 'DATADICT' => array(
 	array( 'DROPCOLUMN' => array(
 		'tiki_articles' => array( '`title`', '`state`', '`topicName`', '`size`', '`useImage`', '`image_name`', '`image_size`', '`image_type`', '`image_x`', '`image_y`', '`image_data`', '`created`', '`heading`', '`body`', '`hash`', '`author`', '`reads`', '`votes`', '`points`', '`type`', '`isfloat`' ),
+		'tiki_article_topics' => array( '`image_name`', '`image_type`', '`image_size`', '`image_data`' ),
 	)),
 )),
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.5 2005/10/26 10:58:16 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.6 2005/12/07 12:17:41 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -27,8 +27,16 @@
 				<div class="row">
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
-						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystemPrefs.article_description_length|escape}" />
+						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystemPrefs.article_description_length|escape}" /> {tr}characters{/tr}
 						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body.<br />Changing this value might influence existing articles."}
+					{/forminput}
+				</div>
+
+				<div class="row">
+					{formlabel label="Article Image Size" for="article_topic_thumbnail_size"}
+					{forminput}
+						<input size="5" type="text" id="article_topic_thumbnail_size" name="article_topic_thumbnail_size" value="{$gBitSystemPrefs.article_topic_thumbnail_size|default:"160"}" /> {tr}pixels{/tr}
+						{formhelp note="Here you can set the maximum width and height an article image can have. If you don't want this feature active, set it very high, then your images will not be resized."}
 					{/forminput}
 				</div>
 

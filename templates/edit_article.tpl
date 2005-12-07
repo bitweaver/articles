@@ -156,6 +156,10 @@
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;
 							<input type="submit" name="save" value="{tr}Save{/tr}" />
 						</div>
+
+						{if $gBitSystem->isFeatureActive( 'feature_article_attachments' )}
+							{include file="bitpackage:liberty/edit_storage_list.tpl"}
+						{/if}
 					{/legend}
 				{/jstab}
 
@@ -187,10 +191,6 @@
 
 				{jstab title="Advanced"}
 					{legend legend="Custom article image"}
-						{*if $gBitSystem->isFeatureActive( 'feature_article__attachments' ) }
-							{include file="bitpackage:liberty/edit_storage_list.tpl"}
-						{/if*}
-
 						{if $article.image_url}
 							<div class="row">
 								{formlabel label="Custom Image"}
@@ -204,14 +204,6 @@
 						{/if}
 
 						<div class="row">
-							{formlabel label="Use Existing Image" for="existing_attachment_id_input"}
-							{forminput}
-								<input type="text" name="image_attachment_id" id="existing_attachment_id_input" value="{$article.image_attachment_id}" size="6"/><br />
-								{jspopup href="`$smarty.const.LIBERTY_PKG_URL`attachment_browser.php" title="Attachment browser"}
-							{/forminput}
-						</div>
-
-						<div class="row">
 							{formlabel label="Custom Image" for="upload"}
 							{forminput}
 								<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
@@ -219,6 +211,10 @@
 								{formhelp note="Use a custom image file for the article."}
 							{/forminput}
 						</div>
+
+						{if $gBitUser->hasPermission('bit_p_content_attachments')}
+							{include file="bitpackage:liberty/edit_storage.tpl" no_plugins=1}
+						{/if}
 					{/legend}
 				{/jstab}
 			{/jstabs}

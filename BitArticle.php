@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.39 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40 2005/12/07 12:17:38 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.39 2005/10/30 19:48:40 lsces Exp $
+ * $Id: BitArticle.php,v 1.40 2005/12/07 12:17:38 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.39 $ $Date: 2005/10/30 19:48:40 $ $Author: lsces $
+ * @version $Revision: 1.40 $ $Date: 2005/12/07 12:17:38 $ $Author: squareing $
  */
 
 /**
@@ -205,6 +205,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		// if no image attachment id is given, we set it null. this way a user can remove an attached image
+		// TODO: since we allow custom image size for article images, we should create a resized image of the original here.
 		if( !empty( $pParamHash['image_attachment_id'] ) ) {
 			$pParamHash['article_store']['image_attachment_id'] = ( int )$pParamHash['image_attachment_id'];
 		} else {
@@ -508,10 +509,10 @@ class BitArticle extends LibertyAttachable {
 		if( !empty( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
 		} elseif( !empty( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
-			// TODO: clean up the avatar url stuff. shouldn't be hardcoded.
+			// TODO: clean up the small url stuff. shouldn't be hardcoded.
 			// perhaps we should make a copy of the image file and reduce it to article size settings.
 			// this will be necessary as soon as we allow custom image sizes for article image
-			$image = preg_replace( "/(.*)\/.*?$/", "$1/avatar.jpg", $pParamHash['image_storage_path'] );
+			$image = preg_replace( "/(.*)\/.*?$/", "$1/small.jpg", $pParamHash['image_storage_path'] );
 			if( is_file( BIT_ROOT_PATH.$image ) ) {
 				$ret =  BIT_ROOT_URL.$image;
 			}

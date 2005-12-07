@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.13 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14 2005/12/07 12:17:39 squareing Exp $
  * @package article
  */
 
@@ -10,7 +10,7 @@
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
-define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', 100 );
+define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', $gBitSystem->getPreference( 'article_topic_thumbnail_size', 160 ) );
 
 /**
  * @package article

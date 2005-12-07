@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.5 2005/10/26 10:58:15 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.6 2005/12/07 12:17:41 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -76,7 +76,7 @@ $formArticleListing = array(
 		'note' => 'This will indicate whether a given article has been submitted or has been approved.',
 	),
 );
-$gBitSmarty->assign('formArticleListing', $formArticleListing);
+$gBitSmarty->assign( 'formArticleListing', $formArticleListing );
 
 $processForm = set_tab();
 
@@ -88,5 +88,6 @@ if( $processForm ) {
 	simple_set_value( "article_date_display_format" );
 	simple_set_int( "max_articles" );
 	simple_set_int( "article_description_length" );
+	simple_set_int( "article_topic_thumbnail_size" );
 }
 ?>

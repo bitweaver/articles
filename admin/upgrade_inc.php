@@ -69,13 +69,13 @@ array( 'PHP' => '
 	global $gBitSystem;
 	require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 
-//	is this needed?
-//	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );
-//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_id_seq", $max_articles + 1 );
-//	$max_topics = $gBitSystem->mDb->getOne( "SELECT MAX(`topic_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_topics`" );
-//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_topics_id_seq", $max_topics + 1 );
-//	$max_types = $gBitSystem->mDb->getOne( "SELECT MAX(`article_type_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_types`" );
-//	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_types_id_seq", $max_types + 1 );
+	// BitArticle has 3 sequences, each needs creating prior to execution
+	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );
+	$gBitSystem->mDb->CreateSequence( "tiki_articles_article_id_seq", $max_articles + 1 );
+	$max_topics = $gBitSystem->mDb->getOne( "SELECT MAX(`topic_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_topics`" );
+	$gBitSystem->mDb->CreateSequence( "tiki_article_topics_topic_id_seq", $max_topics + 1 );
+	$max_types = $gBitSystem->mDb->getOne( "SELECT MAX(`article_type_id`) FROM `'.BIT_DB_PREFIX.'tiki_article_types`" );
+	$gBitSystem->mDb->CreateSequence( "tiki_article_types_article_type_id_seq", $max_types + 1 );
 
 	// tiki_articles
 	$query = "

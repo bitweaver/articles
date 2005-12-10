@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.16 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17 2005/12/10 18:39:17 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -104,5 +104,7 @@ if ($gBitSystem->isPackageActive( 'quicktags' )) {
 
 // Display the Index Template
 $gBitSmarty->assign( 'show_page_bar', 'n' );
+// load the ajax library for this page
+$gBitSmarty->assign( 'loadAjax', TRUE );
 $gBitSystem->display( 'bitpackage:articles/edit_article.tpl', tra( "Articles" ) );
 ?>

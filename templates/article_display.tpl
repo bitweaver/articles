@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13 2005/10/26 10:58:16 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.1 2005/12/17 22:46:17 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -83,7 +83,7 @@
 				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
 			{/if}
 
-			{if $article.allow_comments}
+			{if $article.allow_comments eq 'y'}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#editcomments">{/if}
 					{tr}{$article.num_comments} Comment(s){/tr}

@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.3 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.3.2.1 2005/12/17 18:38:26 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -11,57 +11,39 @@
 require_once( '../bit_setup_inc.php' );
 
 include_once( KERNEL_PKG_PATH . 'rank_lib.php' );
-
+include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
 $gBitSystem->isPackageActive( 'articles' );
-
 $gBitSystem->isFeatureActive( 'feature_cms_rankings' );
-
 $gBitSystem->verifyPermission( 'bit_p_read_article' );
 
 $allrankings = array( 
-    array( 'name' => tra( 'Top articles' ),
-        'value' => 'cms_ranking_top_articles' 
-        ),
-    array( 'name' => tra( 'Top authors' ),
-        'value' => 'cms_ranking_top_authors' 
-        ) 
-    );
-
+	array(
+		'name' => tra( 'Top articles' ),
+		'value' => 'contentRanking' 
+	),
+//	array(
+//		'name' => tra( 'Top authors' ),
+//		'value' => 'cms_ranking_top_authors' 
+//	) 
+);
 $gBitSmarty->assign( 'allrankings', $allrankings );
 
 if ( !isset( $_REQUEST["which"] ) ) {
-    $which = 'cms_ranking_top_articles';
+	$func = 'contentRanking';
 } else {
-    $which = $_REQUEST["which"];
-} 
+	$func = $_REQUEST["which"];
+}
+$gBitSmarty->assign( 'which', $func );
 
-$gBitSmarty->assign( 'which', $which );
-// Get the page from the request var or default it to HomePage
-if ( !isset( $_REQUEST["limit"] ) ) {
-    $limit = 10;
-} else {
-    $limit = $_REQUEST["limit"];
-} 
-
-$gBitSmarty->assign_by_ref( 'limit', $limit );
-// Rankings:
-// Top Pages
-// Last pages
-// Top Authors
-$rankings = array();
-
-$rk = $ranklib->$which( $limit );
-$rank["data"] = $rk["data"];
-$rank["title"] = $rk["title"];
-$rank["y"] = $rk["y"];
-$rankings[] = $rank;
-
-$gBitSmarty->assign_by_ref( 'rankings', $rankings );
-$gBitSmarty->assign( 'rpage', ARTICLES_PKG_URL . 'rankings.php' );
-
+$listHash = array(
+	'title' => tra( 'Article Rankings' ),
+	'content_type_guid' => BITARTICLE_CONTENT_TYPE_GUID,
+	'limit' => ( !empty( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : 10 ),
+);
+$rankings[] = $ranklib->$func( $listHash );
+$gBitSmarty->assign( 'rankings', $rankings );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:kernel/ranking.tpl', tra("articles") );
-
+$gBitSystem->display( 'bitpackage:kernel/ranking.tpl', tra( "Articles" ) );
 ?>

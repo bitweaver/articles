@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.1 2005/12/17 22:31:02 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.2 2005/12/18 08:09:40 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.1 2005/12/17 22:31:02 squareing Exp $
+ * $Id: BitArticle.php,v 1.40.2.2 2005/12/18 08:09:40 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.1 $ $Date: 2005/12/17 22:31:02 $ $Author: squareing $
+ * @version $Revision: 1.40.2.2 $ $Date: 2005/12/18 08:09:40 $ $Author: squareing $
  */
 
 /**
@@ -28,7 +28,7 @@ require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
-define( 'ARTICLE_SPLIT_REGEX', "/\.\.\.split\.\.\.[\r\n]+/i" );
+define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
 define( 'ARTICLE_STATUS_DENIED', 0 );
 define( 'ARTICLE_STATUS_DRAFT', 100 );

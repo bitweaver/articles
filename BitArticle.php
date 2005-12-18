@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40 2005/12/07 12:17:38 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.41 2005/12/18 22:34:08 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40 2005/12/07 12:17:38 squareing Exp $
+ * $Id: BitArticle.php,v 1.41 2005/12/18 22:34:08 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40 $ $Date: 2005/12/07 12:17:38 $ $Author: squareing $
+ * @version $Revision: 1.41 $ $Date: 2005/12/18 22:34:08 $ $Author: squareing $
  */
 
 /**
@@ -28,7 +28,7 @@ require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
-define( 'ARTICLE_SPLIT_REGEX', "/\.\.\.split\.\.\.[\r\n]+/i" );
+define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
 define( 'ARTICLE_STATUS_DENIED', 0 );
 define( 'ARTICLE_STATUS_DRAFT', 100 );
@@ -666,7 +666,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
-			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
+			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_threshold' ) );
 
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );

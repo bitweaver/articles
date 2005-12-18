@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.6 2005/12/07 12:17:41 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.8 2006/01/10 21:11:09 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -23,7 +23,7 @@ $formCmsSettings = array(
 );
 $gBitSmarty->assign( 'formCmsSettings',$formCmsSettings );
 
-$articleDateFormat = array(
+$articleDateThreshold = array(
 	'' => tra( 'never' ),
 	'always' => tra( 'always' ),
 	'year' => tra( 'up to a year' ),
@@ -32,7 +32,7 @@ $articleDateFormat = array(
 	'day' => tra( 'up to a day' ),
 	'hour' => tra( 'up to an hour' ),
 );
-$gBitSmarty->assign( 'articleDateFormat', $articleDateFormat );
+$gBitSmarty->assign( 'articleDateThreshold', $articleDateThreshold );
 
 $formArticleListing = array(
 	"art_list_title" => array(
@@ -85,7 +85,7 @@ if( $processForm ) {
 	foreach( $featureToggles as $item => $data ) {
 		simple_set_toggle( $item );
 	}
-	simple_set_value( "article_date_display_format" );
+	simple_set_value( "article_date_threshold" );
 	simple_set_int( "max_articles" );
 	simple_set_int( "article_description_length" );
 	simple_set_int( "article_topic_thumbnail_size" );

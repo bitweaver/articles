@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.6 2005/12/07 12:17:41 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.8 2006/01/10 21:11:09 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -41,9 +41,9 @@
 				</div>
 
 				<div class="row">
-					{formlabel label="Display Time since Publishing" for="articles-date-format"}
+					{formlabel label="Display Time since Publishing" for="articles-date-threshold"}
 					{forminput}
-						{html_options options=$articleDateFormat values=$articleDateFormat name=article_date_display_format id=article-date-format selected=$gBitSystem->mPrefs.article_date_display_format}
+						{html_options options=$articleDateThreshold values=$articleDateThreshold name=article_date_threshold id=article-date-threshold selected=$gBitSystem->mPrefs.article_date_threshold}
 						{formhelp note="Display the time since the article has been published instead of the full date. Pick the timespan for which this is true."}
 					{/forminput}
 				</div>

@@ -22,8 +22,8 @@
 		<li><a class="item" href="{$smarty.const.XMLRPC_PKG_URL}send_objects.php">{biticon ipackage=liberty iname=spacer iexplain="send articles" iforce=icon} {tr}Send articles{/tr}</a></li>
 	{/if}
 	{if $gBitUser->hasPermission( 'bit_p_admin_articles' )}
-		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php">{biticon ipackage=liberty iname=spacer iexplain="admin topics" iforce=icon} {tr}Article topics{/tr}</a></li>
-		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php">{biticon ipackage=liberty iname=spacer iexplain="admin types" iforce=icon} {tr}Article types{/tr}</a></li>
+		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php">{biticon ipackage=liberty iname=spacer iexplain="admin topics" iforce=icon} {tr}Admin topics{/tr}</a></li>
+		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php">{biticon ipackage=liberty iname=spacer iexplain="admin types" iforce=icon} {tr}Admin types{/tr}</a></li>
 	{/if}
 </ul>
 {/strip}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.3 2005/12/20 17:36:14 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.4 2005/12/20 18:23:07 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.3 2005/12/20 17:36:14 spiderr Exp $
+ * $Id: BitArticle.php,v 1.40.2.4 2005/12/20 18:23:07 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.3 $ $Date: 2005/12/20 17:36:14 $ $Author: spiderr $
+ * @version $Revision: 1.40.2.4 $ $Date: 2005/12/20 18:23:07 $ $Author: spiderr $
  */
 
 /**
@@ -608,7 +608,7 @@ class BitArticle extends LibertyAttachable {
 			// or a string
 			$mid = " WHERE UPPER( tc.`title` ) LIKE ? ";
 			$bindvars = array( '%'.strtoupper( $find ).'%' );
-		} elseif( $this->verifyId( $pParamHash['user_id'] ) ) {
+		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
 			$mid = " WHERE tc.`creator_user_id` = ? ";
 			$bindvars = array( $pParamHash['user_id'] );

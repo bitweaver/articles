@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.4 2005/12/20 18:23:07 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.5 2005/12/21 18:32:07 mej Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.4 2005/12/20 18:23:07 spiderr Exp $
+ * $Id: BitArticle.php,v 1.40.2.5 2005/12/21 18:32:07 mej Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.4 $ $Date: 2005/12/20 18:23:07 $ $Author: spiderr $
+ * @version $Revision: 1.40.2.5 $ $Date: 2005/12/21 18:32:07 $ $Author: mej $
  */
 
 /**
@@ -69,6 +69,12 @@ class BitArticle extends LibertyAttachable {
 		) );
 		$this->mContentId = $pContentId;
 		$this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
+		if( ! @$this->verifyId( $this->mArticleId ) ) {
+			$this->mArticleId = NULL;
+		}
+		if( ! @$this->verifyId( $this->mContentId ) ) {
+			$this->mContentId = NULL;
+		}
 	}
 
 	/**
@@ -577,7 +583,7 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function isValid() {
-		return( $this->verifyId( $this->mArticleId ) );
+		return( $this->verifyId( $this->mArticleId ) && $this->verifyId( $this->mContentId ) );
 	}
 
 	/**
@@ -678,6 +684,7 @@ class BitArticle extends LibertyAttachable {
 			$res['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] ), $res['format_guid'] );
 
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
+			$res['display_url'] = $this->getDisplayUrl($res['article_id']);
 			$ret[] = $res;
 		}
 
@@ -693,10 +700,23 @@ class BitArticle extends LibertyAttachable {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrl() {
+	function getDisplayUrl( $articleId = NULL) {
+		global $gBitSystem;
+
 		$ret = NULL;
-		if( $this->isValid() ) {
-			$ret = ARTICLES_PKG_URL."read.php?article_id=".$this->mArticleId;
+		if( ! $articleId ) {
+			$articleId = $this->mArticleId;
+		}
+
+		if( $this->verifyId( $articleId ) ) {
+			if( $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
+				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
+				$ret = ARTICLES_PKG_URL.$articleId;
+			} else if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
+				$ret = ARTICLES_PKG_URL.$articleId;
+			} else {
+				$ret = ARTICLES_PKG_URL."read.php?article_id=$articleId";
+			}
 		}
 		return $ret;
 	}

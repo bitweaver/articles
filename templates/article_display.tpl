@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.1 2005/12/17 22:46:17 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.2 2005/12/21 18:32:08 mej Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -80,12 +80,12 @@
 			{if $showDescriptionsOnly and $article.read_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
-				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
+				<a href="{$article.display_url}">{tr}Read More...{/tr}</a>
 			{/if}
 
 			{if $article.allow_comments eq 'y'}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
-				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#editcomments">{/if}
+				{if $showDescriptionsOnly}<a href="{$article.display_url}#editcomments">{/if}
 					{tr}{$article.num_comments} Comment(s){/tr}
 				{if $showDescriptionsOnly}</a>{/if}
 			{/if}

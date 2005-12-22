@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.5 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.5.2.1 2005/12/22 13:00:06 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -14,9 +14,9 @@
 
 	// if we already have a gContent, we assume someone else created it for us, and has properly loaded everything up.
 	if( empty( $gContent ) || !is_object( $gContent ) ) {
-		if (!empty($_REQUEST['article_id']) && is_numeric( $_REQUEST['article_id'] ) ) {
+		if (@BitBase::verifyId( $_REQUEST['article_id'] ) ) {
 			$gContent = new BitArticle( $_REQUEST['article_id'] );
-		} elseif( !empty($_REQUEST['content_id'] ) && is_numeric( $_REQUEST['content_id'] ) ) {
+		} elseif( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
 			$gContent = new BitArticle( NULL, $_REQUEST['content_id'] );
 		} else {
 			$gContent = new BitArticle();

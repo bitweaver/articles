@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14.2.1 2005/12/20 17:36:15 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14.2.2 2005/12/22 13:00:05 squareing Exp $
  * @package article
  */
 
@@ -34,9 +34,9 @@ class BitArticleTopic extends BitBase {
 		$whereSQL = ' WHERE at.';
 		$ret = NULL;
 
-		if ($this->verifyId($iParamHash['topic_id']) || !empty($iParamHash['topic_name'])) {
-			$whereSQL .= "`".(($this->verifyId($iParamHash['topic_id']) || $this->mTopicId) ? 'topic_id' : 'topic_name')."` = ?";
-			$bindVars = array(($this->verifyId($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
+		if (@$this->verifyId($iParamHash['topic_id']) || !empty($iParamHash['topic_name'])) {
+			$whereSQL .= "`".((@$this->verifyId($iParamHash['topic_id']) || $this->mTopicId) ? 'topic_id' : 'topic_name')."` = ?";
+			$bindVars = array((@$this->verifyId($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
 
 			$sql = "SELECT at.*".
 				   "FROM `".BIT_DB_PREFIX."tiki_article_topics` at ".
@@ -58,7 +58,7 @@ class BitArticleTopic extends BitBase {
 
 	function verify(&$iParamHash) {
 		// Validate the (optional) topic_id parameter
-		if ($this->verifyId($iParamHash['topic_id'])) {
+		if (@$this->verifyId($iParamHash['topic_id'])) {
 			$cleanHash['topic_id'] = (int)$iParamHash['topic_id'];
 		} else {
 			$cleanHash['topic_id'] = NULL;
@@ -73,7 +73,7 @@ class BitArticleTopic extends BitBase {
 
 		// Whether the topic is active or not
 		if ( empty($iParamHash['active']) || (strtoupper($iParamHash['active']) != 'CHECKED' && strtoupper($iParamHash['active']) != 'ON' && strtoupper($iParamHash['active']) != 'Y')) {
-			if ($this->verifyId($cleanHash['topic_id'])) {
+			if (@$this->verifyId($cleanHash['topic_id'])) {
 				$cleanHash['active'] = 'n';
 			} else {
 				// Probably a new topic so lets go ahead and enable it

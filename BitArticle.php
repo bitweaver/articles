@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.5 2005/12/21 18:32:07 mej Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.6 2005/12/22 13:00:05 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.5 2005/12/21 18:32:07 mej Exp $
+ * $Id: BitArticle.php,v 1.40.2.6 2005/12/22 13:00:05 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.5 $ $Date: 2005/12/21 18:32:07 $ $Author: mej $
+ * @version $Revision: 1.40.2.6 $ $Date: 2005/12/22 13:00:05 $ $Author: squareing $
  */
 
 /**
@@ -82,11 +82,11 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function load() {
-		if( $this->verifyId( $this->mArticleId ) || $this->verifyId( $this->mContentId ) ) {
+		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
-			$lookupColumn = $this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
-			$lookupId = $this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
+			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
+			$lookupId = @$this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
 				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
 				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
@@ -193,7 +193,7 @@ class BitArticle extends LibertyAttachable {
 			$this->load();
 		}
 
-		if( $this->verifyId( $this->mInfo['content_id'] ) ) {
+		if( @$this->verifyId( $this->mInfo['content_id'] ) ) {
 			$pParamHash['content_id'] = $this->mInfo['content_id'];
 		}
 
@@ -202,7 +202,7 @@ class BitArticle extends LibertyAttachable {
 			$pParamHash['content_type_guid'] = $this->mContentTypeGuid;
 		}
 
-		if( $this->verifyId( $pParamHash['content_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['content_id'] ) ) {
 			$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
 		}
 
@@ -212,17 +212,17 @@ class BitArticle extends LibertyAttachable {
 
 		// if no image attachment id is given, we set it null. this way a user can remove an attached image
 		// TODO: since we allow custom image size for article images, we should create a resized image of the original here.
-		if( $this->verifyId( $pParamHash['image_attachment_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['image_attachment_id'] ) ) {
 			$pParamHash['article_store']['image_attachment_id'] = ( int )$pParamHash['image_attachment_id'];
 		} else {
 			$pParamHash['article_store']['image_attachment_id'] = NULL;
 		}
 
-		if( $this->verifyId( $pParamHash['topic_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
 			$pParamHash['article_store']['topic_id'] =( int )$pParamHash['topic_id'];
 		}
 
-		if( $this->verifyId( $pParamHash['article_type_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['article_type_id'] ) ) {
 			$pParamHash['article_store']['article_type_id'] =( int )$pParamHash['article_type_id'];
 		}
 
@@ -291,7 +291,7 @@ class BitArticle extends LibertyAttachable {
 			$pParamHash['article_store']['expire_date'] = $pParamHash['expire_date'];
 		}
 
-		if( $this->verifyId( $pParamHash['status_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
 			if( $pParamHash['status_id'] > ARTICLE_STATUS_PENDING ) {
 				if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
 					$gBitUser->hasPermission( 'bit_p_admin_received_articles' ) ||
@@ -303,7 +303,7 @@ class BitArticle extends LibertyAttachable {
 			} else {
 				$pParamHash['article_store']['status_id'] =( int )( $pParamHash['status_id'] );
 			}
-		} elseif( $this->verifyId( $this->mInfo['status_id'] ) ) {
+		} elseif( @$this->verifyId( $this->mInfo['status_id'] ) ) {
 			$pParamHash['article_store']['status_id'] = $this->mInfo['status_id'];
 		} else {
 			if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
@@ -455,7 +455,7 @@ class BitArticle extends LibertyAttachable {
 			$data['parsed_data'] = $this->parseData( $data['data'],$data['format_guid'] );
 		}
 
-		if( $this->verifyId( $data['image_attachment_id'] ) ) {
+		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
 			$data['image_attachment_id'] = ( int )$data['image_attachment_id'];
 			$query = "SELECT tf.storage_path AS image_storage_path
 				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
@@ -512,9 +512,9 @@ class BitArticle extends LibertyAttachable {
 	function getImageUrl( $pParamHash ) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-		if( $this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
-		} elseif( $this->verifyId( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
+		} elseif( @$this->verifyId( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
 			// TODO: clean up the small url stuff. shouldn't be hardcoded.
 			// perhaps we should make a copy of the image file and reduce it to article size settings.
 			// this will be necessary as soon as we allow custom image sizes for article image
@@ -622,17 +622,17 @@ class BitArticle extends LibertyAttachable {
 			$mid = "";
 		}
 
-		if( $this->verifyId( $pParamHash['status_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['status_id'];
 		}
 
-		if( $this->verifyId( $pParamHash['type_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['type_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`article_type_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['type_id'];
 		}
 
-		if( $this->verifyId( $pParamHash['topic_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
@@ -708,7 +708,7 @@ class BitArticle extends LibertyAttachable {
 			$articleId = $this->mArticleId;
 		}
 
-		if( $this->verifyId( $articleId ) ) {
+		if( @$this->verifyId( $articleId ) ) {
 			if( $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
 				$ret = ARTICLES_PKG_URL.$articleId;
@@ -752,7 +752,7 @@ class BitArticle extends LibertyAttachable {
 			$pArticleId = $this->mArticleId;
 		}
 
-		if( $this->verifyId( $pArticleId ) ) {
+		if( @$this->verifyId( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
 			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
 			return $pStatusId;

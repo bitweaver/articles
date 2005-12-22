@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.7 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.7.2.1 2005/12/22 13:00:06 squareing Exp $
  * @package article
  */
 
@@ -26,7 +26,7 @@ class BitArticleType extends BitBase
 	}
 	
 	function isValid() {
-		return (!empty($this->mTypeId));
+		return (@BitBase::verifyId($this->mTypeId));
 	}
 	
 	function loadType($iTypeId) {
@@ -55,7 +55,7 @@ class BitArticleType extends BitBase
 		$isNewType = FALSE;
 		
 		// Validate the (optional) topic_id parameter
-		if (!empty($iParamHash['article_type_id'])) {
+		if (@BitBase::verifyId($iParamHash['article_type_id'])) {
 			$cleanHash['article_type_id'] = (int)$iParamHash['article_type_id'];
 		} else {
 			$isNewType = TRUE;

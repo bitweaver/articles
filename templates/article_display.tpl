@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.2 2005/12/21 18:32:08 mej Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.3 2005/12/26 10:13:46 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -51,18 +51,15 @@
 			</span>
 		{/if}
 
-		<div class="introduction">
-			{if $article.show_image eq 'y' && $article.image_url}
-				<div class="image">
-					{if $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
-						<img class="icon" alt="{$article.topic_name}" src="{$article.image_url}"/>
-					{if $article.read_more}</a>{/if}
-				</div>
-			{/if}
-		</div><!-- end .introduction -->
-
 		{if $showDescriptionsOnly}
 			<div class="content">
+				{if $article.show_image eq 'y' && $article.image_url}
+					<div class="image">
+						{if $showDescriptionsOnly and $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
+							<img class="icon" alt="{$article.topic_name}" src="{$article.image_url}"/>
+						{if $showDescriptionsOnly and $article.read_more}</a>{/if}
+					</div>
+				{/if}
 				{$article.parsed_description}
 			</div>
 		{else}

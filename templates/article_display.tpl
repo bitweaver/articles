@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.14 2005/12/18 22:34:08 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.15 2005/12/26 12:28:00 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -51,18 +51,15 @@
 			</span>
 		{/if}
 
-		<div class="introduction">
-			{if $article.show_image eq 'y' && $article.image_url}
-				<div class="image">
-					{if $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
-						<img class="icon" alt="{$article.topic_name}" src="{$article.image_url}"/>
-					{if $article.read_more}</a>{/if}
-				</div>
-			{/if}
-		</div><!-- end .introduction -->
-
 		{if $showDescriptionsOnly}
 			<div class="content">
+				{if $article.show_image eq 'y' && $article.image_url}
+					<div class="image">
+						{if $showDescriptionsOnly and $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
+							<img class="icon" alt="{$article.topic_name}" src="{$article.image_url}"/>
+						{if $showDescriptionsOnly and $article.read_more}</a>{/if}
+					</div>
+				{/if}
 				{$article.parsed_description}
 			</div>
 		{else}
@@ -80,12 +77,12 @@
 			{if $showDescriptionsOnly and $article.read_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
-				<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{tr}Read More...{/tr}</a>
+				<a href="{$article.display_url}">{tr}Read More...{/tr}</a>
 			{/if}
 
 			{if $article.allow_comments eq 'y'}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
-				{if $showDescriptionsOnly}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}#editcomments">{/if}
+				{if $showDescriptionsOnly}<a href="{$article.display_url}#editcomments">{/if}
 					{tr}{$article.num_comments} Comment(s){/tr}
 				{if $showDescriptionsOnly}</a>{/if}
 			{/if}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.7 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.9 2006/01/10 21:11:08 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -49,7 +49,7 @@ if( $gContent->mInfo['allow_comments'] == 'y' ) {
 	$comments_prefix_var='article:';
 	$comments_object_var='article';
 	$commentsParentId = $gContent->mContentId;
-	$comments_return_url = ARTICLES_PKG_URL.'read.php?article_id='.$gContent->mArticleId;
+	$comments_return_url = $gContent->mInfo['display_url'];
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
 

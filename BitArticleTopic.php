@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14 2005/12/07 12:17:39 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.15 2005/12/26 12:28:00 squareing Exp $
  * @package article
  */
 
@@ -27,16 +27,16 @@ class BitArticleTopic extends BitBase {
 	}
 
 	function isValid() {
-		return (!empty($this->mTopicId));
+		return ($this->verifyId($this->mTopicId));
 	}
 
 	function loadTopic($iParamHash = NULL) {
 		$whereSQL = ' WHERE at.';
 		$ret = NULL;
 
-		if (!empty($iParamHash['topic_id']) || !empty($iParamHash['topic_name'])) {
-			$whereSQL .= "`".((!empty($iParamHash['topic_id']) || $this->mTopicId) ? 'topic_id' : 'topic_name')."` = ?";
-			$bindVars = array((!empty($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
+		if (@$this->verifyId($iParamHash['topic_id']) || !empty($iParamHash['topic_name'])) {
+			$whereSQL .= "`".((@$this->verifyId($iParamHash['topic_id']) || $this->mTopicId) ? 'topic_id' : 'topic_name')."` = ?";
+			$bindVars = array((@$this->verifyId($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
 
 			$sql = "SELECT at.*".
 				   "FROM `".BIT_DB_PREFIX."tiki_article_topics` at ".
@@ -58,7 +58,7 @@ class BitArticleTopic extends BitBase {
 
 	function verify(&$iParamHash) {
 		// Validate the (optional) topic_id parameter
-		if (!empty($iParamHash['topic_id'])) {
+		if (@$this->verifyId($iParamHash['topic_id'])) {
 			$cleanHash['topic_id'] = (int)$iParamHash['topic_id'];
 		} else {
 			$cleanHash['topic_id'] = NULL;
@@ -73,7 +73,7 @@ class BitArticleTopic extends BitBase {
 
 		// Whether the topic is active or not
 		if ( empty($iParamHash['active']) || (strtoupper($iParamHash['active']) != 'CHECKED' && strtoupper($iParamHash['active']) != 'ON' && strtoupper($iParamHash['active']) != 'Y')) {
-			if (!empty($cleanHash['topic_id'])) {
+			if (@$this->verifyId($cleanHash['topic_id'])) {
 				$cleanHash['active'] = 'n';
 			} else {
 				// Probably a new topic so lets go ahead and enable it

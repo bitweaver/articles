@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9 2005/09/03 09:50:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.11 2006/01/10 21:11:09 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -67,11 +67,9 @@
 							{if $art_list_title eq 'y'}
 								<h2>
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-										<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">
-									{/if}
-									{$article.title}
-									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-										</a>
+										<a href="{$article.display_url}">{$article.title}</a>
+									{else}
+										{$article.title}
 									{/if}
 								</h2>
 							{/if}

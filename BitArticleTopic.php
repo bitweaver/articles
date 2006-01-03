@@ -1,12 +1,14 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14.2.2 2005/12/22 13:00:05 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.14.2.3 2006/01/03 12:41:18 squareing Exp $
  * @package article
  */
 
 /**
  * Required setup
  */
+ // bit_setup_inc.php is needed for getPreference()
+require_once( "../bit_setup_inc.php" );
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 

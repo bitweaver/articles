@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7.2.2 2006/01/09 11:27:58 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7.2.3 2006/01/09 12:06:08 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -33,7 +33,7 @@ $articles = $gContent->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref( 'articles', $articles['data'] );
 
 // Display the template
-$gDefaultCenter = 'bitpackage:blogs/center_list_blog_posts.tpl';
+$gDefaultCenter = 'bitpackage:articles/center_list_articles.tpl';
 $gBitSmarty->assign_by_ref( 'gDefaultCenter', $gDefaultCenter );
 
 // Display the template

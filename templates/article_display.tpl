@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.5 2006/01/09 10:56:16 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.6 2006/01/09 11:27:58 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -73,7 +73,7 @@
 				{$article.hits} {tr}reads{/tr}
 			{/if}
 
-			{if $showDescriptionsOnly and $article.read_more}
+			{if $showDescriptionsOnly and $article.has_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
 				<a href="{$article.display_url}">{tr}Read More...{/tr}</a>

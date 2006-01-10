@@ -1,12 +1,13 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.15 2005/12/26 12:28:00 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.16 2006/01/10 21:11:08 squareing Exp $
  * @package article
  */
 
 /**
  * Required setup
  */
+global $gBitSystem;
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 

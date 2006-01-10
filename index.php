@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7 2005/09/26 07:15:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.8 2006/01/10 21:11:08 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -30,14 +30,12 @@ if( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) {
 	$_REQUEST['max_records'] = $gBitSystem->mPrefs['max_articles'];
 }
 $articles = $gContent->getList( $_REQUEST );
-
-foreach( $articles['data'] as $key => $article ) {
-	if( strlen( $article['parsed_description'] ) != strlen( $article['parsed_data'] ) ) {
-		$articles['data'][$key]['read_more'] = TRUE;
-	}
-}
 $gBitSmarty->assign_by_ref( 'articles', $articles['data'] );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:articles/center_list_articles.tpl', tra( 'Articles' ) );
+$gDefaultCenter = 'bitpackage:articles/center_list_articles.tpl';
+$gBitSmarty->assign_by_ref( 'gDefaultCenter', $gDefaultCenter );
+
+// Display the template
+$gBitSystem->display( 'bitpackage:kernel/dynamic.tpl', 'Articles' );
 ?>

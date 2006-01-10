@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.16 2005/12/29 18:28:15 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.17 2006/01/10 21:11:09 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -39,35 +39,33 @@
 	</div>
 
 	<div class="body"{if $user_dbl eq 'y' and $gBitUser->hasPermission( 'bit_p_edit_article' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
-		{if $showDescriptionsOnly}
-			<div class="content">
-				{if $article.show_image eq 'y' && $article.image_url}
-					<div class="image">
-						{if $showDescriptionsOnly and $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
-							<img class="icon" alt="{$article.topic_name|default:$article.title}" title="{$article.topic_name|default:$article.title}" src="{$article.image_url}"/>
-						{if $showDescriptionsOnly and $article.read_more}</a>{/if}
-					</div>
-				{/if}
+		<div class="content">
+			{if $article.show_image eq 'y' && $article.image_url}
+				<div class="image">
+					{if $showDescriptionsOnly and $article.read_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
+						<img class="icon" alt="{$article.topic_name|default:$article.title}" title="{$article.topic_name|default:$article.title}" src="{$article.image_url}"/>
+					{if $showDescriptionsOnly and $article.read_more}</a>{/if}
+				</div>
+			{/if}
 
-				{if $article.use_ratings eq 'y'}
-					<span class="rating">
-						{repeat count=$article.rating}
-							{biticon ipackage=articles iname=rating iexplain="Article Rating"}
-						{/repeat}
-						{math assign=rating_off equation="5-x" x=$article.rating}
-						{repeat count=$rating_off}
-							{biticon ipackage=articles iname=rating_off iexplain="Article Rating"}
-						{/repeat}
-					</span>
-				{/if}
+			{if $article.use_ratings eq 'y'}
+				<span class="rating">
+					{repeat count=$article.rating}
+						{biticon ipackage=articles iname=rating iexplain="Article Rating"}
+					{/repeat}
+					{math assign=rating_off equation="5-x" x=$article.rating}
+					{repeat count=$rating_off}
+						{biticon ipackage=articles iname=rating_off iexplain="Article Rating"}
+					{/repeat}
+				</span>
+			{/if}
 
+			{if $showDescriptionsOnly}
 				{$article.parsed_description}
-			</div>
-		{else}
-			<div class="content">
+			{else}
 				{$article.parsed_data}
-			</div>
-		{/if}
+			{/if}
+		</div>
 
 		<div class="footer">
 			{if $article.show_reads}
@@ -75,7 +73,7 @@
 				{$article.hits} {tr}reads{/tr}
 			{/if}
 
-			{if $showDescriptionsOnly and $article.read_more}
+			{if $showDescriptionsOnly and $article.has_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
 				<a href="{$article.display_url}">{tr}Read More...{/tr}</a>

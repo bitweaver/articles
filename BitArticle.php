@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.42 2005/12/26 12:28:00 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.43 2006/01/10 21:11:08 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.42 2005/12/26 12:28:00 squareing Exp $
+ * $Id: BitArticle.php,v 1.43 2006/01/10 21:11:08 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.42 $ $Date: 2005/12/26 12:28:00 $ $Author: squareing $
+ * @version $Revision: 1.43 $ $Date: 2006/01/10 21:11:08 $ $Author: squareing $
  */
 
 /**
@@ -122,12 +122,18 @@ class BitArticle extends LibertyAttachable {
 				/* get the "ago" time */
 				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $result->fields['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
 
+				/* i think we don't need to parse the description when we load the full article.
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
 					$parts = preg_split( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] );
 					$this->mInfo['parsed_description'] = $this->parseData( $parts[0] );
 				} else {
-					$this->mInfo['parsed_description'] = $this->parseData( substr( $this->mInfo['data'], 0, $gBitSystem->mPrefs['article_description_length'] ));
+					$this->mInfo['parsed_description'] = $this->parseData( substr( $this->mInfo['data'], 0, $gBitSystem->mPrefs['article_description_length'] ) );
 				}
+
+				if( strlen( $this->mInfo['parsed_description'] ) != strlen( $this->mInfo['parsed_data'] ) ) {
+					$this->mInfo['parsed_description'] .= ' <a href="'.$this->getDisplayUrl().'" title="'.$this->getTitle().'">$hellip;</a> and dogs are on the loose';
+				}
+				*/
 
 				if( $gBitSystem->isPackageActive( 'categories' ) ) {
 					/*global $categlib;
@@ -682,6 +688,15 @@ class BitArticle extends LibertyAttachable {
 			}
 
 			$res['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] ), $res['format_guid'] );
+
+			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
+			if( strlen( $res['parsed_description'] ) != strlen( $res['parsed_data'] ) ) {
+				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
+				$res['parsed_description'] .= '<a href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
+				$res['has_more'] = TRUE;
+			} else {
+				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
+			}
 
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl($res['article_id']);

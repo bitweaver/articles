@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.5.2.3 2006/01/11 14:28:20 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.5.2.4 2006/01/11 16:33:22 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -8,7 +8,6 @@
 /**
  * Initialization
  */
- vd('dogs');
 	global $gContent;
 	require_once( ARTICLES_PKG_PATH.'BitArticle.php');
 	require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );

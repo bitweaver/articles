@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.43 2006/01/10 21:11:08 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.44 2006/01/14 19:53:53 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.43 2006/01/10 21:11:08 squareing Exp $
+ * $Id: BitArticle.php,v 1.44 2006/01/14 19:53:53 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.43 $ $Date: 2006/01/10 21:11:08 $ $Author: squareing $
+ * @version $Revision: 1.44 $ $Date: 2006/01/14 19:53:53 $ $Author: squareing $
  */
 
 /**
@@ -131,7 +131,7 @@ class BitArticle extends LibertyAttachable {
 				}
 
 				if( strlen( $this->mInfo['parsed_description'] ) != strlen( $this->mInfo['parsed_data'] ) ) {
-					$this->mInfo['parsed_description'] .= ' <a href="'.$this->getDisplayUrl().'" title="'.$this->getTitle().'">$hellip;</a> and dogs are on the loose';
+					$this->mInfo['parsed_description'] .= ' <a href="'.$this->getDisplayUrl().'" title="'.$this->getTitle().'">$hellip;</a>';
 				}
 				*/
 
@@ -407,21 +407,6 @@ class BitArticle extends LibertyAttachable {
 		} else {
 			return FALSE;
 		}
-	}
-
-	/**
-	* Work out if a given user has the right to edit an article
-	* @return URL on success, FALSE on failure
-	* @access public
-	**/
-	function viewerCanEdit() {
-		global $gBitUser;
-
-		if( $gBitUser->isAdmin()|| $gContent->mUserId == $gBitUser->mUserId ) {
-			return TRUE;
-		}
-
-		return FALSE;
 	}
 
 	/**

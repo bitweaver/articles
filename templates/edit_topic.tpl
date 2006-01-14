@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.3 2005/09/04 10:43:21 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.4 2006/01/14 19:53:53 squareing Exp $ *}
 
 {strip}
 <div class="floaticon">{bithelp}</div>
@@ -43,7 +43,7 @@
 				{forminput}
 					{if $gContent->mInfo.has_topic_image eq 'y'}
 						<img src="{$gContent->mInfo.topic_image_url}" /> <br/>
-						<a href="{$PHP_SELF}?topic_id={$gContent->mTopicId}&amp;fRemoveTopicImage=1">Remove Topic Image</a>
+						<a href="{$smarty.server.PHP_SELF}?topic_id={$gContent->mTopicId}&amp;fRemoveTopicImage=1">Remove Topic Image</a>
 					{else}
 						{tr}No Image found{/tr}
 					{/if}

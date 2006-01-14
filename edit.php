@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17 2005/12/10 18:39:17 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.18 2006/01/14 19:53:53 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -27,15 +27,15 @@ $gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
 include_once('lookup_article_inc.php');
 
 if( $gBitUser->hasPermission('bit_p_admin_articles' ) || $gBitUser->hasPermission( 'bit_p_edit_article' ) ) {
-	$viewerCanEdit = TRUE;
+	$isOwner = TRUE;
 } elseif( !empty($gContent->mInfo['user_id'] ) && $gContent->mInfo['user_id'] == $gBitUser->mUserId ) {
-	$viewerCanEdit = TRUE;
+	$isOwner = TRUE;
 } elseif( !$gContent->mArticleId && $gBitUser->hasPermission( 'bit_p_submit_article' ) ) {
-	$viewerCanEdit = TRUE;
+	$isOwner = TRUE;
 }
 
 // Now check permissions to access this page
-if( !$viewerCanEdit ) {
+if( !$isOwner ) {
 	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
 	$gBitSystem->display( "error.tpl" );
 	die;

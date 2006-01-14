@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.7 2006/01/10 21:11:08 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_inc.php,v 1.8 2006/01/14 19:53:53 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -13,7 +13,7 @@
 	require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
 
 	// if we already have a gContent, we assume someone else created it for us, and has properly loaded everything up.
-// 	if( empty( $gContent ) || !is_object( $gContent ) ) {
+	if( empty( $gContent ) || !is_object( $gContent ) ) {
 		if (@BitBase::verifyId( $_REQUEST['article_id'] ) ) {
 			$gContent = new BitArticle( $_REQUEST['article_id'] );
 		} elseif( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
@@ -30,5 +30,5 @@
 		}
 		$gBitSmarty->clear_assign( 'gContent' );
 		$gBitSmarty->assign( 'gContent', $gContent );
-// 	}
+	}
 ?>

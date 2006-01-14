@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.7 2005/09/21 21:45:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.8 2006/01/14 19:53:53 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -74,12 +74,12 @@
 						<br />
 						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic and Articles"}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic and its Articles"}</a>
 					</td>
 				</tr>
 			{sectionelse}
 				<tr class="norecords">
-					<td colspan="5">{tr}No records found{/tr}</td>
+					<td colspan="4">{tr}No records found{/tr}</td>
 				</tr>
 			{/section}
 		</table>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.2 2006/01/10 21:12:00 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.3 2006/01/15 15:42:29 squareing Exp $
  * @package article
  * @subpackage functions
  */

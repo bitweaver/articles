@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.3 2006/01/15 15:42:29 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.4 2006/01/15 15:49:54 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -32,6 +32,9 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 		'max_records' => $gBitSystem->getPreference( 'max_rss_articles', 10 ),
 	);
 	$feeds = $articles->getList( $listHash );
+
+	// set the rss link
+	$rss->link = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
 
 	// get all the data ready for the feed creator
 	foreach( $feeds['data'] as $feed ) {

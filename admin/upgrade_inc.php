@@ -5,7 +5,7 @@ require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $upgrades = array(
 	'BONNIE' => array(
-		'CLYDE' => array(
+		'BWR1' => array(
 
 // STEP 0
 array( 'QUERY' =>

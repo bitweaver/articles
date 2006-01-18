@@ -4,6 +4,39 @@ global $gBitSystem, $gUpgradeFrom, $gUpgradeTo;
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $upgrades = array(
+
+	'TIKIWIKI19' => array (
+		'TIKIWIKI18' => array (
+
+array( 'DATADICT' => array(
+	array( 'DROPCOLUMN' => array(
+		'tiki_submissions' => array( '`bibliographical_references`' ),
+	)),
+)),
+
+/* Sliced and diced TW 1.9 upgrade scripts that did actual schema alterations
+
+ALTER TABLE `tiki_articles` ADD `topline` VARCHAR( 255 ) AFTER `articleId` ;
+ALTER TABLE `tiki_articles` ADD `subtitle` VARCHAR( 255 ) AFTER `title` ;
+ALTER TABLE `tiki_articles` ADD `linkto` VARCHAR( 255 ) AFTER `subtitle` ;
+ALTER TABLE `tiki_articles` ADD `image_caption` TEXT AFTER `image_name` ;
+ALTER TABLE `tiki_submissions` ADD `topline` VARCHAR( 255 ) AFTER `subId` ;
+ALTER TABLE `tiki_submissions` ADD `subtitle` VARCHAR( 255 ) AFTER `title` ;
+ALTER TABLE `tiki_submissions` ADD `linkto` VARCHAR( 255 ) AFTER `subtitle` ;
+ALTER TABLE `tiki_submissions` ADD `image_caption` TEXT AFTER `image_name` ;
+ALTER TABLE `tiki_articles` ADD `lang` VARCHAR( 16 ) AFTER `linkto` ;
+ALTER TABLE `tiki_submissions` ADD `lang` VARCHAR( 16 ) AFTER `linkto` ;
+ALTER TABLE `tiki_article_types` ADD `show_topline` CHAR( 1 ) AFTER `show_size` ;
+ALTER TABLE `tiki_article_types` ADD `show_subtitle` CHAR( 1 ) AFTER `show_topline` ;
+ALTER TABLE `tiki_article_types` ADD `show_linkto` CHAR( 1 ) AFTER `show_subtitle` ;
+ALTER TABLE `tiki_article_types` ADD `show_image_caption` CHAR( 1 ) AFTER `show_linkto` ;
+ALTER TABLE `tiki_article_types` ADD `show_lang` CHAR( 1 ) AFTER `show_image_caption` ;
+
+*/
+		)
+	),
+
+
 	'BONNIE' => array(
 		'BWR1' => array(
 

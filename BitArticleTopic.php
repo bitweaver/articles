@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.16 2006/01/10 21:11:08 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.17 2006/01/25 18:56:19 spiderr Exp $
  * @package article
  */
 
@@ -42,9 +42,7 @@ class BitArticleTopic extends BitBase {
 			$sql = "SELECT at.*".
 				   "FROM `".BIT_DB_PREFIX."tiki_article_topics` at ".
 			   	   $whereSQL;
-			$rs = $this->mDb->query($sql, $bindVars);
-
-			$this->mInfo = $rs->fields;
+			$this->mInfo = $this->mDb->getRow($sql, $bindVars);
 			$this->mTopicId = $this->mInfo['topic_id'];
 
 			if ($this->mInfo['has_topic_image']) {

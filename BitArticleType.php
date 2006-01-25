@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.9 2006/01/10 21:11:08 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.10 2006/01/25 18:56:19 spiderr Exp $
  * @package article
  */
 
@@ -38,11 +38,8 @@ class BitArticleType extends BitBase
 		
 		if ($this->mTypeId) {
 			$sql = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_types` WHERE `article_type_id` = ?";
-			$rs = $this->mDb->query($sql, array($this->mTypeId));
 			
-			$ret = array();			
-			if (!empty($rs->fields)) {
-				$ret = $rs->fields;
+			if( $ret = $this->mDb->getRow($sql, array($this->mTypeId)) ) {
 				$ret['num_articles'] = $this->mDb->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'tiki_articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
 			}
 		}

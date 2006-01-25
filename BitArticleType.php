@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.10 2006/01/25 18:56:19 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.11 2006/01/25 23:40:29 lsces Exp $
  * @package article
  */
 
@@ -98,7 +98,7 @@ class BitArticleType extends BitBase
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['article_type_id']) {
 				if (empty($this->mTopicId)) {
-					$typeId = $this->mDb->GenID('tiki_article_types_article_type_id_seq');
+					$typeId = $this->mDb->GenID('tiki_article_types_a_t_id_seq');
 				} else {
 					$typeId = $this->mTopicId;
 				}

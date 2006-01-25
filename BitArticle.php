@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.46 2006/01/25 18:56:19 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.47 2006/01/25 23:40:29 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.46 2006/01/25 18:56:19 spiderr Exp $
+ * $Id: BitArticle.php,v 1.47 2006/01/25 23:40:29 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.46 $ $Date: 2006/01/25 18:56:19 $ $Author: spiderr $
+ * @version $Revision: 1.47 $ $Date: 2006/01/25 23:40:29 $ $Author: lsces $
  */
 
 /**
@@ -88,17 +88,17 @@ class BitArticle extends LibertyAttachable {
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
 			$lookupId = @$this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
-				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
-				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
-				"tf.storage_path as image_storage_path " .
+				"uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`, " .
+				"uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ," .
+				"tf.`storage_path` as `image_storage_path` " .
 				"FROM `".BIT_DB_PREFIX."tiki_articles` ta " .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` tatype ON( tatype.`article_type_id` = ta.`article_type_id` )".
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` tatopic ON( tatopic.`topic_id` = ta.`topic_id` )".
 				"INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = tc.`modifier_user_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = tc.`user_id` )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )" .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )" .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )" .
 				"WHERE ta.`$lookupColumn`=?";
 			$result = $this->mDb->query( $query, array( $lookupId ) );
 
@@ -640,14 +640,14 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.`status_name`, tf.`storage_path` as image_storage_path
+		$query = "SELECT ta.*, tc.*, top.* , tatype.*, tas.`status_name`, tf.`storage_path` as `image_storage_path`
 					FROM `".BIT_DB_PREFIX."tiki_articles` ta
 						INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 						INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.`article_type_id` = ta.`article_type_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` tatype ON( tatype.`article_type_id` = ta.`article_type_id` )
 						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
 					WHERE ". $mid ." AND tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
 					ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 

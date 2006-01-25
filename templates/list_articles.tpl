@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9.2.1 2005/12/21 18:32:08 mej Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9.2.2 2006/01/25 23:15:00 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -8,7 +8,7 @@
 	</div>
 
 	<div class="body">
-		
+
 		{formfeedback hash=$feedback}
 
 		<div class="navbar">
@@ -59,7 +59,15 @@
 					<tr class="{cycle advance=false}">
 						{if $art_list_img eq 'y'}
 							<td rowspan="2">
-								{if $article.image_url}<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />{/if}
+								{if $article.image_url}
+									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+										<a href="{$article.display_url}">
+									{/if}
+									<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />
+									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+										</a>
+									{/if}
+								{/if}
 							</td>
 						{/if}
 

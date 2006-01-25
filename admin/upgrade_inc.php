@@ -5,6 +5,21 @@ require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $upgrades = array(
 
+	'BWR1' => array(
+		'BWR2' => array(
+			// STEP 1
+array( 'PHP' => '
+	global $gBitSystem;
+	$current = $gBitSystem->mDb->GenID( "tiki_article_topics_topic_id_seq" );
+	$gBitSystem->mDb->DropSequence( "tiki_article_topics_topic_id_seq");
+	$gBitSystem->mDb->CreateSequence( "tiki_article_topics_t_id_seq", $current );
+	$current = $gBitSystem->mDb->GenID( "tiki_article_types_article_type_id_seq" );
+	$gBitSystem->mDb->DropSequence( "tiki_article_types_article_type_id_seq");
+	$gBitSystem->mDb->CreateSequence( "tiki_article_types_a_t_id_seq", $current );
+' ),
+		)
+	),
+
 	'TIKIWIKI19' => array (
 		'TIKIWIKI18' => array (
 

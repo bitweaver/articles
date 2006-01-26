@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.9 2006/01/11 16:33:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.10 2006/01/26 02:16:12 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.9 2006/01/11 16:33:22 squareing Exp $
+ * $Id: BitArticle.php,v 1.40.2.10 2006/01/26 02:16:12 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.9 $ $Date: 2006/01/11 16:33:22 $ $Author: squareing $
+ * @version $Revision: 1.40.2.10 $ $Date: 2006/01/26 02:16:12 $ $Author: seannerd $
  */
 
 /**
@@ -630,7 +630,7 @@ class BitArticle extends LibertyAttachable {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
 			$bindvars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." top.`active` != 'n' OR top.`active` IS NULL ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( top.`active` != 'n' OR top.`active` IS NULL ) ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
@@ -658,6 +658,7 @@ class BitArticle extends LibertyAttachable {
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
+
 		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		$comment = &new LibertyComment();

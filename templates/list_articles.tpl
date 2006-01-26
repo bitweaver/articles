@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9.2.2 2006/01/25 23:15:00 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.9.2.3 2006/01/26 13:45:04 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -83,7 +83,7 @@
 							{/if}
 
 							{if $art_list_author eq 'y'}
-								{tr}Created by {displayname user=$article.author_name}{/tr}
+								{tr}Created by{/tr}: {displayname user=$article.author_name}
 							{/if}
 
 							{if $art_list_date eq 'y' or $art_list_expire eq 'y'}<br />{/if}

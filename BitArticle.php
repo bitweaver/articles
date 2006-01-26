@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.10 2006/01/26 02:16:12 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.11 2006/01/26 14:59:54 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.10 2006/01/26 02:16:12 seannerd Exp $
+ * $Id: BitArticle.php,v 1.40.2.11 2006/01/26 14:59:54 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.10 $ $Date: 2006/01/26 02:16:12 $ $Author: seannerd $
+ * @version $Revision: 1.40.2.11 $ $Date: 2006/01/26 14:59:54 $ $Author: squareing $
  */
 
 /**
@@ -88,39 +88,39 @@ class BitArticle extends LibertyAttachable {
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
 			$lookupId = @$this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
-				"uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name, " .
-				"uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name ," .
-				"tf.storage_path as image_storage_path " .
+				"uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`, " .
+				"uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ," .
+				"tf.`storage_path` as `image_storage_path` " .
 				"FROM `".BIT_DB_PREFIX."tiki_articles` ta " .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` tatype ON( tatype.`article_type_id` = ta.`article_type_id` )".
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` tatopic ON( tatopic.`topic_id` = ta.`topic_id` )".
 				"INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = tc.`modifier_user_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = tc.`user_id` )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.attachment_id = ta.image_attachment_id )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )" .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )" .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )" .
 				"WHERE ta.`$lookupColumn`=?";
 			$result = $this->mDb->query( $query, array( $lookupId ) );
 
 			global $gBitSystem;
 			if( $result && $result->numRows() ) {
-				$this->mInfo = $result->fields;
+				$this->mInfo = $result->fetchRow();
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
 				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo );
 
-				$this->mContentId = $result->fields['content_id'];
-				$this->mArticleId = $result->fields['article_id'];
-				$this->mTopicId   = $result->fields['topic_id'];
-				$this->mTypeId	  = $result->fields['article_type_id'];
+				$this->mContentId = $this->mInfo['content_id'];
+				$this->mArticleId = $this->mInfo['article_id'];
+				$this->mTopicId   = $this->mInfo['topic_id'];
+				$this->mTypeId	  = $this->mInfo['article_type_id'];
 
-				$this->mInfo['creator'] = ( isset( $result->fields['creator_real_name'] )? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
-				$this->mInfo['editor'] = ( isset( $result->fields['modifier_real_name'] )? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
+				$this->mInfo['creator'] = ( isset( $this->mInfo['creator_real_name'] )? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
+				$this->mInfo['editor'] = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ));
+				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ), $this->mInfo['format_guid'] );
 
 				/* get the "ago" time */
-				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $result->fields['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
+				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
 
 				/* i think we don't need to parse the description when we load the full article.
 				if( preg_match( ARTICLE_SPLIT_REGEX, $this->mInfo['data'] ) ) {
@@ -642,15 +642,15 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT ta.*, tc.*, top.* , type.*, tas.`status_name`,
-			tf.`storage_path` as image_storage_path
+		$query = "SELECT ta.*, tc.*, top.*, type.*, tas.`status_name`,
+			tf.`storage_path` as `image_storage_path`
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.`article_type_id` = ta.`article_type_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = tat.foreign_id )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
 			".( !empty( $mid ) ? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 

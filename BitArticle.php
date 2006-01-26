@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.48 2006/01/26 11:31:01 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.49 2006/01/26 14:56:29 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.48 2006/01/26 11:31:01 squareing Exp $
+ * $Id: BitArticle.php,v 1.49 2006/01/26 14:56:29 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.48 $ $Date: 2006/01/26 11:31:01 $ $Author: squareing $
+ * @version $Revision: 1.49 $ $Date: 2006/01/26 14:56:29 $ $Author: squareing $
  */
 
 /**
@@ -597,64 +597,67 @@ class BitArticle extends LibertyAttachable {
 		$bindvars = array();
 		$find = $pParamHash['find'];
 
-		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
-			$mid = " ta.`topic_id` = ? ";
-			$bindvars[] = ( int )$pParamHash['topic_id'];
-		} elseif( !empty( $pParamHash['topic'] ) ) {
-			$mid = " UPPER( top.`topic_name` ) = ? ";
-			$bindvars[] = strtoupper( $pParamHash['topic'] );
-		} else {
-			$mid = " top.`active` != 'n' OR top.`active` IS NULL ";
-		}
-		
 		if( is_array( $find ) ) {
 			// you can use an array of articles
-			$mid .= " AND tc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
+			$mid = " WHERE tc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindvars = $find;
 		} elseif( is_string( $find ) ) {
 			// or a string
-			$mid .= " AND UPPER( tc.`title` ) LIKE ? ";
+			$mid = " WHERE UPPER( tc.`title` ) LIKE ? ";
 			$bindvars = array( '%'.strtoupper( $find ).'%' );
 		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
-			$mid .= " AND tc.`creator_user_id` = ? ";
+			$mid = " WHERE tc.`creator_user_id` = ? ";
 			$bindvars = array( $pParamHash['user_id'] );
+		} else {
+			$mid = "";
 		}
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
-			$mid .= " AND ta.`status_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['status_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['type_id'] ) ) {
-			$mid .= " AND ta.`article_type_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`article_type_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['type_id'];
+		}
+
+		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
+			$bindvars[] = ( int )$pParamHash['topic_id'];
+		} elseif( !empty( $pParamHash['topic'] ) ) {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
+			$bindvars[] = strtoupper( $pParamHash['topic'] );
+		} else {
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( top.`active` != 'n' OR top.`active` IS NULL ) ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
-			$mid .= " AND ta.`publish_date` < ? AND ta.`expire_date` > ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`publish_date` < ? AND ta.`expire_date` > ? ";
 			$bindvars[] = ( int )$timestamp;
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT ta.*, tc.*, top.* , tatype.*, tas.`status_name`, tf.`storage_path` as `image_storage_path`
-					FROM `".BIT_DB_PREFIX."tiki_articles` ta
-						INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
-						INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` tatype ON( tatype.`article_type_id` = ta.`article_type_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
-					WHERE ". $mid ." AND tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
-					ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
+		$query = "SELECT ta.*, tc.*, top.*, type.*, tas.`status_name`,
+			tf.`storage_path` as `image_storage_path`
+			FROM `".BIT_DB_PREFIX."tiki_articles` ta
+			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
+			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.`article_type_id` = ta.`article_type_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
+			".( !empty( $mid ) ? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
+			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
-			WHERE tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."' AND " . $mid ;
+			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
 
 		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();

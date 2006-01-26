@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.11 2006/01/10 21:11:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.12 2006/01/26 14:56:29 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -8,7 +8,7 @@
 	</div>
 
 	<div class="body">
-		
+
 		{formfeedback hash=$feedback}
 
 		<div class="navbar">
@@ -59,7 +59,15 @@
 					<tr class="{cycle advance=false}">
 						{if $art_list_img eq 'y'}
 							<td rowspan="2">
-								{if $article.image_url}<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />{/if}
+								{if $article.image_url}
+									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+										<a href="{$article.display_url}">
+									{/if}
+									<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />
+									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+										</a>
+									{/if}
+								{/if}
 							</td>
 						{/if}
 
@@ -75,7 +83,7 @@
 							{/if}
 
 							{if $art_list_author eq 'y'}
-								{tr}Created by {displayname user=$article.author_name}{/tr}
+								{tr}Created by{/tr}: {displayname user=$article.author_name}
 							{/if}
 
 							{if $art_list_date eq 'y' or $art_list_expire eq 'y'}<br />{/if}

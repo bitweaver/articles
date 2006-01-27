@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9.2.1 2006/01/27 07:17:19 seannerd Exp $
  * @package article
  * @subpackage functions
  */
@@ -85,6 +85,12 @@ $article = new BitArticle();
 if( !empty( $_REQUEST['action'] ) ) {
 	if( !empty( $_REQUEST['article_id'] ) && !empty( $_REQUEST['set_status_id'] ) && $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
 		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'] );
+		// Add the article to the search index
+		$contentID = $_REQUEST['content_id'];
+		if( $gBitSystem->isPackageActive( 'search' ) and $search_index_on_submit == 'y') {
+			require_once( SEARCH_PKG_PATH.'refresh_functions.php');
+			refresh_specific_index_article($contentID);
+		}
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.18 2006/01/14 19:53:53 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.19 2006/01/27 21:54:47 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -90,7 +90,7 @@ $gBitSmarty->assign_by_ref( 'topics', $topics );
 $types = BitArticleType::getTypeList();
 $gBitSmarty->assign_by_ref( 'types', $types );
 
-/*if ( $feature_cms_templates == 'y' && $bit_p_use_content_templates == 'y' ) {
+/*if ( $gBitSystem->isFeatureActive( 'feature_cms_templates' ) && $gBitUser->hasPermission( 'bit_p_use_content_templates ) ) {
 	$templates = $tikilib->list_templates( 'cms', 0, -1, 'name_asc', '' );
 }*/
 $gBitSmarty->assign_by_ref( 'templates', $templates["data"] );

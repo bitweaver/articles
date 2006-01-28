@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.12 2006/01/26 14:56:29 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.13 2006/01/28 09:13:25 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -113,7 +113,7 @@
 						{/if}
 						<td style="text-align:right;">
 							{if $article.status_id eq $smarty.const.ARTICLE_STATUS_PENDING and $gBitUser->hasPermission( 'bit_p_approve_submission' )}
-								{smartlink ititle="Approve Article" ibiticon="liberty/success" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
+								{smartlink ititle="Approve Article" ibiticon="liberty/success" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id content_id=$article.content_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
 							{/if}
 
 							{if $gBitUser->hasPermission( 'bit_p_edit_article' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}

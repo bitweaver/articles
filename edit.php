@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17.2.3 2006/01/27 07:18:07 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17.2.4 2006/01/28 05:14:02 seannerd Exp $
  * @package article
  * @subpackage functions
  */
@@ -78,9 +78,9 @@ if( !empty( $_REQUEST["save"] ) ) {
 			header ( "location: " . ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
 		} else {
 			// Add the article to the search index
-			if( $gBitSystem->isPackageActive( 'search' ) and isset($search_index_on_submit) and $search_index_on_submit == 'y') {
+			if( $gBitSystem->isPackageActive( 'search' ) and $gBitSystem->isFeatureActive("search_index_on_submit")) {
 				require_once( SEARCH_PKG_PATH.'refresh_functions.php');
-				refresh_specific_index_article($gContent->mContentId);
+				refresh_index_tiki_content($gContent->mContentId);
 			}
 			header ( "location: " . ARTICLES_PKG_URL. "index.php" );
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9.2.1 2006/01/27 07:17:19 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9.2.2 2006/01/28 05:14:38 seannerd Exp $
  * @package article
  * @subpackage functions
  */
@@ -87,9 +87,9 @@ if( !empty( $_REQUEST['action'] ) ) {
 		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'] );
 		// Add the article to the search index
 		$contentID = $_REQUEST['content_id'];
-		if( $gBitSystem->isPackageActive( 'search' ) and $search_index_on_submit == 'y') {
+		if( $gBitSystem->isPackageActive( 'search' ) and $gBitSystem->isFeatureActive("search_index_on_submit")) {
 			require_once( SEARCH_PKG_PATH.'refresh_functions.php');
-			refresh_specific_index_article($contentID);
+			refresh_index_tiki_content($contentID);
 		}
 	}
 }

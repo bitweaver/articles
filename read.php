@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.7.2.2 2006/01/17 12:22:18 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.7.2.3 2006/01/28 09:17:49 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -53,7 +53,7 @@ if( $gContent->mInfo['allow_comments'] == 'y' ) {
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
 
-if( $feature_theme_control == 'y' ) {
+if( $gBitSystem->isFeatureActive( 'feature_theme_control' ) ) {
 	$cat_type = 'article';
 	$cat_objid = $_REQUEST["article_id"];
 	include( THEMES_PKG_PATH . 'tc_inc.php' );

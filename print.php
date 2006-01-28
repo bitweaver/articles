@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.3 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.3.2.1 2006/01/28 09:17:49 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -32,7 +32,7 @@ if ( isset( $_REQUEST["article_id"] ) ) {
         die;
     } 
 
-    if ( ( $article_data["publish_date"] > date( "U" ) ) && ( $bit_p_admin != 'y' ) ) {
+	if ( ( $article_data["publish_date"] > date( "U" ) ) && ( !$gBitUser->isAdmin() ) ) {
         $gBitSmarty->assign( 'msg', tra( "Article is not published yet" ) );
 
         $gBitSmarty->display( "error.tpl" );

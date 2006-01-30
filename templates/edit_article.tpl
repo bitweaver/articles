@@ -128,7 +128,7 @@
 
 						<div class="row">
 							{forminput}
-								<textarea id="{$textarea_id}" name="edit" rows="{$rows|default:20}" cols="{$cols|default:50}"
+								<textarea id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50"
 									onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
 									onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
 								>{$article.data|escape:html}</textarea>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.11 2006/01/26 14:59:54 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.12 2006/01/30 22:05:18 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.11 2006/01/26 14:59:54 squareing Exp $
+ * $Id: BitArticle.php,v 1.40.2.12 2006/01/30 22:05:18 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.11 $ $Date: 2006/01/26 14:59:54 $ $Author: squareing $
+ * @version $Revision: 1.40.2.12 $ $Date: 2006/01/30 22:05:18 $ $Author: seannerd $
  */
 
 /**
@@ -627,10 +627,10 @@ class BitArticle extends LibertyAttachable {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( tp.`topic_name` ) = ? ";
 			$bindvars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( top.`active` != 'n' OR top.`active` IS NULL ) ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( tp.`active` != 'n' OR tp.`active` IS NULL ) ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
@@ -642,12 +642,12 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT ta.*, tc.*, top.*, type.*, tas.`status_name`,
+		$query = "SELECT ta.*, tc.*, tp.*, type.*, tas.`status_name`,
 			tf.`storage_path` as `image_storage_path`
 			FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
 			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` tp ON( tp.`topic_id` = ta.`topic_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.`article_type_id` = ta.`article_type_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
@@ -656,7 +656,7 @@ class BitArticle extends LibertyAttachable {
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
 			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` tp ON( tp.`topic_id` = ta.`topic_id` )
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
 
 		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );

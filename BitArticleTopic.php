@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.18 2006/01/25 23:40:29 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.19 2006/01/31 20:16:24 bitweaver Exp $
  * @package article
  */
 
@@ -40,7 +40,7 @@ class BitArticleTopic extends BitBase {
 			$bindVars = array((@$this->verifyId($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
 
 			$sql = "SELECT at.*".
-				   "FROM `".BIT_DB_PREFIX."tiki_article_topics` at ".
+				   "FROM `".BIT_DB_PREFIX."article_topics` at ".
 			   	   $whereSQL;
 			$this->mInfo = $this->mDb->getRow($sql, $bindVars);
 			$this->mTopicId = $this->mInfo['topic_id'];
@@ -98,7 +98,7 @@ class BitArticleTopic extends BitBase {
 
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['topic_id']) {
-				$topicId = $this->mDb->GenID('tiki_article_topics_t_id_seq');
+				$topicId = $this->mDb->GenID('article_topics_t_id_seq');
 			} else {
 				$topicId = $this->mTopicId;
 			}
@@ -126,10 +126,10 @@ class BitArticleTopic extends BitBase {
 			}
 
 			if( $iParamHash['topic_id'] ) {
-				$this->mDb->associateUpdate( BIT_DB_PREFIX."tiki_article_topics", $iParamHash, array( 'name' => 'topic_id', 'value'=> $iParamHash['topic_id'] ) );
+				$this->mDb->associateUpdate( BIT_DB_PREFIX."article_topics", $iParamHash, array( 'name' => 'topic_id', 'value'=> $iParamHash['topic_id'] ) );
 			} else {
 				$iParamHash['topic_id'] = $topicId;
-				$this->mDb->associateInsert( BIT_DB_PREFIX."tiki_article_topics", $iParamHash );
+				$this->mDb->associateInsert( BIT_DB_PREFIX."article_topics", $iParamHash );
 			}
 		}
 		$this->mTopicId = $iParamHash['topic_id'];
@@ -175,7 +175,7 @@ class BitArticleTopic extends BitBase {
 		}
 
         $query = "SELECT tat.*
-				 FROM `".BIT_DB_PREFIX."tiki_article_topics` tat
+				 FROM `".BIT_DB_PREFIX."article_topics` tat
 				 $where ORDER BY tat.`topic_name`";
 
 		$result = $gBitSystem->mDb->query( $query, array() );
@@ -183,7 +183,7 @@ class BitArticleTopic extends BitBase {
         $ret = array();
 
         while( $res = $result->fetchRow() ) {
-			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
+			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
 			if( $res['has_topic_image'] == 'y' ) {
 				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
 			}
@@ -199,7 +199,7 @@ class BitArticleTopic extends BitBase {
 			if( file_exists($this->getTopicImageStoragePath() ) ) {
 				@unlink( $this->getTopicImageStoragePath() );
 			}
-			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_article_topics` SET `has_topic_image` = 'n' WHERE `topic_id` = ?";
+			$sql = "UPDATE `".BIT_DB_PREFIX."article_topics` SET `has_topic_image` = 'n' WHERE `topic_id` = ?";
 			$rs = $this->mDb->query($sql, array($this->mTopicId));
 			$this->mInfo['has_topic_image'] = 'n';
 		}
@@ -214,7 +214,7 @@ class BitArticleTopic extends BitBase {
 	}
 
 	function setActivation($iIsActive = FALSE) {
-		$sql = "UPDATE `".BIT_DB_PREFIX."tiki_article_topics` SET `active` = '".($iIsActive ? 'y' : 'n')."' WHERE `topic_id` = ?";
+		$sql = "UPDATE `".BIT_DB_PREFIX."article_topics` SET `active` = '".($iIsActive ? 'y' : 'n')."' WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
 		$this->mInfo['active'] = ($iIsActive ? 'y' : 'n');
 	}
@@ -224,7 +224,7 @@ class BitArticleTopic extends BitBase {
 			return NULL;
 		}
 
-		$sql = "SELECT `article_id` FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `topic_id` = ?";
+		$sql = "SELECT `article_id` FROM `".BIT_DB_PREFIX."articles` WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
 
 		$ret = array();
@@ -248,11 +248,11 @@ class BitArticleTopic extends BitBase {
 				$topicArticles[$articleCount]->expunge();
 			}
 		} else {
-			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `topic_id` = ? WHERE `topic_id` = ?";
+			$sql = "UPDATE `".BIT_DB_PREFIX."articles` SET `topic_id` = ? WHERE `topic_id` = ?";
 			$rs = $this->mDb->query($sql, array(NULL, $this->mTopicId));
 		}
 
-		$sql = "DELETE FROM `".BIT_DB_PREFIX."tiki_article_topics` WHERE `topic_id` = ?";
+		$sql = "DELETE FROM `".BIT_DB_PREFIX."article_topics` WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
 	}
 }

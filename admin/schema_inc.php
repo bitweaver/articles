@@ -6,7 +6,7 @@
 // replaced type_name with article_type_id
 
 $tables = array(
-	'tiki_articles' => "
+	'articles' => "
 		article_id I4 AUTO PRIMARY,
 		content_id I4 NOTNULL,
 		description X,
@@ -21,12 +21,12 @@ $tables = array(
 		status_id I4
 	",
 
-	'tiki_article_status' => "
+	'article_status' => "
 		status_id	I4 PRIMARY,
 		status_name C(64)
 	",
 
-	'tiki_article_types' => "
+	'article_types' => "
 		article_type_id I4 AUTO PRIMARY,
 		type_name C(50),
 		use_ratings C(1),
@@ -45,9 +45,9 @@ $tables = array(
 		comment_can_rate_article C(1)
 	",
 
-	// tiki_topics renamed to tiki_article_topics
+	// tiki_topics renamed to article_topics
 	// name renamed to topic_name
-	'tiki_article_topics' => "
+	'article_topics' => "
 		topic_id I4 AUTO PRIMARY,
 		topic_name C(40),
 		has_topic_image C(1),
@@ -74,9 +74,9 @@ $gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
 
 // these sequences are automatically generated, but Firebird prefers they exist
 $sequences = array (
-	'tiki_article_topics_t_id_seq' => array( 'start' => 1 ),
-	'tiki_article_types_a_t_id_seq' => array( 'start' => 1 ),
-	'tiki_articles_article_id_seq' => array( 'start' => 1 ),
+	'article_topics_t_id_seq' => array( 'start' => 1 ),
+	'article_types_a_t_id_seq' => array( 'start' => 1 ),
+	'articles_article_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
 
@@ -85,15 +85,15 @@ $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
 // $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_DIR, $indices );
 
 $gBitInstaller->registerSchemaDefault( ARTICLES_PKG_DIR, array(
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`) VALUES ('Article')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `use_ratings`) VALUES ('Review','y')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `show_post_expire`) VALUES ('Event','n')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_types` (`type_name`, `show_post_expire`,`heading_only`,`allow_comments`) VALUES ('Classified','n','y','n')",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (  0, 'Denied') ",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (100, 'Draft') ",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (200, 'Pending Approval') ",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (300, 'Approved') ",
-	"INSERT INTO `".BIT_DB_PREFIX."tiki_article_status` (`status_id`, `status_name`) VALUES (400, 'Retired') "
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`) VALUES ('Article')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `use_ratings`) VALUES ('Review','y')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `show_post_expire`) VALUES ('Event','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `show_post_expire`,`heading_only`,`allow_comments`) VALUES ('Classified','n','y','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (  0, 'Denied') ",
+	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (100, 'Draft') ",
+	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (200, 'Pending Approval') ",
+	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (300, 'Approved') ",
+	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (400, 'Retired') "
 ) );
 
 // ### Default UserPermissions

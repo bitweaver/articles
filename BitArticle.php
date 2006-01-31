@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.52 2006/01/31 10:21:11 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.53 2006/01/31 20:16:24 bitweaver Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.52 2006/01/31 10:21:11 squareing Exp $
+ * $Id: BitArticle.php,v 1.53 2006/01/31 20:16:24 bitweaver Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.52 $ $Date: 2006/01/31 10:21:11 $ $Author: squareing $
+ * @version $Revision: 1.53 $ $Date: 2006/01/31 20:16:24 $ $Author: bitweaver $
  */
 
 /**
@@ -87,19 +87,19 @@ class BitArticle extends LibertyAttachable {
 			// This is a significant performance optimization
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
 			$lookupId = @$this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
-			$query = "SELECT ta.*, tc.*, tatype.*, tatopic.*, " .
+			$query = "SELECT a.*, tc.*, atype.*, atopic.*, " .
 				"uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`, " .
 				"uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ," .
 				"tf.`storage_path` as `image_storage_path` " .
-				"FROM `".BIT_DB_PREFIX."tiki_articles` ta " .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` tatype ON( tatype.`article_type_id` = ta.`article_type_id` )".
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` tatopic ON( tatopic.`topic_id` = ta.`topic_id` )".
-				"INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )" .
+				"FROM `".BIT_DB_PREFIX."articles` a " .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )".
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )".
+				"INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = a.`content_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = tc.`modifier_user_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = tc.`user_id` )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )" .
+				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = a.`image_attachment_id` )" .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )" .
-				"WHERE ta.`$lookupColumn`=?";
+				"WHERE a.`$lookupColumn`=?";
 			$result = $this->mDb->query( $query, array( $lookupId ) );
 
 			global $gBitSystem;
@@ -157,7 +157,7 @@ class BitArticle extends LibertyAttachable {
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
-			$table = BIT_DB_PREFIX."tiki_articles";
+			$table = BIT_DB_PREFIX."articles";
 			$this->mDb->StartTrans();
 
 			if( $this->isValid() ) {
@@ -169,7 +169,7 @@ class BitArticle extends LibertyAttachable {
 					// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
 					$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
 				} else {
-					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
+					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'articles_article_id_seq' );
 				}
 				$this->mArticleId = $pParamHash['article_store']['article_id'];
 				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
@@ -449,9 +449,9 @@ class BitArticle extends LibertyAttachable {
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
 			$data['image_attachment_id'] = ( int )$data['image_attachment_id'];
 			$query = "SELECT tf.storage_path AS image_storage_path
-				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = ta.foreign_id )
-				WHERE ta.attachment_id=?";
+				FROM `".BIT_DB_PREFIX."tiki_attachments` a
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.file_id = a.foreign_id )
+				WHERE a.attachment_id=?";
 			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
 			$data['image_url'] = BitArticle::getImageUrl( $data );
 		}
@@ -554,7 +554,7 @@ class BitArticle extends LibertyAttachable {
 		$ret = FALSE;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
-			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `content_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."articles` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			// remove article image if it exists
 			$this->expungeImage();
@@ -614,17 +614,17 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`status_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`status_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['status_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['type_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`article_type_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`article_type_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['type_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`topic_id` = ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`topic_id` = ? ";
 			$bindvars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
@@ -637,26 +637,26 @@ class BitArticle extends LibertyAttachable {
 		// someone better at SQL please get this working without an additional db call - xing
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ta.`publish_date` < ? AND ta.`expire_date` > ? ";
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`publish_date` < ? AND a.`expire_date` > ? ";
 			$bindvars[] = ( int )$timestamp;
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT ta.*, tc.*, top.*, type.*, tas.`status_name`,
+		$query = "SELECT a.*, tc.*, top.*, type.*, astatus.`status_name`,
 			tf.`storage_path` as `image_storage_path`
-			FROM `".BIT_DB_PREFIX."tiki_articles` ta
-			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
-			INNER JOIN `".BIT_DB_PREFIX."tiki_article_status` tas ON( tas.`status_id` = ta.`status_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_types` type ON( type.`article_type_id` = ta.`article_type_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = ta.`image_attachment_id` )
+			FROM `".BIT_DB_PREFIX."articles` a
+			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = a.`content_id` )
+			INNER JOIN `".BIT_DB_PREFIX."article_status` astatus ON( astatus.`status_id` = a.`status_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` type ON( type.`article_type_id` = a.`article_type_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` tat ON( tat.`attachment_id` = a.`image_attachment_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf ON( tf.`file_id` = tat.`foreign_id` )
 			".( !empty( $mid ) ? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
-		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."tiki_articles` ta
-			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = ta.`content_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_article_topics` top ON( top.`topic_id` = ta.`topic_id` )
+		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
+			INNER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON( tc.`content_id` = a.`content_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
 			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." tc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
 
 		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
@@ -730,7 +730,7 @@ class BitArticle extends LibertyAttachable {
 	**/
 	function getStatusList() {
 		global $gBitSystem;
-		$query = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_status`";
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."article_status`";
 		$result = $gBitSystem->mDb->query( $query );
 		return $result->getRows();
 	}
@@ -755,7 +755,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( @$this->verifyId( $pArticleId ) ) {
-			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
+			$sql = "UPDATE `".BIT_DB_PREFIX."articles` SET `status_id` = ? WHERE `article_id` = ?";
 			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
 			return $pStatusId;
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.12 2006/01/26 14:56:29 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.13 2006/01/31 20:16:24 bitweaver Exp $
  * @package article
  */
 
@@ -37,10 +37,10 @@ class BitArticleType extends BitBase
 		}
 		
 		if ($this->mTypeId) {
-			$sql = "SELECT * FROM `".BIT_DB_PREFIX."tiki_article_types` WHERE `article_type_id` = ?";
+			$sql = "SELECT * FROM `".BIT_DB_PREFIX."article_types` WHERE `article_type_id` = ?";
 			
 			if( $ret = $this->mDb->getRow( $sql, array( $this->mTypeId ) ) ) {
-				$ret['num_articles'] = $this->mDb->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'tiki_articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
+				$ret['num_articles'] = $this->mDb->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
 			}
 		}
 		$this->mInfo = $ret;
@@ -98,7 +98,7 @@ class BitArticleType extends BitBase
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['article_type_id']) {
 				if (empty($this->mTopicId)) {
-					$typeId = $this->mDb->GenID('tiki_article_types_a_t_id_seq');
+					$typeId = $this->mDb->GenID('article_types_a_t_id_seq');
 				} else {
 					$typeId = $this->mTopicId;
 				}
@@ -107,10 +107,10 @@ class BitArticleType extends BitBase
 			}
 			
 			if ($iParamHash['article_type_id']) {
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."tiki_article_types", $iParamHash, array('name' => 'article_type_id', 'value'=> $iParamHash['article_type_id']));				
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."article_types", $iParamHash, array('name' => 'article_type_id', 'value'=> $iParamHash['article_type_id']));				
 			} else {
 				$iParamHash['article_type_id'] = $typeId;
-				$this->mDb->associateInsert(BIT_DB_PREFIX."tiki_article_types", $iParamHash);	
+				$this->mDb->associateInsert(BIT_DB_PREFIX."article_types", $iParamHash);	
 			}			
 		}
 		$this->mTypeId = $iParamHash['article_type_id'];
@@ -128,19 +128,19 @@ class BitArticleType extends BitBase
 			$iTypeId = (int)($iTypeId);
 		}
 		
-		$sql = "DELETE FROM `".BIT_DB_PREFIX."tiki_article_types` WHERE `article_type_id` = ?";
+		$sql = "DELETE FROM `".BIT_DB_PREFIX."article_types` WHERE `article_type_id` = ?";
 		$rs = $this->mDb->query($sql, array($iTypeId));
 	}
 	
 	function getTypeList() {
 		global $gBitSystem;
 		
-		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "tiki_article_types`";
+		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "article_types`";
 		$result = $gBitSystem->mDb->query( $query, array() );
         $ret = array();
 
         while ( $res = $result->fetchRow() ) {
-			$res['article_cnt'] = $gBitSystem->mDb->getOne( "select count(*) from `" . BIT_DB_PREFIX . "tiki_articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
+			$res['article_cnt'] = $gBitSystem->mDb->getOne( "select count(*) from `" . BIT_DB_PREFIX . "articles` where `article_type_id` = ?", array( $res['article_type_id'] ) );
             $ret[] = $res;
         }
 

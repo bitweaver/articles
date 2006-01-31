@@ -12,6 +12,11 @@
 	{foreach from=$articles item=article}
 		{include file="bitpackage:articles/article_display.tpl"}
 	{foreachelse}
-		<div class="norecords">{tr}No records found{/tr}<br />{smartlink ititle="Write article" ipackage=articles ifile="edit.php"}</div>
+		<p class="norecords">
+			{tr}No records found{/tr}<br />
+			{if $gBitUser->hasPermission( 'bit_p_submit_article' )}
+				{smartlink ititle="Write article" ipackage=articles ifile="edit.php"}
+			{/if}
+		</p>
 	{/foreach}
 </div>

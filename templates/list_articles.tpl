@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.13 2006/01/28 09:13:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.14 2006/01/31 10:21:11 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -14,16 +14,16 @@
 		<div class="navbar">
 			<ul>
 				<li>{biticon ipackage=liberty iname=sort iexplain="sort by"}</li>
-				{if $art_list_title eq 'y'}
+				{if $gBitSystem->isFeatureActive( 'art_list_title' )}
 					<li>{smartlink ititle='Title' isort='title' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
-				{if $art_list_author eq 'y'}
+				{if $gBitSystem->isFeatureActive( 'art_list_author' )}
 					<li>{smartlink ititle='Author' isort='author_name' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
-				{if $art_list_date eq 'y'}
+				{if $gBitSystem->isFeatureActive( 'art_list_date' )}
 					<li>{smartlink ititle='Publish Date' isort='publish_date' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
-				{if $art_list_expire eq 'y'}
+				{if $gBitSystem->isFeatureActive( 'art_list_expire' )}
 					<li>{smartlink ititle='Expire Date' isort='expire_date' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
 			</ul>
@@ -37,19 +37,19 @@
 			<table class="data">
 				<caption>{tr}Articles Listing{/tr}</caption>
 				<tr>
-					{if $art_list_img eq 'y'}
+					{if $gBitSystem->isFeatureActive( 'art_list_img' )}
 						<th style="width:10px;">{tr}Image{/tr}</th>
 					{/if}
-					{if $art_list_type eq 'y'}
+					{if $gBitSystem->isFeatureActive( 'art_list_type' )}
 						<th>{smartlink ititle='Type' isort='type_name' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
-					{if $art_list_topic eq 'y'}
+					{if $gBitSystem->isFeatureActive( 'art_list_topic' )}
 						<th>{smartlink ititle='Topic' isort='topic_name' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
-					{if $art_list_status eq 'y'}
+					{if $gBitSystem->isFeatureActive( 'art_list_status' )}
 						<th>{smartlink ititle='Status' isort='status_id' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
-					{if $art_list_reads eq 'y'}
+					{if $gBitSystem->isFeatureActive( 'art_list_reads' )}
 						<th>{smartlink ititle='Reads' isort='hits' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
 					<th>{tr}Action{/tr}</th>
@@ -57,7 +57,7 @@
 				{cycle values="even,odd" print=false}
 				{foreach item=article from=$listpages}
 					<tr class="{cycle advance=false}">
-						{if $art_list_img eq 'y'}
+						{if $gBitSystem->isFeatureActive( 'art_list_img' )}
 							<td rowspan="2">
 								{if $article.image_url}
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
@@ -72,7 +72,7 @@
 						{/if}
 
 						<td colspan="5">
-							{if $art_list_title eq 'y'}
+							{if $gBitSystem->isFeatureActive( 'art_list_title' )}
 								<h2>
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
 										<a href="{$article.display_url}">{$article.title}</a>
@@ -82,33 +82,33 @@
 								</h2>
 							{/if}
 
-							{if $art_list_author eq 'y'}
+							{if $gBitSystem->isFeatureActive( 'art_list_author' )}
 								{tr}Created by{/tr}: {displayname user=$article.author_name}
 							{/if}
 
-							{if $art_list_date eq 'y' or $art_list_expire eq 'y'}<br />{/if}
+							{if $gBitSystem->isFeatureActive( 'art_list_date' ) or $gBitSystem->isFeatureActive( 'art_list_expire' )}<br />{/if}
 
-							{if $art_list_date eq 'y' and $art_list_expire eq 'y'}
+							{if $gBitSystem->isFeatureActive( 'art_list_date' ) and $gBitSystem->isFeatureActive( 'art_list_expire' )}
 								{tr}Displayed from <strong>{$article.publish_date|bit_short_datetime}</strong> until <strong>{$article.expire_date|bit_short_datetime}</strong>{/tr}
-							{elseif $art_list_date eq 'y'}
+							{elseif $gBitSystem->isFeatureActive( 'art_list_date' )}
 								{tr}Displayed from <strong>{$article.publish_date|bit_short_datetime}</strong>{/tr}
-							{elseif $art_list_expire eq 'y'}
+							{elseif $gBitSystem->isFeatureActive( 'art_list_expire' )}
 								{tr}Displayed until <strong>{$article.expire_date|bit_short_datetime}</strong>{/tr}
 							{/if}
 						</td>
 					</tr>
 
 					<tr class="{cycle}">
-						{if $art_list_type eq 'y'}
+						{if $gBitSystem->isFeatureActive( 'art_list_type' )}
 							<td>{tr}{$article.type_name}{/tr}</td>
 						{/if}
-						{if $art_list_topic eq 'y'}
+						{if $gBitSystem->isFeatureActive( 'art_list_topic' )}
 							<td>{$article.topic_name}</td>
 						{/if}
-						{if $art_list_status eq 'y'}
+						{if $gBitSystem->isFeatureActive( 'art_list_status' )}
 							<td>{$article.status_name}</td>
 						{/if}
-						{if $art_list_reads eq 'y'}
+						{if $gBitSystem->isFeatureActive( 'art_list_reads' )}
 							<td style="text-align:right;">{$article.hits}</td>
 						{/if}
 						<td style="text-align:right;">
@@ -127,7 +127,7 @@
 					</tr>
 				{foreachelse}
 					<tr class="norecords">
-						<td colspan="11">
+						<td colspan="5">
 							{tr}No records found{/tr}
 						</td>
 					</tr>

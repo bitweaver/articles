@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.10 2006/01/31 10:21:11 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -91,7 +91,7 @@ if( !empty( $_REQUEST['action'] ) ) {
 if( empty( $_REQUEST['status_id'] ) || ( !$gBitUser->hasPermission( 'bit_p_view_submissions' ) && !$gBitUser->hasPermission( 'bit_p_admin_articles' ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
-$listarticles = $article->getList( $_REQUEST );
+$listArticles = $article->getList( $_REQUEST );
 
 $topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign( 'topics', $topics );
@@ -100,7 +100,7 @@ $types = BitArticleType::getTypeList();
 $gBitSmarty->assign( 'types', $types );
 
 $gBitSmarty->assign( 'control', $_REQUEST["control"] );
-$gBitSmarty->assign( 'listpages', $listarticles["data"] );
+$gBitSmarty->assign( 'listpages', $listArticles["data"] );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ));

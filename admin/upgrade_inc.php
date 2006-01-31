@@ -7,15 +7,23 @@ $upgrades = array(
 
 	'BWR1' => array(
 		'BWR2' => array(
-			// STEP 1
+// de-tikify tables
+array( 'DATADICT' => array(
+	array( 'RENAMETABLE' => array(
+		'tiki_articles' => 'articles',
+		'tiki_article_status' => 'article_status',
+		'tiki_article_types' => 'article_types',
+		'tiki_article_topics' => 'article_topics',
+	)),
+)),
 array( 'PHP' => '
 	global $gBitSystem;
 	$current = $gBitSystem->mDb->GenID( "tiki_article_topics_topic_id_seq" );
 	$gBitSystem->mDb->DropSequence( "tiki_article_topics_topic_id_seq");
-	$gBitSystem->mDb->CreateSequence( "tiki_article_topics_t_id_seq", $current );
+	$gBitSystem->mDb->CreateSequence( "article_topics_t_id_seq", $current );
 	$current = $gBitSystem->mDb->GenID( "tiki_article_types_article_type_id_seq" );
 	$gBitSystem->mDb->DropSequence( "tiki_article_types_article_type_id_seq");
-	$gBitSystem->mDb->CreateSequence( "tiki_article_types_a_t_id_seq", $current );
+	$gBitSystem->mDb->CreateSequence( "article_types_a_t_id_seq", $current );
 ' ),
 		)
 	),

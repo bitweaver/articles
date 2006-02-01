@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.11 2006/01/27 21:54:47 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.12 2006/02/01 20:38:40 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -51,12 +51,6 @@ if( $gContent->mInfo['allow_comments'] == 'y' ) {
 	$commentsParentId = $gContent->mContentId;
 	$comments_return_url = $_SERVER['PHP_SELF']."?article_id=".$_REQUEST['article_id'];
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
-}
-
-if( $gBitSystem->isFeatureActive( 'feature_theme_control' ) ) {
-	$cat_type = 'article';
-	$cat_objid = $_REQUEST["article_id"];
-	include( THEMES_PKG_PATH . 'tc_inc.php' );
 }
 
 /*

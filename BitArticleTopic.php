@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.19 2006/01/31 20:16:24 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.20 2006/02/01 18:40:27 squareing Exp $
  * @package article
  */
 
@@ -171,12 +171,12 @@ class BitArticleTopic extends BitBase {
 
 		$where = '';
 		if( !empty( $pOptionHash['active'] ) ) {
-			$where = " WHERE tat.`active` = 'y' ";
+			$where = " WHERE la.`active` = 'y' ";
 		}
 
-        $query = "SELECT tat.*
-				 FROM `".BIT_DB_PREFIX."article_topics` tat
-				 $where ORDER BY tat.`topic_name`";
+        $query = "SELECT la.*
+				 FROM `".BIT_DB_PREFIX."article_topics` la
+				 $where ORDER BY la.`topic_name`";
 
 		$result = $gBitSystem->mDb->query( $query, array() );
 

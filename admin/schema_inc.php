@@ -45,8 +45,6 @@ $tables = array(
 		comment_can_rate_article C(1)
 	",
 
-	// tiki_topics renamed to article_topics
-	// name renamed to topic_name
 	'article_topics' => "
 		topic_id I4 AUTO PRIMARY,
 		topic_name C(40),

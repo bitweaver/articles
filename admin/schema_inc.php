@@ -105,7 +105,6 @@ $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
 	array('bit_p_approve_submission', 'Can approve submissions', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_send_articles', 'Can send articles to other sites', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_sendme_articles', 'Can send articles to this site', 'registered', ARTICLES_PKG_NAME),
-	array('bit_p_admin_received_articles', 'Can admin received articles', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_autoapprove_submission', 'Submited articles automatically approved', 'editors', ARTICLES_PKG_NAME),
 	array('bit_p_admin_articles', 'Can admin the articles package', 'editors', ARTICLES_PKG_NAME),
 ) );

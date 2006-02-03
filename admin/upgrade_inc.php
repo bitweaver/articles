@@ -15,16 +15,11 @@ array( 'DATADICT' => array(
 		'tiki_article_types' => 'article_types',
 		'tiki_article_topics' => 'article_topics',
 	)),
+	array( 'RENAMESEQUENCE' => array(
+		"tiki_article_topics_topic_id_seq" => "article_topics_t_id_seq",
+		"tiki_article_types_topic_id_seq" => "article_types_t_id_seq",
+	)),
 )),
-array( 'PHP' => '
-	global $gBitSystem;
-	$current = $gBitSystem->mDb->GenID( "tiki_article_topics_topic_id_seq" );
-	$gBitSystem->mDb->DropSequence( "tiki_article_topics_topic_id_seq");
-	$gBitSystem->mDb->CreateSequence( "article_topics_t_id_seq", $current );
-	$current = $gBitSystem->mDb->GenID( "tiki_article_types_article_type_id_seq" );
-	$gBitSystem->mDb->DropSequence( "tiki_article_types_article_type_id_seq");
-	$gBitSystem->mDb->CreateSequence( "article_types_a_t_id_seq", $current );
-' ),
 		)
 	),
 

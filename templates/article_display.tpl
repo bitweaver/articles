@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.9 2006/01/16 17:56:57 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.10 2006/02/03 12:35:14 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -12,7 +12,7 @@
 		{if $gBitUser->isAdmin() || $gContent->isOwner( $article )}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 		{/if}
-		<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>
+		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>*}
 		{if $gBitUser->hasPermission( 'bit_p_remove_article' )}
 			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="liberty/delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}

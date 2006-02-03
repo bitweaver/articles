@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.4 2006/01/15 15:49:54 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.5 2006/02/03 12:35:14 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -28,6 +28,7 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 
 	$articles = new BitArticle();
 	$listHash = array(
+		'status_id' => ARTICLE_STATUS_APPROVED,
 		'sort_mode' => 'publish_date_desc',
 		'max_records' => $gBitSystem->getPreference( 'max_rss_articles', 10 ),
 	);

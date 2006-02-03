@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7.2.3 2006/01/09 12:06:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.7.2.4 2006/02/03 12:35:14 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,11 +26,19 @@ if( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) {
 	$_REQUEST['topic_id']    = !empty( $_REQUEST['topic_id'] )    ? $_REQUEST['topic_id']    : NULL;
 	$_REQUEST['type_id']     = !empty( $_REQUEST['type_id'] )     ? $_REQUEST['type_id']     : NULL;
 } else {
-	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
+	$_REQUEST['status_id']   = ARTICLE_STATUS_APPROVED;
 	$_REQUEST['max_records'] = $gBitSystem->mPrefs['max_articles'];
 }
 $articles = $gContent->getList( $_REQUEST );
-$gBitSmarty->assign_by_ref( 'articles', $articles['data'] );
+$gBitSmarty->assign( 'articles', $articles['data'] );
+$gBitSmarty->assign( 'listInfo', $_REQUEST['control'] );
+
+// display submissions if we have the perm to approve them
+if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
+	$listHash = array( 'status_id' => ARTICLE_STATUS_PENDING );
+	$submissions = $gContent->getList( $listHash );
+	$gBitSmarty->assign( 'submissions', $submissions['data'] );
+}
 
 // Display the template
 $gDefaultCenter = 'bitpackage:articles/center_list_articles.tpl';

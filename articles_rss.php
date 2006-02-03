@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.5 2006/02/03 12:35:14 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.6 2006/02/03 12:57:10 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -45,7 +45,7 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 		$item->description = $feed['parsed_data'];
 
 		$item->date = ( int )$feed['publish_date'];
-		$item->source = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL;
+		$item->source = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
 		$item->author = $feed['author_name'];
 
 		$item->descriptionTruncSize = $gBitSystem->getPreference( 'rssfeed_truncate', 5000 );

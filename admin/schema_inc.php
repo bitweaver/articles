@@ -6,21 +6,6 @@
 // replaced type_name with article_type_id
 
 $tables = array(
-	'articles' => "
-		article_id I4 AUTO PRIMARY,
-		content_id I4 NOTNULL,
-		description X,
-		author_name C(250),
-		topic_id I4,
-		image_attachment_id I4,
-		publish_date I4,
-		expire_date I4,
-		article_type_id I4,
-		topic_id I4,
-		rating F,
-		status_id I4
-	",
-
 	'article_status' => "
 		status_id	I4 PRIMARY,
 		status_name C(64)
@@ -51,7 +36,28 @@ $tables = array(
 		has_topic_image C(1),
 		active C(1),
 		created I8
-	"
+	",
+
+	'articles' => "
+		article_id I4 AUTO PRIMARY,
+		content_id I4 NOTNULL,
+		description X,
+		author_name C(250),
+		topic_id I4,
+		image_attachment_id I4,
+		publish_date I4,
+		expire_date I4,
+		article_type_id I4,
+		topic_id I4,
+		rating F,
+		status_id I4
+		CONSTRAINT ', CONSTRAINT `articles_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
+					, CONSTRAINT `articles_topic_ref` FOREIGN KEY (`topic_id`) REFERENCES `".BIT_DB_PREFIX."article_topics` (`topic_id`)
+					, CONSTRAINT `articles_type_ref` FOREIGN KEY (`article_type_id`) REFERENCES `".BIT_DB_PREFIX."article_types` (`article_type_id`)
+					, CONSTRAINT `articles_status` FOREIGN KEY (`status_id`) REFERENCES `".BIT_DB_PREFIX."article_status` (`status_id`)'
+	",
+
+
 );
 
 global $gBitInstaller;

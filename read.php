@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.12 2006/02/01 20:38:40 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.13 2006/02/04 19:04:34 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -52,13 +52,6 @@ if( $gContent->mInfo['allow_comments'] == 'y' ) {
 	$comments_return_url = $_SERVER['PHP_SELF']."?article_id=".$_REQUEST['article_id'];
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
-
-/*
-if( isset( $_REQUEST['mode'] )&& $_REQUEST['mode'] == 'mobile' ) {
-	include_once( HAWHAW_PKG_PATH . 'hawtiki_lib.php' );
-	HAWBIT_read_article( $article_data, $pages );
-}
-*/
 
 // Display the Index Template
 $gBitSystem->display( 'bitpackage:articles/read_article.tpl', $gContent->mInfo['title'] );

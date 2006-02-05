@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.20 2006/02/01 12:18:34 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.21 2006/02/05 21:52:49 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -38,7 +38,7 @@
 		{/if}
 	</div>
 
-	<div class="body"{if $user_dbl eq 'y' and $gBitUser->hasPermission( 'bit_p_edit_article' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
+	<div class="body"{if $gBitUser->getPreference( 'user_dbl' ) and $gBitUser->hasPermission( 'bit_p_edit_article' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		<div class="content">
 			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">

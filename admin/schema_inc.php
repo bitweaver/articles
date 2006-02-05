@@ -67,9 +67,6 @@ foreach( array_keys( $tables ) AS $tableName ) {
 $gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
 	'description' => "This package manages news articles to create a slashdot-like news site.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
-	'version' => '0.1',
-	'state' => 'experimental',
-	'dependencies' => '',
 ) );
 
 /* commented these out because these sequences are automatically generated

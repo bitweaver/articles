@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.54 2006/02/01 18:40:25 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.55 2006/02/05 16:54:18 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.54 2006/02/01 18:40:25 squareing Exp $
+ * $Id: BitArticle.php,v 1.55 2006/02/05 16:54:18 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.54 $ $Date: 2006/02/01 18:40:25 $ $Author: squareing $
+ * @version $Revision: 1.55 $ $Date: 2006/02/05 16:54:18 $ $Author: lsces $
  */
 
 /**
@@ -642,13 +642,13 @@ class BitArticle extends LibertyAttachable {
 			$bindvars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT a.*, lc.*, top.*, type.*, astatus.`status_name`,
+		$query = "SELECT a.*, lc.*, top.*, atype.*, astatus.`status_name`,
 			lf.`storage_path` as `image_storage_path`
 			FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
 			INNER JOIN `".BIT_DB_PREFIX."article_status` astatus ON( astatus.`status_id` = a.`status_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` type ON( type.`article_type_id` = a.`article_type_id` )
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
 			".( !empty( $mid ) ? $mid.' AND ' : ' WHERE ' )." lc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'

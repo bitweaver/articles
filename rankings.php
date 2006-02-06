@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.6 2006/02/04 10:10:50 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.7 2006/02/06 22:56:36 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -14,7 +14,7 @@ include_once( LIBERTY_PKG_PATH . 'LibertyContent.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
 $gBitSystem->isPackageActive( 'articles' );
-$gBitSystem->isFeatureActive( 'feature_cms_rankings' );
+$gBitSystem->isFeatureActive( 'cms_rankings' );
 $gBitSystem->verifyPermission( 'bit_p_read_article' );
 
 $rankingOptions = array(

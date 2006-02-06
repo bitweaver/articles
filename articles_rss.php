@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.8 2006/02/02 13:57:44 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.9 2006/02/06 00:05:46 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -15,8 +15,8 @@ require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
 
-$rss->title = $gBitSystem->getPreference( 'title_rss_articles', $gBitSystem->mPrefs['siteTitle'].' - '.tra( 'Articles' ) );
-$rss->description = $gBitSystem->getPreference( 'desc_rss_articles', $gBitSystem->mPrefs['siteTitle'].' - '.tra( 'RSS Feed' ) );
+$rss->title = $gBitSystem->getPreference( 'title_rss_articles', $gBitSystem->mPrefs['site_title'].' - '.tra( 'Articles' ) );
+$rss->description = $gBitSystem->getPreference( 'desc_rss_articles', $gBitSystem->mPrefs['site_title'].' - '.tra( 'RSS Feed' ) );
 
 // check permission to view articles
 if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {

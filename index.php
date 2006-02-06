@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.9 2006/01/31 10:21:11 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.10 2006/02/06 18:43:08 lsces Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -31,7 +31,7 @@ if( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) {
 }
 $articles = $gContent->getList( $_REQUEST );
 $gBitSmarty->assign( 'articles', $articles['data'] );
-$gBitSmarty->assign( 'listInfo', $_REQUEST['control'] );
+$gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
 
 // display submissions if we have the perm to approve them
 if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {

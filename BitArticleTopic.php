@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.21 2006/02/02 07:55:23 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.22 2006/02/08 23:24:23 spiderr Exp $
  * @package article
  */
 
@@ -126,7 +126,7 @@ class BitArticleTopic extends BitBase {
 			}
 
 			if( $iParamHash['topic_id'] ) {
-				$this->mDb->associateUpdate( BIT_DB_PREFIX."article_topics", $iParamHash, array( 'name' => 'topic_id', 'value'=> $iParamHash['topic_id'] ) );
+				$this->mDb->associateUpdate( BIT_DB_PREFIX."article_topics", $iParamHash, array( 'topic_id' => $iParamHash['topic_id'] ) );
 			} else {
 				$iParamHash['topic_id'] = $topicId;
 				$this->mDb->associateInsert( BIT_DB_PREFIX."article_topics", $iParamHash );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.55 2006/02/05 16:54:18 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.56 2006/02/08 23:24:23 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.55 2006/02/05 16:54:18 lsces Exp $
+ * $Id: BitArticle.php,v 1.56 2006/02/08 23:24:23 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.55 $ $Date: 2006/02/05 16:54:18 $ $Author: lsces $
+ * @version $Revision: 1.56 $ $Date: 2006/02/08 23:24:23 $ $Author: spiderr $
  */
 
 /**
@@ -161,8 +161,7 @@ class BitArticle extends LibertyAttachable {
 			$this->mDb->StartTrans();
 
 			if( $this->isValid() ) {
-				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
-				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
+				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], array( "article_id" => $pParamHash['article_id'] ) );
 			} else {
 				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
 				if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {

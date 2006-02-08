@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17.2.5 2006/01/28 09:17:49 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.17.2.6 2006/02/08 03:02:41 seannerd Exp $
  * @package article
  * @subpackage functions
  */
@@ -77,11 +77,6 @@ if( !empty( $_REQUEST["save"] ) ) {
 		if( $gContent->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
 			header ( "location: " . ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
 		} else {
-			// Add the article to the search index
-			if( $gBitSystem->isPackageActive( 'search' ) and $gBitSystem->isFeatureActive("search_index_on_submit")) {
-				require_once( SEARCH_PKG_PATH.'refresh_functions.php');
-				refresh_index_tiki_content($gContent->mContentId);
-			}
 			header ( "location: " . ARTICLES_PKG_URL. "index.php" );
 		}
 	}

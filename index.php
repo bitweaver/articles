@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.11 2006/02/08 21:51:12 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.12 2006/02/09 10:30:36 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -27,7 +27,7 @@ if( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) {
 	$_REQUEST['type_id']     = !empty( $_REQUEST['type_id'] )     ? $_REQUEST['type_id']     : NULL;
 } else {
 	$_REQUEST['status_id']   = ARTICLE_STATUS_APPROVED;
-	$_REQUEST['max_records'] = $gBitSystem->mPrefs['max_articles'];
+	$_REQUEST['max_records'] = $gBitSystem->getPreference( 'max_articles' );
 }
 $articles = $gContent->getList( $_REQUEST );
 $gBitSmarty->assign( 'articles', $articles['data'] );

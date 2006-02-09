@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.57 2006/02/09 10:30:36 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.58 2006/02/09 12:53:32 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.57 2006/02/09 10:30:36 squareing Exp $
+ * $Id: BitArticle.php,v 1.58 2006/02/09 12:53:32 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.57 $ $Date: 2006/02/09 10:30:36 $ $Author: squareing $
+ * @version $Revision: 1.58 $ $Date: 2006/02/09 12:53:32 $ $Author: lsces $
  */
 
 /**
@@ -567,7 +567,7 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function getList( &$pParamHash ) {
-		global $gBitSystem;
+		global $gBitSystem, $gBitUser;
 
 		if( empty( $pParamHash['sort_mode'] ) ) {
 			$pParamHash['sort_mode'] = 'publish_date_desc';
@@ -613,6 +613,11 @@ class BitArticle extends LibertyAttachable {
 		} else {
 			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( top.`active` != 'n' OR top.`active` IS NULL ) ";
 		}
+		if( !$gBitSystem->isPackageActive( 'gatekeeper' ) ) { 
+			$groups = array_keys($gBitUser->mGroups);
+			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." lc.`group_id` IN ( ".implode( ',',array_fill ( 0, count( $groups ),'?' ) )." )";
+			$bindvars = array_merge( $bindvars, $groups );
+		}		
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing

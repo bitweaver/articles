@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.12 2006/01/30 22:05:18 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.13 2006/02/09 03:03:44 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.12 2006/01/30 22:05:18 seannerd Exp $
+ * $Id: BitArticle.php,v 1.40.2.13 2006/02/09 03:03:44 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.12 $ $Date: 2006/01/30 22:05:18 $ $Author: seannerd $
+ * @version $Revision: 1.40.2.13 $ $Date: 2006/02/09 03:03:44 $ $Author: seannerd $
  */
 
 /**
@@ -593,7 +593,6 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		LibertyContent::prepGetList( $pParamHash );
-
 		$bindvars = array();
 		$find = $pParamHash['find'];
 
@@ -742,6 +741,7 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function setStatus( $pStatusId, $pArticleId = NULL ) {
+		global $gBitSystem;
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
 		if( !in_array( $pStatusId, $validStatuses ) ) {
@@ -752,10 +752,20 @@ class BitArticle extends LibertyAttachable {
 		if( empty( $pArticleId ) && $this->isValid() ) {
 			$pArticleId = $this->mArticleId;
 		}
-
 		if( @$this->verifyId( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
-			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
+			$rs  = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
+			// Sticking this hack to add the article to the search index after approval or delete it from the index otherwise.
+			if( $gBitSystem->isPackageActive( 'search' ) ) {
+				include_once( SEARCH_PKG_PATH.'refresh_functions.php' );
+				$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `article_id` = ?";
+				$contentId = $this->mDb->getOne($sql, array($pArticleId));
+				if ($pStatusId == ARTICLE_STATUS_APPROVED) {
+					refresh_index($contentId);
+				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) { // delete it from the search index unless retired ...
+					delete_index($contentId);
+				}
+			}  // end of hack
 			return $pStatusId;
 		}
 	}

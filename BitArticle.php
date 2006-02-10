@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.58 2006/02/09 12:53:32 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.59 2006/02/10 07:25:42 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.58 2006/02/09 12:53:32 lsces Exp $
+ * $Id: BitArticle.php,v 1.59 2006/02/10 07:25:42 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.58 $ $Date: 2006/02/09 12:53:32 $ $Author: lsces $
+ * @version $Revision: 1.59 $ $Date: 2006/02/10 07:25:42 $ $Author: lsces $
  */
 
 /**
@@ -27,7 +27,6 @@ require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
-define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
 define( 'ARTICLE_STATUS_DENIED', 0 );
@@ -86,20 +85,23 @@ class BitArticle extends LibertyAttachable {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
-			$lookupId = @$this->verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
+			$bindVars = array(); $selectSql = ''; $joinSql = ''; $whereSql = '';
+			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mArticleId )? $this->mArticleId : $this->mContentId );
+			$this->getServicesSql( 'content_load_function', $selectSql, $joinSql, $whereSql, $bindVars );
+
 			$query = "SELECT a.*, lc.*, atype.*, atopic.*, " .
 				"uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`, " .
 				"uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ," .
-				"lf.`storage_path` as `image_storage_path` " .
+				"lf.`storage_path` as `image_storage_path` $selectSql" .
 				"FROM `".BIT_DB_PREFIX."articles` a " .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )".
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )".
-				"INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )" .
+				"INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) $joinSql" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )" .
 				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )" .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )" .
 				"LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )" .
-				"WHERE a.`$lookupColumn`=?";
+				"WHERE a.`$lookupColumn`=? $whereSql";
 			$result = $this->mDb->query( $query, array( $lookupId ) );
 
 			global $gBitSystem;
@@ -125,6 +127,8 @@ class BitArticle extends LibertyAttachable {
 			$comment = &new LibertyComment();
 			$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 				LibertyAttachable::load();
+			} else {
+				$this->mArticleId = NULL;
 			}
 		}
 		return( count( $this->mInfo ) );
@@ -575,77 +579,76 @@ class BitArticle extends LibertyAttachable {
 
 		LibertyContent::prepGetList( $pParamHash );
 
-		$bindvars = array();
-		$find = $pParamHash['find'];
+		$joinSql = '';
+		$selectSql = '';
+		$bindVars = array();
+		array_push( $bindVars, $this->mContentTypeGuid );
+		$this->getServicesSql( 'content_list_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
+		$find = $pParamHash['find'];
 		if( is_array( $find ) ) {
 			// you can use an array of articles
-			$mid = " WHERE lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
-			$bindvars = $find;
+			$whereSql = " AND lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
+			$bindVars[] = $find;
 		} elseif( is_string( $find ) ) {
 			// or a string
-			$mid = " WHERE UPPER( lc.`title` ) LIKE ? ";
-			$bindvars = array( '%'.strtoupper( $find ).'%' );
+			$whereSql = " AND UPPER( lc.`title` ) LIKE ? ";
+			$bindVars[] = array( '%'.strtoupper( $find ).'%' );
 		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
-			$mid = " WHERE lc.`creator_user_id` = ? ";
-			$bindvars = array( $pParamHash['user_id'] );
+			$whereSql = " AND lc.`creator_user_id` = ? ";
+			$bindVars[] = array( $pParamHash['user_id'] );
 		} else {
-			$mid = "";
+			$whereSql = "";
 		}
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`status_id` = ? ";
-			$bindvars[] = ( int )$pParamHash['status_id'];
+			$whereSql .= " AND a.`status_id` = ? ";
+			$bindVars[] = $pParamHash['status_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['type_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`article_type_id` = ? ";
-			$bindvars[] = ( int )$pParamHash['type_id'];
+			$whereSql .= " AND a.`article_type_id` = ? ";
+			$bindVars[] = ( int )$pParamHash['type_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`topic_id` = ? ";
-			$bindvars[] = ( int )$pParamHash['topic_id'];
+			$whereSql .= " AND a.`topic_id` = ? ";
+			$bindVars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." UPPER( top.`topic_name` ) = ? ";
-			$bindvars[] = strtoupper( $pParamHash['topic'] );
+			$whereSql .= " AND UPPER( top.`topic_name` ) = ? ";
+			$bindVars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." ( top.`active` != 'n' OR top.`active` IS NULL ) ";
+			$whereSql .= " AND ( top.`active` != 'n' OR top.`active` IS NULL ) ";
 		}
-		if( !$gBitSystem->isPackageActive( 'gatekeeper' ) ) { 
-			$groups = array_keys($gBitUser->mGroups);
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." lc.`group_id` IN ( ".implode( ',',array_fill ( 0, count( $groups ),'?' ) )." )";
-			$bindvars = array_merge( $bindvars, $groups );
-		}		
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing
 		if( empty( $pParamHash['show_expired'] ) ) {
 			$timestamp = $gBitSystem->getUTCTime();
-			$mid .= ( empty( $mid ) ? " WHERE " : " AND " )." a.`publish_date` < ? AND a.`expire_date` > ? ";
-			$bindvars[] = ( int )$timestamp;
-			$bindvars[] = ( int )$timestamp;
+			$whereSql .= " AND a.`publish_date` < ? AND a.`expire_date` > ? ";
+			$bindVars[] = ( int )$timestamp;
+			$bindVars[] = ( int )$timestamp;
 		}
 
 		$query = "SELECT a.*, lc.*, top.*, atype.*, astatus.`status_name`,
-			lf.`storage_path` as `image_storage_path`
+			lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) $joinSql
 			INNER JOIN `".BIT_DB_PREFIX."article_status` astatus ON( astatus.`status_id` = a.`status_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
-			".( !empty( $mid ) ? $mid.' AND ' : ' WHERE ' )." lc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'
+			WHERE lc.`content_type_guid` = ? $whereSql 
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
+			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) $joinSql
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
-			".( !empty( $mid )? $mid.' AND ' : ' WHERE ' )." lc.`content_type_guid` = '".BITARTICLE_CONTENT_TYPE_GUID."'";
+			WHERE lc.`content_type_guid` = ? $whereSql";
 
-		$result = $this->mDb->query( $query, $bindvars, $pParamHash['max_records'], $pParamHash['offset'] );
+		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
@@ -677,7 +680,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		$pParamHash["data"] = $ret;
-		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindvars );
+		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 
 		LibertyContent::postGetList( $pParamHash );
 

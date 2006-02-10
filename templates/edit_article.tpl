@@ -163,7 +163,9 @@
 					{/legend}
 				{/jstab}
 
-				{jstab title="Article Dates"}
+				{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
+
+				{jstab title="Advanced"}
 					{legend legend="Publication and Expiration Dates"}
 						<div class="row">
 							<input type="hidden" name="publishDateInput" value="1" />
@@ -185,11 +187,7 @@
 							{/forminput}
 						</div>
 					{/legend}
-				{/jstab}
 
-				{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
-
-				{jstab title="Advanced"}
 					{legend legend="Custom article image"}
 						{if $article.image_url}
 							<div class="row">

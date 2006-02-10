@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.59 2006/02/10 07:25:42 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.60 2006/02/10 21:18:47 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.59 2006/02/10 07:25:42 lsces Exp $
+ * $Id: BitArticle.php,v 1.60 2006/02/10 21:18:47 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.59 $ $Date: 2006/02/10 07:25:42 $ $Author: lsces $
+ * @version $Revision: 1.60 $ $Date: 2006/02/10 21:18:47 $ $Author: lsces $
  */
 
 /**
@@ -589,11 +589,11 @@ class BitArticle extends LibertyAttachable {
 		if( is_array( $find ) ) {
 			// you can use an array of articles
 			$whereSql = " AND lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
-			$bindVars[] = $find;
+			$bindVars = array_merge( $bindVars, $find );
 		} elseif( is_string( $find ) ) {
 			// or a string
 			$whereSql = " AND UPPER( lc.`title` ) LIKE ? ";
-			$bindVars[] = array( '%'.strtoupper( $find ).'%' );
+			$bindVars[] = '%'.strtoupper( $find ).'%';
 		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
 			$whereSql = " AND lc.`creator_user_id` = ? ";

@@ -1,14 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.21 2006/02/05 21:52:49 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.22 2006/02/13 17:23:26 squareing Exp $ *}
 {strip}
-{assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
-{assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
-
-{if $serviceNavTpls.categorization and !$showDescriptionsOnly}
-	{include file=$serviceNavTpls.categorization"}
+{if !$showDescriptionsOnly}
+	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
 {/if}
 
 <div class="{$outer_div|default:"post"}">
 	<div class="floaticon">
+		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$article}
 		{if $gBitUser->isAdmin() || $gContent->isOwner( $article )}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 		{/if}
@@ -60,6 +58,7 @@
 				</span>
 			{/if}
 
+			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{if $showDescriptionsOnly}
 				{$article.parsed_description}
 			{else}
@@ -93,7 +92,5 @@
 	{include file="bitpackage:liberty/comments.tpl"}
 {/if}
 
-{if $serviceViewTpls.categorization and !$showDescriptionsOnly}
-	{include file=$serviceViewTpls.categorization"}
-{/if}
+{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='view' serviceHash=$article}
 {/strip}

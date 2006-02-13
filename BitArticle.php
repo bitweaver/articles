@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.60 2006/02/10 21:18:47 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.61 2006/02/13 10:06:06 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.60 2006/02/10 21:18:47 lsces Exp $
+ * $Id: BitArticle.php,v 1.61 2006/02/13 10:06:06 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.60 $ $Date: 2006/02/10 21:18:47 $ $Author: lsces $
+ * @version $Revision: 1.61 $ $Date: 2006/02/13 10:06:06 $ $Author: squareing $
  */
 
 /**
@@ -700,7 +700,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( @$this->verifyId( $articleId ) ) {
-			if( $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
+			if( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
 				$ret = ARTICLES_PKG_URL.$articleId;
 			} else if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {

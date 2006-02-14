@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.61 2006/02/13 10:06:06 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.62 2006/02/14 21:14:27 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.61 2006/02/13 10:06:06 squareing Exp $
+ * $Id: BitArticle.php,v 1.62 2006/02/14 21:14:27 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.61 $ $Date: 2006/02/13 10:06:06 $ $Author: squareing $
+ * @version $Revision: 1.62 $ $Date: 2006/02/14 21:14:27 $ $Author: squareing $
  */
 
 /**
@@ -124,8 +124,8 @@ class BitArticle extends LibertyAttachable {
 				/* get the "ago" time */
 				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
 
-			$comment = &new LibertyComment();
-			$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
+				$comment = &new LibertyComment();
+				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 				LibertyAttachable::load();
 			} else {
 				$this->mArticleId = NULL;
@@ -588,18 +588,16 @@ class BitArticle extends LibertyAttachable {
 		$find = $pParamHash['find'];
 		if( is_array( $find ) ) {
 			// you can use an array of articles
-			$whereSql = " AND lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
+			$whereSql .= " AND lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindVars = array_merge( $bindVars, $find );
 		} elseif( is_string( $find ) ) {
 			// or a string
-			$whereSql = " AND UPPER( lc.`title` ) LIKE ? ";
+			$whereSql .= " AND UPPER( lc.`title` ) LIKE ? ";
 			$bindVars[] = '%'.strtoupper( $find ).'%';
 		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
-			$whereSql = " AND lc.`creator_user_id` = ? ";
+			$whereSql .= " AND lc.`creator_user_id` = ? ";
 			$bindVars[] = array( $pParamHash['user_id'] );
-		} else {
-			$whereSql = "";
 		}
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
@@ -631,16 +629,15 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT a.*, lc.*, top.*, atype.*, astatus.`status_name`,
-			lf.`storage_path` as `image_storage_path` $selectSql
+		$query = "SELECT a.*, lc.*, top.*, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
-			INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) $joinSql
-			INNER JOIN `".BIT_DB_PREFIX."article_status` astatus ON( astatus.`status_id` = a.`status_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
-			WHERE lc.`content_type_guid` = ? $whereSql 
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
+				INNER JOIN `".BIT_DB_PREFIX."article_status` astatus ON( astatus.`status_id` = a.`status_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` top ON( top.`topic_id` = a.`topic_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
+			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a

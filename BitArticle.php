@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.62 2006/02/14 21:14:27 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.63 2006/02/14 21:29:29 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.62 2006/02/14 21:14:27 squareing Exp $
+ * $Id: BitArticle.php,v 1.63 2006/02/14 21:29:29 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.62 $ $Date: 2006/02/14 21:14:27 $ $Author: squareing $
+ * @version $Revision: 1.63 $ $Date: 2006/02/14 21:29:29 $ $Author: squareing $
  */
 
 /**
@@ -85,24 +85,23 @@ class BitArticle extends LibertyAttachable {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
-			$bindVars = array(); $selectSql = ''; $joinSql = ''; $whereSql = '';
-			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mArticleId )? $this->mArticleId : $this->mContentId );
+			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, lc.*, atype.*, atopic.*, " .
-				"uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`, " .
-				"uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ," .
-				"lf.`storage_path` as `image_storage_path` $selectSql" .
-				"FROM `".BIT_DB_PREFIX."articles` a " .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )".
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )".
-				"INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) $joinSql" .
-				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )" .
-				"LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )" .
-				"LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )" .
-				"WHERE a.`$lookupColumn`=? $whereSql";
-			$result = $this->mDb->query( $query, array( $lookupId ) );
+			$query = "SELECT a.*, lc.*, atype.*, atopic.*,
+				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
+				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
+				lf.`storage_path` as `image_storage_path` $selectSql
+				FROM `".BIT_DB_PREFIX."articles` a
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
+				WHERE a.`$lookupColumn`=? $whereSql";
+			$result = $this->mDb->query( $query, $bindVars );
 
 			global $gBitSystem;
 			if( $result && $result->numRows() ) {

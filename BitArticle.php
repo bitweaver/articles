@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.65 2006/02/15 00:43:24 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.66 2006/02/15 01:56:39 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.65 2006/02/15 00:43:24 seannerd Exp $
+ * $Id: BitArticle.php,v 1.66 2006/02/15 01:56:39 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.65 $ $Date: 2006/02/15 00:43:24 $ $Author: seannerd $
+ * @version $Revision: 1.66 $ $Date: 2006/02/15 01:56:39 $ $Author: seannerd $
  */
 
 /**
@@ -616,7 +616,8 @@ class BitArticle extends LibertyAttachable {
 			$whereSql .= " AND UPPER( tp.`topic_name` ) = ? ";
 			$bindVars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			$whereSql .= " AND ( tp.`active` != 'n' OR tp.`active` IS NULL ) ";
+			//$whereSql .= " AND ( tp.`active` != 'n' OR tp.`active` IS NULL ) ";
+			$whereSql .= " AND tp.`active` != 'n' ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates

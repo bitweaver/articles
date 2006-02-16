@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.67 2006/02/16 11:10:23 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.68 2006/02/16 13:48:10 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.67 2006/02/16 11:10:23 squareing Exp $
+ * $Id: BitArticle.php,v 1.68 2006/02/16 13:48:10 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.67 $ $Date: 2006/02/16 11:10:23 $ $Author: squareing $
+ * @version $Revision: 1.68 $ $Date: 2006/02/16 13:48:10 $ $Author: squareing $
  */
 
 /**
@@ -115,10 +115,11 @@ class BitArticle extends LibertyAttachable {
 				$this->mTopicId   = $this->mInfo['topic_id'];
 				$this->mTypeId	  = $this->mInfo['article_type_id'];
 
-				$this->mInfo['creator'] = ( isset( $this->mInfo['creator_real_name'] )? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
-				$this->mInfo['editor'] = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
+				$this->mInfo['creator']     = ( isset( $this->mInfo['creator_real_name'] )? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
+				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				$this->mInfo['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] ), $this->mInfo['format_guid'] );
+				$this->mInfo['data']        = preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] );
+				$this->mInfo['parsed_data'] = $this->parseData();
 
 				/* get the "ago" time */
 				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
@@ -427,7 +428,8 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( empty( $data['parsed_data'] ) ) {
-			$data['parsed_data'] = $this->parseData( $data['data'],$data['format_guid'] );
+			$data['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $data['data'] );
+			$data['parsed_data'] = $this->parseData( $data );
 		}
 
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
@@ -613,11 +615,11 @@ class BitArticle extends LibertyAttachable {
 			$whereSql .= " AND a.`topic_id` = ? ";
 			$bindVars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
-			$whereSql .= " AND UPPER( atp.`topic_name` ) = ? ";
+			$whereSql .= " AND UPPER( atopic.`topic_name` ) = ? ";
 			$bindVars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			//$whereSql .= " AND ( atp.`active` != 'n' OR atp.`active` IS NULL ) ";
-			$whereSql .= " AND atp.`active` != 'n' ";
+			//$whereSql .= " AND ( atopic.`active` != 'n' OR atopic.`active` IS NULL ) ";
+			$whereSql .= " AND atopic.`active` != 'n' ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
@@ -629,11 +631,11 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT a.*, lc.*, atp.*, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
+		$query = "SELECT a.*, lc.*, atopic.*, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`     lc ON lc.`content_id`         = a.`content_id`
 				INNER JOIN      `".BIT_DB_PREFIX."article_status` astatus ON astatus.`status_id`     = a.`status_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`     atp ON at.`topic_id`           = a.`topic_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`  atopic ON atopic.`topic_id`       = a.`topic_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`    atype ON atype.`article_type_id` = a.`article_type_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON la.`attachment_id`      = a.`image_attachment_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`       lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
@@ -641,8 +643,8 @@ class BitArticle extends LibertyAttachable {
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
-			INNER JOIN      `".BIT_DB_PREFIX."liberty_content` lc ON lc.`content_id` = a.`content_id` $joinSql
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atp ON atp.`topic_id`  = a.`topic_id`
+			INNER JOIN      `".BIT_DB_PREFIX."liberty_content`    lc ON lc.`content_id`   = a.`content_id`
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON atopic.`topic_id` = a.`topic_id` $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
 
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
@@ -652,15 +654,20 @@ class BitArticle extends LibertyAttachable {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
 			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_threshold' ) );
 
+			// deal with the parsing
+			$parseHash['format_guid'] = $res['format_guid'];
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
-				$res['parsed_description'] = $this->parseData( $parts[0], $res['format_guid'] );
-			} else {
-				$res['parsed_description'] = $this->parseData( substr( $res['data'], 0, $gBitSystem->getPreference( 'article_description_length' ) ), $res['format_guid'] );
+				$parseHash['data'] = $parts[0];
+				} else {
+				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getPreference( 'article_description_length' ) );
 			}
+			$res['parsed_description'] = $this->parseData( $parseHash );
 
-			$res['parsed_data'] = $this->parseData( preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] ), $res['format_guid'] );
+			$parseHash['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] );
+			$res['parsed_data'] = $this->parseData( $parseHash );
 
+			// this is needed to remove trailing stuff from the parser and insert a link to the actual article
 			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
 			if( strlen( $res['parsed_description'] ) != strlen( $res['parsed_data'] ) ) {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.66 2006/02/15 01:56:39 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.67 2006/02/16 11:10:23 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.66 2006/02/15 01:56:39 seannerd Exp $
+ * $Id: BitArticle.php,v 1.67 2006/02/16 11:10:23 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.66 $ $Date: 2006/02/15 01:56:39 $ $Author: seannerd $
+ * @version $Revision: 1.67 $ $Date: 2006/02/16 11:10:23 $ $Author: squareing $
  */
 
 /**
@@ -613,11 +613,11 @@ class BitArticle extends LibertyAttachable {
 			$whereSql .= " AND a.`topic_id` = ? ";
 			$bindVars[] = ( int )$pParamHash['topic_id'];
 		} elseif( !empty( $pParamHash['topic'] ) ) {
-			$whereSql .= " AND UPPER( tp.`topic_name` ) = ? ";
+			$whereSql .= " AND UPPER( atp.`topic_name` ) = ? ";
 			$bindVars[] = strtoupper( $pParamHash['topic'] );
 		} else {
-			//$whereSql .= " AND ( tp.`active` != 'n' OR tp.`active` IS NULL ) ";
-			$whereSql .= " AND tp.`active` != 'n' ";
+			//$whereSql .= " AND ( atp.`active` != 'n' OR atp.`active` IS NULL ) ";
+			$whereSql .= " AND atp.`active` != 'n' ";
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
@@ -629,20 +629,20 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = ( int )$timestamp;
 		}
 
-		$query = "SELECT a.*, lc.*, tp.*, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
+		$query = "SELECT a.*, lc.*, atp.*, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
-				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`     lc ON lc.`content_id`         = a.`content_id` 
-				INNER JOIN      `".BIT_DB_PREFIX."article_status` astatus ON astatus.`status_id`     = a.`status_id` 
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`      tp ON tp.`topic_id`           = a.`topic_id` 
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`    atype ON atype.`article_type_id` = a.`article_type_id` 
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON la.`attachment_id`      = a.`image_attachment_id` 
+				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`     lc ON lc.`content_id`         = a.`content_id`
+				INNER JOIN      `".BIT_DB_PREFIX."article_status` astatus ON astatus.`status_id`     = a.`status_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`     atp ON at.`topic_id`           = a.`topic_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`    atype ON atype.`article_type_id` = a.`article_type_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON la.`attachment_id`      = a.`image_attachment_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`       lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN      `".BIT_DB_PREFIX."liberty_content` lc ON lc.`content_id` = a.`content_id` $joinSql
-			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`  tp ON tp.`topic_id`   = a.`topic_id` 
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atp ON atp.`topic_id`  = a.`topic_id`
 			WHERE lc.`content_type_guid` = ? $whereSql";
 
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );

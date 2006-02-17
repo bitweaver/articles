@@ -1,6 +1,11 @@
 <?php
 global $gBitSystem, $gBitUser, $gBitSmarty;
-$gBitSystem->registerPackage( 'articles', dirname( __FILE__ ).'/' );
+
+$registerHash = array(
+	'package_name' => 'articles',
+	'package_path' => dirname( __FILE__ ).'/',
+);
+$gBitSystem->registerPackage( $registerHash );
 
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 

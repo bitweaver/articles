@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.13 2006/02/04 19:04:34 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.14 2006/02/18 19:16:04 bitweaver Exp $
  * @package article
  * @subpackage functions
  */
@@ -27,7 +27,7 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.
-if( $gContent->mInfo['status_id'] != ARTICLE_STATUS_APPROVED && !( $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->isAdmin() ) ) {
+if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->hasPermission( 'bit_p_edit_submission' ) || $gBitUser->isAdmin() ) ) {
 	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot view this article" ) );
 	$gBitSystem->display( "error.tpl" );
 	die;

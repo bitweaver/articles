@@ -34,7 +34,7 @@ $tables = array(
 		topic_id I4 AUTO PRIMARY,
 		topic_name C(40),
 		has_topic_image C(1),
-		active C(1),
+		active_topic C(1),
 		created I8
 	",
 

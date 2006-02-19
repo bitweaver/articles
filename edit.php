@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.20 2006/02/02 10:32:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.21 2006/02/19 00:37:50 lsces Exp $
  * @package article
  * @subpackage functions
  */
@@ -84,7 +84,7 @@ if( !empty( $_REQUEST["save"] ) ) {
 }
 
 // Get a topic list
-$topics = BitArticleTopic::getTopicList( array( 'active' => TRUE ) );
+$topics = BitArticleTopic::getTopicList( array( 'active_topic' => TRUE ) );
 $gBitSmarty->assign_by_ref( 'topics', $topics );
 // get list of valid types
 $types = BitArticleType::getTypeList();

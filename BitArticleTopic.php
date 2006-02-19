@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.22 2006/02/08 23:24:23 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.23 2006/02/19 00:37:50 lsces Exp $
  * @package article
  */
 
@@ -71,15 +71,15 @@ class BitArticleTopic extends BitBase {
 		}
 
 		// Whether the topic is active or not
-		if ( empty($iParamHash['active']) || (strtoupper($iParamHash['active']) != 'CHECKED' && strtoupper($iParamHash['active']) != 'ON' && strtoupper($iParamHash['active']) != 'Y')) {
+		if ( empty($iParamHash['active_topic']) || (strtoupper($iParamHash['active_topic']) != 'CHECKED' && strtoupper($iParamHash['active_topic']) != 'ON' && strtoupper($iParamHash['active_topic']) != 'Y')) {
 			if (@$this->verifyId($cleanHash['topic_id'])) {
-				$cleanHash['active'] = 'n';
+				$cleanHash['active_topic'] = 'n';
 			} else {
 				// Probably a new topic so lets go ahead and enable it
-				$cleanHash['active'] = 'y';
+				$cleanHash['active_topic'] = 'y';
 			}
 		} else {
-			$cleanHash['active'] = 'y';
+			$cleanHash['active_topic'] = 'y';
 		}
 
 		if (empty($iParamHash['created'])) {
@@ -170,8 +170,8 @@ class BitArticleTopic extends BitBase {
 		global $gBitSystem;
 
 		$where = '';
-		if( !empty( $pOptionHash['active'] ) ) {
-			$where = " WHERE la.`active` = 'y' ";
+		if( !empty( $pOptionHash['active_topic'] ) ) {
+			$where = " WHERE la.`active_topic` = 'y' ";
 		}
 
         $query = "SELECT la.*
@@ -214,9 +214,9 @@ class BitArticleTopic extends BitBase {
 	}
 
 	function setActivation($iIsActive = FALSE) {
-		$sql = "UPDATE `".BIT_DB_PREFIX."article_topics` SET `active` = '".($iIsActive ? 'y' : 'n')."' WHERE `topic_id` = ?";
+		$sql = "UPDATE `".BIT_DB_PREFIX."article_topics` SET `active_topic` = '".($iIsActive ? 'y' : 'n')."' WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
-		$this->mInfo['active'] = ($iIsActive ? 'y' : 'n');
+		$this->mInfo['active_topic'] = ($iIsActive ? 'y' : 'n');
 	}
 
 	function getTopicArticles() {

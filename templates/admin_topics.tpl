@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.8 2006/01/14 19:53:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.9 2006/02/19 00:37:47 lsces Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -61,7 +61,7 @@
 					</td>
 
 					<td style="text-align:center;">
-						{if $topics[user].active eq 'n'}
+						{if $topics[user].active_topic eq 'n'}
 							{smartlink ititle='activate' ibiticon='liberty/inactive' fActivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{else}
 							{smartlink ititle='deactivate' ibiticon='liberty/active' fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}

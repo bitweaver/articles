@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.4 2006/01/14 19:53:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/edit_topic.tpl,v 1.5 2006/02/19 00:37:47 lsces Exp $ *}
 
 {strip}
 <div class="floaticon">{bithelp}</div>
@@ -25,7 +25,7 @@
 			<div class="row">
 				{formlabel label="Topic Enabled" for="topic_enabled"}
 				{forminput}
-					<input type="checkbox" id="topic_enabled" name="active" {if $gContent->mInfo.active == 'y'}checked="checked"{/if} />
+					<input type="checkbox" id="topic_enabled" name="active_topic" {if $gContent->mInfo.active_topic == 'y'}checked="checked"{/if} />
 					{formhelp note=""}
 				{/forminput}
 			</div>

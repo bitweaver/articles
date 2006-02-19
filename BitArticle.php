@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.14 2006/02/09 17:02:37 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.15 2006/02/19 03:52:19 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.14 2006/02/09 17:02:37 squareing Exp $
+ * $Id: BitArticle.php,v 1.40.2.15 2006/02/19 03:52:19 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.14 $ $Date: 2006/02/09 17:02:37 $ $Author: squareing $
+ * @version $Revision: 1.40.2.15 $ $Date: 2006/02/19 03:52:19 $ $Author: seannerd $
  */
 
 /**
@@ -149,32 +149,37 @@ class BitArticle extends LibertyAttachable {
 	**/
 	function store( &$pParamHash ) {
 		global $gBitSystem;
-		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
-			$table = BIT_DB_PREFIX."tiki_articles";
-			$this->mDb->StartTrans();
-
-			if( $this->isValid() ) {
-				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
-				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
-			} else {
-				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
-				if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
-					// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
-					$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
-				} else {
-					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
-				}
-				$this->mArticleId = $pParamHash['article_store']['article_id'];
-				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
+		if( $this->verify( $pParamHash ) ) {
+			if ( array_search($pParamHash['article_store']['status_id'],
+				array(ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING))) {
+					$this->mInfo["no_index"] = true ;
 			}
+			if (LibertyAttachable::store( $pParamHash ) ) {
+				$table = BIT_DB_PREFIX."tiki_articles";
+				$this->mDb->StartTrans();
 
-			// we need to store any custom image that has been uploaded
-			$this->storeImage( $pParamHash, $_FILES['article_image'] );
+				if( $this->isValid() ) {
+					$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
+					$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
+				} else {
+					$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
+					if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
+						// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
+						$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
+					} else {
+						$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
+					}
+					$this->mArticleId = $pParamHash['article_store']['article_id'];
+					$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
+				}
 
-			$this->mDb->CompleteTrans();
-			$this->load();
+				// we need to store any custom image that has been uploaded
+				$this->storeImage( $pParamHash, $_FILES['article_image'] );
+				$this->mDb->CompleteTrans();
+				$this->load();
+			}
+			return ( count( $this->mErrors ) == 0 );
 		}
-		return ( count( $this->mErrors ) == 0 );
 	}
 
 	/**
@@ -733,30 +738,31 @@ class BitArticle extends LibertyAttachable {
 	* @return new status of article on success - else returns NULL
 	* @access public
 	**/
-	function setStatus( $pStatusId, $pArticleId = NULL ) {
+	function setStatus( $pStatusId, $pArticleId = null, $pContentId = NULL ) {
 		global $gBitSystem;
-		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
+		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, 
+								ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
 		if( !in_array( $pStatusId, $validStatuses ) ) {
 			$this->mErrors[] = "Invalid article status";
 			return FALSE;
 		}
+	
+		if(  empty( $pContentId ) and  $this->isValid()) $pContentId = $this->mContentId ;
+		if(  empty( $pArticleId ) and  $this->isValid()) $pArticleId = $this->mArticleId ;
+		if( !empty( $pContentId ) and !$this->isValid()) $this->mContentId = $pContentId ;
+		if( !empty( $pArticleId ) and !$this->isValid()) $this->mArticleId = $pArticleId ;
 
-		if( empty( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
 		if( @$this->verifyId( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."tiki_articles` SET `status_id` = ? WHERE `article_id` = ?";
 			$rs  = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
-			// Sticking this hack to add the article to the search index after approval or delete it from the index otherwise.
+			// Calling the index function for approved articles ...
 			if( $gBitSystem->isPackageActive( 'search' ) ) {
 				include_once( SEARCH_PKG_PATH.'refresh_functions.php' );
-				$sql = "SELECT `content_id` FROM `".BIT_DB_PREFIX."tiki_articles` WHERE `article_id` = ?";
-				$contentId = $this->mDb->getOne($sql, array($pArticleId));
 				if ($pStatusId == ARTICLE_STATUS_APPROVED) {
-					refresh_index($contentId);
-				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) { // delete it from the search index unless retired ...
-					delete_index($contentId);
+					refresh_index($this);
+				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) { 
+					delete_index($pContentId); // delete it from the search index unless retired ...
 				}
 			}  // end of hack
 			return $pStatusId;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9.2.4 2006/02/08 03:02:41 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.9.2.5 2006/02/19 03:53:17 seannerd Exp $
  * @package article
  * @subpackage functions
  */
@@ -84,7 +84,7 @@ $article = new BitArticle();
 // change the status of an article first
 if( !empty( $_REQUEST['action'] ) ) {
 	if( !empty( $_REQUEST['article_id'] ) && !empty( $_REQUEST['set_status_id'] ) && $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
-		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'] );
+		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'], $_REQUEST['content_id'] );
 	}
 }
 

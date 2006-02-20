@@ -12,7 +12,7 @@ $tables = array(
 	",
 
 	'article_types' => "
-		article_type_id I4 AUTO PRIMARY,
+		article_type_id I4 PRIMARY,
 		type_name C(50),
 		use_ratings C(1),
 		show_pre_publ C(1),
@@ -31,7 +31,7 @@ $tables = array(
 	",
 
 	'article_topics' => "
-		topic_id I4 AUTO PRIMARY,
+		topic_id I4 PRIMARY,
 		topic_name C(40),
 		has_topic_image C(1),
 		active_topic C(1),
@@ -39,7 +39,7 @@ $tables = array(
 	",
 
 	'articles' => "
-		article_id I4 AUTO PRIMARY,
+		article_id I4 PRIMARY,
 		content_id I4 NOTNULL,
 		description X,
 		author_name C(250),
@@ -76,10 +76,11 @@ $gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
 	'dependencies' => '',
 ) );
 
-// these sequences are automatically generated, but Firebird prefers they exist
+// these sequences are automatically generated, but Firebird and MSSQL prefers they exist
+// Starting the numbering off at 5 for types to allow room for the INSERTs later.
 $sequences = array (
 	'article_topics_t_id_seq' => array( 'start' => 1 ),
-	'article_types_a_t_id_seq' => array( 'start' => 1 ),
+	'article_types_a_t_id_seq' => array( 'start' => 5 ),
 	'articles_article_id_seq' => array( 'start' => 1 ),
 );
 $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
@@ -89,10 +90,10 @@ $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
 // $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_DIR, $indices );
 
 $gBitInstaller->registerSchemaDefault( ARTICLES_PKG_DIR, array(
-	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`) VALUES ('Article')",
-	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `use_ratings`) VALUES ('Review','y')",
-	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `show_post_expire`) VALUES ('Event','n')",
-	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`type_name`, `show_post_expire`,`heading_only`,`allow_comments`) VALUES ('Classified','n','y','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`) VALUES (1, 'Article')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`, `use_ratings`) VALUES (2, 'Review','y')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`, `show_post_expire`) VALUES (3, 'Event','n')",
+	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`, `show_post_expire`,`heading_only`,`allow_comments`) VALUES (4, 'Classified','n','y','n')",
 	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (  0, 'Denied') ",
 	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (100, 'Draft') ",
 	"INSERT INTO `".BIT_DB_PREFIX."article_status` (`status_id`, `status_name`) VALUES (200, 'Pending Approval') ",

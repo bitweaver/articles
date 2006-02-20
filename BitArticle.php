@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.71 2006/02/19 00:37:50 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.72 2006/02/20 04:56:08 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.71 2006/02/19 00:37:50 lsces Exp $
+ * $Id: BitArticle.php,v 1.72 2006/02/20 04:56:08 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.71 $ $Date: 2006/02/19 00:37:50 $ $Author: lsces $
+ * @version $Revision: 1.72 $ $Date: 2006/02/20 04:56:08 $ $Author: seannerd $
  */
 
 /**
@@ -28,12 +28,6 @@ require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
 define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
-
-define( 'ARTICLE_STATUS_DENIED', 0 );
-define( 'ARTICLE_STATUS_DRAFT', 100 );
-define( 'ARTICLE_STATUS_PENDING', 200 );
-define( 'ARTICLE_STATUS_APPROVED', 300 );
-define( 'ARTICLE_STATUS_RETIRED', 400 );
 
 /**
  * @package article
@@ -304,6 +298,11 @@ class BitArticle extends LibertyAttachable {
 			} else {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;		// Default status
 			}
+		}
+
+		if ( array_search($pParamHash['article_store']['status_id'],
+			array(ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING))) {
+				$this->mInfo["no_index"] = true ;
 		}
 
 		return( count( $this->mErrors )== 0 );
@@ -736,13 +735,18 @@ class BitArticle extends LibertyAttachable {
 	* @return new status of article on success - else returns NULL
 	* @access public
 	**/
-	function setStatus( $pStatusId, $pArticleId = NULL ) {
+	function setStatus( $pStatusId, $pArticleId = NULL, $pContentId = NULL ) {
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
 		if( !in_array( $pStatusId, $validStatuses ) ) {
 			$this->mErrors[] = "Invalid article status";
 			return FALSE;
 		}
+
+		if(  empty( $pContentId ) and  $this->isValid()) $pContentId = $this->mContentId ;
+		if(  empty( $pArticleId ) and  $this->isValid()) $pArticleId = $this->mArticleId ;
+		if( !empty( $pContentId ) and !$this->isValid()) $this->mContentId = $pContentId ;
+		if( !empty( $pArticleId ) and !$this->isValid()) $this->mArticleId = $pArticleId ;
 
 		if( empty( $pArticleId ) && $this->isValid() ) {
 			$pArticleId = $this->mArticleId;
@@ -751,6 +755,15 @@ class BitArticle extends LibertyAttachable {
 		if( @$this->verifyId( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."articles` SET `status_id` = ? WHERE `article_id` = ?";
 			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
+			// Calling the index function for approved articles ...
+			if( $gBitSystem->isPackageActive( 'search' ) ) {
+				include_once( SEARCH_PKG_PATH.'refresh_functions.php' );
+				if ($pStatusId == ARTICLE_STATUS_APPROVED) {
+					refresh_index($this);
+				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) { 
+					delete_index($pContentId); // delete it from the search index unless retired ...
+				}
+			}
 			return $pStatusId;
 		}
 	}

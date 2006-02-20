@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.15 2006/02/19 03:52:19 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.40.2.16 2006/02/20 02:12:15 seannerd Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.40.2.15 2006/02/19 03:52:19 seannerd Exp $
+ * $Id: BitArticle.php,v 1.40.2.16 2006/02/20 02:12:15 seannerd Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.40.2.15 $ $Date: 2006/02/19 03:52:19 $ $Author: seannerd $
+ * @version $Revision: 1.40.2.16 $ $Date: 2006/02/20 02:12:15 $ $Author: seannerd $
  */
 
 /**
@@ -149,37 +149,31 @@ class BitArticle extends LibertyAttachable {
 	**/
 	function store( &$pParamHash ) {
 		global $gBitSystem;
-		if( $this->verify( $pParamHash ) ) {
-			if ( array_search($pParamHash['article_store']['status_id'],
-				array(ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING))) {
-					$this->mInfo["no_index"] = true ;
-			}
-			if (LibertyAttachable::store( $pParamHash ) ) {
-				$table = BIT_DB_PREFIX."tiki_articles";
-				$this->mDb->StartTrans();
+		if( $this->verify( $pParamHash ) and LibertyAttachable::store( $pParamHash ) ) {
+			$table = BIT_DB_PREFIX."tiki_articles";
+			$this->mDb->StartTrans();
 
-				if( $this->isValid() ) {
-					$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
-					$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
+			if( $this->isValid() ) {
+				$locId = array( "name" => "article_id", "value" => $pParamHash['article_id'] );
+				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], $locId );
+			} else {
+				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
+				if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
+					// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
+					$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
 				} else {
-					$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
-					if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
-						// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
-						$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
-					} else {
-						$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
-					}
-					$this->mArticleId = $pParamHash['article_store']['article_id'];
-					$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
+					$pParamHash['article_store']['article_id'] = $this->mDb->GenID( 'tiki_articles_article_id_seq' );
 				}
-
-				// we need to store any custom image that has been uploaded
-				$this->storeImage( $pParamHash, $_FILES['article_image'] );
-				$this->mDb->CompleteTrans();
-				$this->load();
+				$this->mArticleId = $pParamHash['article_store']['article_id'];
+				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
 			}
-			return ( count( $this->mErrors ) == 0 );
+
+			// we need to store any custom image that has been uploaded
+			$this->storeImage( $pParamHash, $_FILES['article_image'] );
+			$this->mDb->CompleteTrans();
+			$this->load();
 		}
+		return ( count( $this->mErrors ) == 0 );
 	}
 
 	/**
@@ -317,6 +311,11 @@ class BitArticle extends LibertyAttachable {
 			} else {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;		// Default status
 			}
+		}
+
+		if ( array_search($pParamHash['article_store']['status_id'],
+			array(ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING))) {
+				$this->mInfo["no_index"] = true ;
 		}
 
 		return( count( $this->mErrors )== 0 );

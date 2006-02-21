@@ -3,6 +3,7 @@
 		document.getElementById( counterId ).value = maxLimit - document.getElementById( textareaId ).value.length;
 	{rdelim}
 //]]></script>
+{strip}
 <div class="floaticon">{bithelp}</div>
 <div class="admin articles">
 	<div class="header">
@@ -27,7 +28,7 @@
 			<input type="hidden" name="article_id" value="{$gContent->mArticleId}" />
 			<input type="hidden" name="preview_image_url" value="{$article.preview_image_url}" />
 			<input type="hidden" name="preview_image_path" value="{$article.preview_image_path}" />
-			
+
 			{jstabs}
 				{jstab title="Article Body"}
 					{legend legend="Article Body"}
@@ -128,10 +129,7 @@
 
 						<div class="row">
 							{forminput}
-								<textarea id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50"
-									onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
-									onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})"
-								>{$article.data|escape:html}</textarea>
+								<textarea id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})" onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystemPrefs.article_description_length})">{$article.data|escape:html}</textarea>
 								{capture name=artCount}
 									{$article.data|count_characters:true}
 								{/capture}
@@ -223,3 +221,4 @@
 
 	</div><!-- end .body -->
 </div><!-- end .article -->
+{/strip}

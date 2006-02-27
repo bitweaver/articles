@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.74 2006/02/27 20:26:19 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.75 2006/02/27 20:28:20 bitweaver Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.74 2006/02/27 20:26:19 bitweaver Exp $
+ * $Id: BitArticle.php,v 1.75 2006/02/27 20:28:20 bitweaver Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.74 $ $Date: 2006/02/27 20:26:19 $ $Author: bitweaver $
+ * @version $Revision: 1.75 $ $Date: 2006/02/27 20:28:20 $ $Author: bitweaver $
  */
 
 /**
@@ -631,7 +631,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
-		$query = "SELECT a.article_id, a.description , a.author_name, a.image_attachment_id , a.publish_date , a.expire_date , a.rating , lc.*, atopic.topic_id, atopic.topic_name, atopic.has_topic_image, atopic.active_topic, atype.*, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
+		$query = "SELECT a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`, lc.*, atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`, atype.*, astatus.`status_id`, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`     lc ON lc.`content_id`         = a.`content_id`
 				INNER JOIN      `".BIT_DB_PREFIX."article_status` astatus ON astatus.`status_id`     = a.`status_id`

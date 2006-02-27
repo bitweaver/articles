@@ -132,6 +132,12 @@ $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
 	array( ARTICLES_PKG_NAME, 'article_submissions', 'y'),
 	array( ARTICLES_PKG_NAME, 'article_description_length', '500'),
 	array( ARTICLES_PKG_NAME, 'article_date_threshold', 'week'),
-	array( RSS_PKG_NAME, 'rss_'.ARTICLES_PKG_NAME, 'y'),
 ) );
+
+if( defined( 'RSS_PKG_NAME' ) ) {
+	$gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
+		array( RSS_PKG_NAME, 'rss_'.ARTICLES_PKG_NAME, 'y'),
+	) );
+}
+
 ?>

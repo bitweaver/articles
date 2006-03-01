@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.9 2006/03/01 20:16:03 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.10 2006/03/01 21:12:23 spiderr Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -10,7 +10,7 @@
 					<div class="row">
 						{formlabel label=`$output.label` for=$feature}
 						{forminput}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 							{formhelp note=`$output.note` page=`$output.page`}
 						{/forminput}
 					</div>
@@ -60,7 +60,7 @@
 					<div class="row">
 						{formlabel label=`$output.label` for=$feature}
 						{forminput}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 							{formhelp note=`$output.note` page=`$output.page`}
 						{/forminput}
 					</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.21 2006/02/19 00:37:50 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.22 2006/03/01 20:04:37 starrrider Exp $
  * @package article
  * @subpackage functions
  */
@@ -91,7 +91,7 @@ $types = BitArticleType::getTypeList();
 $gBitSmarty->assign_by_ref( 'types', $types );
 
 // WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', 'editarticle' );
+$gBitSmarty->assign( 'textarea_id', LIBERTY_TEXT_AREA );
 
 if ($gBitSystem->isPackageActive( 'quicktags' )) {
 	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );

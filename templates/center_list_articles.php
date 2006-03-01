@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.3 2005/09/26 07:15:09 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.4 2006/03/01 20:16:03 spiderr Exp $
 require_once( '../bit_setup_inc.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
@@ -17,7 +17,7 @@ if (empty($_REQUEST['status_id']) || (!$gBitUser->hasPermission('bit_p_view_subm
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 
-$gBitSmarty->assign('descriptionLength', $gBitSystem->getPreference( 'article_description_length', 500 ) );
+$gBitSmarty->assign('descriptionLength', $gBitSystem->getConfig( 'article_description_length', 500 ) );
 $gBitSmarty->assign('showDescriptionsOnly', TRUE);
 
 //if( empty( $articles ) ) {

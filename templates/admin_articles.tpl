@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.8 2006/01/10 21:11:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.9 2006/03/01 20:16:03 spiderr Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -10,7 +10,7 @@
 					<div class="row">
 						{formlabel label=`$output.label` for=$feature}
 						{forminput}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
 							{formhelp note=`$output.note` page=`$output.page`}
 						{/forminput}
 					</div>
@@ -19,7 +19,7 @@
 				<div class="row">
 					{formlabel label="Maximum Articles" for="articles-maxhome"}
 					{forminput}
-						<input size="5" type="text" name="max_articles" id="articles-maxhome" value="{$gBitSystemPrefs.max_articles|escape}" />
+						<input size="5" type="text" name="max_articles" id="articles-maxhome" value="{$gBitSystem->getConfig('max_articles')|escape}" />
 						{formhelp note="Number of articles shown on the main articles page."}
 					{/forminput}
 				</div>
@@ -27,7 +27,7 @@
 				<div class="row">
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
-						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystemPrefs.article_description_length|escape}" /> {tr}characters{/tr}
+						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystem->getConfig('article_description_length')|escape}" /> {tr}characters{/tr}
 						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body.<br />Changing this value might influence existing articles."}
 					{/forminput}
 				</div>
@@ -35,7 +35,7 @@
 				<div class="row">
 					{formlabel label="Article Image Size" for="article_topic_thumbnail_size"}
 					{forminput}
-						<input size="5" type="text" id="article_topic_thumbnail_size" name="article_topic_thumbnail_size" value="{$gBitSystemPrefs.article_topic_thumbnail_size|default:"160"}" /> {tr}pixels{/tr}
+						<input size="5" type="text" id="article_topic_thumbnail_size" name="article_topic_thumbnail_size" value="{$gBitSystem->getConfig('article_topic_thumbnail_size')|default:"160"}" /> {tr}pixels{/tr}
 						{formhelp note="Here you can set the maximum width and height an article image can have. If you don't want this feature active, set it very high, then your images will not be resized."}
 					{/forminput}
 				</div>
@@ -60,7 +60,7 @@
 					<div class="row">
 						{formlabel label=`$output.label` for=$feature}
 						{forminput}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
 							{formhelp note=`$output.note` page=`$output.page`}
 						{/forminput}
 					</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.10 2006/02/09 10:30:36 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.11 2006/03/01 20:16:01 spiderr Exp $
  * @package article
  * @subpackage functions
  */
@@ -15,8 +15,8 @@ require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
 
-$rss->title = $gBitSystem->getPreference( 'title_rss_articles', $gBitSystem->getPreference( 'site_title' ).' - '.tra( 'Articles' ) );
-$rss->description = $gBitSystem->getPreference( 'desc_rss_articles', $gBitSystem->getPreference( 'site_title' ).' - '.tra( 'RSS Feed' ) );
+$rss->title = $gBitSystem->getConfig( 'title_rss_articles', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'Articles' ) );
+$rss->description = $gBitSystem->getConfig( 'desc_rss_articles', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );
 
 // check permission to view articles
 if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
@@ -30,7 +30,7 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 	$listHash = array(
 		'status_id' => ARTICLE_STATUS_APPROVED,
 		'sort_mode' => 'publish_date_desc',
-		'max_records' => $gBitSystem->getPreference( 'max_rss_articles', 10 ),
+		'max_records' => $gBitSystem->getConfig( 'max_rss_articles', 10 ),
 	);
 	$feeds = $articles->getList( $listHash );
 
@@ -48,7 +48,7 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 		$item->source = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL;
 		$item->author = $feed['author_name'];
 
-		$item->descriptionTruncSize = $gBitSystem->getPreference( 'rssfeed_truncate', 5000 );
+		$item->descriptionTruncSize = $gBitSystem->getConfig( 'rssfeed_truncate', 5000 );
 		$item->descriptionHtmlSyndicated = FALSE;
 
 		// pass the item on to the rss feed creator

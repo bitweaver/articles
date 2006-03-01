@@ -163,7 +163,7 @@ array( 'PHP' => '
 
 	// article images and state
 	// work out what resizer to use
-	$resizeFunc = ( $gBitSystem->getPreference( "image_processor" ) == "imagick" ) ? "liberty_imagick_resize_image" : "liberty_gd_resize_image";
+	$resizeFunc = ( $gBitSystem->getConfig( "image_processor" ) == "imagick" ) ? "liberty_imagick_resize_image" : "liberty_gd_resize_image";
 	// make sure we have a place to store the images
 	$tempDir = TEMP_PKG_PATH.ARTICLES_PKG_NAME;
 	$storageDir = STORAGE_PKG_PATH.ARTICLES_PKG_NAME;

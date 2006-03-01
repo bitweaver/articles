@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.23 2006/02/19 00:37:50 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.24 2006/03/01 20:16:01 spiderr Exp $
  * @package article
  */
 
@@ -11,7 +11,7 @@ global $gBitSystem;
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
-define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', $gBitSystem->getPreference( 'article_topic_thumbnail_size', 160 ) );
+define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', $gBitSystem->getConfig( 'article_topic_thumbnail_size', 160 ) );
 
 /**
  * @package article
@@ -109,7 +109,7 @@ class BitArticleTopic extends BitBase {
 					$this->mErrors['topic_image'] = "Error during attachment of topic image";
 				} else {
 					global $gBitSystem;
-					$resizeFunc = ($gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+					$resizeFunc = ($gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 					$pFileHash['dest_base_name'] = 'topic_'.$topicId;
 					$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 					$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;

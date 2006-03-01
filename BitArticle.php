@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.75 2006/02/27 20:28:20 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.76 2006/03/01 20:16:01 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.75 2006/02/27 20:28:20 bitweaver Exp $
+ * $Id: BitArticle.php,v 1.76 2006/03/01 20:16:01 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.75 $ $Date: 2006/02/27 20:28:20 $ $Author: bitweaver $
+ * @version $Revision: 1.76 $ $Date: 2006/03/01 20:16:01 $ $Author: spiderr $
  */
 
 /**
@@ -116,7 +116,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['parsed_data'] = $this->parseData();
 
 				/* get the "ago" time */
-				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_display_format' ) );
+				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getConfig( 'article_date_display_format' ) );
 
 				$comment = &new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
@@ -323,7 +323,7 @@ class BitArticle extends LibertyAttachable {
 				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
 					$this->mErrors['article_image'] = "Error during attachment of article image";
 				} else {
-					$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+					$resizeFunc = ( $gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 					$storeHash['source_file'] = $tmpImagePath;
 					$storeHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
@@ -452,7 +452,7 @@ class BitArticle extends LibertyAttachable {
 			if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
 				$this->mErrors['article_image'] = "Error during attachment of article image";
 			} else {
-				$resizeFunc = ( $gBitSystem->getPreference( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+				$resizeFunc = ( $gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
 				$pFileHash['source_file'] = $tmpImagePath;
 				$pFileHash['dest_path'] = TEMP_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 				// remove the extension
@@ -652,7 +652,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
-			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getPreference( 'article_date_threshold' ) );
+			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getConfig( 'article_date_threshold' ) );
 
 			// deal with the parsing
 			$parseHash['format_guid'] = $res['format_guid'];
@@ -661,7 +661,7 @@ class BitArticle extends LibertyAttachable {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
 				$parseHash['data'] = $parts[0];
 				} else {
-				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getPreference( 'article_description_length' ) );
+				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'article_description_length' ) );
 			}
 			$res['parsed_description'] = $this->parseData( $parseHash );
 

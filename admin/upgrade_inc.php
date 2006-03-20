@@ -18,6 +18,7 @@ array( 'DATADICT' => array(
 	array( 'RENAMESEQUENCE' => array(
 		"tiki_article_topics_topic_id_seq" => "article_topics_t_id_seq",
 		"tiki_article_types_topic_id_seq" => "article_types_t_id_seq",
+		"tiki_article_article_id_seq" => "article_article_id_seq",
 	)),
 )),
 		)

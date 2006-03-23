@@ -97,32 +97,6 @@
 
 						{include file="bitpackage:liberty/edit_format.tpl"}
 
-						{if $gBitSystem->isFeatureActive( 'feature_cms_templates' ) and $gBitUser->hasPermission( 'bit_p_use_content_templates' )}
-							<div class="row">
-								{formlabel label="Apply template" for="template"}
-								{forminput}
-										<select name="template_id" onchange="javascript:document.getElementById('writearticle').submit();">
-											<option value="0">{tr}none{/tr}</option>
-											{section name=ix loop=$templates}
-												<option value="{$templates[ix].template_id|escape}">{tr}{$templates[ix].name}{/tr}</option>
-											{/section}
-										</select>
-										<noscript>
-											<input type="submit" value="get template" />
-										</noscript>
-									{formhelp note=""}
-								{/forminput}
-							</div>
-						{/if}
-
-						{*<div class="row">
-							{formlabel label="Introduction" for="heading"}
-							{forminput}
-								<textarea class="wikiedit" name="description" id="heading" rows="7" cols="50">{$article.description|escape}</textarea>
-								{formhelp note="The introduction is shown on your articles home page. If you provide text in the body part or this article, a link to the full text will be provided."}
-							{/forminput}
-						</div>*}
-
 						{if $gBitSystem->isPackageActive( 'quicktags' )}
 							{include file="bitpackage:quicktags/quicktags_full.tpl"}
 						{/if}

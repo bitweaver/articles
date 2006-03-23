@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.12 2006/03/01 21:12:21 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.13 2006/03/23 16:40:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -15,10 +15,6 @@ $formCmsSettings = array(
 	'display_article_filter_bar' => array(
 		'label' => 'Articles Filter',
 		'note' => 'Allows admins to quickly filter articles based on status, topic and type.',
-	),
-	'feature_cms_templates' => array(
-		'label' => 'Use Templates',
-		'note' => 'Use customised templates for the creation of articles to standardise and simplify posts.',
 	),
 );
 $gBitSmarty->assign( 'formCmsSettings',$formCmsSettings );

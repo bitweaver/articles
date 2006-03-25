@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.22 2006/02/13 17:23:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.23 2006/03/25 10:37:51 bitweaver Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -40,7 +40,7 @@
 		<div class="content">
 			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">
-					{if $showDescriptionsOnly and $article.has_more}<a href="{$smarty.const.ARTICLES_PKG_URL}read.php?article_id={$article.article_id}">{/if}
+					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
 						<img class="icon" alt="{$article.topic_name|default:$article.title}" title="{$article.topic_name|default:$article.title}" src="{$article.image_url}"/>
 					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
 				</div>
@@ -75,7 +75,7 @@
 			{if $showDescriptionsOnly and $article.has_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
-				<a href="{$article.display_url}">{tr}Read More...{/tr}</a>
+				<a href="{$article.display_url}">{tr}Read More&hellip;{/tr}</a>
 			{/if}
 
 			{if $article.allow_comments eq 'y'}

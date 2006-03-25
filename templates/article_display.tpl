@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.23 2006/03/25 10:37:51 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.24 2006/03/25 20:47:10 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -17,7 +17,7 @@
 	</div><!-- end .footer -->
 
 	<div class="header">
-		<h1>{$article.title}</h1>
+		<h1>{$article.title|escape}</h1>
 		{if $article.show_author || $article.show_pubdate}
 			<div class="date">
 				{if $article.show_author}
@@ -41,7 +41,7 @@
 			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">
 					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
-						<img class="icon" alt="{$article.topic_name|default:$article.title}" title="{$article.topic_name|default:$article.title}" src="{$article.image_url}"/>
+						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>
 					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
 				</div>
 			{/if}

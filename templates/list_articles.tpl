@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.14 2006/01/31 10:21:11 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.15 2006/03/25 20:47:10 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -63,7 +63,7 @@
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
 										<a href="{$article.display_url}">
 									{/if}
-									<img src="{$article.image_url}" title="{$article.title}" alt="{tr}Article Image{/tr}" />
+									<img src="{$article.image_url}" title="{$article.title|escape}" alt="{tr}Article Image{/tr}" />
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
 										</a>
 									{/if}
@@ -75,9 +75,9 @@
 							{if $gBitSystem->isFeatureActive( 'art_list_title' )}
 								<h2>
 									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
-										<a href="{$article.display_url}">{$article.title}</a>
+										<a href="{$article.display_url}">{$article.title|escape}</a>
 									{else}
-										{$article.title}
+										{$article.title|escape}
 									{/if}
 								</h2>
 							{/if}

@@ -8,7 +8,7 @@
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
-			<h1>{tr}Edit Article {$article.title}{/tr}</h1>
+			<h1>{tr}Edit Article {$article.title|escape}{/tr}</h1>
 		{elseif $gBitUser->hasPermission('bit_p_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('bit_p_autoapprove_submission')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
@@ -165,7 +165,7 @@
 							<div class="row">
 								{formlabel label="Custom Image"}
 								{forminput}
-									<img alt="{tr}Article image{/tr}" title="{$article.title}" src="{$article.image_url}"/>
+									<img alt="{tr}Article image{/tr}" title="{$article.title|escape}" src="{$article.image_url}"/>
 									<br />
 									<input type="submit" name="remove_image" value="{tr}Remove Image{/tr}" />
 									{formhelp note="You can replace this image by uploading a new one."}

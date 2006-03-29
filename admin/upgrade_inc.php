@@ -24,6 +24,11 @@ array( 'DATADICT' => array(
 		"tiki_article_types_topic_id_seq" => "article_types_t_id_seq",
 		"tiki_article_article_id_seq" => "article_article_id_seq",
 	)),
+	array( 'RENAMECOLUMN' => array(
+		'article_topics' => array(
+			'`active`' => 'active_topic'
+		),
+	)),
 )),
 		)
 	),

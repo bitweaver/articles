@@ -26,7 +26,7 @@ array( 'DATADICT' => array(
 	)),
 	array( 'RENAMECOLUMN' => array(
 		'article_topics' => array(
-			'`active`' => 'active_topic'
+			'`active`' => '`active_topic` C(1)'
 		),
 	)),
 )),

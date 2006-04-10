@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.76 2006/03/01 20:16:01 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.77 2006/04/10 17:55:55 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.76 2006/03/01 20:16:01 spiderr Exp $
+ * $Id: BitArticle.php,v 1.77 2006/04/10 17:55:55 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.76 $ $Date: 2006/03/01 20:16:01 $ $Author: spiderr $
+ * @version $Revision: 1.77 $ $Date: 2006/04/10 17:55:55 $ $Author: spiderr $
  */
 
 /**
@@ -610,6 +610,15 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = ( int )$pParamHash['type_id'];
 		}
 
+		// TODO: we need to check if the article wants to be viewed before / after respective dates
+		// someone better at SQL please get this working without an additional db call - xing
+		if( empty( $pParamHash['show_expired'] ) ) {
+			$timestamp = $gBitSystem->getUTCTime();
+			$whereSql .= " AND a.`publish_date` < ? AND a.`expire_date` > ? ";
+			$bindVars[] = ( int )$timestamp;
+			$bindVars[] = ( int )$timestamp;
+		}
+
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
 			$whereSql .= " AND a.`topic_id` = ? ";
 			$bindVars[] = ( int )$pParamHash['topic_id'];
@@ -619,15 +628,6 @@ class BitArticle extends LibertyAttachable {
 		} else {
 			$whereSql .= " AND ( atopic.`active_topic` != 'n' OR atopic.`active_topic` IS NULL ) ";
 			//$whereSql .= " AND atopic.`active_topic` != 'n' ";
-		}
-
-		// TODO: we need to check if the article wants to be viewed before / after respective dates
-		// someone better at SQL please get this working without an additional db call - xing
-		if( empty( $pParamHash['show_expired'] ) ) {
-			$timestamp = $gBitSystem->getUTCTime();
-			$whereSql .= " AND a.`publish_date` < ? AND a.`expire_date` > ? ";
-			$bindVars[] = ( int )$timestamp;
-			$bindVars[] = ( int )$timestamp;
 		}
 
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
@@ -737,6 +737,7 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function setStatus( $pStatusId, $pArticleId = NULL, $pContentId = NULL ) {
+		global $gBitSystem;
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
 		if( !in_array( $pStatusId, $validStatuses ) ) {

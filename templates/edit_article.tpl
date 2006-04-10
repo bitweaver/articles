@@ -112,16 +112,6 @@
 							{/forminput}
 						</div>
 
-						{if $cms_spellcheck eq 'y'}
-							<div class="row">
-								{formlabel label="Spellcheck" for="spellcheck"}
-								{forminput}
-									<input type="checkbox" name="spellcheck" id="spellcheck" {if $spellcheck eq 'y'}checked="checked"{/if} />
-									{formhelp note=""}
-								{/forminput}
-							</div>
-						{/if}
-
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
 						<div class="row submit">

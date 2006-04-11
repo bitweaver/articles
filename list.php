@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.12 2006/02/20 04:56:10 seannerd Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.13 2006/04/11 13:03:24 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -16,7 +16,7 @@ include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
 $gBitSystem->verifyPackage( 'articles' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'bit_p_read_article' );
+$gBitSystem->verifyPermission( 'p_articles_read' );
 
 // nuke articles if requested
 if( !empty( $_REQUEST['action'] ) ) {
@@ -25,9 +25,9 @@ if( !empty( $_REQUEST['action'] ) ) {
 		$tmpArt->load();
 		// depending on what the status of the article is, we need to check different permissions
 		if( $tmpArt->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
-			$gBitSystem->verifyPermission( 'bit_p_remove_submission' );
+			$gBitSystem->verifyPermission( 'p_articles_remove_submission' );
 		} else {
-			$gBitSystem->verifyPermission( 'bit_p_remove_article' );
+			$gBitSystem->verifyPermission( 'p_articles_remove' );
 		}
 
 		if( isset( $_REQUEST["confirm"] ) ) {
@@ -55,7 +55,7 @@ if( !empty( $_REQUEST['action'] ) ) {
 /* this is a messed up version of a multiple articles removal section
 if( isset( $_REQUEST["multi_article"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["multi_article"] == "remove_articles" ) {
 	// Now check permissions to remove the selected articles
-	$gBitSystem->verifyPermission( 'bit_p_remove_article' );
+	$gBitSystem->verifyPermission( 'p_articles_remove' );
 
 	if( !empty( $_REQUEST['cancel'] ) ) {
 		// user cancelled - just continue on, doing nothing
@@ -83,12 +83,12 @@ if( isset( $_REQUEST["multi_article"] ) && isset( $_REQUEST["checked"] ) && $_RE
 $article = new BitArticle();
 // change the status of an article first
 if( !empty( $_REQUEST['action'] ) ) {
-	if( !empty( $_REQUEST['article_id'] ) && !empty( $_REQUEST['set_status_id'] ) && $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
+	if( !empty( $_REQUEST['article_id'] ) && !empty( $_REQUEST['set_status_id'] ) && $gBitUser->hasPermission( 'p_articles_approve_submission' ) ) {
 		$article->setStatus( $_REQUEST['set_status_id'], $_REQUEST['article_id'], $_REQUEST['content_id'] );
 	}
 }
 
-if( empty( $_REQUEST['status_id'] ) || ( !$gBitUser->hasPermission( 'bit_p_view_submissions' ) && !$gBitUser->hasPermission( 'bit_p_admin_articles' ) ) ) {
+if( empty( $_REQUEST['status_id'] ) || ( !$gBitUser->hasPermission( 'bit_p_view_submissions' ) && !$gBitUser->hasPermission( 'p_articles_admin' ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 $listArticles = $article->getList( $_REQUEST );

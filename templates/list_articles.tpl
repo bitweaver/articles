@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.15 2006/03/25 20:47:10 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.16 2006/04/11 13:03:25 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -60,11 +60,11 @@
 						{if $gBitSystem->isFeatureActive( 'art_list_img' )}
 							<td rowspan="2">
 								{if $article.image_url}
-									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+									{if $gBitUser->hasPermission( 'p_articles_read' )}
 										<a href="{$article.display_url}">
 									{/if}
 									<img src="{$article.image_url}" title="{$article.title|escape}" alt="{tr}Article Image{/tr}" />
-									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+									{if $gBitUser->hasPermission( 'p_articles_read' )}
 										</a>
 									{/if}
 								{/if}
@@ -74,7 +74,7 @@
 						<td colspan="5">
 							{if $gBitSystem->isFeatureActive( 'art_list_title' )}
 								<h2>
-									{if $gBitUser->hasPermission( 'bit_p_read_article' )}
+									{if $gBitUser->hasPermission( 'p_articles_read' )}
 										<a href="{$article.display_url}">{$article.title|escape}</a>
 									{else}
 										{$article.title|escape}
@@ -112,15 +112,15 @@
 							<td style="text-align:right;">{$article.hits}</td>
 						{/if}
 						<td style="text-align:right;">
-							{if $article.status_id eq $smarty.const.ARTICLE_STATUS_PENDING and $gBitUser->hasPermission( 'bit_p_approve_submission' )}
+							{if $article.status_id eq $smarty.const.ARTICLE_STATUS_PENDING and $gBitUser->hasPermission( 'p_articles_approve_submission' )}
 								{smartlink ititle="Approve Article" ibiticon="liberty/success" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id content_id=$article.content_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
 							{/if}
 
-							{if $gBitUser->hasPermission( 'bit_p_edit_article' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}
+							{if $gBitUser->hasPermission( 'p_articles_edit' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}
 								{smartlink ititle="Edit" ifile="edit.php" ibiticon="liberty/edit" article_id=$article.article_id}
 							{/if}
 
-							{if $gBitUser->hasPermission( 'bit_p_remove_article' )}
+							{if $gBitUser->hasPermission( 'p_articles_remove' )}
 								{smartlink ititle="Remove" ibiticon="liberty/delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 							{/if}
 						</td>

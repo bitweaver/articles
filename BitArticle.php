@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.77 2006/04/10 17:55:55 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.78 2006/04/11 13:03:23 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.77 2006/04/10 17:55:55 spiderr Exp $
+ * $Id: BitArticle.php,v 1.78 2006/04/11 13:03:23 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.77 $ $Date: 2006/04/10 17:55:55 $ $Author: spiderr $
+ * @version $Revision: 1.78 $ $Date: 2006/04/11 13:03:23 $ $Author: squareing $
  */
 
 /**
@@ -278,9 +278,9 @@ class BitArticle extends LibertyAttachable {
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
 			if( $pParamHash['status_id'] > ARTICLE_STATUS_PENDING ) {
-				if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
+				if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) ||
 					$gBitUser->hasPermission( 'bit_p_admin_received_articles' ) ||
-					$gTikiuser->hasPermission( 'bit_p_autoapprove_submission' ) ) {
+					$gTikiuser->hasPermission( 'p_articles_auto_approve' ) ) {
 					$pParamHash['article_store']['status_id'] =( int )( $pParamHash['status_id'] );
 				} else {
 					$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;
@@ -291,9 +291,9 @@ class BitArticle extends LibertyAttachable {
 		} elseif( @$this->verifyId( $this->mInfo['status_id'] ) ) {
 			$pParamHash['article_store']['status_id'] = $this->mInfo['status_id'];
 		} else {
-			if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ||
+			if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) ||
 				$gBitUser->hasPermission( 'bit_p_admin_received_articles' ) ||
-				$gBitUser->hasPermission( 'bit_p_autoapprove_submission' ) ) {
+				$gBitUser->hasPermission( 'p_articles_auto_approve' ) ) {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_APPROVED;
 			} else {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;		// Default status

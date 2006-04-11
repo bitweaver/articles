@@ -9,7 +9,7 @@
 	<div class="header">
 		{if $gContent->mArticleId}
 			<h1>{tr}Edit Article {$article.title|escape}{/tr}</h1>
-		{elseif $gBitUser->hasPermission('bit_p_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('bit_p_autoapprove_submission')}
+		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('p_articles_auto_approve')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
 			<h1>{tr}Submit Article{/tr}</h1>
@@ -48,7 +48,7 @@
 							{/forminput}
 						</div>
 
-						{if $topics or $gBitUser->hasPermission( 'bit_p_admin_articles' )}
+						{if $topics or $gBitUser->hasPermission( 'p_articles_admin' )}
 							<div class="row">
 								{formlabel label="Topic" for="topic_id"}
 								{forminput}
@@ -172,7 +172,7 @@
 							{/forminput}
 						</div>
 
-						{if $gBitUser->hasPermission('bit_p_content_attachments')}
+						{if $gBitUser->hasPermission('p_liberty_attach_attachments')}
 							{include file="bitpackage:liberty/edit_storage.tpl" no_plugins=1}
 						{/if}
 					{/legend}

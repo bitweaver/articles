@@ -1,19 +1,19 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.4 2006/03/01 20:16:03 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.5 2006/04/11 13:03:25 squareing Exp $
 require_once( '../bit_setup_inc.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
 
-$gBitSystem->verifyPermission( 'bit_p_read_article' );
+$gBitSystem->verifyPermission( 'p_articles_read' );
 
 include_once(ARTICLES_PKG_PATH."lookup_article_inc.php");
 
 if ( isset( $_REQUEST["remove"] ) ) {
-    $gBitSystem->verifyPermission( 'bit_p_remove_article' );
+    $gBitSystem->verifyPermission( 'p_articles_remove' );
 }
 
-if (empty($_REQUEST['status_id']) || (!$gBitUser->hasPermission('bit_p_view_submissions') && !$gBitUser->hasPermission('bit_p_admin_articles'))) {
+if (empty($_REQUEST['status_id']) || (!$gBitUser->hasPermission('bit_p_view_submissions') && !$gBitUser->hasPermission('p_articles_admin'))) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.22 2006/03/01 20:04:37 starrrider Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.23 2006/04/11 13:03:24 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -26,11 +26,11 @@ $gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
 
 include_once('lookup_article_inc.php');
 
-if( $gBitUser->hasPermission('bit_p_admin_articles' ) || $gBitUser->hasPermission( 'bit_p_edit_article' ) ) {
+if( $gBitUser->hasPermission('p_articles_admin' ) || $gBitUser->hasPermission( 'p_articles_edit' ) ) {
 	$isOwner = TRUE;
 } elseif( !empty($gContent->mInfo['user_id'] ) && $gContent->mInfo['user_id'] == $gBitUser->mUserId ) {
 	$isOwner = TRUE;
-} elseif( !$gContent->mArticleId && $gBitUser->hasPermission( 'bit_p_submit_article' ) ) {
+} elseif( !$gContent->mArticleId && $gBitUser->hasPermission( 'p_articles_submit' ) ) {
 	$isOwner = TRUE;
 }
 

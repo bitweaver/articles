@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.13 2006/03/01 20:16:01 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.14 2006/04/11 13:03:24 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -11,7 +11,7 @@ require_once( '../bit_setup_inc.php' );
 $gBitSystem->verifyPackage( 'articles' );
 
 // Now check permissions to access this page
-$gBitSystem->verifyPermission( 'bit_p_read_article' );
+$gBitSystem->verifyPermission( 'p_articles_read' );
 
 if( !empty( $_REQUEST['article_id'] ) ) {
 	header( "location: ".ARTICLES_PKG_URL."read.php?article_id=".( ( int )$_REQUEST['article_id'] ) );
@@ -34,7 +34,7 @@ $gBitSmarty->assign( 'articles', $articles['data'] );
 $gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
 
 // display submissions if we have the perm to approve them
-if( $gBitUser->hasPermission( 'bit_p_approve_submission' ) ) {
+if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) ) {
 	$listHash = array( 'status_id' => ARTICLE_STATUS_PENDING );
 	$submissions = $gContent->getList( $listHash );
 	$gBitSmarty->assign( 'submissions', $submissions['data'] );

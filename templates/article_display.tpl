@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.24 2006/03/25 20:47:10 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.25 2006/04/11 13:03:25 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -11,7 +11,7 @@
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 		{/if}
 		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>*}
-		{if $gBitUser->hasPermission( 'bit_p_remove_article' )}
+		{if $gBitUser->hasPermission( 'p_articles_remove' )}
 			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="liberty/delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}
 	</div><!-- end .footer -->
@@ -36,7 +36,7 @@
 		{/if}
 	</div>
 
-	<div class="body"{if $gBitUser->getPreference( 'user_dbl' ) and $gBitUser->hasPermission( 'bit_p_edit_article' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
+	<div class="body"{if $gBitUser->getPreference( 'user_dbl' ) and $gBitUser->hasPermission( 'p_articles_edit' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		<div class="content">
 			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">

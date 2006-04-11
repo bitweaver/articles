@@ -103,17 +103,17 @@ $gBitInstaller->registerSchemaDefault( ARTICLES_PKG_DIR, array(
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
-	array('bit_p_edit_article', 'Can edit articles', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_remove_article', 'Can remove articles', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_read_article', 'Can read articles', 'basic', ARTICLES_PKG_NAME),
-	array('bit_p_submit_article', 'Can submit articles', 'basic', ARTICLES_PKG_NAME),
-	array('bit_p_edit_submission', 'Can edit submissions', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_remove_submission', 'Can remove submissions', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_approve_submission', 'Can approve submissions', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_send_articles', 'Can send articles to other sites', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_sendme_articles', 'Can send articles to this site', 'registered', ARTICLES_PKG_NAME),
-	array('bit_p_autoapprove_submission', 'Submited articles automatically approved', 'editors', ARTICLES_PKG_NAME),
-	array('bit_p_admin_articles', 'Can admin the articles package', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_edit', 'Can edit articles', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_remove', 'Can remove articles', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_read', 'Can read articles', 'basic', ARTICLES_PKG_NAME),
+	array('p_articles_submit', 'Can submit articles', 'basic', ARTICLES_PKG_NAME),
+	array('p_articles_edit_submission', 'Can edit submissions', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_remove_submission', 'Can remove submissions', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_approve_submission', 'Can approve submissions', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_send', 'Can send articles to other sites', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_sendme', 'Can send articles to this site', 'registered', ARTICLES_PKG_NAME),
+	array('p_articles_auto_approve', 'Submited articles automatically approved', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_admin', 'Can admin the articles package', 'editors', ARTICLES_PKG_NAME),
 ) );
 
 // ### Default Preferences

@@ -8,7 +8,7 @@
 	{formfeedback success=$smarty.request.feedback}
 
 	{include file="bitpackage:articles/article_filter_inc.tpl"}
-	{if $gBitUser->hasPermission( 'bit_p_approve_submission' ) && $submissions}
+	{if $gBitUser->hasPermission( 'p_articles_approve_submission' ) && $submissions}
 		<h3>{tr}The following articles are awaiting your attention{/tr}</h3>
 		<ul>
 			{foreach from=$submissions item=submission}
@@ -22,9 +22,9 @@
 	{foreachelse}
 		<p class="norecords">
 			{tr}No records found{/tr}<br />
-			{if $gBitUser->hasPermission( 'bit_p_autoapprove_submission' )}
+			{if $gBitUser->hasPermission( 'p_articles_auto_approve' )}
 				{smartlink ititle="Write article" ipackage=articles ifile="edit.php"}
-			{elseif $gBitUser->hasPermission( 'bit_p_submit_article' )}
+			{elseif $gBitUser->hasPermission( 'p_articles_submit' )}
 				{smartlink ititle="Submit article" ipackage=articles ifile="edit.php"}
 			{/if}
 		</p>

@@ -9,7 +9,7 @@
 	<div class="header">
 		{if $gContent->mArticleId}
 			<h1>{tr}Edit Article {$article.title|escape}{/tr}</h1>
-		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('p_articles_auto_approve')}
+		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
 			<h1>{tr}Submit Article{/tr}</h1>

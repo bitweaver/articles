@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.5 2006/04/11 13:03:25 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.6 2006/04/11 17:52:09 squareing Exp $
 require_once( '../bit_setup_inc.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
@@ -13,7 +13,7 @@ if ( isset( $_REQUEST["remove"] ) ) {
     $gBitSystem->verifyPermission( 'p_articles_remove' );
 }
 
-if (empty($_REQUEST['status_id']) || (!$gBitUser->hasPermission('bit_p_view_submissions') && !$gBitUser->hasPermission('p_articles_admin'))) {
+if (empty($_REQUEST['status_id']) || (!$gBitUser->hasPermission('p_articles_approve_submission') && !$gBitUser->hasPermission('p_articles_admin'))) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 

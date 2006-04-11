@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.4 2005/09/03 07:55:58 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.5 2006/04/11 17:52:09 squareing Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -7,7 +7,7 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_topic_inc.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
-$gBitSystem->verifyPermission( 'bit_p_admin_cms' );
+$gBitSystem->verifyPermission( 'p_articles_admin' );
 
 if( isset( $_REQUEST["fSubmitAddTopic"] ) ) {
 	$gContent->storeTopic( $_REQUEST );	
@@ -33,7 +33,7 @@ for( $i = 0; $i < count( $topics ); $i++ ) {
 			$topics[$i]["individual_bit_p_topic_read"] = 'n';
 		} 
 
-		if( $gBitUser->isAdim() || $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'bit_p_admin_cms' ) ) {
+		if( $gBitUser->isAdim() || $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'p_articles_admin' ) ) {
 			$topics[$i]["individual_bit_p_topic_read"] = 'y';
 		} 
 	} else {

@@ -1,4 +1,4 @@
-{if ( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) and $gBitSystem->isFeatureActive( 'display_article_filter_bar' ) and $filter}
+{if ( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'p_articles_admin' ) ) and $gBitSystem->isFeatureActive( 'display_article_filter_bar' ) and $filter}
 	{form}
 		<table class="optionbar">
 			<caption>{tr}Article Filter{/tr}</caption>

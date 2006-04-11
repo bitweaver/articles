@@ -1,11 +1,11 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/article_filter_inc.php,v 1.3 2005/10/30 19:48:40 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/article_filter_inc.php,v 1.4 2006/04/11 17:52:08 squareing Exp $
  * @package article
  * @subpackage functions
  */
 
-if( $gBitSystem->isFeatureActive( 'display_article_filter_bar' ) && ( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'bit_p_admin_cms' ) ) ) {
+if( $gBitSystem->isFeatureActive( 'display_article_filter_bar' ) && ( $gBitUser->isAdmin() || $gBitUser->hasPermission( 'p_articles_admin' ) ) ) {
 	$filter['topic'][]  = '';
 	$filter['type'][]   = '';
 	$filter['status'][] = '';

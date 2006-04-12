@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.25 2006/04/11 13:03:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.26 2006/04/12 20:03:03 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -20,12 +20,12 @@
 		<h1>{$article.title|escape}</h1>
 		{if $article.show_author || $article.show_pubdate}
 			<div class="date">
-				{if $article.show_author}
+				{if $article.show_author eq 'y'}
 					{* can't really use the link here since it only works when the user uses his login name *}
 					{displayname user=$article.author_name nolink=true}&nbsp;
 				{/if}
 
-				{if $article.show_pubdate}
+				{if $article.show_pubdate eq 'y'}
 					{if $article.time_difference.orientation eq 'past'}
 						&bull; {tr}{$article.time_difference.strings.0} {$article.time_difference.strings.1} ago{/tr}
 					{else}
@@ -67,7 +67,7 @@
 		</div>
 
 		<div class="footer">
-			{if $article.show_reads}
+			{if $article.show_reads eq 'y'}
 				{assign var=spacer value=TRUE}
 				{$article.hits} {tr}reads{/tr}
 			{/if}

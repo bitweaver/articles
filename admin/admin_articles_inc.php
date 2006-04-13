@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.13 2006/03/23 16:40:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.14 2006/04/13 09:09:50 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,10 +7,6 @@ $formCmsSettings = array(
 	'cms_rankings' => array(
 		'label' => 'Rankings',
 		'note' => 'Activates statistics for article ranking features.',
-	),
-	'cms_spellcheck' => array(
-		'label' => 'Spellchecker',
-		'note' => 'Allows users to check their spelling before submitting.',
 	),
 	'display_article_filter_bar' => array(
 		'label' => 'Articles Filter',

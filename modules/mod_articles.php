@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.9 2006/03/01 20:16:02 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.10 2006/04/14 17:18:37 squareing Exp $
  * @package article
  * @subpackage modules
  */
@@ -33,7 +33,7 @@ if( !empty( $module_params['sort_mode'] ) && in_array( $module_params['sort_mode
 
 $getHash['status_id']     = $status_id;
 $getHash['sort_mode']     = $sort_mode;
-$getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->getConfig( 'max_articles' );
+$getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->getConfig( 'articles_max_list' );
 $getHash['topic']         = !empty( $module_params['topic'] ) ? $module_params['topic'] : NULL;
 $articles = $articles->getList( $getHash );
 

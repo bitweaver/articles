@@ -103,11 +103,11 @@
 
 						<div class="row">
 							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('article_description_length')})" onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('article_description_length')})">{$article.data|escape:html}</textarea>
+								<textarea {spellchecker} id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})" onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})">{$article.data|escape:html}</textarea>
 								{capture name=artCount}
 									{$article.data|count_characters:true}
 								{/capture}
-								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('article_description_length')-$smarty.capture.artCount}" />
+								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$smarty.capture.artCount}" />
 								{formhelp note="If the article body exceeds the specified maximum body length, a seperate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a seperate line in your text."}
 							{/forminput}
 						</div>

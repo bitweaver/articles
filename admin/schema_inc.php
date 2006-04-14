@@ -118,20 +118,20 @@ $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
-	array( ARTICLES_PKG_NAME, 'art_list_author','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_date','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_img','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_reads','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_size','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_title','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_topic','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_type','y'),
-	array( ARTICLES_PKG_NAME, 'art_list_expire','y'),
-	array( ARTICLES_PKG_NAME, 'max_articles','10'),
-	array( ARTICLES_PKG_NAME, 'cms_rankings','y'),
-	array( ARTICLES_PKG_NAME, 'article_submissions', 'y'),
-	array( ARTICLES_PKG_NAME, 'article_description_length', '500'),
-	array( ARTICLES_PKG_NAME, 'article_date_threshold', 'week'),
+	array( ARTICLES_PKG_NAME, 'articles_list_author','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_date','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_img','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_reads','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_size','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_title','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_topic','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_type','y'),
+	array( ARTICLES_PKG_NAME, 'articles_list_expire','y'),
+	array( ARTICLES_PKG_NAME, 'articles_max_list','10'),
+	array( ARTICLES_PKG_NAME, 'articles_rankings','y'),
+	array( ARTICLES_PKG_NAME, 'articles_submissions', 'y'),
+	array( ARTICLES_PKG_NAME, 'articles_description_length', '500'),
+	array( ARTICLES_PKG_NAME, 'articles_date_threshold', 'week'),
 ) );
 
 if( defined( 'RSS_PKG_NAME' ) ) {

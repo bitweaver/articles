@@ -5,7 +5,7 @@
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list.php">{biticon ipackage=liberty iname=list iexplain="list articles" iforce=icon} {tr}List articles{/tr}</a></li>
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list_topics.php">{biticon ipackage=liberty iname=list iexplain="list articles" iforce=icon} {tr}List topics{/tr}</a></li>
 	{/if}
-	{if $gBitSystem->isFeatureActive('article_submissions')}
+	{if $gBitSystem->isFeatureActive('articles_submissions')}
 		{if $gBitUser->hasPermission( 'p_articles_submit ' ) ||
 			$gBitUser->hasPermission( 'p_articles_approve_submission ' ) ||
 			$gBitUser->hasPermission( 'p_articles_remove_submission ' )}
@@ -15,7 +15,7 @@
 	{if $gBitUser->hasPermission( 'p_articles_edit') || $gBitUser->hasPermission('p_articles_submit') }
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}edit.php">{biticon ipackage=liberty iname=new iexplain="new article" iforce=icon} {tr}{if $gBitUser->hasPermission('p_articles_edit')}Write{else}Submit{/if} article{/tr}</a></li>
 	{/if}
-	{if $gBitSystem->isFeatureActive( 'cms_rankings' ) && $gBitUser->hasPermission( 'p_articles_read ' )}
+	{if $gBitSystem->isFeatureActive( 'articles_rankings' ) && $gBitUser->hasPermission( 'p_articles_read ' )}
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}rankings.php">{biticon ipackage=liberty iname=list iexplain="article rankings" iforce=icon} {tr}Article rankings{/tr}</a></li>
 	{/if}
 	{if $gBitSystem->isFeatureActive( 'feature_comm' ) && $gBitUser->hasPermission( 'p_articles_send ' )}

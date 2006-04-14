@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.10 2006/03/01 21:12:23 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.11 2006/04/14 17:18:37 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -19,7 +19,7 @@
 				<div class="row">
 					{formlabel label="Maximum Articles" for="articles-maxhome"}
 					{forminput}
-						<input size="5" type="text" name="max_articles" id="articles-maxhome" value="{$gBitSystem->getConfig('max_articles')|escape}" />
+						<input size="5" type="text" name="articles_max_list" id="articles-maxhome" value="{$gBitSystem->getConfig('articles_max_list')|escape}" />
 						{formhelp note="Number of articles shown on the main articles page."}
 					{/forminput}
 				</div>
@@ -27,7 +27,7 @@
 				<div class="row">
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
-						<input size="5" type="text" name="article_description_length" id="articles-descrlength" value="{$gBitSystem->getConfig('article_description_length')|escape}" /> {tr}characters{/tr}
+						<input size="5" type="text" name="articles_description_length" id="articles-descrlength" value="{$gBitSystem->getConfig('articles_description_length')|escape}" /> {tr}characters{/tr}
 						{formhelp note="Number of characters displayed on the articles main page before splitting the article into a heading and body.<br />Changing this value might influence existing articles."}
 					{/forminput}
 				</div>
@@ -43,7 +43,7 @@
 				<div class="row">
 					{formlabel label="Display Time since Publishing" for="articles-date-threshold"}
 					{forminput}
-						{html_options options=$articleDateThreshold values=$articleDateThreshold name=article_date_threshold id=article-date-threshold selected=$gBitSystem->mPrefs.article_date_threshold}
+						{html_options options=$articleDateThreshold values=$articleDateThreshold name=articles_date_threshold id=article-date-threshold selected=$gBitSystem->mPrefs.articles_date_threshold}
 						{formhelp note="Display the time since the article has been published instead of the full date. Pick the timespan for which this is true."}
 					{/forminput}
 				</div>

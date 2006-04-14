@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.79 2006/04/11 17:52:08 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.80 2006/04/14 17:18:37 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.79 2006/04/11 17:52:08 squareing Exp $
+ * $Id: BitArticle.php,v 1.80 2006/04/14 17:18:37 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.79 $ $Date: 2006/04/11 17:52:08 $ $Author: squareing $
+ * @version $Revision: 1.80 $ $Date: 2006/04/14 17:18:37 $ $Author: squareing $
  */
 
 /**
@@ -648,7 +648,7 @@ class BitArticle extends LibertyAttachable {
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
-			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getConfig( 'article_date_threshold' ) );
+			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getConfig( 'articles_date_threshold' ) );
 
 			// deal with the parsing
 			$parseHash['format_guid'] = $res['format_guid'];
@@ -657,7 +657,7 @@ class BitArticle extends LibertyAttachable {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
 				$parseHash['data'] = $parts[0];
 				} else {
-				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'article_description_length' ) );
+				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'articles_description_length' ) );
 			}
 			$res['parsed_description'] = $this->parseData( $parseHash );
 

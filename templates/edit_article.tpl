@@ -8,7 +8,7 @@
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
-			<h1>{tr}Edit Article {$article.title|escape}{/tr}</h1>
+		<h1>{tr}Edit Article{/tr}: {$article.title|escape}</h1>
 		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}

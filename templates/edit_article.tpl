@@ -7,7 +7,7 @@
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
-			<h1>{tr}Edit Article {$article.title}{/tr}</h1>
+			<h1>{tr}Edit Article{/tr}: {$article.title}</h1>
 		{elseif $gBitUser->hasPermission('bit_p_approve_submission') || $gBitUser->hasPermission('bit_p_admin_received_articles') || $gBitUser->hasPermission('bit_p_autoapprove_submission')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}

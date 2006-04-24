@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.24 2006/04/21 15:18:42 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.25 2006/04/24 20:47:41 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -21,9 +21,6 @@ include_once( LIBERTY_PKG_PATH.'edit_help_inc.php' );
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
 
-// initiate feedback array
-$gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
-
 include_once('lookup_article_inc.php');
 
 $isOwner = FALSE;
@@ -42,19 +39,19 @@ if( !$isOwner ) {
 	die;
 }
 
-// content templates
-if( !empty( $_REQUEST["template_id"] ) && $_REQUEST["template_id"] > 0 ) {
-	$template_data = $tikilib->get_template( $_REQUEST["template_id"] );
-	$_REQUEST["preview"] = 1;
-	$_REQUEST["body"] = $template_data["content"].$_REQUEST["data"];
-}
-
 // if we want to remove a custom image, just nuke all custom image settings at once
 if( !empty( $_REQUEST['remove_image'] ) ) {
 	$_REQUEST['image_attachment_id'] = NULL;
 	$gContent->expungeImage( $gContent->mArticleId, !empty( $_REQUEST['preview_image_path'] ) ? $_REQUEST['preview_image_path'] : NULL );
 	// set the preview mode to maintain all settings
 	$_REQUEST['preview'] = 1;
+}
+
+// random image code
+if( !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
+	$feedback['error'] = tra( "You need to supply the correct code to submit." );
+	$_REQUEST['preview'] = TRUE;
+	unset( $_REQUEST['save'] );
 }
 
 // If we are in preview mode then preview it!
@@ -97,6 +94,8 @@ $gBitSmarty->assign( 'textarea_id', LIBERTY_TEXT_AREA );
 if ($gBitSystem->isPackageActive( 'quicktags' )) {
 	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
 }
+
+$gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 
 // Display the Index Template
 $gBitSmarty->assign( 'show_page_bar', 'n' );

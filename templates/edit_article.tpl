@@ -8,7 +8,7 @@
 <div class="admin articles">
 	<div class="header">
 		{if $gContent->mArticleId}
-		<h1>{tr}Edit Article{/tr}: {$article.title|escape}</h1>
+			<h1>{tr}Edit Article{/tr}: {$article.title|escape}</h1>
 		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
@@ -16,12 +16,12 @@
 		{/if}
 	</div>
 
-	{formfeedback hash=$feedback}
-
 	{if $preview}
 		<h2>Preview</h2>
 		<div class="preview">{include file="bitpackage:articles/article_display.tpl" outer_div='display article'}</div>
 	{/if}
+
+	{formfeedback hash=$feedback}
 
 	<div class="body">
 		{form enctype="multipart/form-data" id="writearticle"}
@@ -113,6 +113,17 @@
 						</div>
 
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
+
+						{if $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !( $gContent->mArticleId || ( $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve') ) )}
+							<div class="row">
+								{formlabel label="Submission Code"}
+								{forminput}
+									<img src="{$smarty.const.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
+									<br /><input type="text" name="rnd_img" />
+									{formhelp note="Please enter the code in the image to submit this article."}
+								{/forminput}
+							</div>
+						{/if}
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;

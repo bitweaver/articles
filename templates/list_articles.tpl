@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.17 2006/04/14 17:18:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.18 2006/04/24 21:10:55 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -46,7 +46,7 @@
 					{if $gBitSystem->isFeatureActive( 'articles_list_topic' )}
 						<th>{smartlink ititle='Topic' isort='topic_name' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
-					{if $gBitSystem->isFeatureActive( 'art_list_status' )}
+					{if $gBitSystem->isFeatureActive( 'articles_list_status' )}
 						<th>{smartlink ititle='Status' isort='status_id' offset=$offset type=$find_type topic=$find_topic}</th>
 					{/if}
 					{if $gBitSystem->isFeatureActive( 'articles_list_reads' )}
@@ -105,7 +105,7 @@
 						{if $gBitSystem->isFeatureActive( 'articles_list_topic' )}
 							<td>{$article.topic_name}</td>
 						{/if}
-						{if $gBitSystem->isFeatureActive( 'art_list_status' )}
+						{if $gBitSystem->isFeatureActive( 'articles_list_status' )}
 							<td>{$article.status_name}</td>
 						{/if}
 						{if $gBitSystem->isFeatureActive( 'articles_list_reads' )}

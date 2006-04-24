@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.26 2006/04/12 20:03:03 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.27 2006/04/24 09:11:16 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -18,7 +18,7 @@
 
 	<div class="header">
 		<h1>{$article.title|escape}</h1>
-		{if $article.show_author || $article.show_pubdate}
+		{if $article.show_author eq 'y' || $article.show_pubdate eq 'y'}
 			<div class="date">
 				{if $article.show_author eq 'y'}
 					{* can't really use the link here since it only works when the user uses his login name *}

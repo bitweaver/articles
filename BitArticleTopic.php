@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.24 2006/03/01 20:16:01 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.25 2006/04/24 20:41:18 squareing Exp $
  * @package article
  */
 
@@ -43,12 +43,15 @@ class BitArticleTopic extends BitBase {
 				   "FROM `".BIT_DB_PREFIX."article_topics` at ".
 			   	   $whereSQL;
 			$this->mInfo = $this->mDb->getRow($sql, $bindVars);
-			$this->mTopicId = $this->mInfo['topic_id'];
 
-			if ($this->mInfo['has_topic_image']) {
-				$this->mInfo['topic_image_url'] = $this->getTopicImageStorageUrl(NULL, FALSE, TRUE);
-			} else {
-				$this->mInfo['topic_image_url'] = NULL;
+			if( !empty( $this->mInfo['topic_id'] ) ) {
+				$this->mTopicId = $this->mInfo['topic_id'];
+
+				if ($this->mInfo['has_topic_image']) {
+					$this->mInfo['topic_image_url'] = $this->getTopicImageStorageUrl(NULL, FALSE, TRUE);
+				} else {
+					$this->mInfo['topic_image_url'] = NULL;
+				}
 			}
 		}
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.11 2006/04/12 19:57:06 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.13.2.12 2006/04/24 09:10:28 squareing Exp $ *}
 {strip}
 {assign var=serviceNavTpls value=$gLibertySystem->getServiceValues('content_nav_tpl')}
 {assign var=serviceViewTpls value=$gLibertySystem->getServiceValues('content_view_tpl')}
@@ -20,7 +20,7 @@
 
 	<div class="header">
 		<h1>{$article.title}</h1>
-		{if $article.show_author || $article.show_pubdate}
+		{if $article.show_author eq 'y' || $article.show_pubdate eq 'y'}
 			<div class="date">
 				{if $article.show_author eq 'y'}
 					{* can't really use the link here since it only works when the user uses his login name *}

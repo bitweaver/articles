@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.15 2006/04/11 13:03:24 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.16 2006/04/29 16:26:25 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -44,7 +44,7 @@ $topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign_by_ref( 'topics', $topics );
 
 // Comments engine!
-if( $gContent->mInfo['allow_comments'] == 'y' ) {
+if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 	$comments_vars = Array( 'article' );
 	$comments_prefix_var='article:';
 	$comments_object_var='article';
@@ -54,5 +54,5 @@ if( $gContent->mInfo['allow_comments'] == 'y' ) {
 }
 
 // Display the Index Template
-$gBitSystem->display( 'bitpackage:articles/read_article.tpl', $gContent->mInfo['title'] );
+$gBitSystem->display( 'bitpackage:articles/read_article.tpl', @$gContent->mInfo['title'] );
 ?>

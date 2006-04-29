@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.80 2006/04/14 17:18:37 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.81 2006/04/29 16:39:57 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.80 2006/04/14 17:18:37 squareing Exp $
+ * $Id: BitArticle.php,v 1.81 2006/04/29 16:39:57 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.80 $ $Date: 2006/04/14 17:18:37 $ $Author: squareing $
+ * @version $Revision: 1.81 $ $Date: 2006/04/29 16:39:57 $ $Author: squareing $
  */
 
 /**
@@ -113,14 +113,16 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['data']        = preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] );
-				$this->mInfo['parsed_data'] = $this->parseData();
 
 				/* get the "ago" time */
 				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getConfig( 'article_date_display_format' ) );
 
 				$comment = &new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
+
 				LibertyAttachable::load();
+
+				$this->mInfo['parsed_data'] = $this->parseData();
 			} else {
 				$this->mArticleId = NULL;
 			}
@@ -296,8 +298,21 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-		if ( array_search($pParamHash['article_store']['status_id'],
-			array(ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING))) {
+		// content preferences
+		$prefs = array();
+		if( $gBitUser->hasPermission( 'p_liberty_enter_html' ) ) {
+			$prefs[] = 'content_enter_html';
+		}
+
+		foreach( $prefs as $pref ) {
+			if( !empty( $pParamHash['preferences'][$pref] ) ) {
+				$pParamHash['preferences_store'][$pref] = $pParamHash['preferences'][$pref];
+			} else {
+				$pParamHash['preferences_store'][$pref] = NULL;
+			}
+		}
+
+		if ( array_search( $pParamHash['article_store']['status_id'], array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING ) ) ) {
 				$this->mInfo["no_index"] = true ;
 		}
 
@@ -656,17 +671,14 @@ class BitArticle extends LibertyAttachable {
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
 				$parseHash['data'] = $parts[0];
-				} else {
+			} else {
 				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'articles_description_length' ) );
 			}
 			$res['parsed_description'] = $this->parseData( $parseHash );
 
-			$parseHash['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $res['data'] );
-			$res['parsed_data'] = $this->parseData( $parseHash );
-
 			// this is needed to remove trailing stuff from the parser and insert a link to the actual article
 			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
-			if( strlen( $res['parsed_description'] ) != strlen( $res['parsed_data'] ) ) {
+			if( $res['data'] != $parseHash['data'] ) {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
 				$res['parsed_description'] .= '<a href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
 				$res['has_more'] = TRUE;

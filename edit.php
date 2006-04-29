@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.25 2006/04/24 20:47:41 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.26 2006/04/29 16:39:57 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -48,7 +48,7 @@ if( !empty( $_REQUEST['remove_image'] ) ) {
 }
 
 // random image code
-if( !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
+if( !( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || $gBitUser->hasPermission( 'p_articles_auto_approve' ) ) && !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
 	$feedback['error'] = tra( "You need to supply the correct code to submit." );
 	$_REQUEST['preview'] = TRUE;
 	unset( $_REQUEST['save'] );

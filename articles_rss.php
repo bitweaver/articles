@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.13 2006/04/11 13:03:24 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.14 2006/05/01 11:18:33 bitweaver Exp $
  * @package article
  * @subpackage functions
  */
@@ -42,7 +42,12 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 		$item = new FeedItem();
 		$item->title = $feed['title'];
 		$item->link = BIT_BASE_URI.$articles->getDisplayUrl( $feed['article_id'] );
-		$item->description = $feed['parsed_data'];
+
+		// show the full article in the feed
+		$parseHash['content_id'] = $feed['content_id'];
+		$parseHash['format_guid'] = $feed['format_guid'];
+		$parseHash['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $feed['data'] );
+		$item->description = $articles->parseData( $parseHash );
 
 		$item->date = ( int )$feed['publish_date'];
 		$item->source = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL;

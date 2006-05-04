@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.14 2006/05/01 11:18:33 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.15 2006/05/04 18:43:22 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -14,9 +14,10 @@ require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
+$gBitSystem->verifyFeature( 'articles_rss' );
 
-$rss->title = $gBitSystem->getConfig( 'title_rss_articles', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'Articles' ) );
-$rss->description = $gBitSystem->getConfig( 'desc_rss_articles', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );
+$rss->title = $gBitSystem->getConfig( 'articles_rss_title', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'Articles' ) );
+$rss->description = $gBitSystem->getConfig( 'articles_rss_description', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );
 
 // check permission to view articles
 if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
@@ -30,7 +31,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	$listHash = array(
 		'status_id' => ARTICLE_STATUS_APPROVED,
 		'sort_mode' => 'publish_date_desc',
-		'max_records' => $gBitSystem->getConfig( 'max_rss_articles', 10 ),
+		'max_records' => $gBitSystem->getConfig( 'articles_rss_max_records', 10 ),
 	);
 	$feeds = $articles->getList( $listHash );
 

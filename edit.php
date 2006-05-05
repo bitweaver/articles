@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.26 2006/04/29 16:39:57 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.27 2006/05/05 13:34:08 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -95,6 +95,7 @@ if ($gBitSystem->isPackageActive( 'quicktags' )) {
 	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
 }
 
+$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
 $gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 
 // Display the Index Template

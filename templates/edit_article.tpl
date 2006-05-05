@@ -22,6 +22,7 @@
 	{/if}
 
 	{formfeedback hash=$feedback}
+	{formfeedback warning=`$errors.title`}
 
 	<div class="body">
 		{form enctype="multipart/form-data" id="writearticle"}

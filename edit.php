@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.27 2006/05/05 13:34:08 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.28 2006/05/05 14:31:56 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -93,6 +93,11 @@ $gBitSmarty->assign( 'textarea_id', LIBERTY_TEXT_AREA );
 
 if ($gBitSystem->isPackageActive( 'quicktags' )) {
 	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
+}
+
+if ( !empty( $gContent->mErrors ) || !empty( $feedback ) ) {
+	$article = $gContent->preparePreview( $_REQUEST );
+	$gBitSmarty->assign_by_ref( 'article', $article );
 }
 
 $gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );

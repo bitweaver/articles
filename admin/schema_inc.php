@@ -43,7 +43,6 @@ $tables = array(
 		content_id I4 NOTNULL,
 		description X,
 		author_name C(250),
-		topic_id I4,
 		image_attachment_id I4,
 		publish_date I4,
 		expire_date I4,
@@ -56,8 +55,6 @@ $tables = array(
 					, CONSTRAINT `articles_type_ref` FOREIGN KEY (`article_type_id`) REFERENCES `".BIT_DB_PREFIX."article_types` (`article_type_id`)
 					, CONSTRAINT `articles_status` FOREIGN KEY (`status_id`) REFERENCES `".BIT_DB_PREFIX."article_status` (`status_id`)'
 	",
-
-
 );
 
 global $gBitInstaller;
@@ -65,7 +62,7 @@ global $gBitInstaller;
 $gBitInstaller->makePackageHomeable( ARTICLES_PKG_NAME );
 
 foreach( array_keys( $tables ) AS $tableName ) {
-    $gBitInstaller->registerSchemaTable( ARTICLES_PKG_DIR, $tableName, $tables[$tableName] );
+	$gBitInstaller->registerSchemaTable( ARTICLES_PKG_DIR, $tableName, $tables[$tableName] );
 }
 
 $gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(

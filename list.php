@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.15 2006/05/26 14:23:00 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.16 2006/05/26 15:36:55 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -91,7 +91,6 @@ if( !empty( $_REQUEST['action'] ) ) {
 if( empty( $_REQUEST['status_id'] ) || ( !$gBitUser->hasPermission( 'p_articles_edit_submission' ) && !$gBitUser->hasPermission( 'p_articles_admin' ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
-$_REQUEST['load_pagination'] = 'y';
 $listArticles = $article->getList( $_REQUEST );
 
 $topics = BitArticleTopic::getTopicList();

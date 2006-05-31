@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.28 2006/05/05 14:31:56 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.29 2006/05/31 19:49:14 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -84,6 +84,9 @@ if( !empty( $_REQUEST["save"] ) ) {
 // Get a topic list
 $topics = BitArticleTopic::getTopicList( array( 'active_topic' => TRUE ) );
 $gBitSmarty->assign_by_ref( 'topics', $topics );
+if ( !empty( $_REQUEST['topic'] ) ) {
+	$gBitSmarty->assign( 'topic', $_REQUEST['topic'] );
+}
 // get list of valid types
 $types = BitArticleType::getTypeList();
 $gBitSmarty->assign_by_ref( 'types', $types );

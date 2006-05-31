@@ -57,7 +57,7 @@
 										<select name="topic_id" id="topic_id">
 											<option value="">{tr}None{/tr}</option>
 											{section name=t loop=$topics}
-												<option value="{$topics[t].topic_id}" {if $article.topic_id eq $topics[t].topic_id}selected="selected"{/if}>{$topics[t].topic_name|escape}</option>
+												<option value="{$topics[t].topic_id}" {if $article.topic_id eq $topics[t].topic_id or $topic eq $topics[t].topic_name}selected="selected"{/if}>{$topics[t].topic_name|escape}</option>
 											{/section}
 										</select>
 									{else}

@@ -23,9 +23,14 @@
 		<p class="norecords">
 			{tr}No records found{/tr}<br />
 			{if $gBitUser->hasPermission( 'p_articles_auto_approve' )}
-				{smartlink ititle="Write article" ipackage=articles ifile="edit.php"}
-			{elseif $gBitUser->hasPermission( 'p_articles_submit' )}
-				{smartlink ititle="Submit article" ipackage=articles ifile="edit.php"}
+				{assign var="ititle" value="Write article"}
+			{else}
+				{assign var="ititle" value="Submit article"}
+			{/if}
+			{if $topic}
+				{smartlink ititle=$ititle ipackage=articles ifile="edit.php" topic="$topic"}
+			{else}
+				{smartlink ititle=$ititle ipackage=articles ifile="edit.php"}
 			{/if}
 		</p>
 	{/foreach}

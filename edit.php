@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.29 2006/05/31 19:49:14 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.30 2006/06/11 12:48:24 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -34,7 +34,11 @@ if( $gBitUser->hasPermission('p_articles_admin' ) || $gBitUser->hasPermission( '
 
 // Now check permissions to access this page
 if( !$isOwner ) {
-	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
+	if ( empty( $gContent->mArticleId ) ) {
+		$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot submit an article" ) );
+	} else {
+		$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
+	}
 	$gBitSystem->display( "error.tpl" );
 	die;
 }

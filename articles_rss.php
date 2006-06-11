@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.7 2006/04/07 07:37:58 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.3.2.8 2006/06/11 00:38:45 wolff_borg Exp $
  * @package article
  * @subpackage functions
  */
@@ -15,8 +15,8 @@ require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
 
-$rss->title = $gBitSystem->getPreference( 'title_rss_articles', $gBitSystem->mPrefs['siteTitle'].' - '.tra( 'Articles' ) );
-$rss->description = $gBitSystem->getPreference( 'desc_rss_articles', $gBitSystem->mPrefs['siteTitle'].' - '.tra( 'RSS Feed' ) );
+$rss->title = $gBitSystem->getPreference( 'title_rss_articles', $gBitSystem->getPreference('siteTitle').' - '.tra( 'Articles' ) );
+$rss->description = $gBitSystem->getPreference( 'desc_rss_articles', $gBitSystem->getPreference('siteTitle').' - '.tra( 'RSS Feed' ) );
 
 // check permission to view articles
 if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
@@ -35,17 +35,17 @@ if( !$gBitUser->hasPermission( 'bit_p_read_article' ) ) {
 	$feeds = $articles->getList( $listHash );
 
 	// set the rss link
-	$rss->link = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
+	$rss->link = ARTICLES_PKG_URI;
 
 	// get all the data ready for the feed creator
 	foreach( $feeds['data'] as $feed ) {
 		$item = new FeedItem();
 		$item->title = $feed['title'];
-		$item->link = BIT_BASE_URI.$articles->getDisplayUrl( $feed['article_id'] );
+		$item->link = httpPrefix().$articles->getDisplayUrl( $feed['article_id'] );
 		$item->description = $feed['parsed_data'];
 
 		$item->date = ( int )$feed['publish_date'];
-		$item->source = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
+		$item->source = ARTICLES_PKG_URI;
 		$item->author = $feed['author_name'];
 
 		$item->descriptionTruncSize = $gBitSystem->getPreference( 'rssfeed_truncate', 5000 );

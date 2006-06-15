@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.82 2006/05/05 13:46:20 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.83 2006/06/15 18:14:09 wakeworks Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.82 2006/05/05 13:46:20 sylvieg Exp $
+ * $Id: BitArticle.php,v 1.83 2006/06/15 18:14:09 wakeworks Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.82 $ $Date: 2006/05/05 13:46:20 $ $Author: sylvieg $
+ * @version $Revision: 1.83 $ $Date: 2006/06/15 18:14:09 $ $Author: wakeworks $
  */
 
 /**
@@ -244,10 +244,10 @@ class BitArticle extends LibertyAttachable {
 				if( empty( $pParamHash['title'] ) ) {
 					$this->mErrors['title'] = 'You must specify a title.';
 				} else {
-					$pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, 160 );
+					$pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, BIT_CONTENT_MAX_TITLE_LEN );
 				}
 			} else {
-				$pParamHash['content_store']['title'] =( isset( $pParamHash['title'] ))? substr( $pParamHash['title'], 0, 160 ): '';
+				$pParamHash['content_store']['title'] =( isset( $pParamHash['title'] ))? substr( $pParamHash['title'], 0, BIT_CONTENT_MAX_TITLE_LEN ): '';
 			}
 		} else if( empty( $pParamHash['title'] ) ) {
 			// no name specified

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.30 2006/06/11 12:48:24 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.31 2006/06/16 21:12:18 sylvieg Exp $
  * @package article
  * @subpackage functions
  */
@@ -35,12 +35,10 @@ if( $gBitUser->hasPermission('p_articles_admin' ) || $gBitUser->hasPermission( '
 // Now check permissions to access this page
 if( !$isOwner ) {
 	if ( empty( $gContent->mArticleId ) ) {
-		$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot submit an article" ) );
+		$gBitSystem->fatalPermission('p_articles_submit');
 	} else {
-		$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot edit this article" ) );
+		$gBitSystem->fatalPermission('p_articles_edit');
 	}
-	$gBitSystem->display( "error.tpl" );
-	die;
 }
 
 // if we want to remove a custom image, just nuke all custom image settings at once

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.84 2006/06/19 21:55:36 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.85 2006/06/20 08:37:11 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.84 2006/06/19 21:55:36 bitweaver Exp $
+ * $Id: BitArticle.php,v 1.85 2006/06/20 08:37:11 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.84 $ $Date: 2006/06/19 21:55:36 $ $Author: bitweaver $
+ * @version $Revision: 1.85 $ $Date: 2006/06/20 08:37:11 $ $Author: squareing $
  */
 
 /**
@@ -438,8 +438,10 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( empty( $data['parsed_data'] ) ) {
-			$data['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $data['data'] );
+			$data['no_cache']    = TRUE;
 			$data['parsed_data'] = $this->parseData( $data );
+			// replace the split syntax with a horizontal rule
+			$data['parsed_data'] = preg_replace( ARTICLE_SPLIT_REGEX, "<hr />", $data['parsed_data'] );
 		}
 
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
@@ -666,8 +668,9 @@ class BitArticle extends LibertyAttachable {
 			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getConfig( 'articles_date_threshold' ) );
 
 			// deal with the parsing
-			$parseHash['format_guid'] = $res['format_guid'];
-			$parseHash['content_id']  = $res['content_id'];
+			$parseHash['format_guid']     = $res['format_guid'];
+			$parseHash['content_id']      = $res['content_id'];
+			$parseHash['cache_extension'] = 'desc';
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
 				$parseHash['data'] = $parts[0];

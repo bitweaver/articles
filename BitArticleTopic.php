@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.25 2006/04/24 20:41:18 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.26 2006/07/12 21:21:35 spiderr Exp $
  * @package article
  */
 
@@ -108,24 +108,20 @@ class BitArticleTopic extends BitBase {
 
 			if( !empty( $_FILES['upload'] ) && $_FILES['upload']['tmp_name'] ) {
 				$tmpImagePath = $this->getTopicImageStoragePath( $topicId, TRUE).$_FILES['upload']['name'];
-				if( !move_uploaded_file( $_FILES['upload']['tmp_name'], $tmpImagePath ) ) {
-					$this->mErrors['topic_image'] = "Error during attachment of topic image";
-				} else {
-					global $gBitSystem;
-					$resizeFunc = ($gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
-					$pFileHash['dest_base_name'] = 'topic_'.$topicId;
-					$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$pFileHash['source_file'] = $tmpImagePath;
-					$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
-					$pFileHash['type'] = $_FILES['upload']['type'];
+				global $gBitSystem;
+				$pFileHash = $_FILES['upload'];
+				$resizeFunc = ($gBitSystem->getConfig( 'image_processor' ) == 'magickwand' ) ? 'liberty_magickwand_resize_image' : 'liberty_gd_resize_image';
+				$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+				$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
+				$pFileHash['source_file'] = $pFileHash['tmp_name'];
+				$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
+				$pFileHash['dest_base_name'] = 'topic_'.$topicId;
 
-					if( !( $resizeFunc( $pFileHash ) ) ) {
-						$this->mErrors[] = 'Error while resizing topic image';
-					}
-					@unlink( $tmpImagePath );
-					$iParamHash['has_topic_image'] = 'y';
+				if( !( $resizeFunc( $pFileHash ) ) ) {
+					$this->mErrors[] = 'Error while resizing topic image';
 				}
+				@unlink( $tmpImagePath );
+				$iParamHash['has_topic_image'] = 'y';
 			}
 
 			if( $iParamHash['topic_id'] ) {
@@ -154,7 +150,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( $iBasePathOnly ) {
-			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
+			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 		}
 
 		$ret = NULL;

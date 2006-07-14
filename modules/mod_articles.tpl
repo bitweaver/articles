@@ -1,7 +1,7 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.6 2006/03/25 20:47:10 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.7 2006/07/14 16:22:49 spiderr Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive( 'articles' )}
-	{bitmodule title="$moduleTitle" name="articles"}
+	{bitmodule title="$moduleTitle" name=$smarty.const.ARTICLES_PKG_NAME}
 		<ol>
 			{foreach item=modArt from=$modArticles}
 				<li><a href="{$modArt.display_url}">{$modArt.title|escape}</a></li>

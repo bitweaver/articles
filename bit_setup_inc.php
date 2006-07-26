@@ -1,6 +1,4 @@
 <?php
-global $gBitSystem, $gBitUser, $gBitSmarty;
-
 $registerHash = array(
 	'package_name' => 'articles',
 	'package_path' => dirname( __FILE__ ).'/',

@@ -1,5 +1,6 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine  on
-	RewriteBase    /articles/
+# Uncomment this line if you have a crappy host
+#	RewriteBase    /articles/
 	RewriteRule    ^([0-9]+)$  read.php?article_id=$1  [L]
 </IfModule>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.86 2006/07/14 16:22:31 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.87 2006/08/01 13:19:14 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.86 2006/07/14 16:22:31 spiderr Exp $
+ * $Id: BitArticle.php,v 1.87 2006/08/01 13:19:14 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.86 $ $Date: 2006/07/14 16:22:31 $ $Author: spiderr $
+ * @version $Revision: 1.87 $ $Date: 2006/08/01 13:19:14 $ $Author: squareing $
  */
 
 /**
@@ -687,7 +687,7 @@ class BitArticle extends LibertyAttachable {
 			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
 			if( $res['data'] != $parseHash['data'] ) {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
-				$res['parsed_description'] .= '<a href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
+				$res['parsed_description'] .= '<a class="more" href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
 				$res['has_more'] = TRUE;
 			} else {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.29 2006/07/27 15:36:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.30 2006/08/01 13:19:14 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -75,7 +75,7 @@
 			{if $showDescriptionsOnly and $article.has_more}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{assign var=spacer value=TRUE}
-				<a href="{$article.display_url}">{tr}Read More&hellip;{/tr}</a>
+				<a class="more" href="{$article.display_url}">{tr}Read More&hellip;{/tr}</a>
 			{/if}
 
 			{if $article.allow_comments eq 'y'}

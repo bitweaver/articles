@@ -203,7 +203,7 @@ array( 'PHP' => '
 					$gBitInstaller->mErrors["upgrade"][ARTICLES_PKG_NAME]["article_image_create"][] = "Error while creating article image: ".$rs->fields["image_name"];
 				}
 				$storeHash["source_file"] = $tmpImagePath;
-				$storeHash["dest_path"] = STORAGE_PKG_NAME."/".ARTICLES_PKG_NAME."/";
+				$storeHash["dest_path"] = STORAGE_PKG_URL.ARTICLES_PKG_NAME."/";
 				$storeHash["dest_base_name"] = "article_".$rs->fields["article_id"];
 				$storeHash["max_width"] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 				$storeHash["max_height"] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
@@ -249,7 +249,7 @@ array( 'PHP' => '
 				}
 
 				$storeHash["source_file"] = $tmpImagePath;
-				$storeHash["dest_path"] = STORAGE_PKG_NAME."/".ARTICLES_PKG_NAME."/";
+				$storeHash["dest_path"] = STORAGE_PKG_URL.ARTICLES_PKG_NAME."/";
 				$storeHash["dest_base_name"] = "topic_".$rs->fields["topic_id"];
 				$storeHash["max_width"] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 				$storeHash["max_height"] = ARTICLE_TOPIC_THUMBNAIL_SIZE;

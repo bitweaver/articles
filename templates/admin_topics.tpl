@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.9 2006/02/19 00:37:47 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.10 2006/08/19 20:34:26 sylvieg Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -9,6 +9,8 @@
 	</div>
 
 	<div class="body">
+		{formfeedback error=$gContent->mErrors}
+
 		{form legend="Create a new Topic" enctype="multipart/form-data"}
 			<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
 			

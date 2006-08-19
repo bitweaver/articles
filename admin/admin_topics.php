@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.5 2006/04/11 17:52:09 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.6 2006/08/19 20:34:26 sylvieg Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -10,7 +10,10 @@ $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPermission( 'p_articles_admin' );
 
 if( isset( $_REQUEST["fSubmitAddTopic"] ) ) {
-	$gContent->storeTopic( $_REQUEST );	
+	$gContent->storeTopic( $_REQUEST );
+	if ( !empty( $gContent->mErrors ) ) {
+		$gBitSmarty->assign_by_ref('errors', $gContent->mErrors );
+	}
 } elseif( !empty( $_REQUEST['fActivateTopic'] )&& $gContent ) {
 	$gContent->activateTopic();
 } elseif( !empty( $_REQUEST['fDeactivateTopic'] )&& $gContent ) {

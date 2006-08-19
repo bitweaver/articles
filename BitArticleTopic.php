@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.26 2006/07/12 21:21:35 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.27 2006/08/19 20:34:26 sylvieg Exp $
  * @package article
  */
 
@@ -70,7 +70,12 @@ class BitArticleTopic extends BitBase {
 		if (empty($iParamHash['topic_name']) || ($iParamHash['topic_name'] == '')) {
 			$this->mErrors['topic_name'] = tra("Invalid or blank topic name supplied");
 		} else {
-			$cleanHash['topic_name'] = $iParamHash['topic_name'];
+			$ret = $this->getTopicList( array( 'topic_name' => $iParamHash['topic_name'] ) );
+			if ( sizeof( $ret ) ) {
+				$this->mErrors['topic_name'] = 'Topic "'.$iParamHash['topic_name'].'" already exists. Please choose a different name.';
+			} else {
+				$cleanHash['topic_name'] = $iParamHash['topic_name'];
+			}
 		}
 
 		// Whether the topic is active or not
@@ -169,15 +174,20 @@ class BitArticleTopic extends BitBase {
 		global $gBitSystem;
 
 		$where = '';
+		$bindVars = array();
 		if( !empty( $pOptionHash['active_topic'] ) ) {
 			$where = " WHERE la.`active_topic` = 'y' ";
 		}
+		if ( !empty(  $pOptionHash['topic_name'] ) ) {
+			$where = " WHERE la.`topic_name` = ? ";
+			$bindVars[] = $pOptionHash['topic_name'];
+		}
 
-        $query = "SELECT la.*
+		$query = "SELECT la.*
 				 FROM `".BIT_DB_PREFIX."article_topics` la
 				 $where ORDER BY la.`topic_name`";
 
-		$result = $gBitSystem->mDb->query( $query, array() );
+		$result = $gBitSystem->mDb->query( $query, $bindVars );
 
         $ret = array();
 
@@ -254,6 +264,7 @@ class BitArticleTopic extends BitBase {
 		$sql = "DELETE FROM `".BIT_DB_PREFIX."article_topics` WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
 	}
+
 }
 
 ?>

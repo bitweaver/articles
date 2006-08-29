@@ -8,7 +8,8 @@
 	{if $gBitSystem->isFeatureActive('articles_submissions')}
 		{if $gBitUser->hasPermission( 'p_articles_submit ' ) ||
 			$gBitUser->hasPermission( 'p_articles_approve_submission ' ) ||
-			$gBitUser->hasPermission( 'p_articles_remove_submission ' )}
+			$gBitUser->hasPermission( 'p_articles_remove_submission ' ) ||
+			($gBitSystem->isFeatureActive('articles_auto_approve')&&$gBitUser->isRegistered())}
 			<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$smarty.const.ARTICLE_STATUS_PENDING}">{biticon ipackage=liberty iname=list iexplain="view submissions" iforce=icon} {tr}List submissions{/tr}</a></li>
 		{/if}
 	{/if}

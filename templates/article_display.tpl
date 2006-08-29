@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.30 2006/08/01 13:19:14 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.31 2006/08/29 16:46:45 hash9 Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -7,6 +7,9 @@
 <div class="{$outer_div|default:"post"}">
 	<div class="floaticon">
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$article}
+		{if $gBitUser->hasPermission( 'p_articles_read_history' ) && !$version && $article.version>1}
+			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="liberty/history" article_id=$article.article_id}
+		{/if}
 		{if $gBitUser->hasPermission('p_articles_admin') || $gBitUser->getField('user_id') == $article.user_id}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
 		{/if}

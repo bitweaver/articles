@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.87 2006/08/01 13:19:14 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.88 2006/08/29 16:46:44 hash9 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.87 2006/08/01 13:19:14 squareing Exp $
+ * $Id: BitArticle.php,v 1.88 2006/08/29 16:46:44 hash9 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.87 $ $Date: 2006/08/01 13:19:14 $ $Author: squareing $
+ * @version $Revision: 1.88 $ $Date: 2006/08/29 16:46:44 $ $Author: hash9 $
  */
 
 /**
@@ -26,6 +26,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
+require_once( ARTICLES_PKG_PATH.'BitArticleStatistics.php' );
 
 define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
@@ -74,7 +75,8 @@ class BitArticle extends LibertyAttachable {
 	* Load the data from the database
 	* @access public
 	**/
-	function load() {
+	function load($ver = 0) {
+		$ver = intval($ver);
 		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
@@ -82,19 +84,21 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, lc.*, atype.*, atopic.*,
+			$query = "SELECT a.*, ". (!empty($ver) ? "lch.*, lc.`title`" : "lc.*" ). ", atype.*, atopic.*,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
 				lf.`storage_path` as `image_storage_path` $selectSql
 				FROM `".BIT_DB_PREFIX."articles` a
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) ".
+					(!empty($ver) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lch ON( lch.`content_id` = a.`content_id` )" : "" ) . "
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
-				WHERE a.`$lookupColumn`=? $whereSql";
+				WHERE a.`$lookupColumn`=? $whereSql ". (!empty($ver) ? " AND lch.version = ?" : "");
+			if (!empty($ver)) { $bindVars[]=$ver; }
 			$result = $this->mDb->query( $query, $bindVars );
 
 			global $gBitSystem;
@@ -586,7 +590,11 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function getList( &$pParamHash ) {
-		global $gBitSystem, $gBitUser;
+		global $gBitSystem, $gBitUser, $gLibertySystem;
+
+		if ($gBitSystem->isFeatureActive('articles_auto_approve') && empty($pParamHash['no_update'])) {
+			BitArticleStatistics::autoApprove();
+		}
 
 		if( empty( $pParamHash['sort_mode'] ) ) {
 			$pParamHash['sort_mode'] = 'publish_date_desc';
@@ -645,17 +653,28 @@ class BitArticle extends LibertyAttachable {
 			//$whereSql .= " AND atopic.`active_topic` != 'n' ";
 		}
 
+		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
+			$as = new BitArticleStatistics();
+			$selectSql .= $as->getSQLRank();
+		}
+
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
 		$query = "SELECT a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`, lc.*, atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`, atype.*, astatus.`status_id`, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
-				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`     lc ON lc.`content_id`         = a.`content_id`
-				INNER JOIN      `".BIT_DB_PREFIX."article_status` astatus ON astatus.`status_id`     = a.`status_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`  atopic ON atopic.`topic_id`       = a.`topic_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`    atype ON atype.`article_type_id` = a.`article_type_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON la.`attachment_id`      = a.`image_attachment_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`       lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
+				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON lc.`content_id`         = a.`content_id`
+				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON astatus.`status_id`     = a.`status_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON lc.`content_id`         = lch.`content_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON atopic.`topic_id`       = a.`topic_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`      atype ON atype.`article_type_id` = a.`article_type_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`attachment_id`      = a.`image_attachment_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
-			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
+			ORDER BY ";
+		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
+			$query .= "order_key DESC";
+		} else {
+			$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
+		}
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN      `".BIT_DB_PREFIX."liberty_content`    lc ON lc.`content_id`   = a.`content_id`
@@ -777,7 +796,7 @@ class BitArticle extends LibertyAttachable {
 				include_once( SEARCH_PKG_PATH.'refresh_functions.php' );
 				if ($pStatusId == ARTICLE_STATUS_APPROVED) {
 					refresh_index($this);
-				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) { 
+				} elseif (!$pStatusId == ARTICLE_STATUS_RETIRED) {
 					delete_index($pContentId); // delete it from the search index unless retired ...
 				}
 			}

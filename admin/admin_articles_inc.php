@@ -1,5 +1,5 @@
-<?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.16 2006/04/24 20:47:42 squareing Exp $
+<?php
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.17 2006/08/29 16:46:45 hash9 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -15,6 +15,10 @@ $formCmsSettings = array(
 	'articles_submissions_rnd_img' => array(
 		'label' => 'Prevent Spam',
 		'note' => 'This will generate a random number as an image which the user has to confirm.',
+	),
+	'articles_auto_approve' => array(
+		'label' => 'Auto Approve Articles',
+		'note' => 'Allow User ratings to Auto Approve Articles',
 	),
 );
 $gBitSmarty->assign( 'formCmsSettings',$formCmsSettings );

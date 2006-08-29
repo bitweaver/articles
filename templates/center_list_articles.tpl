@@ -15,6 +15,8 @@
 				<li>{$submission.display_link} <small>[ {tr}Submitted{/tr}: {$submission.last_modified|bit_long_datetime} ]</small></li>
 			{/foreach}
 		</ul>
+		{elseif $submissions && $gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered()}
+		<h3 style="margin-bottom:1em;">{tr}There are <a href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$smarty.const.ARTICLE_STATUS_PENDING}">more articles</a> that haven't made it here yet{/tr}</h3>
 	{/if}
 
 	{foreach from=$articles item=article}

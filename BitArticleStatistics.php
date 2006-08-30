@@ -107,8 +107,8 @@ class BitArticleStatistics {
 			$min_c_time= 0;
 		}
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,false,false));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,true,false));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(null,false,false,false));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(null,false,true,false));
 
 		$pListHash = array('max_records'=>-1,'content_type_guid'=>BITARTICLE_CONTENT_TYPE_GUID, 'sort_mode'=>'created_desc');
 		$obj = new LibertyContent();//BitArticle();
@@ -219,8 +219,8 @@ class BitArticleStatistics {
 		$stat = $this->getStatistics();
 		global $gLibertySystem;
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,false,true,$pObj));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,true,true,$pObj));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($pObj,false,false,true));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($pObj,false,true,true));
 
 		$orderSSQL = '';
 		$selectSql = ", ( ";
@@ -277,8 +277,8 @@ class BitArticleStatistics {
 		$a = new BitArticle();
 		$list = $a->getList($pListHash);
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,false,false,$this));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,true,false,$this));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($this,false,false,false));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($this,false,true,false));
 
 		foreach ($list['data'] as $article) {
 			if ($article['status_id']!=ARTICLE_STATUS_APPROVED) {

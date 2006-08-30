@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.88 2006/08/29 16:46:44 hash9 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.89 2006/08/30 14:26:11 hash9 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.88 2006/08/29 16:46:44 hash9 Exp $
+ * $Id: BitArticle.php,v 1.89 2006/08/30 14:26:11 hash9 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.88 $ $Date: 2006/08/29 16:46:44 $ $Author: hash9 $
+ * @version $Revision: 1.89 $ $Date: 2006/08/30 14:26:11 $ $Author: hash9 $
  */
 
 /**
@@ -673,7 +673,7 @@ class BitArticle extends LibertyAttachable {
 		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
 			$query .= "order_key DESC";
 		} else {
-			$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
+			$query .= $this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 		}
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a

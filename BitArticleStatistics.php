@@ -11,17 +11,17 @@ class BitArticleStatistics {
 	/**
 	 * Enter description here...
 	 *
-	 * @param string $basefeild
+	 * @param string $basefield
 	 * @param string $data
 	 * @param integer $size
 	 */
-	function spiltEncodeData($basefeild, $data, $size = 200) {
+	function spiltEncodeData($basefield, $data, $size = 200) {
 		global $gBitSystem;
 		$str_A = str_split($data,$size);
 		if (count($str_A)>0) {
-			$gBitSystem->storeConfig($basefeild."_size", count($str_A));
+			$gBitSystem->storeConfig($basefield."_size", count($str_A));
 			foreach ($str_A as $i => $part) {
-				$gBitSystem->storeConfig($basefeild."_".$i, $part);
+				$gBitSystem->storeConfig($basefield."_".$i, $part);
 			}
 		}
 	}
@@ -29,19 +29,19 @@ class BitArticleStatistics {
 	/**
 	 * Enter description here...
 	 *
-	 * @param string $basefeild
+	 * @param string $basefield
 	 * @param string $default
 	 * @return string
 	 */
-	function splitDecodeData($basefeild,$default='') {
+	function splitDecodeData($basefield,$default='') {
 		global $gBitSystem;
-		$len = intval( $gBitSystem->getConfig($basefeild."_size",'0'));
+		$len = intval( $gBitSystem->getConfig($basefield."_size",'0'));
 		if ($len==0) {
 			return $default;
 		}
 		$data ='';
 		for ($i = 0; $i < $len; $i++) {
-			$data .= $gBitSystem->getConfig($basefeild."_".$i, '');
+			$data .= $gBitSystem->getConfig($basefield."_".$i, '');
 		}
 		return $data;
 	}
@@ -107,8 +107,8 @@ class BitArticleStatistics {
 			$min_c_time= 0;
 		}
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(null,false,false,false));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(null,false,true,false));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array(null,false,false,false));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array(null,false,true,false));
 
 		$pListHash = array('max_records'=>-1,'content_type_guid'=>BITARTICLE_CONTENT_TYPE_GUID, 'sort_mode'=>'created_desc');
 		$obj = new LibertyContent();//BitArticle();
@@ -196,8 +196,8 @@ class BitArticleStatistics {
 	}
 
 	/*function rankContent(&$pObjHash) {
-	$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,false,false));
-	$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array(false,true,false));
+	$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array(false,false,false));
+	$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array(false,true,false));
 	foreach (array_keys($rating_vars) as $serv) {
 	$rateing = intval($pObjHash[$rating_vars[$serv]]);
 	$rate_count = 0;
@@ -219,8 +219,8 @@ class BitArticleStatistics {
 		$stat = $this->getStatistics();
 		global $gLibertySystem;
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($pObj,false,false,true));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($pObj,false,true,true));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array($pObj,false,false,true));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array($pObj,false,true,true));
 
 		$orderSSQL = '';
 		$selectSql = ", ( ";
@@ -277,8 +277,8 @@ class BitArticleStatistics {
 		$a = new BitArticle();
 		$list = $a->getList($pListHash);
 
-		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($this,false,false,false));
-		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_feild_function',array($this,false,true,false));
+		$rating_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array($this,false,false,false));
+		$rating_count_vars = $gLibertySystem->invokeServiceFunctionR('content_get_rating_field_function',array($this,false,true,false));
 
 		foreach ($list['data'] as $article) {
 			if ($article['status_id']!=ARTICLE_STATUS_APPROVED) {

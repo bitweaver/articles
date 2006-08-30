@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.89 2006/08/30 14:26:11 hash9 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.90 2006/08/30 15:27:06 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.89 2006/08/30 14:26:11 hash9 Exp $
+ * $Id: BitArticle.php,v 1.90 2006/08/30 15:27:06 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.89 $ $Date: 2006/08/30 14:26:11 $ $Author: hash9 $
+ * @version $Revision: 1.90 $ $Date: 2006/08/30 15:27:06 $ $Author: spiderr $
  */
 
 /**
@@ -597,7 +597,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( empty( $pParamHash['sort_mode'] ) ) {
-			$pParamHash['sort_mode'] = 'publish_date_desc';
+			$pParamHash['sort_mode'] = $gBitSystem->isFeatureActive('articles_auto_approve') ? 'order_key_desc' : 'publish_date_desc';
 		}
 
 		LibertyContent::prepGetList( $pParamHash );
@@ -669,12 +669,7 @@ class BitArticle extends LibertyAttachable {
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`attachment_id`      = a.`image_attachment_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
-			ORDER BY ";
-		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
-			$query .= "order_key DESC";
-		} else {
-			$query .= $this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
-		}
+			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN      `".BIT_DB_PREFIX."liberty_content`    lc ON lc.`content_id`   = a.`content_id`

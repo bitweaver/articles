@@ -81,7 +81,7 @@ class BitArticleStatistics {
 	 */
 	function conditionalUpdate() {
 		$d = $this->load();
-		if (($d['t']+$d['mt'])<time()) {
+		if (empty($d) || ($d['t']+$d['mt'])<time()) {
 			$this->update();
 		}
 	}
@@ -230,11 +230,19 @@ class BitArticleStatistics {
 			if(!empty($orderSSQL)) {
 				$orderSSQL .=" + ";
 			}
+			if (empty($stat['r'])) {
+				$stat['r']=array();
+			}
+			if (empty($stat['r'][$serv])) {
+				$stat['r'][$serv]=array('r_c'=>0,'r'=>0);
+			}
 			if (!empty($rate_c_var)) {
 				$factor = $stat['r'][$serv]['r_c'] * $stat['r'][$serv]['r'];
+				if ($factor==0) { $factor = 1; }
 				$orderSSQL .= "(( COALESCE($rate_var,0) * COALESCE($rate_c_var,0)) / $factor)";
 			} else {
 				$factor = $stat['r'][$serv]['r'];
+				if ($factor==0) { $factor = 1; }
 				$orderSSQL .= "(COALESCE($rate_var,0) / $factor )";
 			}
 		}
@@ -242,8 +250,11 @@ class BitArticleStatistics {
 		if(!empty($orderSSQL)) {
 			$orderSSQL .=" + ";
 		}
-		$orderSSQL .= "(CAST(( lc.`created` - ". time() . ")AS FLOAT) / ({$stat['age']}) )";
+		$orderSSQL .= "(CAST(( lc.`created` - ". time() . ") AS FLOAT) / ({$stat['age']}) )";
 
+		if (empty($stat['hr'])) {
+			$stat['hr']=0;
+		}
 		if ($stat['hr']>0) {
 			$orderSSQL .= " + ((CAST( lch.`hits` AS FLOAT) / CAST( lch.`last_hit` AS FLOAT) / 60) / {$stat['hr']} )";
 		} else {
@@ -288,9 +299,8 @@ class BitArticleStatistics {
 			}
 		}
 		if ($gBitSystem->isFeatureActive('articles_auto_approve') && !empty($auto_approve_ids)) {
-			vd($auto_approve_ids);
 			$query = 'UPDATE `'.BIT_DB_PREFIX.'articles` SET `status_id`=' .ARTICLE_STATUS_APPROVED. ' WHERE `content_id`='.implode(' OR `content_id`=',$auto_approve_ids);
-			//$result = $a->mDb->query( $query );
+			$result = $a->mDb->query( $query );
 		}
 	}
 

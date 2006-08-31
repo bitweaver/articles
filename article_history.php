@@ -79,7 +79,6 @@ if (isset($_REQUEST["delete"]) && isset($_REQUEST["hist"])) {
 	$diffx = new WikiDiff($from_lines,$to_lines);
 	$fmt = new WikiUnifiedDiffFormatter;
 	$html = $fmt->format($diffx, $from_lines);
-	vd($html);
 	$gBitSmarty->assign('diffdata', $html);
 	$gBitSmarty->assign('diff2', 'y');
 	$gBitSmarty->assign('version_from', $from_version);

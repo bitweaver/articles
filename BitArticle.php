@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.90 2006/08/30 15:27:06 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.91 2006/08/31 21:16:38 hash9 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.90 2006/08/30 15:27:06 spiderr Exp $
+ * $Id: BitArticle.php,v 1.91 2006/08/31 21:16:38 hash9 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.90 $ $Date: 2006/08/30 15:27:06 $ $Author: spiderr $
+ * @version $Revision: 1.91 $ $Date: 2006/08/31 21:16:38 $ $Author: hash9 $
  */
 
 /**
@@ -655,8 +655,12 @@ class BitArticle extends LibertyAttachable {
 
 		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
 			$as = new BitArticleStatistics();
-			$selectSql .= $as->getSQLRank();
-		}
+                        $obj = null;
+                        if (isset($this)) {
+                                $obj = $this;
+                        }
+                        $selectSql .= $as->getSQLRank($obj);
+                }
 
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
 		$query = "SELECT a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`, lc.*, atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`, atype.*, astatus.`status_id`, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql

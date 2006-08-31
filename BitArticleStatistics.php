@@ -215,7 +215,7 @@ class BitArticleStatistics {
 	 * @param array $pObj
 	 * @return string
 	 */
-	function getSQLRank(&$pObj=null) {
+	function getSQLRank(&$pObj) {
 		$stat = $this->getStatistics();
 		global $gLibertySystem;
 

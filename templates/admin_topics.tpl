@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.10 2006/08/19 20:34:26 sylvieg Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.11 2006/09/03 13:27:43 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -13,7 +13,7 @@
 
 		{form legend="Create a new Topic" enctype="multipart/form-data"}
 			<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-			
+
 			<div class="row">
 				{formlabel label="Topic Title" for="topic_name"}
 				{forminput}
@@ -21,7 +21,7 @@
 					{formhelp note=""}
 				{/forminput}
 			</div> 
-			
+
 			<div class="row">
 				{formlabel label="Upload Image" for="t-image"}
 				{forminput}
@@ -29,7 +29,7 @@
 					{formhelp note=""}
 				{/forminput}
 			</div>
-			
+
 			<div class="row submit">
 				<input type="submit" name="fSubmitAddTopic" value="{tr}Add Topic{/tr}" />
 			</div>
@@ -59,20 +59,20 @@
 							<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?topic_id={$topics[user].topic_id}">{$topics[user].topic_name}</a>
 							&nbsp; <small>[ {$topics[user].num_articles} ]</small>
 						</h2>
-						
+
 					</td>
 
 					<td style="text-align:center;">
 						{if $topics[user].active_topic eq 'n'}
-							{smartlink ititle='activate' ibiticon='liberty/inactive' fActivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='activate' ibiticon="liberty/inactive" fActivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{else}
-							{smartlink ititle='deactivate' ibiticon='liberty/active' fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='deactivate' ibiticon="liberty/active" fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{/if}
 					</td>
 
 					<td align="right">
-						{smartlink ititle='edit' ibiticon='liberty/edit' ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
-						{smartlink ititle='permissions' ibiticon='liberty/permissions' ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
+						{smartlink ititle='edit' ibiticon="liberty/edit" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
+						{smartlink ititle='permissions' ibiticon="liberty/permissions" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
 						<br />
 						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />

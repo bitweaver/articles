@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.31 2006/08/29 16:46:45 hash9 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.32 2006/09/03 20:04:53 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -8,14 +8,14 @@
 	<div class="floaticon">
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$article}
 		{if $gBitUser->hasPermission( 'p_articles_read_history' ) && !$version && $article.version>1}
-			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="liberty/history" article_id=$article.article_id}
+			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="icons/appointment-new" article_id=$article.article_id}
 		{/if}
 		{if $gBitUser->hasPermission('p_articles_admin') || $gBitUser->getField('user_id') == $article.user_id}
-			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=edit iexplain=edit}</a>
+			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain=edit}</a>
 		{/if}
-		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage=liberty iname=print iexplain=print}</a>*}
+		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="document-print" iexplain=print}</a>*}
 		{if $gBitUser->hasPermission( 'p_articles_remove' )}
-			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="liberty/delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
+			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="icons/edit-delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}
 	</div><!-- end .footer -->
 

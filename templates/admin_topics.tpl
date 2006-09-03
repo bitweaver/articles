@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.11 2006/09/03 13:27:43 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.12 2006/09/03 20:04:53 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -64,19 +64,19 @@
 
 					<td style="text-align:center;">
 						{if $topics[user].active_topic eq 'n'}
-							{smartlink ititle='activate' ibiticon="liberty/inactive" fActivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='activate' ibiticon="icons/face-sad" fActivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{else}
-							{smartlink ititle='deactivate' ibiticon="liberty/active" fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='deactivate' ibiticon="icons/face-smile" fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
 						{/if}
 					</td>
 
 					<td align="right">
-						{smartlink ititle='edit' ibiticon="liberty/edit" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
-						{smartlink ititle='permissions' ibiticon="liberty/permissions" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
+						{smartlink ititle='edit' ibiticon="icons/accessories-text-editor" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
+						{smartlink ititle='permissions' ibiticon="icons/emblem-shared" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
 						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic"}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage="icons" iname="edit-delete" iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage=liberty iname=delete iforce=icon_text iexplain="Remove Topic and its Articles"}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage="icons" iname="edit-delete" iforce=icon_text iexplain="Remove Topic and its Articles"}</a>
 					</td>
 				</tr>
 			{sectionelse}

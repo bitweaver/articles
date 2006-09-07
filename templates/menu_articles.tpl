@@ -17,7 +17,7 @@
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}edit.php">{biticon ipackage="icons" iname="document-new" iexplain="new article" iforce=icon} {tr}{if $gBitUser->hasPermission('p_articles_edit')}Write{else}Submit{/if} article{/tr}</a></li>
 	{/if}
 	{if $gBitSystem->isFeatureActive( 'articles_rankings' ) && $gBitUser->hasPermission( 'p_articles_read ' )}
-		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}rankings.php">{biticon ipackage="icons" iname="format-justify-fill" iexplain="article rankings" iforce=icon} {tr}Article rankings{/tr}</a></li>
+		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}rankings.php">{biticon ipackage="icons" iname="view-sort-ascending" iexplain="article rankings" iforce=icon} {tr}Article rankings{/tr}</a></li>
 	{/if}
 	{if $gBitSystem->isFeatureActive( 'feature_comm' ) && $gBitUser->hasPermission( 'p_articles_send ' )}
 		<li><a class="item" href="{$smarty.const.XMLRPC_PKG_URL}send_objects.php">{biticon ipackage=liberty iname=spacer iexplain="send articles" iforce=icon} {tr}Send articles{/tr}</a></li>

@@ -15,7 +15,12 @@ if( $gBitSystem->isPackageActive( 'articles' ) ) {
 	define( 'ARTICLE_STATUS_APPROVED', 300 );
 	define( 'ARTICLE_STATUS_RETIRED', 400 );
 
-	$gBitSystem->registerAppMenu( ARTICLES_PKG_NAME, ucfirst( ARTICLES_PKG_DIR ), ARTICLES_PKG_URL.'index.php', 'bitpackage:articles/menu_articles.tpl', ARTICLES_PKG_NAME );
+	$menuHash = array(
+		'package_name'  => ARTICLES_PKG_NAME,
+		'index_url'     => ARTICLES_PKG_URL.'index.php',
+		'menu_template' => 'bitpackage:articles/menu_articles.tpl',
+	);
+	$gBitSystem->registerAppMenu( $menuHash );
 
 	$gBitSystem->registerNotifyEvent( array( "article_submitted" => tra( "A user submits an article" ) ) );
 }

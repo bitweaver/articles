@@ -185,7 +185,7 @@
 						</div>
 
 						{if $gBitUser->hasPermission('p_liberty_attach_attachments')}
-							{include file="bitpackage:liberty/edit_storage.tpl" no_plugins=1}
+							{include file="bitpackage:liberty/edit_storage.tpl"}
 						{/if}
 					{/legend}
 				{/jstab}

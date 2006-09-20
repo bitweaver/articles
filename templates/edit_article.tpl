@@ -96,6 +96,8 @@
 							</div>
 						{/if}
 
+						{include file="bitpackage:liberty/content_status.tpl"}
+
 						{include file="bitpackage:liberty/edit_format.tpl"}
 
 						{if $gBitSystem->isPackageActive( 'quicktags' )}

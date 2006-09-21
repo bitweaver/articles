@@ -96,7 +96,7 @@
 							</div>
 						{/if}
 
-						{include file="bitpackage:liberty/content_status.tpl"}
+						{include file="bitpackage:liberty/edit_content_status_inc.tpl"}
 
 						{include file="bitpackage:liberty/edit_format.tpl"}
 

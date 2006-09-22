@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.10 2006/04/14 17:18:37 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.11 2006/09/22 08:44:46 squareing Exp $
  * @package article
  * @subpackage modules
  */
@@ -34,8 +34,17 @@ if( !empty( $module_params['sort_mode'] ) && in_array( $module_params['sort_mode
 $getHash['status_id']     = $status_id;
 $getHash['sort_mode']     = $sort_mode;
 $getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->getConfig( 'articles_max_list' );
-$getHash['topic']         = !empty( $module_params['topic'] ) ? $module_params['topic'] : NULL;
+$getHash['topic_name']    = !empty( $module_params['topic_name'] ) ? $module_params['topic_name'] : NULL;
+$getHash['topic_id']      = !empty( $module_params['topic_id'] ) ? $module_params['topic_id'] : NULL;
 $articles = $articles->getList( $getHash );
+
+if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name'] ) ) && empty( $module_title ) && !empty( $articles ) ) {
+	$gBitSmarty->assign( 'moduleTitle', $articles['data'][0]['topic_name'] );
+} elseif( !empty( $module_title ) ) {
+	$gBitSmarty->assign( 'moduleTitle', $module_title );
+} else {
+	$gBitSmarty->assign( 'moduleTitle', "Articles" );
+}
 
 $gBitSmarty->assign( 'modArticles', $articles['data'] );
 ?>

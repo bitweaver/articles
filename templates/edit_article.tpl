@@ -68,19 +68,26 @@
 							</div>
 						{/if}
 
-						<div class="row">
-							{formlabel label="Type" for="article_type_id"}
-							{forminput}
-								<select id="article_type_id" name="article_type_id">
-									{section name=t loop=$types}
-										<option value="{$types[t].article_type_id}" {if $article.article_type_id eq $types[t].article_type_id}selected="selected"{/if}>{tr}{$types[t].type_name}{/tr} {if $types[t].use_ratings eq 'y'}{assign var=rat value=TRUE} &nbsp; [ {tr}uses rating{/tr} ]{/if}</option>
-									{/section}
-								</select>
-								{formhelp note=""}
-							{/forminput}
-						</div>
+						{if count($types) == 1}
+							{section name=t loop=$types}
+								<input type="hidden" name="article_type_id" value="{$types[t].article_type_id}">
+								{if $types[t].use_ratings eq 'y'}{assign var=ratings value=TRUE}{/if}
+							{/section}
+						{else}
+							<div class="row">
+								{formlabel label="Type" for="article_type_id"}
+								{forminput}
+									<select id="article_type_id" name="article_type_id">
+										{section name=t loop=$types}
+											<option value="{$types[t].article_type_id}" {if $article.article_type_id eq $types[t].article_type_id}selected="selected"{/if}>{tr}{$types[t].type_name}{/tr} {if $types[t].use_ratings eq 'y'}{assign var=ratings value=TRUE} &nbsp; [ {tr}uses rating{/tr} ]{/if}</option>
+										{/section}
+									</select>
+									{formhelp note=""}
+								{/forminput}
+							</div>
+						{/if}
 
-						{if $rat}
+						{if $ratings}
 							<div id="ratingedit" class="row">
 								{formlabel label="Rating" for="rating"}
 								{forminput}

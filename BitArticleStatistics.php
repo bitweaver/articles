@@ -1,7 +1,27 @@
 <?php
-// Initialization
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleStatistics.php,v 1.93 2006/10/09 09:36:50 dspt Exp $
+ * @package article
+ *
+ * Copyright( c )2004 bitweaver.org
+ * Copyright( c )2003 tikwiki.org
+ * Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * created 2004/8/15
+ * @author wolffy <wolff_borg@yahoo.com.au>
+ * @version $Revision: 1.93 $ $Date: 2006/10/09 09:36:50 $ $Author: dspt $
+ */
+
+/**
+ * Required setup
+ */
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
+/**
+ * @package article
+ */
 class BitArticleStatistics {
 
 	function BitArticleStatistics() {

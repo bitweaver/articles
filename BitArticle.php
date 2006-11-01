@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.93 2006/10/09 09:36:50 dspt Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.94 2006/11/01 09:16:52 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.93 2006/10/09 09:36:50 dspt Exp $
+ * $Id: BitArticle.php,v 1.94 2006/11/01 09:16:52 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.93 $ $Date: 2006/10/09 09:36:50 $ $Author: dspt $
+ * @version $Revision: 1.94 $ $Date: 2006/11/01 09:16:52 $ $Author: squareing $
  */
 
 /**
@@ -161,7 +161,7 @@ class BitArticle extends LibertyAttachable {
 			}
 
 			// we need to store any custom image that has been uploaded
-			if( !empty( $_FILES['article_image'] ) ) {
+			if( !empty( $_FILES['article_image']['name'] ) ) {
 				$this->storeImage( $pParamHash, $_FILES['article_image'] );
 			}
 
@@ -404,7 +404,7 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		if( is_file( STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg' ) ) {
-			return STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg';
+			return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg';
 		} else {
 			return FALSE;
 		}
@@ -656,12 +656,12 @@ class BitArticle extends LibertyAttachable {
 
 		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
 			$as = new BitArticleStatistics();
-                        $obj = null;
-                        if (isset($this)) {
-                                $obj = $this;
-                        }
-                        $selectSql .= $as->getSQLRank($obj);
-                }
+			$obj = null;
+			if (isset($this)) {
+				$obj = $this;
+			}
+			$selectSql .= $as->getSQLRank($obj);
+		}
 
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
 		$query = "SELECT a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`, lc.*, atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`, atype.*, astatus.`status_id`, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql

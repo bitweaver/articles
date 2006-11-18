@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.94 2006/11/01 09:16:52 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.95 2006/11/18 15:10:48 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.94 2006/11/01 09:16:52 squareing Exp $
+ * $Id: BitArticle.php,v 1.95 2006/11/18 15:10:48 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.94 $ $Date: 2006/11/01 09:16:52 $ $Author: squareing $
+ * @version $Revision: 1.95 $ $Date: 2006/11/18 15:10:48 $ $Author: spiderr $
  */
 
 /**
@@ -26,7 +26,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
-require_once( ARTICLES_PKG_PATH.'BitArticleStatistics.php' );
+// feature incomplete require_once( ARTICLES_PKG_PATH.'BitArticleStatistics.php' );
 
 define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
@@ -593,9 +593,12 @@ class BitArticle extends LibertyAttachable {
 	function getList( &$pParamHash ) {
 		global $gBitSystem, $gBitUser, $gLibertySystem;
 
+/*
+feature incomplete
 		if ($gBitSystem->isFeatureActive('articles_auto_approve') && empty($pParamHash['no_update'])) {
 			BitArticleStatistics::autoApprove();
 		}
+*/
 
 		if( empty( $pParamHash['sort_mode'] ) ) {
 			$pParamHash['sort_mode'] = $gBitSystem->isFeatureActive('articles_auto_approve') ? 'order_key_desc' : 'publish_date_desc';
@@ -654,6 +657,8 @@ class BitArticle extends LibertyAttachable {
 			//$whereSql .= " AND atopic.`active_topic` != 'n' ";
 		}
 
+/*
+feature incomplete
 		if ($gBitSystem->isFeatureActive('articles_auto_approve')) {
 			$as = new BitArticleStatistics();
 			$obj = null;
@@ -662,6 +667,7 @@ class BitArticle extends LibertyAttachable {
 			}
 			$selectSql .= $as->getSQLRank($obj);
 		}
+*/
 
 		// Oracle is very particular about naming multiple columns, so need to explicity name them ORA-00918: column ambiguously defined
 		$query = "SELECT a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`, lc.*, atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`, atype.*, astatus.`status_id`, astatus.`status_name`, lf.`storage_path` as `image_storage_path` $selectSql

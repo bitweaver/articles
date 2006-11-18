@@ -1,13 +1,16 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.17 2006/08/29 16:46:45 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.18 2006/11/18 15:10:48 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 $formCmsSettings = array(
+/*
+	Feature is incomplete
 	'articles_rankings' => array(
 		'label' => 'Rankings',
 		'note' => 'Activates statistics for article ranking features.',
 	),
+*/
 	'articles_display_filter_bar' => array(
 		'label' => 'Articles Filter',
 		'note' => 'Allows admins to quickly filter articles based on status, topic and type.',

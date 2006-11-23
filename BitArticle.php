@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.95 2006/11/18 15:10:48 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.96 2006/11/23 15:18:18 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.95 2006/11/18 15:10:48 spiderr Exp $
+ * $Id: BitArticle.php,v 1.96 2006/11/23 15:18:18 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.95 $ $Date: 2006/11/18 15:10:48 $ $Author: spiderr $
+ * @version $Revision: 1.96 $ $Date: 2006/11/23 15:18:18 $ $Author: squareing $
  */
 
 /**
@@ -117,9 +117,6 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['data']        = preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] );
-
-				/* get the "ago" time */
-				$this->mInfo['time_difference'] = BitDate::calculateTimeDifference( $this->mInfo['publish_date'], NULL, $gBitSystem->getConfig( 'article_date_display_format' ) );
 
 				$comment = &new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
@@ -692,7 +689,6 @@ feature incomplete
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			$res['image_url'] = BitArticle::getImageUrl( $res );
-			$res['time_difference'] = BitDate::calculateTimeDifference( $res['publish_date'], NULL, $gBitSystem->getConfig( 'articles_date_threshold' ) );
 
 			// deal with the parsing
 			$parseHash['format_guid']     = $res['format_guid'];

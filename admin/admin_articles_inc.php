@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.18 2006/11/18 15:10:48 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.19 2006/11/23 15:18:18 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -88,7 +88,6 @@ if( $processForm ) {
 	foreach( $featureToggles as $item => $data ) {
 		simple_set_toggle( $item, ARTICLES_PKG_NAME );
 	}
-	simple_set_value( "articles_date_threshold", ARTICLES_PKG_NAME );
 	simple_set_int( "articles_max_list", ARTICLES_PKG_NAME );
 	simple_set_int( "articles_description_length", ARTICLES_PKG_NAME );
 	simple_set_int( "article_topic_thumbnail_size", ARTICLES_PKG_NAME );

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.11 2006/04/14 17:18:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.12 2006/11/23 15:18:18 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -37,14 +37,6 @@
 					{forminput}
 						<input size="5" type="text" id="article_topic_thumbnail_size" name="article_topic_thumbnail_size" value="{$gBitSystem->getConfig('article_topic_thumbnail_size')|default:"160"}" /> {tr}pixels{/tr}
 						{formhelp note="Here you can set the maximum width and height an article image can have. If you don't want this feature active, set it very high, then your images will not be resized."}
-					{/forminput}
-				</div>
-
-				<div class="row">
-					{formlabel label="Display Time since Publishing" for="articles-date-threshold"}
-					{forminput}
-						{html_options options=$articleDateThreshold values=$articleDateThreshold name=articles_date_threshold id=article-date-threshold selected=$gBitSystem->mPrefs.articles_date_threshold}
-						{formhelp note="Display the time since the article has been published instead of the full date. Pick the timespan for which this is true."}
 					{/forminput}
 				</div>
 

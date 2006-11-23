@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.32 2006/09/03 20:04:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.33 2006/11/23 15:18:18 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -29,11 +29,7 @@
 				{/if}
 
 				{if $article.show_pubdate eq 'y'}
-					{if $article.time_difference.orientation eq 'past'}
-						&bull; {tr}{$article.time_difference.strings.0} {$article.time_difference.strings.1} ago{/tr}
-					{else}
-						&bull; {$article.publish_date|bit_short_datetime}
-					{/if}
+					&bull; {$article.publish_date|reltime}
 				{/if}
 			</div><!-- end .date -->
 		{/if}
@@ -72,7 +68,7 @@
 		<div class="footer">
 			{if $article.show_reads eq 'y'}
 				{assign var=spacer value=TRUE}
-				{$article.hits} {tr}reads{/tr}
+				{$article.hits|default:0} {tr}reads{/tr}
 			{/if}
 
 			{if $showDescriptionsOnly and $article.has_more}

@@ -18,7 +18,7 @@
 
 	{if $preview}
 		<h2>Preview</h2>
-		<div class="preview">{include file="bitpackage:articles/article_display.tpl" outer_div='display article'}</div>
+		<div class="preview">{include file="bitpackage:articles/article_display.tpl" outer_div='display articles'}</div>
 	{/if}
 
 	{formfeedback hash=$feedback}

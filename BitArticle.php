@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.96 2006/11/23 15:18:18 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.97 2006/11/28 20:45:04 nickpalmer Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.96 2006/11/23 15:18:18 squareing Exp $
+ * $Id: BitArticle.php,v 1.97 2006/11/28 20:45:04 nickpalmer Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.96 $ $Date: 2006/11/23 15:18:18 $ $Author: squareing $
+ * @version $Revision: 1.97 $ $Date: 2006/11/28 20:45:04 $ $Author: nickpalmer $
  */
 
 /**
@@ -84,7 +84,7 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, ". (!empty($ver) ? "lch.*, lc.`title`" : "lc.*" ). ", atype.*, atopic.*,
+			$query = "SELECT a.*, ". (!empty($ver) ? "lch.`hits`, lc.`title`" : "lc.*" ). ", atype.*, atopic.*,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
 				lf.`storage_path` as `image_storage_path` $selectSql
@@ -128,6 +128,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mArticleId = NULL;
 			}
 		}
+
 		return( count( $this->mInfo ) );
 	}
 

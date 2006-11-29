@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.27 2006/08/19 20:34:26 sylvieg Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.28 2006/11/29 03:02:47 nickpalmer Exp $
  * @package article
  */
 
@@ -69,7 +69,7 @@ class BitArticleTopic extends BitBase {
 		// Was an acceptable name given?
 		if (empty($iParamHash['topic_name']) || ($iParamHash['topic_name'] == '')) {
 			$this->mErrors['topic_name'] = tra("Invalid or blank topic name supplied");
-		} else {
+		} else if (empty($iParamHash['topic_id'])) {
 			$ret = $this->getTopicList( array( 'topic_name' => $iParamHash['topic_name'] ) );
 			if ( sizeof( $ret ) ) {
 				$this->mErrors['topic_name'] = 'Topic "'.$iParamHash['topic_name'].'" already exists. Please choose a different name.';
@@ -77,6 +77,10 @@ class BitArticleTopic extends BitBase {
 				$cleanHash['topic_name'] = $iParamHash['topic_name'];
 			}
 		}
+		else {
+			$cleanHash['topic_name'] = $iParamHash['topic_name'];
+		}
+
 
 		// Whether the topic is active or not
 		if ( empty($iParamHash['active_topic']) || (strtoupper($iParamHash['active_topic']) != 'CHECKED' && strtoupper($iParamHash['active_topic']) != 'ON' && strtoupper($iParamHash['active_topic']) != 'Y')) {
@@ -110,7 +114,6 @@ class BitArticleTopic extends BitBase {
 			} else {
 				$topicId = $this->mTopicId;
 			}
-
 			if( !empty( $_FILES['upload'] ) && $_FILES['upload']['tmp_name'] ) {
 				$tmpImagePath = $this->getTopicImageStoragePath( $topicId, TRUE).$_FILES['upload']['name'];
 				global $gBitSystem;

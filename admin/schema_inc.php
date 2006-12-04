@@ -63,7 +63,7 @@ foreach( array_keys( $tables ) AS $tableName ) {
 	$gBitInstaller->registerSchemaTable( ARTICLES_PKG_NAME, $tableName, $tables[$tableName] );
 }
 
-$gBitInstaller->registerPackageInfo( ARTICLES_PKG_DIR, array(
+$gBitInstaller->registerPackageInfo( ARTICLES_PKG_NAME, array(
 	'description' => "This package manages news articles to create a slashdot-like news site.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
@@ -79,9 +79,9 @@ $gBitInstaller->registerSchemaSequences( ARTICLES_PKG_NAME, $sequences );
 
 
 // $indices = array();
-// $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_DIR, $indices );
+// $gBitInstaller->registerSchemaIndexes( ARTICLES_PKG_NAME, $indices );
 
-$gBitInstaller->registerSchemaDefault( ARTICLES_PKG_DIR, array(
+$gBitInstaller->registerSchemaDefault( ARTICLES_PKG_NAME, array(
 	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`) VALUES (1, 'Article')",
 	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`, `use_ratings`) VALUES (2, 'Review','y')",
 	"INSERT INTO `".BIT_DB_PREFIX."article_types` (`article_type_id`, `type_name`, `show_post_expire`) VALUES (3, 'Event','n')",

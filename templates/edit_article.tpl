@@ -113,7 +113,7 @@
 
 						<div class="row">
 							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})" onkeyup  ="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})">{$article.raw|escape:html}</textarea>
+								<textarea {spellchecker} id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})" onkeyup="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})">{$article.raw|escape:html}</textarea>
 								{capture name=artCount}
 									{$article.data|count_characters:true}
 								{/capture}

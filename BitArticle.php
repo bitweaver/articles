@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.100 2006/12/13 17:55:29 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.101 2006/12/16 09:53:02 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.100 2006/12/13 17:55:29 squareing Exp $
+ * $Id: BitArticle.php,v 1.101 2006/12/16 09:53:02 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.100 $ $Date: 2006/12/13 17:55:29 $ $Author: squareing $
+ * @version $Revision: 1.101 $ $Date: 2006/12/16 09:53:02 $ $Author: squareing $
  */
 
 /**
@@ -75,8 +75,8 @@ class BitArticle extends LibertyAttachable {
 	* Load the data from the database
 	* @access public
 	**/
-	function load($ver = 0) {
-		$ver = intval($ver);
+	function load( $pVersion = 0 ) {
+		$pVersion = intval( $pVersion );
 		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
@@ -84,7 +84,7 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, ". (!empty($ver) ? "lch.`hits`, lc.`title`" : "lc.*" ). ", atype.*, atopic.*,
+			$query = "SELECT a.*, ".( !empty( $pVersion ) ? "lch.`hits`, lc.`title`" : "lc.*" ).", atype.*, atopic.*,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
 				lf.`storage_path` as `image_storage_path` $selectSql
@@ -92,13 +92,15 @@ class BitArticle extends LibertyAttachable {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) ".
-					(!empty($ver) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lch ON( lch.`content_id` = a.`content_id` )" : "" ) . "
+					( !empty( $pVersion ) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lch ON( lch.`content_id` = a.`content_id` )" : "" ) . "
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
-				WHERE a.`$lookupColumn`=? $whereSql ". (!empty($ver) ? " AND lch.version = ?" : "");
-			if (!empty($ver)) { $bindVars[]=$ver; }
+				WHERE a.`$lookupColumn`=? $whereSql ".( !empty( $pVersion ) ? " AND lch.version = ?" : "" );
+			if( !empty( $pVersion ) ) {
+				$bindVars[]=$pVersion;
+			}
 			$result = $this->mDb->query( $query, $bindVars );
 
 			global $gBitSystem;
@@ -116,7 +118,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['creator']     = ( isset( $this->mInfo['creator_real_name'] )? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
 				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				$this->mInfo['raw']        = $this->mInfo['data'];
+				$this->mInfo['raw']         = $this->mInfo['data'];
 				$this->mInfo['data']        = preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] );
 
 				$comment = &new LibertyComment();
@@ -361,6 +363,25 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
+	 * Get the name of the article image file
+	 * 
+	 * @param array $pArticleId article id
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getArticleImageStorageName( $pArticleId = NULL ) {
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		return "article_$pArticleId.jpg";
+	}
+
+	/**
 	* Work out the path to the image for this article
 	* @param $pArticleId id of the article we need the image path for
 	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
@@ -368,12 +389,28 @@ class BitArticle extends LibertyAttachable {
 	* @access public
 	**/
 	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
-		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $pArticleId, $pBasePathOnly );
-		$ret = NULL;
-		if( $relativeUrl ) {
-			$ret = BIT_ROOT_PATH.$relativeUrl;
+		$path = STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/';
+		if( !is_dir( $path ) ) {
+			mkdir_p( $path );
 		}
-		return $ret;
+
+		if( $pBasePathOnly ) {
+			return $path;
+		}
+
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( !empty( $pArticleId ) ) {
+			return $path.BitArticle::getArticleImageStorageName( $pArticleId );
+		} else {
+			return FALSE;
+		}
 	}
 
 	/**
@@ -383,18 +420,14 @@ class BitArticle extends LibertyAttachable {
 	* @return URL on success, FALSE on failure
 	* @access public
 	**/
-	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
 		global $gBitSystem;
-		if( !is_dir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME ) ) {
-			mkdir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME );
-		}
-
+		$url = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/';
 		if( $pBasePathOnly ) {
-			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME;
+			return $url;
 		}
 
-		$ret = NULL;
-		if( !$pArticleId ) {
+		if( !@BitBase::verifyId( $pArticleId ) ) {
 			if( $this->isValid() ) {
 				$pArticleId = $this->mArticleId;
 			} else {
@@ -402,8 +435,8 @@ class BitArticle extends LibertyAttachable {
 			}
 		}
 
-		if( is_file( STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg' ) ) {
-			return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/article_'.$pArticleId.'.jpg';
+		if( is_file( BitArticle::getArticleImageStoragePath( NULL, TRUE ).BitArticle::getArticleImageStorageName( $pArticleId ) ) ) {
+			return $url.BitArticle::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 		} else {
 			return FALSE;
 		}
@@ -505,6 +538,20 @@ class BitArticle extends LibertyAttachable {
 	* @return url to image
 	* @access public
 	**/
+	function getImagePath() {
+		$ret = NULL;
+		if( $this->isValid() && BitArticle::getArticleImageStoragePath( $this->mArticleId ) ) {
+			$ret = BitArticle::getArticleImageStoragePath( $this->mArticleId );
+		}
+		return $ret;
+	}
+
+	/**
+	* Get the URL for any given article image
+	* @param $pParamHash pass in full set of data returned from article query
+	* @return url to image
+	* @access public
+	**/
 	function getImageUrl( $pParamHash ) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
@@ -514,7 +561,8 @@ class BitArticle extends LibertyAttachable {
 			// TODO: clean up the small url stuff. shouldn't be hardcoded.
 			// perhaps we should make a copy of the image file and reduce it to article size settings.
 			// this will be necessary as soon as we allow custom image sizes for article image
-			$image = preg_replace( "/(.*)\/.*?$/", "$1/small.jpg", $pParamHash['image_storage_path'] );
+			//$image = preg_replace( "/(.*)\/.*?$/", "$1/small.jpg", $pParamHash['image_storage_path'] );
+			$image = basename( $pParamHash['image_storage_path'] )."/small.jpg";
 			if( is_file( BIT_ROOT_PATH.$image ) ) {
 				$ret =  BIT_ROOT_URL.$image;
 			}
@@ -531,20 +579,18 @@ class BitArticle extends LibertyAttachable {
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
 	* @access public
 	**/
-	function expungeImage( $pArticleId=NULL, $pImagePath=NULL ) {
-		if( is_file( $pImagePath) ) {
-			if( !@unlink( $pImagePath) ) {
-				$this->mErrors['remove_image'] = tra( 'The image could not be removed because the path supplied does not exist.' );
-			}
+	function expungeImage( $pArticleId = NULL, $pImagePath = NULL ) {
+		if( !empty( $pImagePath ) && is_file( $pImagePath ) && !@unlink( $pImagePath ) ) {
+			$this->mErrors['remove_image'] = tra( 'The image could not be removed because we don\'t have the correct permission to do so.' );
 		}
 
 		if( empty( $pArticleId ) && $this->isValid() ) {
 			$pArticleId = $this->mArticleId;
 		}
 
-		if( $image = is_file( BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
+		if( is_file( $image = BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
 			if( !@unlink( $image ) ) {
-				$this->mErrors['remove_image'] = tra( 'The article image could not be removed because this article doesn\'t seem to have an article associated with it.' );
+				$this->mErrors['remove_image'] = tra( 'The article image could not be removed because this article doesn\'t seem to have an image associated with it.' );
 			}
 		}
 		return ( count( $this->mErrors ) == 0 );
@@ -741,22 +787,22 @@ feature incomplete
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrl( $articleId = NULL) {
+	function getDisplayUrl( $pArticleId = NULL) {
 		global $gBitSystem;
 
 		$ret = NULL;
-		if( ! $articleId ) {
-			$articleId = $this->mArticleId;
+		if( !@BitBase::verifyId( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
 		}
 
-		if( @$this->verifyId( $articleId ) ) {
+		if( @$this->verifyId( $pArticleId ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
-				$ret = ARTICLES_PKG_URL.$articleId;
+				$ret = ARTICLES_PKG_URL.$pArticleId;
 			} else if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
-				$ret = ARTICLES_PKG_URL.$articleId;
+				$ret = ARTICLES_PKG_URL.$pArticleId;
 			} else {
-				$ret = ARTICLES_PKG_URL."read.php?article_id=$articleId";
+				$ret = ARTICLES_PKG_URL."read.php?article_id=$pArticleId";
 			}
 		}
 		return $ret;

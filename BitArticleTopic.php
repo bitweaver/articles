@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.28 2006/11/29 03:02:47 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.29 2006/12/16 09:53:02 squareing Exp $
  * @package article
  */
 
@@ -142,35 +142,80 @@ class BitArticleTopic extends BitBase {
 		$this->mTopicId = $iParamHash['topic_id'];
 	}
 
-	function getTopicImageStoragePath( $iTopicId = NULL, $iBasePathOnly = FALSE ) {
-		$relativeUrl = BitArticleTopic::getTopicImageStorageUrl( $iTopicId, $iBasePathOnly );
-		$ret = NULL;
-		if( $relativeUrl ) {
-			$ret = BIT_ROOT_PATH.$relativeUrl;
-		}
-		return $ret;
-	}
-
-	function getTopicImageStorageUrl( $iTopicId = NULL, $iBasePathOnly = FALSE, $iForceRefresh = NULL ) {
-		global $gBitSystem;
-		if( !is_dir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME ) ) {
-			mkdir( STORAGE_PKG_PATH.ARTICLES_PKG_NAME );
-		}
-
-		if( $iBasePathOnly ) {
-			return STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
-		}
-
-		$ret = NULL;
-		if( !$iTopicId ) {
-			if( $this->mTopicId ) {
-				$iTopicId = $this->mTopicId;
+	/**
+	 * Get the name of the article image file
+	 * 
+	 * @param array $pTopicId article id
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getTopicImageStorageName( $pTopicId = NULL ) {
+		if( !@BitBase::verifyId( $pTopicId ) ) {
+			if( $this->isValid() ) {
+				$pTopicId = $this->mTopicId;
 			} else {
 				return NULL;
 			}
 		}
 
-		return STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/topic_'.$iTopicId.'.jpg'.($iForceRefresh ? "?".$gBitSystem->getUTCTime() : '');
+		return "topic_$pTopicId.jpg";
+	}
+
+	/**
+	* Work out the path to the image for this article
+	* @param $pTopicId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return path on success, FALSE on failure
+	* @access public
+	**/
+	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
+		$path = BitArticle::getArticleImageStoragePath( NULL, TRUE );
+
+		if( $pBasePathOnly ) {
+			return $path;
+		}
+
+		if( !@BitBase::verifyId( $pTopicId ) ) {
+			if( $this->isValid() ) {
+				$pTopicId = $this->mTopicId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( !empty( $pTopicId ) ) {
+			return $path.BitArticleTopic::getTopicImageStorageName( $pTopicId );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	* Work out the URL to the image for this article
+	* @param $pTopicId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
+	function getTopicImageStorageUrl( $pTopicId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+		$url = BitArticle::getArticleImageStorageUrl( NULL, TRUE );
+		if( $pBasePathOnly ) {
+			return $url;
+		}
+
+		if( !@BitBase::verifyId( $pTopicId ) ) {
+			if( $this->isValid() ) {
+				$pTopicId = $this->mTopicId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( is_file( BitArticleTopic::getArticleImageStoragePath( NULL, TRUE ).BitArticleTopic::getTopicImageStorageName( $pTopicId ) ) ) {
+			return $url.BitArticleTopic::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		} else {
+			return FALSE;
+		}
 	}
 
 	function getTopicList( $pOptionHash=NULL ) {

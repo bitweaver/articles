@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.101 2006/12/16 09:53:02 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.102 2006/12/19 12:42:14 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.101 2006/12/16 09:53:02 squareing Exp $
+ * $Id: BitArticle.php,v 1.102 2006/12/19 12:42:14 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.101 $ $Date: 2006/12/16 09:53:02 $ $Author: squareing $
+ * @version $Revision: 1.102 $ $Date: 2006/12/19 12:42:14 $ $Author: squareing $
  */
 
 /**
@@ -751,6 +751,9 @@ feature incomplete
 			$parseHash['cache_extension'] = 'desc';
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
+				if( empty( $parts[1] ) ) {
+					$res['has_more'] = FALSE;
+				}
 				$parseHash['data'] = $parts[0];
 			} else {
 				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'articles_description_length' ) );
@@ -763,8 +766,10 @@ feature incomplete
 			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
 			if( $res['data'] != $parseHash['data'] ) {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
-				$res['parsed_description'] .= '<a class="more" href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
-				$res['has_more'] = TRUE;
+				if( !isset( $res['has_more'] ) || ( isset( $res['has_more'] ) && $res['has_more'] === TRUE ) ) {
+					$res['parsed_description'] .= '<a class="more" href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
+					$res['has_more'] = TRUE;
+				}
 			} else {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
 			}

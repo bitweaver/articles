@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.19 2006/12/29 10:38:03 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.20 2007/01/01 14:15:42 squareing Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,12 +12,6 @@ $gBitSystem->verifyPackage( 'articles' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_articles_read' );
-
-// {{{ FCAMOD
-//if( $gBitUser->isRegistered() ) {
-	$gBitSystem->setConfig( 'articles_hide_right_col', 'n' );
-//}
-// FCAMOD }}}
 
 if( !empty( $_REQUEST['article_id'] ) ) {
 	header( "location: ".ARTICLES_PKG_URL."read.php?article_id=".( ( int )$_REQUEST['article_id'] ) );

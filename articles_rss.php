@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.15 2006/05/04 18:43:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.16 2007/01/01 12:53:26 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -9,12 +9,13 @@
  * Initialization
  */
 require_once( "../bit_setup_inc.php" );
-require_once( RSS_PKG_PATH."rss_inc.php" );
-require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
 $gBitSystem->verifyFeature( 'articles_rss' );
+
+require_once( ARTICLES_PKG_PATH."BitArticle.php" );
+require_once( RSS_PKG_PATH."rss_inc.php" );
 
 $rss->title = $gBitSystem->getConfig( 'articles_rss_title', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'Articles' ) );
 $rss->description = $gBitSystem->getConfig( 'articles_rss_description', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );

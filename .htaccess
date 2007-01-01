@@ -1,6 +1,10 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine  on
-# Uncomment this line if you have a crappy host
-#	RewriteBase    /articles/
-	RewriteRule    ^([0-9]+)$  read.php?article_id=$1  [L]
+#	Uncomment this line if you have a crappy host
+#	RewriteBase /articles/
+#	RewriteRule ^([0-9]+)$  read.php?article_id=$1  [L]
+	RewriteCond %{SCRIPT_FILENAME}  -f [OR]
+	RewriteCond %{SCRIPT_FILENAME}/read.php    -f
+	RewriteRule ^(.*)$            - [L]
+	RewriteRule ^(.*)$  read.php?article_id=$1  [L]
 </IfModule>

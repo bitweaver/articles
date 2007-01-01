@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.30 2006/12/19 12:32:00 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.31 2007/01/01 14:02:49 squareing Exp $
  * @package article
  */
 
@@ -118,7 +118,7 @@ class BitArticleTopic extends BitBase {
 				$tmpImagePath = $this->getTopicImageStoragePath( $topicId, TRUE).$_FILES['upload']['name'];
 				global $gBitSystem;
 				$pFileHash = $_FILES['upload'];
-				$resizeFunc = ($gBitSystem->getConfig( 'image_processor' ) == 'magickwand' ) ? 'liberty_magickwand_resize_image' : 'liberty_gd_resize_image';
+				$resizeFunc = liberty_get_function( 'resize' );
 				$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 				$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
 				$pFileHash['source_file'] = $pFileHash['tmp_name'];

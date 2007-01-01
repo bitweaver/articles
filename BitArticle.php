@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.102 2006/12/19 12:42:14 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.103 2007/01/01 14:02:49 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.102 2006/12/19 12:42:14 squareing Exp $
+ * $Id: BitArticle.php,v 1.103 2007/01/01 14:02:49 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.102 $ $Date: 2006/12/19 12:42:14 $ $Author: squareing $
+ * @version $Revision: 1.103 $ $Date: 2007/01/01 14:02:49 $ $Author: squareing $
  */
 
 /**
@@ -341,7 +341,7 @@ class BitArticle extends LibertyAttachable {
 				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
 					$this->mErrors['article_image'] = "Error during attachment of article image";
 				} else {
-					$resizeFunc = ( $gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+					$resizeFunc = liberty_get_function( 'resize' );
 					$storeHash['source_file'] = $tmpImagePath;
 					$storeHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
 					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
@@ -504,7 +504,7 @@ class BitArticle extends LibertyAttachable {
 			if( !move_uploaded_file( $_FILES['article_image']['tmp_name'], $tmpImagePath ) ) {
 				$this->mErrors['article_image'] = "Error during attachment of article image";
 			} else {
-				$resizeFunc = ( $gBitSystem->getConfig( 'image_processor' ) == 'imagick' ) ? 'liberty_imagick_resize_image' : 'liberty_gd_resize_image';
+				$resizeFunc = liberty_get_function( 'resize' );
 				$pFileHash['source_file'] = $tmpImagePath;
 				$pFileHash['dest_path'] = preg_replace( '!/+!', '', str_replace( BIT_ROOT_PATH, '', TEMP_PKG_PATH ) ).'/'.ARTICLES_PKG_NAME.'/';
 				// remove the extension

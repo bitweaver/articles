@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.103 2007/01/01 14:02:49 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.104 2007/01/06 09:46:09 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.103 2007/01/01 14:02:49 squareing Exp $
+ * $Id: BitArticle.php,v 1.104 2007/01/06 09:46:09 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.103 $ $Date: 2007/01/01 14:02:49 $ $Author: squareing $
+ * @version $Revision: 1.104 $ $Date: 2007/01/06 09:46:09 $ $Author: squareing $
  */
 
 /**
@@ -732,7 +732,7 @@ feature incomplete
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`attachment_id`      = a.`image_attachment_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
-			ORDER BY ".$this->mDb->convert_sortmode( $pParamHash['sort_mode'] );
+			ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN      `".BIT_DB_PREFIX."liberty_content`    lc ON lc.`content_id`   = a.`content_id`
@@ -865,10 +865,5 @@ feature incomplete
 			return $pStatusId;
 		}
 	}
-
-	/* TODO: write this function...
-	function prepGetList( &$pParamHash ) {
-	}
-	*/
 }
 ?>

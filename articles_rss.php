@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.16 2007/01/01 12:53:26 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.17 2007/01/07 10:48:29 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -26,7 +26,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 } else {
 	// check if we want to use the cache file
 	$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.ARTICLES_PKG_NAME.'_'.$rss_version_name.'.xml';
-	$rss->useCached( $rss_version_name, $cacheFile ); // use cached version if age < 1 hour
+	$rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 	$articles = new BitArticle();
 	$listHash = array(

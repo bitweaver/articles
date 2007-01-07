@@ -126,10 +126,10 @@ $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
 	array( ARTICLES_PKG_NAME, 'articles_date_threshold', 'week'),
 ) );
 
-if( defined( 'RSS_PKG_NAME' ) ) {
+if( defined( 'RSS_PKG_NAME' )) {
 	$gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
-		array( RSS_PKG_NAME, 'rss_'.ARTICLES_PKG_NAME, 'y'),
-	) );
+		array( RSS_PKG_NAME, ARTICLES_PKG_NAME.'_rss', 'y'),
+	));
 }
 
 ?>

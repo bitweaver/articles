@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.33 2006/11/23 15:18:18 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.34 2007/01/17 11:12:24 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -37,6 +37,7 @@
 
 	<div class="body"{if $gBitUser->getPreference( 'users_double_click' ) and $gBitUser->hasPermission( 'p_articles_edit' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		<div class="content">
+			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{if $article.show_image eq 'y' && $article.image_url}
 				<div class="image">
 					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
@@ -57,7 +58,6 @@
 				</span>
 			{/if}
 
-			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{if $showDescriptionsOnly}
 				{$article.parsed_description}
 			{else}

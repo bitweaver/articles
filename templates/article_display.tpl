@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.34 2007/01/17 11:12:24 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.35 2007/01/23 16:07:15 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -84,6 +84,22 @@
 				{if $showDescriptionsOnly}</a>{/if}
 			{/if}
 		</div>
+
+		{if $article.status_id == $smarty.const.ARTICLE_STATUS_PENDING && !$preview}
+			<div class="row">
+				{formlabel label="Approve or deny Submission"}
+				{forminput}
+					{if $gBitUser->hasPermission( 'p_articles_approve_submission' )}
+						<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$article.status_id}&amp;article_id={$article.article_id}&amp;content_id={$article.content_id}&amp;set_status_id=300&amp;action=approve">{biticon ipackage=icons iname="large/dialog-ok" iexplain="Approve Article"}</a> &nbsp;
+					{/if}
+
+					{if $gBitUser->hasPermission( 'p_articles_remove' ) || $gBitUser->hasPermission( 'p_articles_remove_submission' )}
+						<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$article.status_id}&amp;remove_article_id={$article.article_id}&amp;action=remove">{biticon ipackage=icons iname="large/dialog-cancel" iexplain="Remove Article"}</a>
+					{/if}
+				{/forminput}
+			</div>
+		{/if}
+
 	</div><!-- end .body -->
 </div><!-- end .article -->
 

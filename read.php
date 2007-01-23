@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.16 2006/04/29 16:26:25 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.17 2007/01/23 16:07:15 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -27,17 +27,17 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.
-if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->isAdmin() ) ) {
-	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot view this article" ) );
-	$gBitSystem->display( "error.tpl" );
-	die;
+if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {
+	if( !( $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_approve_submission' ))) {
+		$gBitSystem->fatalError( "Permission denied you cannot view this article" );
+	}
 }
 
 $gContent->addHit();
 $gBitSmarty->assign_by_ref( 'article', $gContent->mInfo );
 
 // get all the services that want to display something on this page
-$displayHash = array( 'perm_name' => 'p_wiki_view_page' );
+$displayHash = array( 'perm_name' => 'p_articles_read' );
 $gContent->invokeServices( 'content_display_function', $displayHash );
 
 $topics = BitArticleTopic::getTopicList();

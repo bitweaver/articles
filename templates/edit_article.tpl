@@ -5,7 +5,7 @@
 //]]></script>
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="admin articles">
+<div class="edit articles">
 	<div class="header">
 		{if $gContent->mArticleId}
 			<h1>{tr}Edit Article{/tr}: {$article.title|escape}</h1>

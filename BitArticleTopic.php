@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.31 2007/01/01 14:02:49 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.32 2007/01/28 09:55:39 hash9 Exp $
  * @package article
  */
 
@@ -32,15 +32,15 @@ class BitArticleTopic extends BitBase {
 	}
 
 	function loadTopic($iParamHash = NULL) {
-		$whereSQL = ' WHERE at.';
+		$whereSQL = ' WHERE artt.';
 		$ret = NULL;
 
 		if (@$this->verifyId($iParamHash['topic_id']) || !empty($iParamHash['topic_name'])) {
 			$whereSQL .= "`".((@$this->verifyId($iParamHash['topic_id']) || $this->mTopicId) ? 'topic_id' : 'topic_name')."` = ?";
 			$bindVars = array((@$this->verifyId($iParamHash['topic_id']) ? (int)$iParamHash['topic_id'] : ($this->mTopicId ? $this->mTopicId : $iParamHash['topic_name'])) );
 
-			$sql = "SELECT at.*".
-				   "FROM `".BIT_DB_PREFIX."article_topics` at ".
+			$sql = "SELECT artt.*".
+				   "FROM `".BIT_DB_PREFIX."article_topics` artt ".
 			   	   $whereSQL;
 			$this->mInfo = $this->mDb->getRow($sql, $bindVars);
 
@@ -224,16 +224,16 @@ class BitArticleTopic extends BitBase {
 		$where = '';
 		$bindVars = array();
 		if( !empty( $pOptionHash['active_topic'] ) ) {
-			$where = " WHERE la.`active_topic` = 'y' ";
+			$where = " WHERE artt.`active_topic` = 'y' ";
 		}
 		if ( !empty(  $pOptionHash['topic_name'] ) ) {
-			$where = " WHERE la.`topic_name` = ? ";
+			$where = " WHERE artt.`topic_name` = ? ";
 			$bindVars[] = $pOptionHash['topic_name'];
 		}
 
-		$query = "SELECT la.*
-				 FROM `".BIT_DB_PREFIX."article_topics` la
-				 $where ORDER BY la.`topic_name`";
+		$query = "SELECT artt.*
+				 FROM `".BIT_DB_PREFIX."article_topics` artt
+				 $where ORDER BY artt.`topic_name`";
 
 		$result = $gBitSystem->mDb->query( $query, $bindVars );
 

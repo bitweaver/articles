@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.104 2007/01/06 09:46:09 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.105 2007/02/09 03:19:49 spiderr Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.104 2007/01/06 09:46:09 squareing Exp $
+ * $Id: BitArticle.php,v 1.105 2007/02/09 03:19:49 spiderr Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.104 $ $Date: 2007/01/06 09:46:09 $ $Author: squareing $
+ * @version $Revision: 1.105 $ $Date: 2007/02/09 03:19:49 $ $Author: spiderr $
  */
 
 /**
@@ -92,12 +92,13 @@ class BitArticle extends LibertyAttachable {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) ".
-					( !empty( $pVersion ) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lch ON( lch.`content_id` = a.`content_id` )" : "" ) . "
+					( !empty( $pVersion ) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lchy ON( lchy.`content_id` = a.`content_id` )" : "" ) . "
+					LEFT JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lch.`content_id` = lc.`content_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
-				WHERE a.`$lookupColumn`=? $whereSql ".( !empty( $pVersion ) ? " AND lch.version = ?" : "" );
+				WHERE a.`$lookupColumn`=? $whereSql ".( !empty( $pVersion ) ? " AND lchy.version = ?" : "" );
 			if( !empty( $pVersion ) ) {
 				$bindVars[]=$pVersion;
 			}

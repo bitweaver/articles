@@ -118,7 +118,7 @@
 									{$article.data|count_characters:true}
 								{/capture}
 								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$smarty.capture.artCount}" />
-								{formhelp note="If the article body exceeds the specified maximum body length, a seperate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a seperate line in your text."}
+								{formhelp note="If the article body exceeds the specified maximum body length, a separate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a separate line in your text."}
 							{/forminput}
 						</div>
 

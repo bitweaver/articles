@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.107 2007/03/01 20:26:18 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.108 2007/03/01 20:34:44 wjames5 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.107 2007/03/01 20:26:18 squareing Exp $
+ * $Id: BitArticle.php,v 1.108 2007/03/01 20:34:44 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.107 $ $Date: 2007/03/01 20:26:18 $ $Author: squareing $
+ * @version $Revision: 1.108 $ $Date: 2007/03/01 20:34:44 $ $Author: wjames5 $
  */
 
 /**
@@ -774,20 +774,6 @@ feature incomplete
 			} elseif( preg_replace( "/\{maketoc[^\}]*\}/i", "", $res['data'] ) != $parseHash['data'] ) {
 				$res['has_more'] = TRUE;
 			}
-
-			/*ORIGINAL CONDITION FOR hellip - slated for removal
-			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
-			if( $res['data'] != $parseHash['data'] ) {
-				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
-				if( !isset( $res['has_more'] ) || ( isset( $res['has_more'] ) && $res['has_more'] === TRUE ) ) {
-					$res['parsed_description'] .= '<a class="more" href="'.$this->getDisplayUrl( $res['article_id'] ).'" title="'.$this->getTitle( $res ).'">&hellip;</a>';
-					$res['has_more'] = TRUE;
-				}
-			} else {
-				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
-			}
-			*/
-
 
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl( $res['article_id'] );

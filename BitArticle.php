@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.105 2007/02/09 03:19:49 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.106 2007/03/01 19:46:07 wjames5 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.105 2007/02/09 03:19:49 spiderr Exp $
+ * $Id: BitArticle.php,v 1.106 2007/03/01 19:46:07 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.105 $ $Date: 2007/02/09 03:19:49 $ $Author: spiderr $
+ * @version $Revision: 1.106 $ $Date: 2007/03/01 19:46:07 $ $Author: wjames5 $
  */
 
 /**
@@ -750,7 +750,9 @@ feature incomplete
 			$parseHash['format_guid']     = $res['format_guid'];
 			$parseHash['content_id']      = $res['content_id'];
 			$parseHash['cache_extension'] = 'desc';
+			$res['man_split'] = FALSE;
 			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
+				$res['man_split'] = TRUE;
 				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
 				if( empty( $parts[1] ) ) {
 					$res['has_more'] = FALSE;
@@ -763,7 +765,16 @@ feature incomplete
 			$parseHash['data'] = preg_replace( "/\{maketoc[^\}]*\}/i", "", $parseHash['data'] );
 			$res['parsed_description'] = $this->parseData( $parseHash );
 
-			// this is needed to remove trailing stuff from the parser and insert a link to the actual article
+			// this is needed to remove trailing stuff from the parser and insert a link to the actual article			
+			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
+			$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
+			if( ($res['data'] != $parseHash['data']) && ($res['man_split'] != TRUE)  && ( !isset( $res['has_more'] ) || ( isset( $res['has_more'] ) && $res['has_more'] === TRUE ) ) )
+			{
+					$res['parsed_description'] .= '&hellip;';
+					$res['has_more'] = TRUE;
+			}
+
+			/*ORIGINAL CONDITION FOR hellip - slated for removal
 			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
 			if( $res['data'] != $parseHash['data'] ) {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
@@ -774,6 +785,8 @@ feature incomplete
 			} else {
 				$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
 			}
+			*/
+
 
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl( $res['article_id'] );

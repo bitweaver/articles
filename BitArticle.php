@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.108 2007/03/01 20:34:44 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.109 2007/03/01 20:39:48 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.108 2007/03/01 20:34:44 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.109 2007/03/01 20:39:48 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.108 $ $Date: 2007/03/01 20:34:44 $ $Author: wjames5 $
+ * @version $Revision: 1.109 $ $Date: 2007/03/01 20:39:48 $ $Author: squareing $
  */
 
 /**
@@ -229,18 +229,6 @@ class BitArticle extends LibertyAttachable {
 		if( !empty( $pParamHash['edit'] ) ) {
 			$pParamHash['content_store']['data'] = $pParamHash['edit'];
 		}
-
-		// check some lengths, if too long, then truncate
-		/* DrewSlater - Killed article description storage. Any reason to use this instead of just a substr of the article body?
-		if( $this->isValid()&& !empty( $this->mInfo['description'] )&& empty( $pParamHash['description'] ) ) {
-			// someone has deleted the description, we need to null it out
-			$pParamHash['article_store']['description'] = '';
-		} else if( empty( $pParamHash['description'] ) ) {
-			$bodyText = $pParamHash['content_store']['data'];
-			$pParamHash['article_store']['description'] = substr( $bodyText,0, DEFAULT_ARTICLE_DESCR_LEN ).( strlen( $bodyText )> DEFAULT_ARTICLE_DESCR_LEN ? '...' : '' );
-		} else {
-			$pParamHash['article_store']['description'] = $pParamHash['description'];
-		}*/
 
 		if( !empty( $pParamHash['rating'] ) ) {
 			$pParamHash['article_store']['rating'] =( int )( $pParamHash['rating'] );

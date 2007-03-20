@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.6 2006/08/19 20:34:26 sylvieg Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.7 2007/03/20 17:36:08 spiderr Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -25,24 +25,6 @@ if( isset( $_REQUEST["fSubmitAddTopic"] ) ) {
 }
 
 $topics = BitArticleTopic::getTopicList();
-
-for( $i = 0; $i < count( $topics ); $i++ ) {
-	if( $gBitUser->object_has_one_permission( $topics[$i]["topic_id"], 'topic' ) ) {
-		$topics[$i]["individual"] = 'y';
-
-		if( $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'bit_p_topic_read' ) ) {
-			$topics[$i]["individual_bit_p_topic_read"] = 'y';
-		} else {
-			$topics[$i]["individual_bit_p_topic_read"] = 'n';
-		} 
-
-		if( $gBitUser->isAdim() || $gBitUser->object_has_permission( $gBitUser->mUserId, $topics[$i]["topic_id"], 'topic', 'p_articles_admin' ) ) {
-			$topics[$i]["individual_bit_p_topic_read"] = 'y';
-		} 
-	} else {
-		$topics[$i]["individual"] = 'n';
-	} 
-}
 $gBitSmarty->assign( 'topics', $topics );
 
 $gBitSystem->display( 'bitpackage:articles/admin_topics.tpl', tra( 'Edit Topics' ) );

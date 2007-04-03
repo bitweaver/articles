@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.11 2006/09/22 08:44:46 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.12 2007/04/03 16:23:46 squareing Exp $
  * @package article
  * @subpackage modules
  */
@@ -8,8 +8,9 @@
 /**
  * Initialization
  */
-include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
-global $module_rows, $module_params, $module_title;
+include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+
+extract( $moduleParams );
 
 $articles = new BitArticle();
 $stati = array( 'pending', 'approved' );

@@ -103,24 +103,17 @@
 							</div>
 						{/if}
 
-						{include file="bitpackage:liberty/edit_content_status_inc.tpl"}
-
-						{include file="bitpackage:liberty/edit_format.tpl"}
-
-						{if $gBitSystem->isPackageActive( 'quicktags' )}
-							{include file="bitpackage:quicktags/quicktags_full.tpl"}
-						{/if}
-
-						<div class="row">
-							{forminput}
-								<textarea {spellchecker} id="{$textarea_id}" name="edit" rows="{$smarty.cookies.rows|default:20}" cols="50" onkeydown="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})" onkeyup="charCounter('{$textarea_id}','artCounter',{$gBitSystem->getConfig('articles_description_length')})">{$article.raw|escape:html}</textarea>
-								{capture name=artCount}
-									{$article.data|count_characters:true}
-								{/capture}
-								<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$smarty.capture.artCount}" />
-								{formhelp note="If the article body exceeds the specified maximum body length, a separate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a separate line in your text."}
-							{/forminput}
-						</div>
+						{capture assign=textarea_help}
+							{tr}If the article body exceeds the specified maximum body length, a separate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a separate line in your text.{/tr}
+						{/capture}
+						{capture assign=length}
+							{$gBitSystem->getConfig('articles_description_length')}
+						{/capture}
+						{textarea name="edit" onkeydown="charCounter('$textarea_id','artCounter','$length')" onkeyup="charCounter('$textarea_id','artCounter','$length')"}{$article.raw}{/textarea}
+						{capture name=artCount}
+							{$article.data|count_characters:true}
+						{/capture}
+						<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$smarty.capture.artCount}" />
 
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 

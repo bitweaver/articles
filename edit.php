@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.32 2006/12/23 09:29:04 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.33 2007/04/20 11:01:35 nickpalmer Exp $
  * @package article
  * @subpackage functions
  */
@@ -92,13 +92,6 @@ if ( !empty( $_REQUEST['topic'] ) ) {
 // get list of valid types
 $types = BitArticleType::getTypeList();
 $gBitSmarty->assign_by_ref( 'types', $types );
-
-// WYSIWYG and Quicktag variable
-$gBitSmarty->assign( 'textarea_id', LIBERTY_TEXT_AREA );
-
-if ($gBitSystem->isPackageActive( 'quicktags' )) {
-	include_once( QUICKTAGS_PKG_PATH . 'quicktags_inc.php' );
-}
 
 if ( !empty( $gContent->mErrors ) || !empty( $feedback ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );

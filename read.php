@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.17 2007/01/23 16:07:15 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.18 2007/04/23 09:36:30 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -29,7 +29,7 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 // additionally we need to check if this article is a submission and see if user has perms to view it.
 if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {
 	if( !( $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_approve_submission' ))) {
-		$gBitSystem->fatalError( "Permission denied you cannot view this article" );
+		$gBitSystem->fatalError( tra( "Permission denied you cannot view this article" ));
 	}
 }
 

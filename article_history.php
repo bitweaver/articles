@@ -33,7 +33,7 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
 //vd($gContent->mPageId);vd($gContent->mInfo);
 if( !$gContent->isValid() || empty( $gContent->mInfo ) ) {
-	$gBitSystem->fatalError( "Unknown article" );
+	$gBitSystem->fatalError( tra( "Unknown article" ));
 }
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.

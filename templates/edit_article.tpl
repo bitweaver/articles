@@ -106,15 +106,11 @@
 						{capture assign=textarea_help}
 							{tr}If the article body exceeds the specified maximum body length, a separate page will be provided with the full body of the article. You can override this by using <strong>...split...</strong> on a separate line in your text.{/tr}
 						{/capture}
-						{capture assign=length}
-							{$gBitSystem->getConfig('articles_description_length')}
-						{/capture}
-						{capture assign=textarea_id}{$smarty.const.LIBERTY_TEXT_AREA}{/capture}
+						{assign var=length value=$gBitSystem->getConfig('articles_description_length')}
+						{assign var=textarea_id value=$smarty.const.LIBERTY_TEXT_AREA}
 						{textarea name="edit" onkeydown="charCounter('$textarea_id','artCounter','$length');" onkeyup="charCounter('$textarea_id','artCounter','$length');"}{$article.raw}{/textarea}
-						{capture name=artCount}
-							{$article.data|count_characters:true}
-						{/capture}
-						<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$smarty.capture.artCount}" />
+						{assign var=artCount value=$article.data|count_characters:true}
+						<input style="float:right" readonly="readonly" type="text" id="artCounter" size="5" value="{$gBitSystem->getConfig('articles_description_length')-$artCount}" />
 
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.110 2007/04/23 07:54:15 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.111 2007/05/21 17:47:17 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.110 2007/04/23 07:54:15 squareing Exp $
+ * $Id: BitArticle.php,v 1.111 2007/05/21 17:47:17 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.110 $ $Date: 2007/04/23 07:54:15 $ $Author: squareing $
+ * @version $Revision: 1.111 $ $Date: 2007/05/21 17:47:17 $ $Author: lsces $
  */
 
 /**
@@ -31,7 +31,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
 
 /**
- * @package article
+				WHERE la.`attachment_id`=?";
  */
 class BitArticle extends LibertyAttachable {
 	/**
@@ -474,9 +474,9 @@ class BitArticle extends LibertyAttachable {
 
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
 			$data['image_attachment_id'] = ( int )$data['image_attachment_id'];
-			$query = "SELECT lf.storage_path AS image_storage_path
+			$query = "SELECT lf.`storage_path` AS `image_storage_path`
 				FROM `".BIT_DB_PREFIX."liberty_attachments` la
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.file_id = la.foreign_id )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
 				WHERE la.attachment_id=?";
 			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
 			$data['image_url'] = BitArticle::getImageUrl( $data );

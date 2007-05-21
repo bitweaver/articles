@@ -109,7 +109,8 @@
 						{capture assign=length}
 							{$gBitSystem->getConfig('articles_description_length')}
 						{/capture}
-						{textarea name="edit" onkeydown="charCounter('$textarea_id','artCounter','$length')" onkeyup="charCounter('$textarea_id','artCounter','$length')"}{$article.raw}{/textarea}
+						{capture assign=textarea_id}{$smarty.const.LIBERTY_TEXT_AREA}{/capture}
+						{textarea name="edit" onkeydown="charCounter('$textarea_id','artCounter','$length');" onkeyup="charCounter('$textarea_id','artCounter','$length');"}{$article.raw}{/textarea}
 						{capture name=artCount}
 							{$article.data|count_characters:true}
 						{/capture}

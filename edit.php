@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.33 2007/04/20 11:01:35 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.34 2007/05/22 01:55:26 laetzer Exp $
  * @package article
  * @subpackage functions
  */
@@ -70,15 +70,17 @@ if( !empty( $_REQUEST['preview'] ) ) {
 	$gBitSmarty->assign_by_ref('article', $gContent->mInfo);
 }
 
-if( !empty( $_REQUEST["save"] ) ) {
-	if( empty( $_REQUEST["rating"] ) ) $_REQUEST['rating'] = 0;
+// If the article was saved, show feedback or show result
+if( !empty( $_REQUEST['save'] ) ) {
+	if( empty( $_REQUEST['rating'] ) ) $_REQUEST['rating'] = 0;
 	if( empty( $_REQUEST['topic_id'] ) ) $_REQUEST['topic_id'] = 0;
 
 	if( $gContent->store( $_REQUEST ) ) {
 		if( $gContent->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
 			header ( "location: " . ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
 		} else {
-			header ( "location: " . ARTICLES_PKG_URL. "index.php" );
+			// vd($_REQUEST);
+			header ( "location: " . ARTICLES_PKG_URL. "read.php?article_id=" . $_REQUEST['article_id'] . "" );
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.34 2007/05/22 01:55:26 laetzer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.35 2007/05/22 19:53:31 gravyface Exp $
  * @package article
  * @subpackage functions
  */
@@ -79,8 +79,7 @@ if( !empty( $_REQUEST['save'] ) ) {
 		if( $gContent->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
 			header ( "location: " . ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
 		} else {
-			// vd($_REQUEST);
-			header ( "location: " . ARTICLES_PKG_URL. "read.php?article_id=" . $_REQUEST['article_id'] . "" );
+			header ( "location: " . ARTICLES_PKG_URL . ( ($gBitSystem->isFeatureActive('pretty_urls_extended') || $gBitSystem->isFeatureActive('pretty_urls')) ? $gContent->mArticleId : "read.php?article_id=" . $gContent->mArticleId ) );
 		}
 	}
 }

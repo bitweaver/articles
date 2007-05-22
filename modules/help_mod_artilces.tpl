@@ -12,7 +12,7 @@
 	</tr>
 	<tr class="even">
 		<td>sort_mode</td>
-		<td>last_modifed_desc<br />last_modifed_asc<br />...</td>
+		<td>last_modifed_desc<br />last_modifed_asc<br />created_asc<br />created_desc</td>
 		<td>{tr}Decide in what order you wish to display the articles.<br />( default: last_modified_desc ){/tr}</td>
 	</tr>
 	<tr class="odd">

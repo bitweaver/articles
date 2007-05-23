@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.12 2007/04/03 16:23:46 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.13 2007/05/23 05:26:29 laetzer Exp $
  * @package article
  * @subpackage modules
  */
@@ -45,6 +45,11 @@ if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name
 	$gBitSmarty->assign( 'moduleTitle', $module_title );
 } else {
 	$gBitSmarty->assign( 'moduleTitle', "Articles" );
+}
+
+// if user provided a name for this module, use it (overrides guessing above)
+if ( !empty($moduleParams['title']) ){
+	$gBitSmarty->assign( 'moduleTitle', $moduleParams['title'] );
 }
 
 $gBitSmarty->assign( 'modArticles', $articles['data'] );

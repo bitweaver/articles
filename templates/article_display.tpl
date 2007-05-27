@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.35 2007/01/23 16:07:15 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.36 2007/05/27 18:29:11 laetzer Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -80,7 +80,13 @@
 			{if $article.allow_comments eq 'y'}
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{if $showDescriptionsOnly}<a href="{$article.display_url}#editcomments">{/if}
-					{tr}{$article.num_comments} Comment(s){/tr}
+					{$article.num_comments} 
+					&nbsp;
+					{if $article.num_comments eq 1}
+						{tr}Comment{/tr}
+					{else}
+						{tr}Comments{/tr}
+					{/if}
 				{if $showDescriptionsOnly}</a>{/if}
 			{/if}
 		</div>

@@ -43,6 +43,11 @@ if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gBitUse
 	die;
 }
 
+$smartyContentRef = 'article';
+
+include_once( LIBERTY_PKG_PATH.'content_history_inc.php' );
+
+/* SLATED FOR REMOVAL - SCRIPT MOVED TO LIBERTY:content_history_inc.php
 $gBitSmarty->assign('source', 0);
 // If we have to include a preview please show it
 $gBitSmarty->assign('preview', false);
@@ -97,12 +102,20 @@ if (isset($_REQUEST["delete"]) && isset($_REQUEST["hist"])) {
 		$gBitSmarty->assign_by_ref('version', $_REQUEST["preview"]);
 	}
 }
+*/
 
 // pagination stuff
+/* SLATED FOR REMOVAL - WE ARE GOING TO MAKE THIS JUST LIKE WIKI TO KEEP IT SIMPLE
 $gBitSmarty->assign( 'page', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
 $offset = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );
 $history = $gContent->getHistory( NULL, NULL, $offset, $gBitSystem->getConfig( 'max_records' ) );
 $gBitSmarty->assign_by_ref( 'history', $history );
+*/
+$gBitSmarty->assign( 'page', $page = !empty( $_REQUEST['list_page'] ) ? $_REQUEST['list_page'] : 1 );
+$offset = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );
+$history = $gContent->getHistory( NULL, NULL, $offset, $gBitSystem->getConfig( 'max_records' ) );
+$gBitSmarty->assign_by_ref( 'data', $history['data'] );
+$gBitSmarty->assign_by_ref( 'listInfo', $history['listInfo'] );
 
 //vd($gContent->getHistoryCount());
 

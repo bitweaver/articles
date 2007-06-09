@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.32 2007/01/28 09:55:39 hash9 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.33 2007/06/09 20:28:05 nickpalmer Exp $
  * @package article
  */
 
@@ -198,6 +198,7 @@ class BitArticleTopic extends BitBase {
 	* @access public
 	**/
 	function getTopicImageStorageUrl( $pTopicId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+		global $gBitSystem;
 		$url = BitArticle::getArticleImageStorageUrl( NULL, TRUE );
 		if( $pBasePathOnly ) {
 			return $url;

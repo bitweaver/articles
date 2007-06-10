@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.112 2007/06/08 20:58:41 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.113 2007/06/10 14:33:48 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,29 +9,24 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.112 2007/06/08 20:58:41 squareing Exp $
+ * $Id: BitArticle.php,v 1.113 2007/06/10 14:33:48 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.112 $ $Date: 2007/06/08 20:58:41 $ $Author: squareing $
+ * @version $Revision: 1.113 $ $Date: 2007/06/10 14:33:48 $ $Author: squareing $
  */
 
 /**
  * Required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
+require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
-define( 'ARTICLE_SPLIT_REGEX', "/\.{3}split\.{3}[\r\n]?/i" );
-
-/**
-				WHERE la.`attachment_id`=?";
- */
 class BitArticle extends LibertyAttachable {
 	/**
 	* Primary key for articles
@@ -119,7 +114,7 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['raw']         = $this->mInfo['data'];
-				$this->mInfo['data']        = preg_replace( ARTICLE_SPLIT_REGEX, "", $this->mInfo['data'] );
+				$this->mInfo['data']        = preg_replace( LIBERTY_SPLIT_REGEX, "", $this->mInfo['data'] );
 
 				$comment = &new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
@@ -468,7 +463,7 @@ class BitArticle extends LibertyAttachable {
 			$data['no_cache']    = TRUE;
 			$data['parsed_data'] = $this->parseData( $data );
 			// replace the split syntax with a horizontal rule
-			$data['parsed_data'] = preg_replace( ARTICLE_SPLIT_REGEX, "<hr />", $data['parsed_data'] );
+			$data['parsed_data'] = preg_replace( LIBERTY_SPLIT_REGEX, "<hr />", $data['parsed_data'] );
 		}
 
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
@@ -712,37 +707,10 @@ class BitArticle extends LibertyAttachable {
 		$ret = array();
 		$comment = &new LibertyComment();
 		while( $res = $result->fetchRow() ) {
+			// get this stuff parsed
+			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
+
 			$res['image_url'] = BitArticle::getImageUrl( $res );
-
-			// deal with the parsing
-			$parseHash['format_guid']     = $res['format_guid'];
-			$parseHash['content_id']      = $res['content_id'];
-			$parseHash['cache_extension'] = 'desc';
-			if( preg_match( ARTICLE_SPLIT_REGEX, $res['data'] ) ) {
-				$res['man_split'] = TRUE;
-				$parts = preg_split( ARTICLE_SPLIT_REGEX, $res['data'] );
-				if( empty( $parts[1] ) ) {
-					$res['has_more'] = FALSE;
-				}
-				$parseHash['data'] = $parts[0];
-			} else {
-				$parseHash['data'] = substr( $res['data'], 0, $gBitSystem->getConfig( 'articles_description_length' ) );
-			}
-			// description shouldn't contain {maketoc}
-			$parseHash['data'] = preg_replace( "/\{maketoc[^\}]*\}/i", "", $parseHash['data'] );
-			$res['parsed_description'] = $this->parseData( $parseHash );
-
-			// this is needed to remove trailing stuff from the parser and insert a link to the actual article			
-			$trailing_junk_pattern = "/(<br[^>]*>)*$/i";
-			$res['parsed_description'] = preg_replace( $trailing_junk_pattern, "", $res['parsed_description'] );
-			if( preg_replace( "/\{maketoc[^\}]*\}/i", "", $res['data'] ) != $parseHash['data'] && empty( $res['man_split'] )) {
-				// we append ... when the split was generated automagically
-				$res['parsed_description'] .= '&hellip;';
-				$res['has_more'] = TRUE;
-			} elseif( preg_replace( "/\{maketoc[^\}]*\}/i", "", $res['data'] ) != $parseHash['data'] ) {
-				$res['has_more'] = TRUE;
-			}
-
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl( $res['article_id'] );
 			$res['display_link'] = $this->getDisplayLink( $res['title'], $res );

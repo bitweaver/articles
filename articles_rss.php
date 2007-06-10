@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.17 2007/01/07 10:48:29 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.18 2007/06/10 14:36:57 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -48,7 +48,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 		// show the full article in the feed
 		$parseHash['content_id'] = $feed['content_id'];
 		$parseHash['format_guid'] = $feed['format_guid'];
-		$parseHash['data'] = preg_replace( ARTICLE_SPLIT_REGEX, "", $feed['data'] );
+		$parseHash['data'] = preg_replace( LIBERTY_SPLIT_REGEX, "", $feed['data'] );
 		$item->description = $articles->parseData( $parseHash );
 
 		$item->date = ( int )$feed['publish_date'];

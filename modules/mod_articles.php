@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.14 2007/05/27 21:34:22 laetzer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.15 2007/06/13 19:39:05 squareing Exp $
  * @package article
  * @subpackage modules
  */
@@ -44,7 +44,7 @@ $getHash['topic_id']      = !empty( $module_params['topic_id'] ) ? $module_param
 $articles = $articles->getList( $getHash );
 
 if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name'] ) ) && empty($moduleParams['title']) && !empty( $articles ) ) {
-	$gBitSmarty->assign( 'moduleTitle', $articles['data'][0]['topic_name'] );
+	$gBitSmarty->assign( 'moduleTitle', $articles[0]['topic_name'] );
 } elseif( !empty($moduleParams['title']) ) {
 	$gBitSmarty->assign( 'moduleTitle', $moduleParams['title'] );
 } else {
@@ -52,5 +52,5 @@ if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name
 }
 
 $gBitSmarty->assign( 'params', !empty( $moduleParams['params'] ) ? $moduleParams['params'] : '');
-$gBitSmarty->assign( 'modArticles', $articles['data'] );
+$gBitSmarty->assign( 'modArticles', $articles );
 ?>

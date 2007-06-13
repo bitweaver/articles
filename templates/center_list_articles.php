@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.7 2006/04/14 17:18:37 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.8 2007/06/13 19:39:05 squareing Exp $
 require_once( '../bit_setup_inc.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
@@ -22,6 +22,6 @@ $gBitSmarty->assign('showDescriptionsOnly', TRUE);
 
 //if( empty( $articles ) ) {
 //	$articles = $gContent->getList($_REQUEST);
-//	$gBitSmarty->assign_by_ref('articles', $articles['data']);
+//	$gBitSmarty->assign_by_ref('articles', $articles);
 //}
 ?>

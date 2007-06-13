@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.18 2007/06/10 14:36:57 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.19 2007/06/13 19:39:05 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -40,7 +40,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	$rss->link = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
 
 	// get all the data ready for the feed creator
-	foreach( $feeds['data'] as $feed ) {
+	foreach( $feeds as $feed ) {
 		$item = new FeedItem();
 		$item->title = $feed['title'];
 		$item->link = BIT_BASE_URI.$articles->getDisplayUrl( $feed['article_id'] );

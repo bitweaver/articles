@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.17 2006/08/29 16:46:45 hash9 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.18 2007/06/13 19:39:05 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -100,7 +100,7 @@ $types = BitArticleType::getTypeList();
 $gBitSmarty->assign( 'types', $types );
 
 $gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
-$gBitSmarty->assign( 'listpages', $listArticles["data"] );
+$gBitSmarty->assign( 'listpages', $listArticles );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ));

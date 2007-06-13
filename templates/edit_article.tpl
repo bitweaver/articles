@@ -161,33 +161,33 @@
 						</div>
 					{/legend}
 
-					{legend legend="Custom article image"}
-						{if $article.image_url}
+					{legend legend="Custom Topic image"}
+						{if $article.image_url && !$article.image_url_is_topic}
 							<div class="row">
-								{formlabel label="Custom Image"}
+								{formlabel label="Old Custom Image"}
 								{forminput}
 									<img alt="{tr}Article image{/tr}" title="{$article.title|escape}" src="{$article.image_url}"/>
 									<br />
-									<input type="submit" name="remove_image" value="{tr}Remove Image{/tr}" />
-									{formhelp note="You can replace this image by uploading a new one."}
+									{formhelp note="You can replace this image by removing this image and uploading a new one below."}
 								{/forminput}
 							</div>
 						{/if}
 
 						<div class="row">
-							{formlabel label="Custom Image" for="upload"}
+							{formlabel label="Custom Topic Image" for="upload"}
 							{forminput}
-								<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
-								<input type="file" id="upload" name="article_image"/>
-								{formhelp note="Use a custom image file for the article."}
+								{include file="bitpackage:liberty/edit_primary_attachment.tpl"}
 							{/forminput}
 						</div>
-
-						{if $gBitUser->hasPermission('p_liberty_attach_attachments')}
-							{include file="bitpackage:liberty/edit_storage.tpl"}
-						{/if}
 					{/legend}
 				{/jstab}
+
+				{jstab title="Attachment Browser"}
+					{legend legend="Attachment Browser"}
+						{include file="bitpackage:liberty/edit_storage.tpl"}
+					{/legend}
+				{/jstab}
+
 			{/jstabs}
 		{/form}
 

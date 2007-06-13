@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.113 2007/06/10 14:33:48 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.114 2007/06/13 00:43:54 nickpalmer Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.113 2007/06/10 14:33:48 squareing Exp $
+ * $Id: BitArticle.php,v 1.114 2007/06/13 00:43:54 nickpalmer Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.113 $ $Date: 2007/06/10 14:33:48 $ $Author: squareing $
+ * @version $Revision: 1.114 $ $Date: 2007/06/13 00:43:54 $ $Author: nickpalmer $
  */
 
 /**
@@ -103,7 +103,9 @@ class BitArticle extends LibertyAttachable {
 				$this->mInfo = $result->fetchRow();
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo );
+				$isTopicImage = false;
+				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo, $isTopicImage);
+				$this->mInfo['image_url_is_topic'] = $isTopicImage;
 
 				$this->mContentId = $this->mInfo['content_id'];
 				$this->mArticleId = $this->mInfo['article_id'];
@@ -473,7 +475,9 @@ class BitArticle extends LibertyAttachable {
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
 				WHERE la.attachment_id=?";
 			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
-			$data['image_url'] = BitArticle::getImageUrl( $data );
+			$isTopicUrl = false;
+			$data['image_url'] = BitArticle::getImageUrl( $data , $isTopicUrl);
+			$data['image_url_is_topic'] = $isTopicUrl;
 		}
 
 		if( !empty( $_FILES['article_image']['name'] ) ) {
@@ -535,7 +539,7 @@ class BitArticle extends LibertyAttachable {
 	* @return url to image
 	* @access public
 	**/
-	function getImageUrl( $pParamHash ) {
+	function getImageUrl( $pParamHash, &$pIsTopicImage) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
 		if( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
@@ -551,6 +555,9 @@ class BitArticle extends LibertyAttachable {
 			}
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
 			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
+			if ($pIsTopicImage) {
+				$pIsTopicImage = true;
+			}
 		}
 		return $ret;
 	}
@@ -710,7 +717,9 @@ class BitArticle extends LibertyAttachable {
 			// get this stuff parsed
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
 
-			$res['image_url'] = BitArticle::getImageUrl( $res );
+			$isTopicUrl = false;
+			$res['image_url'] = BitArticle::getImageUrl( $res , $isTopicUrl);
+			$res['image_url_is_topic'] = $isTopicUrl;
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl( $res['article_id'] );
 			$res['display_link'] = $this->getDisplayLink( $res['title'], $res );

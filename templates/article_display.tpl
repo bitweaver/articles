@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.36 2007/05/27 18:29:11 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.37 2007/06/13 00:43:54 nickpalmer Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -38,7 +38,16 @@
 	<div class="body"{if $gBitUser->getPreference( 'users_double_click' ) and $gBitUser->hasPermission( 'p_articles_edit' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
-			{if $article.show_image eq 'y' && $article.image_url}
+			{* If there is a custom primary override *}
+			{if !empty($article.primary_attachment_id)}
+				<div class="image">
+					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
+						{assign var=image value=$gContent->mStorage[$article.primary_attachment_id]}
+						{jspopup notra=1 href=$image.source_url alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$image.thumbnail_url.small}
+					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
+				</div>
+			{elseif $article.show_image eq 'y' && $article.image_url}
+				{* Support for legacy images and topic images. *}
 				<div class="image">
 					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
 						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>

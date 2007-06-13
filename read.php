@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.18 2007/04/23 09:36:30 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.19 2007/06/13 16:26:23 wjames5 Exp $
  * @package article
  * @subpackage functions
  */
@@ -26,11 +26,22 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 
 include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 
+// Check if we actually have some content
+if( !$gContent->isValid() ) {
+	$gBitSystem->fatalError( tra( 'Article cannot be found' ));
+}
+
 // additionally we need to check if this article is a submission and see if user has perms to view it.
 if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {
 	if( !( $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_approve_submission' ))) {
 		$gBitSystem->fatalError( tra( "Permission denied you cannot view this article" ));
 	}
+}
+
+// we also need to check and see if the article is future dated - we will display it if the user can edit it otherwise we pretend it does not exist.
+$timestamp = $gBitSystem->getUTCTime();
+if ( ($gContent->mInfo['publish_date'] > $timestamp) && !$gBitUser->hasPermission( 'p_articles_edit' ) ){
+	$gBitSystem->fatalError( tra( 'Article cannot be found' ));
 }
 
 $gContent->addHit();

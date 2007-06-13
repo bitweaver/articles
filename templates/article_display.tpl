@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.37 2007/06/13 00:43:54 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.38 2007/06/13 08:51:19 lsces Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -53,6 +53,10 @@
 						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>
 					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
 				</div>
+			{/if}
+
+			{if $gBitSystem->isFeatureActive( 'liberty_auto_display_attachment_thumbs' )}
+				{include file="bitpackage:liberty/storage_thumbs.tpl"}
 			{/if}
 
 			{if $article.use_ratings eq 'y'}

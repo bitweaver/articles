@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.114 2007/06/13 00:43:54 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.115 2007/06/13 19:36:06 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.114 2007/06/13 00:43:54 nickpalmer Exp $
+ * $Id: BitArticle.php,v 1.115 2007/06/13 19:36:06 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.114 $ $Date: 2007/06/13 00:43:54 $ $Author: nickpalmer $
+ * @version $Revision: 1.115 $ $Date: 2007/06/13 19:36:06 $ $Author: squareing $
  */
 
 /**
@@ -35,6 +35,10 @@ class BitArticle extends LibertyAttachable {
 	var $mArticleId;
 	var $mTypeId;
 	var $mTopicId;
+
+	// Admin permission for articles
+	var $mAdminContentPerm = 'p_articles_admin';
+	var $mEditContentPerm = 'p_articles_edit';
 
 	/**
 	* Initiate the articles class
@@ -621,9 +625,7 @@ class BitArticle extends LibertyAttachable {
 	/**
 	* This function generates a list of records from the liberty_content database for use in a list page
 	* @param $pParamHash contains an array of conditions to sort by
-	* @return array
-	* ['data'] which contains all articles that match pParamHash conditions
-	* ['cant'] which contains the number of articles that matched the pParamHash conditions
+	* @return array of articles
 	* @access public
 	**/
 	function getList( &$pParamHash ) {
@@ -668,11 +670,30 @@ class BitArticle extends LibertyAttachable {
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing
-		if( empty( $pParamHash['show_expired'] ) ) {
-			$timestamp = $gBitSystem->getUTCTime();
+		$now = $gBitSystem->getUTCTime();
+		if( !empty( $pParamHash['show_future'] ) && !empty( $pParamHash['show_expired'] )) {
+			// this will show all articles at once - future, current and expired
+		} elseif( !empty( $pParamHash['show_future'] )) {
+			// hide expired articles
+			$whereSql .= " AND a.`expire_date` > ? ";
+			$bindVars[] = ( int )$now;
+		} elseif( !empty( $pParamHash['show_expired'] )) {
+			// hide future articles
+			$whereSql .= " AND a.`publish_date` < ?";
+			$bindVars[] = ( int )$now;
+		} elseif( !empty( $pParamHash['get_future'] )) {
+			// show only future
+			$whereSql .= " AND a.`publish_date` > ?";
+			$bindVars[] = ( int )$now;
+		} elseif( !empty( $pParamHash['get_expired'] )) {
+			// show only expired articles
+			$whereSql .= " AND a.`expire_date` < ? ";
+			$bindVars[] = ( int )$now;
+		} else {
+			// hide future and expired articles
 			$whereSql .= " AND a.`publish_date` < ? AND a.`expire_date` > ? ";
-			$bindVars[] = ( int )$timestamp;
-			$bindVars[] = ( int )$timestamp;
+			$bindVars[] = ( int )$now;
+			$bindVars[] = ( int )$now;
 		}
 
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
@@ -726,12 +747,35 @@ class BitArticle extends LibertyAttachable {
 			$ret[] = $res;
 		}
 
-		$pParamHash["data"] = $ret;
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 
 		LibertyContent::postGetList( $pParamHash );
 
-		return $pParamHash;
+		return $ret;
+	}
+
+	/**
+	 * Get a list of articles that are to be published in the future
+	 * 
+	 * @param array $pParamHash contains listing options - same as getList()
+	 * @access public
+	 * @return array of articles
+	 */
+	function getFutureList( &$pParamHash ) {
+		$pParamHash['get_future'] = TRUE;
+		return( $this->getList( $pParamHash ));
+	}
+
+	/**
+	 * Get list of articles that have expired and are not displayed on the site anymore
+	 * 
+	 * @param array $pParamHash contains listing options - same as getList()
+	 * @access public
+	 * @return array of articles
+	 */
+	function getExpiredList( &$pParamHash ) {
+		$pParamHash['get_expired'] = TRUE;
+		return( $this->getList( $pParamHash ));
 	}
 
 	/**

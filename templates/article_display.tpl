@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.38 2007/06/13 08:51:19 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.39 2007/06/15 23:54:29 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -74,7 +74,7 @@
 			{if $showDescriptionsOnly}
 				{$article.parsed_description}
 			{else}
-				{$article.parsed_data}
+				{$article.parsed}
 			{/if}
 		</div>
 

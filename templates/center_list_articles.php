@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.10 2007/06/15 20:42:22 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.11 2007/06/15 23:54:29 squareing Exp $
 global $gBitSmarty, $gContent, $gBitSystem, $gQueryUserId, $moduleParams;
 extract( $moduleParams );
 
@@ -45,11 +45,14 @@ if( @BitBase::verifyId( $_REQUEST['group_id'] ) ) {
 	$listHash['group_id'] = $_REQUEST['group_id'];
 }
 
-
-//$articles = $gContent->getList( $_REQUEST );
 $articles = $gContent->getList( $listHash );
 $gBitSmarty->assign( 'articles', $articles );
 $gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
+
+// show only descriptions on listing page
+if( count( $articles ) > 1 ) {
+	$gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
+}
 
 // display submissions if we have the perm to approve them
 if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {

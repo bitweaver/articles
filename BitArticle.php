@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.117 2007/06/15 20:14:10 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.118 2007/06/15 23:54:29 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.117 2007/06/15 20:14:10 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.118 2007/06/15 23:54:29 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.117 $ $Date: 2007/06/15 20:14:10 $ $Author: wjames5 $
+ * @version $Revision: 1.118 $ $Date: 2007/06/15 23:54:29 $ $Author: squareing $
  */
 
 /**
@@ -127,7 +127,7 @@ class BitArticle extends LibertyAttachable {
 
 				LibertyAttachable::load();
 
-				$this->mInfo['parsed_data'] = $this->parseData();
+				$this->mInfo['parsed'] = $this->parseData();
 			} else {
 				$this->mArticleId = NULL;
 			}
@@ -465,11 +465,11 @@ class BitArticle extends LibertyAttachable {
 			$data['topic_id'] = 1;
 		}
 
-		if( empty( $data['parsed_data'] ) ) {
+		if( empty( $data['parsed'] ) ) {
 			$data['no_cache']    = TRUE;
-			$data['parsed_data'] = $this->parseData( $data );
+			$data['parsed'] = $this->parseData( $data );
 			// replace the split syntax with a horizontal rule
-			$data['parsed_data'] = preg_replace( LIBERTY_SPLIT_REGEX, "<hr />", $data['parsed_data'] );
+			$data['parsed'] = preg_replace( LIBERTY_SPLIT_REGEX, "<hr />", $data['parsed'] );
 		}
 
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {

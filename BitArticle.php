@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.116 2007/06/15 08:23:33 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.117 2007/06/15 20:14:10 wjames5 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.116 2007/06/15 08:23:33 lsces Exp $
+ * $Id: BitArticle.php,v 1.117 2007/06/15 20:14:10 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.116 $ $Date: 2007/06/15 08:23:33 $ $Author: lsces $
+ * @version $Revision: 1.117 $ $Date: 2007/06/15 20:14:10 $ $Author: wjames5 $
  */
 
 /**
@@ -654,8 +654,8 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = '%'.strtoupper( $find ).'%';
 		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
-			$whereSql .= " AND lc.`creator_user_id` = ? ";
-			$bindVars[] = array( $pParamHash['user_id'] );
+			$whereSql .= " AND lc.`user_id` = ? ";
+			$bindVars[] = (int)$pParamHash['user_id'];
 		}
 
 		if( @$this->verifyId( $pParamHash['status_id'] ) ) {

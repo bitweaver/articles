@@ -1,6 +1,6 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.11 2007/06/15 23:54:29 squareing Exp $
-global $gBitSmarty, $gContent, $gBitSystem, $gQueryUserId, $moduleParams;
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.12 2007/06/16 00:01:44 squareing Exp $
+global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
 extract( $moduleParams );
 
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );

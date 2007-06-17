@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.19 2006/11/23 15:18:18 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.20 2007/06/17 19:38:33 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -11,6 +11,14 @@ $formCmsSettings = array(
 		'note' => 'Activates statistics for article ranking features.',
 	),
 */
+	'articles_attachments'  => array(
+		'label' => 'File Attachments',
+		'note' => 'Allow the attachment of files to an article.',
+	),
+	'articles_content_attachments'  => array(
+		'label' => 'Content Attachments',
+		'note' => 'Allow the attachment of content to an article.',
+	),
 	'articles_display_filter_bar' => array(
 		'label' => 'Articles Filter',
 		'note' => 'Allows admins to quickly filter articles based on status, topic and type.',

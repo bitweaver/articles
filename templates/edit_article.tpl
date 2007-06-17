@@ -130,7 +130,7 @@
 							<input type="submit" name="save" value="{tr}Save{/tr}" />
 						</div>
 
-						{if $gBitSystem->isFeatureActive( 'feature_article_attachments' )}
+						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
 							{include file="bitpackage:liberty/edit_storage_list.tpl"}
 						{/if}
 					{/legend}
@@ -182,7 +182,7 @@
 					{/legend}
 				{/jstab}
 
-				{if $gBitUser->hasPermission('p_liberty_attach_attachments') }
+				{if $gBitSystem->isFeatureActive( 'articles_attachments' ) && $gBitUser->hasPermission('p_liberty_attach_attachments') }
 					{jstab title="Attachment Browser"}
 						{legend legend="Attachment Browser"}
 							{include file="bitpackage:liberty/edit_storage.tpl"}

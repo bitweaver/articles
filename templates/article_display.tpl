@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.39 2007/06/15 23:54:29 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.40 2007/06/17 20:24:42 lsces Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -55,7 +55,7 @@
 				</div>
 			{/if}
 
-			{if $gBitSystem->isFeatureActive( 'liberty_auto_display_attachment_thumbs' )}
+			{if $gBitSystem->isFeatureActive( 'articles_attachments' ) && $gBitSystem->isFeatureActive( 'liberty_auto_display_attachment_thumbs' )}
 				{include file="bitpackage:liberty/storage_thumbs.tpl"}
 			{/if}
 

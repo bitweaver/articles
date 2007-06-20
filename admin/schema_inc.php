@@ -110,6 +110,7 @@ $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( ARTICLES_PKG_NAME, array(
+	array( ARTICLES_PKG_NAME, 'articles_attachments','y'),
 	array( ARTICLES_PKG_NAME, 'articles_list_author','y'),
 	array( ARTICLES_PKG_NAME, 'articles_list_date','y'),
 	array( ARTICLES_PKG_NAME, 'articles_list_img','y'),

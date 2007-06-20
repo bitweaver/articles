@@ -173,12 +173,14 @@
 							</div>
 						{/if}
 
-						<div class="row">
-							{formlabel label="Custom Topic Image" for="upload"}
-							{forminput}
-								{include file="bitpackage:liberty/edit_primary_attachment.tpl"}
-							{/forminput}
-						</div>
+						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
+							<div class="row">
+								{formlabel label="Custom Topic Image" for="upload"}
+								{forminput}
+									{include file="bitpackage:liberty/edit_primary_attachment.tpl"}
+								{/forminput}
+							</div>
+						{/if}
 					{/legend}
 				{/jstab}
 

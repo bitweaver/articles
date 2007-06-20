@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.35 2007/05/22 19:53:31 gravyface Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.36 2007/06/20 21:16:21 lsces Exp $
  * @package article
  * @subpackage functions
  */
@@ -60,7 +60,7 @@ if( !( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || $gBitUser-
 if( !empty( $_REQUEST['preview'] ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );
 	$gBitSmarty->assign( 'preview', TRUE );
-	$gContent->invokeServices( 'content_preview_function' );
+	$gContent->invokeServices( 'content_preview_function', $_REQUEST );
 	$gBitSmarty->assign_by_ref( 'article', $article );
 } else {
 	$gContent->invokeServices( 'content_edit_function' );

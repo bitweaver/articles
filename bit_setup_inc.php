@@ -16,9 +16,10 @@ if( $gBitSystem->isPackageActive( 'articles' ) ) {
 	define( 'ARTICLE_STATUS_RETIRED', 400 );
 
 	$menuHash = array(
-		'package_name'  => ARTICLES_PKG_NAME,
-		'index_url'     => ARTICLES_PKG_URL.'index.php',
-		'menu_template' => 'bitpackage:articles/menu_articles.tpl',
+		'package_name'       => ARTICLES_PKG_NAME,
+		'index_url'          => ARTICLES_PKG_URL.'index.php',
+		'menu_template'      => 'bitpackage:articles/menu_articles.tpl',
+		'admin_comments_url' => ARTICLES_PKG_URL.'admin/admin_types.php',
 	);
 	$gBitSystem->registerAppMenu( $menuHash );
 

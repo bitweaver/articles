@@ -1,7 +1,11 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.16 2007/06/13 12:45:36 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.17 2007/06/22 09:04:47 lsces Exp $
  * @package article
+ * 
+ * @copyright Copyright (c) 2004-2006, bitweaver.org
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
 
 /**
@@ -12,6 +16,7 @@ require_once(ARTICLES_PKG_PATH.'BitArticle.php');
 
 /**
  * @package article
+ * @subpackage BitArticleType
  */
 class BitArticleType extends BitBase
 {

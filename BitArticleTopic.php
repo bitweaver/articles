@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.34 2007/06/22 09:04:47 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.35 2007/06/22 11:12:28 lsces Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -19,7 +19,6 @@ define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', $gBitSystem->getConfig( 'article_topic_t
 
 /**
  * @package article
- * @subpackage BitArticleTopic
  */
 class BitArticleTopic extends BitBase {
 	var $mTopicId;

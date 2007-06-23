@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.12 2007/06/16 00:01:44 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.13 2007/06/23 18:46:49 squareing Exp $
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
 extract( $moduleParams );
 
@@ -50,9 +50,7 @@ $gBitSmarty->assign( 'articles', $articles );
 $gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
 
 // show only descriptions on listing page
-if( count( $articles ) > 1 ) {
-	$gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
-}
+$gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
 
 // display submissions if we have the perm to approve them
 if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {

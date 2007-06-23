@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.19 2006/09/03 20:04:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.20 2007/06/23 05:22:18 lsces Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -135,7 +135,7 @@
 			</table>
 		{/form}
 
-		{include file="bitpackage:kernel/pagination.tpl"}
+		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .article -->
 {/strip}

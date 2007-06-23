@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.19 2007/06/13 16:26:23 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.20 2007/06/23 18:27:41 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -13,15 +13,10 @@ require_once( '../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
+$gBitSystem->verifyPermission( 'p_articles_read' );
 
-if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
-	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot view this section" ) );
-	$gBitSystem->display( "error.tpl" );
-	die;
-} elseif( !isset( $_REQUEST["article_id"] ) ) {
-	$gBitSmarty->assign( 'msg', tra( "No article indicated" ) );
-	$gBitSystem->display( "error.tpl" );
-	die;
+if( !@BitBase::verifyId( $_REQUEST["article_id"] )) {
+	$gBitSystem->fatalError( tra( "No article indicated" ));
 }
 
 include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );

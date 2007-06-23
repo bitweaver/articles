@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.40 2007/06/17 20:24:42 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.41 2007/06/23 18:27:41 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -39,12 +39,16 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* If there is a custom primary override *}
-			{if !empty($article.primary_attachment_id)}
+			{if $article.primary_attachment_id and $article.show_image}
 				<div class="image">
-					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
+					{if $gContent->mStorage}
 						{assign var=image value=$gContent->mStorage[$article.primary_attachment_id]}
 						{jspopup notra=1 href=$image.source_url alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$image.thumbnail_url.small}
-					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
+					{else}
+						{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
+							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>
+						{if $showDescriptionsOnly and $article.has_more}</a>{/if}
+					{/if}
 				</div>
 			{elseif $article.show_image eq 'y' && $article.image_url}
 				{* Support for legacy images and topic images. *}

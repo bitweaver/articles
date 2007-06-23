@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.120 2007/06/22 11:12:28 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.121 2007/06/23 18:27:41 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.120 2007/06/22 11:12:28 lsces Exp $
+ * $Id: BitArticle.php,v 1.121 2007/06/23 18:27:41 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.120 $ $Date: 2007/06/22 11:12:28 $ $Author: lsces $
+ * @version $Revision: 1.121 $ $Date: 2007/06/23 18:27:41 $ $Author: squareing $
  */
 
 /**
@@ -546,10 +546,13 @@ class BitArticle extends LibertyAttachable {
 	* @return url to image
 	* @access public
 	**/
-	function getImageUrl( $pParamHash, &$pIsTopicImage) {
+	function getImageUrl( $pParamHash, &$pIsTopicImage, $pLoadAttachment = FALSE ) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-		if( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
+		if( $pLoadAttachment && @BitBase::verifyId( $pParamHash['primary_attachment_id'] )) {
+			$attachment = $this->getAttachment( $pParamHash['primary_attachment_id'] );
+			$ret = $attachment['thumbnail_url']['small'];
+		} elseif( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
 		} elseif( @$this->verifyId( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
 			// TODO: clean up the small url stuff. shouldn't be hardcoded.
@@ -716,8 +719,8 @@ class BitArticle extends LibertyAttachable {
 				a.`article_id`, a.`description`, a.`author_name`, a.`image_attachment_id`, a.`publish_date`, a.`expire_date`, a.`rating`,
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
-				lch.`hits`, lf.`storage_path` as `image_storage_path`,
-				atype.*, lc.* $selectSql
+				lch.`hits`, lf.`storage_path` AS `image_storage_path`,
+				atype.*, lc.*, lf2.storage_path AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON lc.`content_id`         = a.`content_id`
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON astatus.`status_id`     = a.`status_id`
@@ -725,7 +728,10 @@ class BitArticle extends LibertyAttachable {
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON atopic.`topic_id`       = a.`topic_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`      atype ON atype.`article_type_id` = a.`article_type_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`attachment_id`      = a.`image_attachment_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`  $joinSql
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`  la2 ON la2.`attachment_id`     = lc.`primary_attachment_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`        lf2 ON lf2.`file_id`           = la2.`foreign_id`
+			   	$joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 
@@ -741,9 +747,13 @@ class BitArticle extends LibertyAttachable {
 			// get this stuff parsed
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
 
-			$isTopicUrl = false;
-			$res['image_url'] = BitArticle::getImageUrl( $res , $isTopicUrl);
-			$res['image_url_is_topic'] = $isTopicUrl;
+			if( !empty( $res['image_attachment_path'] )) {
+				$res['image_url'] = liberty_fetch_thumbnail_url( $res['image_attachment_path'], 'small' );
+			} else {
+				$isTopicUrl = FALSE;
+				$res['image_url'] = BitArticle::getImageUrl( $res , $isTopicUrl );
+				$res['image_url_is_topic'] = $isTopicUrl;
+			}
 			$res['num_comments'] = $comment->getNumComments( $res['content_id'] );
 			$res['display_url'] = $this->getDisplayUrl( $res['article_id'] );
 			$res['display_link'] = $this->getDisplayLink( $res['title'], $res );

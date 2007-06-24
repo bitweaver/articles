@@ -161,10 +161,10 @@
 						</div>
 					{/legend}
 
-					{legend legend="Custom Topic image"}
+					{legend legend="Custom Article image"}
 						{if $article.image_url && !$article.image_url_is_topic}
 							<div class="row">
-								{formlabel label="Old Custom Image"}
+								{formlabel label="Old Article Image"}
 								{forminput}
 									<img alt="{tr}Article image{/tr}" title="{$article.title|escape}" src="{$article.image_url}"/>
 									<br />
@@ -174,12 +174,7 @@
 						{/if}
 
 						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
-							<div class="row">
-								{formlabel label="Custom Topic Image" for="upload"}
-								{forminput}
-									{include file="bitpackage:liberty/edit_primary_attachment.tpl"}
-								{/forminput}
-							</div>
+							{include file="bitpackage:liberty/edit_primary_attachment.tpl" label="Custom Article Image"}
 						{/if}
 					{/legend}
 				{/jstab}

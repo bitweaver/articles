@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.121 2007/06/23 18:27:41 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.122 2007/06/24 07:05:57 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.121 2007/06/23 18:27:41 squareing Exp $
+ * $Id: BitArticle.php,v 1.122 2007/06/24 07:05:57 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.121 $ $Date: 2007/06/23 18:27:41 $ $Author: squareing $
+ * @version $Revision: 1.122 $ $Date: 2007/06/24 07:05:57 $ $Author: squareing $
  */
 
 /**
@@ -165,11 +165,6 @@ class BitArticle extends LibertyAttachable {
 				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
 			}
 
-			// we need to store any custom image that has been uploaded
-			if( !empty( $_FILES['article_image']['name'] ) ) {
-				$this->storeImage( $pParamHash, $_FILES['article_image'] );
-			}
-
 			$this->mDb->CompleteTrans();
 			$this->load();
 		}
@@ -316,42 +311,6 @@ class BitArticle extends LibertyAttachable {
 		}
 
 		return( count( $this->mErrors )== 0 );
-	}
-
-	/**
-	* Store article image
-	* @param array pParamHash of values that will be used to store the page
-	* @param array pFileHash hash returned by $_FILES[<name>]
-	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
-	* @access public
-	**/
-	function storeImage( &$pParamHash, $pFileHash ) {
-		global $gBitSystem;
-		if( $this->isValid() ) {
-			if( !empty( $pFileHash['tmp_name'] ) ) {
-				$tmpImagePath = $this->getArticleImageStoragePath( $this->mArticleId, TRUE ).$pFileHash['name'];
-				if( !move_uploaded_file( $pFileHash['tmp_name'], $tmpImagePath ) ) {
-					$this->mErrors['article_image'] = "Error during attachment of article image";
-				} else {
-					$resizeFunc = liberty_get_function( 'resize' );
-					$storeHash['source_file'] = $tmpImagePath;
-					$storeHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
-					$storeHash['dest_base_name'] = 'article_'.$this->mArticleId;
-					$storeHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$storeHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-					$storeHash['type'] = $pFileHash['type'];
-
-					if( !( $resizeFunc( $storeHash ) ) ) {
-						$this->mErrors[] = 'Error while resizing article image';
-					}
-					@unlink( $tmpImagePath );
-				}
-			} elseif( !empty( $pParamHash['preview_image_path'] ) && is_file( $pParamHash['preview_image_path'] ) ) {
-				// if this article has been previewed with an image, we can copy it to the destination place
-				rename( $pParamHash['preview_image_path'], STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/article_'.$this->mArticleId.'.jpg' );
-			}
-		}
-		return ( count( $this->mErrors ) == 0 );
 	}
 
 	/**

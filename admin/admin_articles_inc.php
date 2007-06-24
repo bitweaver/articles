@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.21 2007/06/17 21:05:22 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.22 2007/06/24 05:22:00 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,7 +13,7 @@ $formCmsSettings = array(
 */
 	'articles_attachments'  => array(
 		'label' => 'File Attachments',
-		'note' => 'Allow the attachment of files to an article.',
+		'note' => 'Allow the attachment of files to an article. This feature is required if you want to have individual article images.',
 	),
 /*	'articles_content_attachments'  => array(
 		'label' => 'Content Attachments',

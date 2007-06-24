@@ -174,7 +174,7 @@
 						{/if}
 
 						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
-							{include file="bitpackage:liberty/edit_primary_attachment.tpl" label="Custom Article Image"}
+							{include file="bitpackage:liberty/edit_primary_attachment_inc.tpl" label="Custom Article Image"}
 						{/if}
 					{/legend}
 				{/jstab}

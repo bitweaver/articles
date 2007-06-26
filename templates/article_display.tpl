@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.42 2007/06/26 09:44:41 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.43 2007/06/26 10:08:08 lsces Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -59,6 +59,7 @@
 				</div>
 			{/if}
 
+			{if $article.show_image ne 'y' }{assign var=showprimary value=y }{/if}
 			{if $gBitSystem->isFeatureActive( 'articles_attachments' ) && $gBitSystem->isFeatureActive( 'liberty_auto_display_attachment_thumbs' )}
 				{include file="bitpackage:liberty/storage_thumbs.tpl"}
 			{/if}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.122 2007/06/24 07:05:57 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.123 2007/06/26 08:51:51 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.122 2007/06/24 07:05:57 squareing Exp $
+ * $Id: BitArticle.php,v 1.123 2007/06/26 08:51:51 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.122 $ $Date: 2007/06/24 07:05:57 $ $Author: squareing $
+ * @version $Revision: 1.123 $ $Date: 2007/06/26 08:51:51 $ $Author: lsces $
  */
 
 /**
@@ -524,7 +524,7 @@ class BitArticle extends LibertyAttachable {
 			}
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
 			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
-			if ($pIsTopicImage) {
+			if ( empty($pIsTopicImage) ) {
 				$pIsTopicImage = true;
 			}
 		}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.7 2006/09/03 20:04:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.8 2007/06/26 07:11:40 lsces Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -64,7 +64,7 @@
 					<dt>{counter}</dt>
 					<dd>
 						{tr}Remove Type{/tr}<br />
-						<small>{tr}Delete this type (only possible if all articles of this type have been delted previously){/tr}</small>
+						<small>{tr}Delete this type (only possible if all articles of this type have been deleted previously){/tr}</small>
 					</dd>
 				</dl>
 			{/jstab}

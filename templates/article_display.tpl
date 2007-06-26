@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.41 2007/06/23 18:27:41 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.42 2007/06/26 09:44:41 lsces Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -39,7 +39,7 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* If there is a custom primary override *}
-			{if $article.primary_attachment_id and $article.show_image}
+			{if $article.primary_attachment_id and $article.show_image eq 'y'}
 				<div class="image">
 					{if $gContent->mStorage}
 						{assign var=image value=$gContent->mStorage[$article.primary_attachment_id]}

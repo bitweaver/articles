@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.36 2007/06/26 08:37:42 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.37 2007/06/29 20:34:32 squareing Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -163,7 +163,7 @@ class BitArticleTopic extends BitBase {
 		}
 		
 		global $gBitSystem;
-		return "topic_$pTopicId.".$gBitSystem->getConfig( 'liberty_thumbnail_format' );
+		return "topic_$pTopicId.".$gBitSystem->getConfig( 'liberty_thumbnail_format', 'jpg' );
 	}
 
 	/**

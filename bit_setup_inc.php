@@ -15,13 +15,15 @@ if( $gBitSystem->isPackageActive( 'articles' ) ) {
 	define( 'ARTICLE_STATUS_APPROVED', 300 );
 	define( 'ARTICLE_STATUS_RETIRED', 400 );
 
-	$menuHash = array(
-		'package_name'       => ARTICLES_PKG_NAME,
-		'index_url'          => ARTICLES_PKG_URL.'index.php',
-		'menu_template'      => 'bitpackage:articles/menu_articles.tpl',
-		'admin_comments_url' => ARTICLES_PKG_URL.'admin/admin_types.php',
-	);
-	$gBitSystem->registerAppMenu( $menuHash );
+	if( $gBitUser->hasPermission( 'p_articles_read' )) {
+		$menuHash = array(
+			'package_name'       => ARTICLES_PKG_NAME,
+			'index_url'          => ARTICLES_PKG_URL.'index.php',
+			'menu_template'      => 'bitpackage:articles/menu_articles.tpl',
+			'admin_comments_url' => ARTICLES_PKG_URL.'admin/admin_types.php',
+		);
+		$gBitSystem->registerAppMenu( $menuHash );
+	}
 
 	$gBitSystem->registerNotifyEvent( array( "article_submitted" => tra( "A user submits an article" ) ) );
 }

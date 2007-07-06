@@ -20,8 +20,8 @@ require_once( '../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
-$gBitSystem->verifyPermission( 'p_articles_read', tra( "Permission denied you cannot browse this article history" ) );
-$gBitSystem->verifyPermission( 'p_articles_read_history', tra( "Permission denied you cannot browse this article history" ) );
+$gBitSystem->verifyPermission( 'p_articles_read' );
+$gBitSystem->verifyPermission( 'p_articles_read_history' );
 
 if( !isset( $_REQUEST["article_id"] ) ) {
 	$gBitSystem->fatalError( tra( "No article indicated" ));
@@ -35,7 +35,7 @@ if( !$gContent->isValid() || empty( $gContent->mInfo ) ) {
 }
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.
-if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->isAdmin() ) ) {
+if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gBitUser->isAdmin() ) ) {
 	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot view this article" ) );
 	$gBitSystem->display( "error.tpl" );
 	die;

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.43 2007/06/26 10:08:08 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.44 2007/07/06 16:37:22 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -7,14 +7,14 @@
 <div class="{$outer_div|default:"post"}">
 	<div class="floaticon">
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$article}
-		{if $gBitUser->hasPermission( 'p_articles_read_history' ) && !$version && $article.version>1}
+		{if $gContent->hasUserPermission( 'p_articles_read_history' ) && !$version && $article.version>1}
 			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="icons/appointment-new" article_id=$article.article_id}
 		{/if}
-		{if $gBitUser->hasPermission('p_articles_admin') || $gBitUser->getField('user_id') == $article.user_id}
+		{if $gContent->hasUserPermission('p_articles_admin') || $gBitUser->getField('user_id') == $article.user_id}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain=edit}</a>
 		{/if}
 		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="document-print" iexplain=print}</a>*}
-		{if $gBitUser->hasPermission( 'p_articles_remove' )}
+		{if $gContent->hasUserPermission( 'p_articles_remove' )}
 			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="icons/edit-delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}
 	</div><!-- end .footer -->
@@ -35,7 +35,7 @@
 		{/if}
 	</div>
 
-	<div class="body"{if $gBitUser->getPreference( 'users_double_click' ) and $gBitUser->hasPermission( 'p_articles_edit' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
+	<div class="body"{if $gBitUser->getPreference( 'users_double_click' ) and $gContent->hasUserPermission( 'p_articles_edit' )} ondblclick="location.href='{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}';"{/if}>
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* If there is a custom primary override *}
@@ -113,11 +113,11 @@
 			<div class="row">
 				{formlabel label="Approve or deny Submission"}
 				{forminput}
-					{if $gBitUser->hasPermission( 'p_articles_approve_submission' )}
+					{if $gContent->hasUserPermission( 'p_articles_approve_submission' )}
 						<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$article.status_id}&amp;article_id={$article.article_id}&amp;content_id={$article.content_id}&amp;set_status_id=300&amp;action=approve">{biticon ipackage=icons iname="large/dialog-ok" iexplain="Approve Article"}</a> &nbsp;
 					{/if}
 
-					{if $gBitUser->hasPermission( 'p_articles_remove' ) || $gBitUser->hasPermission( 'p_articles_remove_submission' )}
+					{if $gContent->hasUserPermission( 'p_articles_remove' ) || $gContent->hasUserPermission( 'p_articles_remove_submission' )}
 						<a href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$article.status_id}&amp;remove_article_id={$article.article_id}&amp;action=remove">{biticon ipackage=icons iname="large/dialog-cancel" iexplain="Remove Article"}</a>
 					{/if}
 				{/forminput}

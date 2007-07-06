@@ -9,7 +9,7 @@
 	<div class="header">
 		{if $gContent->mArticleId}
 			<h1>{tr}Edit Article{/tr}: {$article.title|escape}</h1>
-		{elseif $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve')}
+			{elseif $gContent->hasUserPermission('p_articles_approve_submission') || $gContent->hasUserPermission('p_articles_auto_approve')}
 			<h1>{tr}Create Article{/tr}</h1>
 		{else}
 			<h1>{tr}Submit Article{/tr}</h1>
@@ -49,7 +49,7 @@
 							{/forminput}
 						</div>
 
-						{if $topics or $gBitUser->hasPermission( 'p_articles_admin' )}
+						{if $topics or $gContent->hasUserPermission( 'p_articles_admin' )}
 							<div class="row">
 								{formlabel label="Topic" for="topic_id"}
 								{forminput}
@@ -114,7 +114,7 @@
 
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
-						{if $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !( $gContent->mArticleId || ( $gBitUser->hasPermission('p_articles_approve_submission') || $gBitUser->hasPermission('p_articles_auto_approve') ) )}
+						{if $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !( $gContent->mArticleId || ( $gContent->hasUserPermission('p_articles_approve_submission') || $gContent->hasUserPermission('p_articles_auto_approve') ) )}
 							<div class="row">
 								{formlabel label="Submission Code"}
 								{forminput}

@@ -81,13 +81,13 @@
 							&nbsp;&bull;&nbsp;{smartlink ititle="Difference" article_id=`$gContent->mArticleId` diff2=`$item.version`}
 							&nbsp;&bull;&nbsp;{smartlink ititle="Source" article_id=`$gContent->mArticleId` source=`$item.version`}
 							{* Articles doesnt have rollback option yet
-							{if $gBitUser->hasPermission( 'p_articles_rollback' )}
+							{if $gContent->hasUserPermission( 'p_articles_rollback' )}
 								&nbsp;&bull;&nbsp;{smartlink iurl="rollback.php" ititle="Rollback" article_id=`$gContent->mArticleId` version=`$item.version`}
 							{/if}
 							*}
 						</td>
 						<td style="text-align:right;">
-							{if $gBitUser->hasPermission( 'p_articles_remove' )}
+							{if $gContent->hasUserPermission( 'p_articles_remove' )}
 								<input type="checkbox" name="hist[{$item.version}]" id="hist_{$item.version}" />
 							{/if}
 						</td>
@@ -101,7 +101,7 @@
 				{/foreach}
 			</table>
 
-			{if $gBitUser->hasPermission( 'p_articles_remove' )}
+			{if $gContent->hasUserPermission( 'p_articles_remove' )}
 				<div style="text-align:right;">
 					<input type="submit" name="delete" value="{tr}Delete selected versions{/tr}" />
 				</div>

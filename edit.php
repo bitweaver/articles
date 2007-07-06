@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.36 2007/06/20 21:16:21 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.37 2007/07/06 16:37:22 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -24,20 +24,18 @@ $gBitSystem->verifyPackage( 'articles' );
 include_once('lookup_article_inc.php');
 
 $isOwner = FALSE;
-if( $gBitUser->hasPermission('p_articles_admin' ) || $gBitUser->hasPermission( 'p_articles_edit' ) ) {
+if( $gContent->hasAdminPermission() || $gContent->hasUserPermission( 'p_articles_edit' ) || $gContent->isOwner() ) {
 	$isOwner = TRUE;
-} elseif( !empty($gContent->mInfo['user_id'] ) && $gContent->mInfo['user_id'] == $gBitUser->mUserId ) {
-	$isOwner = TRUE;
-} elseif( !$gContent->mArticleId && $gBitUser->hasPermission( 'p_articles_submit' ) ) {
+} elseif( !$gContent->mArticleId && $gContent->hasUserPermission( 'p_articles_submit' ) ) {
 	$isOwner = TRUE;
 }
 
 // Now check permissions to access this page
 if( !$isOwner ) {
-	if ( empty( $gContent->mArticleId ) ) {
-		$gBitSystem->fatalPermission('p_articles_submit');
+	if ( empty( $gContent->mArticleId )) {
+		$gBitSystem->fatalPermission( 'p_articles_submit' );
 	} else {
-		$gBitSystem->fatalPermission('p_articles_edit');
+		$gBitSystem->fatalPermission( 'p_articles_edit' );
 	}
 }
 
@@ -50,7 +48,7 @@ if( !empty( $_REQUEST['remove_image'] ) ) {
 }
 
 // random image code
-if( !( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || $gBitUser->hasPermission( 'p_articles_auto_approve' ) ) && !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
+if( !( $gContent->hasUserPermission( 'p_articles_approve_submission' ) || $gContent->hasUserPermission( 'p_articles_auto_approve' ) ) && !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
 	$feedback['error'] = tra( "You need to supply the correct code to submit." );
 	$_REQUEST['preview'] = TRUE;
 	unset( $_REQUEST['save'] );

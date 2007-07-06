@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.18 2007/06/13 19:39:05 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.19 2007/07/06 16:37:22 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -88,7 +88,7 @@ if( !empty( $_REQUEST['action'] ) ) {
 	}
 }
 
-if( empty( $_REQUEST['status_id'] ) || (!(($gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered())||$gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_admin' ) ) ) ) {
+if( empty( $_REQUEST['status_id'] ) || (!(($gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered()) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_admin' ) ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 $listArticles = $article->getList( $_REQUEST );

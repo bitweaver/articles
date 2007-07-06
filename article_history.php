@@ -24,9 +24,7 @@ $gBitSystem->verifyPermission( 'p_articles_read', tra( "Permission denied you ca
 $gBitSystem->verifyPermission( 'p_articles_read_history', tra( "Permission denied you cannot browse this article history" ) );
 
 if( !isset( $_REQUEST["article_id"] ) ) {
-	$gBitSmarty->assign( 'msg', tra( "No article indicated" ) );
-	$gBitSystem->display( "error.tpl" );
-	die;
+	$gBitSystem->fatalError( tra( "No article indicated" ));
 }
 
 include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.20 2007/07/06 16:37:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.21 2007/07/06 16:48:08 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -21,7 +21,7 @@ $rss->title = $gBitSystem->getConfig( 'articles_rss_title', $gBitSystem->getConf
 $rss->description = $gBitSystem->getConfig( 'articles_rss_description', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );
 
 // check permission to view articles
-if( !$gContent->hasUserPermission( 'p_articles_read' ) ) {
+if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	require_once( RSS_PKG_PATH."rss_error.php" );
 } else {
 	// check if we want to use the cache file

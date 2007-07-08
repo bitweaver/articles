@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.13 2007/06/23 18:46:49 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.14 2007/07/08 23:11:13 squareing Exp $
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
 extract( $moduleParams );
 
@@ -47,7 +47,7 @@ if( @BitBase::verifyId( $_REQUEST['group_id'] ) ) {
 
 $articles = $gContent->getList( $listHash );
 $gBitSmarty->assign( 'articles', $articles );
-$gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
+$gBitSmarty->assign( 'listInfo', $listHash['listInfo'] );
 
 // show only descriptions on listing page
 $gBitSmarty->assign( 'showDescriptionsOnly', TRUE );

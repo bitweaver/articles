@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.37 2007/07/06 16:37:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.38 2007/07/09 22:03:17 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -102,7 +102,6 @@ $gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 
 // Display the Index Template
 $gBitSmarty->assign( 'show_page_bar', 'n' );
-// load the ajax library for this page
-$gBitSmarty->assign( 'loadAjax', 'prototype' );
+$gBitSystem->loadAjax( 'prototype' );
 $gBitSystem->display( 'bitpackage:articles/edit_article.tpl', tra( "Articles" ) );
 ?>

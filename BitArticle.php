@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.124 2007/07/06 16:37:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.125 2007/07/13 07:59:31 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.124 2007/07/06 16:37:22 squareing Exp $
+ * $Id: BitArticle.php,v 1.125 2007/07/13 07:59:31 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.124 $ $Date: 2007/07/06 16:37:22 $ $Author: squareing $
+ * @version $Revision: 1.125 $ $Date: 2007/07/13 07:59:31 $ $Author: squareing $
  */
 
 /**
@@ -119,10 +119,12 @@ class BitArticle extends LibertyAttachable {
 				$this->mTopicId   = $this->mInfo['topic_id'];
 				$this->mTypeId	  = $this->mInfo['article_type_id'];
 
-				$this->mInfo['creator']     = ( isset( $this->mInfo['creator_real_name'] )? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
-				$this->mInfo['editor']      = ( isset( $this->mInfo['modifier_real_name'] )? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
+				$this->mInfo['creator']     = ( !empty( $this->mInfo['creator_real_name'] ) ? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
+				$this->mInfo['editor']      = ( !empty( $this->mInfo['modifier_real_name'] ) ? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
+				// we need the raw data to display in the textarea
 				$this->mInfo['raw']         = $this->mInfo['data'];
+				// here we have the displayed data without the ...split... stuff
 				$this->mInfo['data']        = preg_replace( LIBERTY_SPLIT_REGEX, "", $this->mInfo['data'] );
 
 				$comment = &new LibertyComment();
@@ -314,86 +316,6 @@ class BitArticle extends LibertyAttachable {
 	}
 
 	/**
-	 * Get the name of the article image file
-	 * 
-	 * @param array $pArticleId article id
-	 * @access public
-	 * @return TRUE on success, FALSE on failure
-	 */
-	function getArticleImageStorageName( $pArticleId = NULL ) {
-		if( !@BitBase::verifyId( $pArticleId ) ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
-			}
-		}
-
-		return "article_$pArticleId.jpg";
-	}
-
-	/**
-	* Work out the path to the image for this article
-	* @param $pArticleId id of the article we need the image path for
-	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
-	* @return path on success, FALSE on failure
-	* @access public
-	**/
-	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
-		$path = STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/';
-		if( !is_dir( $path ) ) {
-			mkdir_p( $path );
-		}
-
-		if( $pBasePathOnly ) {
-			return $path;
-		}
-
-		if( !@BitBase::verifyId( $pArticleId ) ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
-			}
-		}
-
-		if( !empty( $pArticleId ) ) {
-			return $path.BitArticle::getArticleImageStorageName( $pArticleId );
-		} else {
-			return FALSE;
-		}
-	}
-
-	/**
-	* Work out the URL to the image for this article
-	* @param $pArticleId id of the article we need the image path for
-	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
-	* @return URL on success, FALSE on failure
-	* @access public
-	**/
-	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
-		global $gBitSystem;
-		$url = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/';
-		if( $pBasePathOnly ) {
-			return $url;
-		}
-
-		if( !@BitBase::verifyId( $pArticleId ) ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
-			}
-		}
-
-		if( is_file( BitArticle::getArticleImageStoragePath( NULL, TRUE ).BitArticle::getArticleImageStorageName( $pArticleId ) ) ) {
-			return $url.BitArticle::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
-		} else {
-			return FALSE;
-		}
-	}
-
-	/**
 	* Deal with images and text, modify them apprpriately that they can be returned to the form.
 	* @param $previewData data submitted by form - generally $_REQUEST
 	* @return array of data compatible with article form
@@ -491,68 +413,30 @@ class BitArticle extends LibertyAttachable {
 	* @return url to image
 	* @access public
 	**/
-	function getImagePath() {
-		$ret = NULL;
-		if( $this->isValid() && BitArticle::getArticleImageStoragePath( $this->mArticleId ) ) {
-			$ret = BitArticle::getArticleImageStoragePath( $this->mArticleId );
-		}
-		return $ret;
-	}
-
-	/**
-	* Get the URL for any given article image
-	* @param $pParamHash pass in full set of data returned from article query
-	* @return url to image
-	* @access public
-	**/
 	function getImageUrl( $pParamHash, &$pIsTopicImage, $pLoadAttachment = FALSE ) {
 		$ret = NULL;
 		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
 		if( $pLoadAttachment && @BitBase::verifyId( $pParamHash['primary_attachment_id'] )) {
+			// this is the new and improved way of how articles deal with images - primary_attachment_id
 			$attachment = $this->getAttachment( $pParamHash['primary_attachment_id'] );
 			$ret = $attachment['thumbnail_url']['small'];
 		} elseif( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
+			// old style - deprecated
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
 		} elseif( @$this->verifyId( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
-			// TODO: clean up the small url stuff. shouldn't be hardcoded.
-			// perhaps we should make a copy of the image file and reduce it to article size settings.
-			// this will be necessary as soon as we allow custom image sizes for article image
-			//$image = preg_replace( "/(.*)\/.*?$/", "$1/small.jpg", $pParamHash['image_storage_path'] );
+			// even older style - deprecated
 			$image = basename( $pParamHash['image_storage_path'] )."/small.jpg";
 			if( is_file( BIT_ROOT_PATH.$image ) ) {
 				$ret =  BIT_ROOT_URL.$image;
 			}
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
+			// fall back to topic
 			$ret = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
-			if ( empty($pIsTopicImage) ) {
-				$pIsTopicImage = true;
+			if ( empty( $pIsTopicImage )) {
+				$pIsTopicImage = TRUE;
 			}
 		}
 		return $ret;
-	}
-
-	/**
-	* Remove a custom article image - will result in the usage of the default image if a topic with image is selected
-	* @param $pArticleId ID of the article that needs the image removed
-	* @param $pImagePath path to the image that needs removing - generally used during preview - will override article id
-	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
-	* @access public
-	**/
-	function expungeImage( $pArticleId = NULL, $pImagePath = NULL ) {
-		if( !empty( $pImagePath ) && is_file( $pImagePath ) && !@unlink( $pImagePath ) ) {
-			$this->mErrors['remove_image'] = tra( 'The image could not be removed because we don\'t have the correct permission to do so.' );
-		}
-
-		if( empty( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
-
-		if( is_file( $image = BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
-			if( !@unlink( $image ) ) {
-				$this->mErrors['remove_image'] = tra( 'The article image could not be removed because this article doesn\'t seem to have an image associated with it.' );
-			}
-		}
-		return ( count( $this->mErrors ) == 0 );
 	}
 
 	/**
@@ -827,5 +711,115 @@ class BitArticle extends LibertyAttachable {
 			return $pStatusId;
 		}
 	}
+
+
+
+	// Image functions needed for backward compatability - these are needed to handle old article image style images that are not attachments
+	// generally these functions are deprecated but needed for legacy code
+
+	/**
+	 * Get the name of the article image file
+	 * 
+	 * @param array $pArticleId article id
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getArticleImageStorageName( $pArticleId = NULL ) {
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		return "article_$pArticleId.jpg";
+	}
+
+	/**
+	* Work out the path to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return path on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+		$path = STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/';
+		if( !is_dir( $path ) ) {
+			mkdir_p( $path );
+		}
+
+		if( $pBasePathOnly ) {
+			return $path;
+		}
+
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( !empty( $pArticleId ) ) {
+			return $path.BitArticle::getArticleImageStorageName( $pArticleId );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	* Work out the URL to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+		global $gBitSystem;
+		$url = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/';
+		if( $pBasePathOnly ) {
+			return $url;
+		}
+
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( is_file( BitArticle::getArticleImageStoragePath( NULL, TRUE ).BitArticle::getArticleImageStorageName( $pArticleId ) ) ) {
+			return $url.BitArticle::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	* Remove a custom article image - will result in the usage of the default image if a topic with image is selected
+	* @param $pArticleId ID of the article that needs the image removed
+	* @param $pImagePath path to the image that needs removing - generally used during preview - will override article id
+	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
+	* @access public
+	**/
+	function expungeImage( $pArticleId = NULL, $pImagePath = NULL ) {
+		if( !empty( $pImagePath ) && is_file( $pImagePath ) && !@unlink( $pImagePath ) ) {
+			$this->mErrors['remove_image'] = tra( 'The image could not be removed because we don\'t have the correct permission to do so.' );
+		}
+
+		if( empty( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		if( is_file( $image = BitArticle::getArticleImageStoragePath( $pArticleId ) ) ) {
+			if( !@unlink( $image ) ) {
+				$this->mErrors['remove_image'] = tra( 'The article image could not be removed because this article doesn\'t seem to have an image associated with it.' );
+			}
+		}
+		return ( count( $this->mErrors ) == 0 );
+	}
+
 }
 ?>

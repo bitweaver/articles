@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.37 2007/06/29 20:34:32 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.38 2007/07/13 09:52:02 squareing Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -14,8 +14,6 @@
 global $gBitSystem;
 require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
-
-define( 'ARTICLE_TOPIC_THUMBNAIL_SIZE', $gBitSystem->getConfig( 'article_topic_thumbnail_size', 160 ) );
 
 /**
  * @package article
@@ -118,22 +116,19 @@ class BitArticleTopic extends BitBase {
 			} else {
 				$topicId = $this->mTopicId;
 			}
-			if( !empty( $_FILES['upload'] ) && $_FILES['upload']['tmp_name'] ) {
-				$tmpImagePath = $this->getTopicImageStoragePath( $topicId, TRUE).$_FILES['upload']['name'];
-				global $gBitSystem;
-				$pFileHash = $_FILES['upload'];
-				$resizeFunc = liberty_get_function( 'resize' );
-				$pFileHash['max_width'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-				$pFileHash['max_height'] = ARTICLE_TOPIC_THUMBNAIL_SIZE;
-				$pFileHash['source_file'] = $pFileHash['tmp_name'];
-				$pFileHash['dest_path'] = STORAGE_PKG_NAME.'/'.ARTICLES_PKG_NAME.'/';
-				$pFileHash['dest_base_name'] = 'topic_'.$topicId;
 
-				if( !( $resizeFunc( $pFileHash ) ) ) {
-					$this->mErrors[] = 'Error while resizing topic image';
+			if( !empty( $_FILES['upload'] ) && $_FILES['upload']['tmp_name'] ) {
+				$checkFunc = liberty_get_function( 'can_thumbnail' );
+				if( $checkFunc( $_FILES['upload']['type'] )) {
+					$fileHash = $_FILES['upload'];
+					$fileHash['dest_path'] = $this->getTopicImageBaseUrl( $topicId );
+					$fileHash['source_file'] = $fileHash['tmp_name'];
+					liberty_clear_thumbnails( $fileHash );
+					liberty_generate_thumbnails( $fileHash );
+					$iParamHash['has_topic_image'] = 'y';
+				} else {
+					$this->mErrors = tra( "The file you uploaded doesn't appear to be a valid image. The reported mime type is" ).": ".$_FILES['upload']['type'];
 				}
-				@unlink( $tmpImagePath );
-				$iParamHash['has_topic_image'] = 'y';
 			}
 
 			if( $iParamHash['topic_id'] ) {
@@ -147,81 +142,42 @@ class BitArticleTopic extends BitBase {
 	}
 
 	/**
-	 * Get the name of the article image file
-	 * 
-	 * @param array $pTopicId article id
-	 * @access public
-	 * @return TRUE on success, FALSE on failure
-	 */
-	function getTopicImageStorageName( $pTopicId = NULL ) {
-		if( !@BitBase::verifyId( $pTopicId ) ) {
-			if( $this->isValid() ) {
-				$pTopicId = $this->mTopicId;
-			} else {
-				return NULL;
-			}
-		}
-		
-		global $gBitSystem;
-		return "topic_$pTopicId.".$gBitSystem->getConfig( 'liberty_thumbnail_format', 'jpg' );
-	}
-
-	/**
 	* Work out the path to the image for this article
 	* @param $pTopicId id of the article we need the image path for
 	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
 	* @return path on success, FALSE on failure
 	* @access public
 	**/
-	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
-		$path = BitArticle::getArticleImageStoragePath( NULL, TRUE );
-
-		if( $pBasePathOnly ) {
-			return $path;
+	function getTopicImageBaseUrl( $pTopicId = NULL ) {
+		$ret = FALSE;
+		if( !@BitBase::verifyId( $pTopicId ) && $this->isValid() ) {
+			$pTopicId = $this->mTopicId;
 		}
 
-		if( !@BitBase::verifyId( $pTopicId ) ) {
-			if( $this->isValid() ) {
-				$pTopicId = $this->mTopicId;
-			} else {
-				return NULL;
-			}
+		if( @BitBase::verifyId( $pTopicId )) {
+			$ret = LibertyAttachable::getStorageUrl( 'topics/'.$pTopicId );
 		}
-
-		if( !empty( $pTopicId ) ) {
-			return $path.BitArticleTopic::getTopicImageStorageName( $pTopicId );
-		} else {
-			return FALSE;
-		}
+		return $ret;
 	}
 
 	/**
-	* Work out the URL to the image for this article
-	* @param $pTopicId id of the article we need the image path for
-	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
-	* @return URL on success, FALSE on failure
-	* @access public
-	**/
-	function getTopicImageStorageUrl( $pTopicId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+	 * Get the full URL to the needed thumbnail
+	 *
+	 * @param numeric $pTopicId Topic ID of topic in question
+	 * @access public
+	 * @return Path to thumbnail, FALSE on failure
+	 */
+	function getTopicImageThumbUrl( $pTopicId = NULL ) {
 		global $gBitSystem;
-		$url = BitArticle::getArticleImageStorageUrl( NULL, TRUE );
-		if( $pBasePathOnly ) {
-			return $url;
+		$ret = FALSE;
+		if( !@BitBase::verifyId( $pTopicId ) && $this->isValid() ) {
+			$pTopicId = $this->mTopicId;
 		}
 
-		if( !@BitBase::verifyId( $pTopicId ) ) {
-			if( $this->isValid() ) {
-				$pTopicId = $this->mTopicId;
-			} else {
-				return NULL;
-			}
+		if( @BitBase::verifyId( $pTopicId )) {
+			$ret = liberty_fetch_thumbnail_url( BitArticleTopic::getTopicImageBaseUrl( $pTopicId ), $gBitSystem->getConfig( 'articles_image_size', 'small' ));
 		}
-
-		if( is_file( BitArticleTopic::getTopicImageStoragePath( NULL, TRUE ).BitArticleTopic::getTopicImageStorageName( $pTopicId ) ) ) {
-			return $url.BitArticleTopic::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
-		} else {
-			return FALSE;
-		}
+		return $ret;
 	}
 
 	function getTopicList( $pOptionHash=NULL ) {
@@ -247,7 +203,7 @@ class BitArticleTopic extends BitBase {
 
         while( $res = $result->fetchRow() ) {
 			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
-			if( $res['has_topic_image'] == 'y' ) {
+			if( empty( $res['topic_image_url'] ) && $res['has_topic_image'] == 'y' ) {
 				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
 			}
 
@@ -317,6 +273,98 @@ class BitArticleTopic extends BitBase {
 
 		$sql = "DELETE FROM `".BIT_DB_PREFIX."article_topics` WHERE `topic_id` = ?";
 		$rs = $this->mDb->query($sql, array($this->mTopicId));
+	}
+
+
+
+
+	/*****************************************************************************
+	 * Image functions needed for backward compatability - these are needed to   *
+	 * handle old article image style images that are not attachments. generally *
+	 * these functions are deprecated but needed for legacy code                 *
+	 ****************************************************************************/
+
+	/**
+	 * Get the name of the article image file
+	 * 
+	 * @param array $pTopicId article id
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getTopicImageStorageName( $pTopicId = NULL ) {
+		if( !@BitBase::verifyId( $pTopicId ) ) {
+			if( $this->isValid() ) {
+				$pTopicId = $this->mTopicId;
+			} else {
+				return NULL;
+			}
+		}
+		
+		global $gBitSystem;
+		return "topic_$pTopicId.".$gBitSystem->getConfig( 'liberty_thumbnail_format', 'jpg' );
+	}
+
+	/**
+	* Work out the path to the image for this article
+	* @param $pTopicId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return path on success, FALSE on failure
+	* @access public
+	**/
+	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
+		$path = BitArticle::getArticleImageStoragePath( NULL, TRUE );
+
+		if( $pBasePathOnly ) {
+			return $path;
+		}
+
+		if( !@BitBase::verifyId( $pTopicId ) ) {
+			if( $this->isValid() ) {
+				$pTopicId = $this->mTopicId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( !empty( $pTopicId ) ) {
+			return $path.BitArticleTopic::getTopicImageStorageName( $pTopicId );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	* Work out the URL to the image for this article
+	* @param $pTopicId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
+	function getTopicImageStorageUrl( $pTopicId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+		global $gBitSystem;
+		$ret = FALSE;
+
+		// first we check to see if this is a new type thumbnail. if that fails we'll use the old method
+		if( !( $ret = BitArticleTopic::getTopicImageThumbUrl( $pTopicId ))) {
+			$url = BitArticle::getArticleImageStorageUrl( NULL, TRUE );
+			if( $pBasePathOnly ) {
+				return $url;
+			}
+
+			if( !@BitBase::verifyId( $pTopicId ) ) {
+				if( $this->isValid() ) {
+					$pTopicId = $this->mTopicId;
+				} else {
+					return NULL;
+				}
+			}
+
+			if( is_file( BitArticleTopic::getTopicImageStoragePath( NULL, TRUE ).BitArticleTopic::getTopicImageStorageName( $pTopicId ))) {
+				$ret = $url.BitArticleTopic::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+			}
+		}
+
+		return $ret;
 	}
 
 }

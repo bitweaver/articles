@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.12 2006/11/23 15:18:18 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.13 2007/07/13 09:52:02 squareing Exp $ *}
 {strip}
 {form}
 	{jstabs}
@@ -35,13 +35,9 @@
 				<div class="row">
 					{formlabel label="Article Image Size" for="article_topic_thumbnail_size"}
 					{forminput}
-						<input size="5" type="text" id="article_topic_thumbnail_size" name="article_topic_thumbnail_size" value="{$gBitSystem->getConfig('article_topic_thumbnail_size')|default:"160"}" /> {tr}pixels{/tr}
-						{formhelp note="Here you can set the maximum width and height an article image can have. If you don't want this feature active, set it very high, then your images will not be resized."}
+						{html_options values=$imageSizes options=$imageSizes name="articles_image_size" selected=$gBitSystem->getConfig('articles_image_size')|default:small}
+						{formhelp note="Here you can select the size of the displayed article image."}
 					{/forminput}
-				</div>
-
-				<div class="row submit">
-					<input type="submit" name="settingsTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}
 		{/jstab}
@@ -57,12 +53,12 @@
 						{/forminput}
 					</div>
 				{/foreach}
-
-				<div class="row submit">
-					<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
-				</div>
 			{/legend}
 		{/jstab}
 	{/jstabs}
+
+	<div class="row submit">
+		<input type="submit" name="store_settings" value="{tr}Change preferences{/tr}" />
+	</div>
 {/form}
 {/strip}

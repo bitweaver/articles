@@ -128,6 +128,8 @@ array( 'DATADICT' => array(
 // STEP 3
 array( 'PHP' => '
 	global $gBitSystem;
+	// this define is needed for backwards compatability.
+	define( "ARTICLE_TOPIC_THUMBNAIL_SIZE", 160 ) );
 	require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 
 	// BitArticle has 3 sequences, each needs creating prior to execution

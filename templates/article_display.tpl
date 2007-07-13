@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.44 2007/07/06 16:37:22 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.45 2007/07/13 09:52:02 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -43,7 +43,8 @@
 				<div class="image">
 					{if $gContent->mStorage}
 						{assign var=image value=$gContent->mStorage[$article.primary_attachment_id]}
-						{jspopup notra=1 href=$image.source_url alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$image.thumbnail_url.small}
+						{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
+						{jspopup notra=1 href=$image.source_url alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$image.thumbnail_url.$size}
 					{else}
 						{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
 							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>

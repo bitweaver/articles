@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.126 2007/07/13 09:23:12 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.127 2007/07/13 09:52:02 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.126 2007/07/13 09:23:12 squareing Exp $
+ * $Id: BitArticle.php,v 1.127 2007/07/13 09:52:02 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.126 $ $Date: 2007/07/13 09:23:12 $ $Author: squareing $
+ * @version $Revision: 1.127 $ $Date: 2007/07/13 09:52:02 $ $Author: squareing $
  */
 
 /**
@@ -368,6 +368,7 @@ class BitArticle extends LibertyAttachable {
 			$data['image_url_is_topic'] = $isTopicUrl;
 		}
 
+		/* this stuff is out of date since we're using attachments now
 		if( !empty( $_FILES['article_image']['name'] ) ) {
 			// store the image in temp/articles/
 			$tmpImagePath = TEMP_PKG_PATH.ARTICLES_PKG_NAME.'/'.'temp_'.$_FILES['article_image']['name'];
@@ -399,6 +400,7 @@ class BitArticle extends LibertyAttachable {
 		} elseif( !empty( $data['preview_image_path'] ) && is_file( $data['preview_image_path'] ) ) {
 			$data['image_url'] = $data['preview_image_url'];
 		}
+		 */
 
 		$articleType = &new BitArticleType( $data['article_type_id'] );
 		$articleTopic = &new BitArticleTopic( $data['topic_id'] );
@@ -591,7 +593,7 @@ class BitArticle extends LibertyAttachable {
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
 
 			if( !empty( $res['image_attachment_path'] )) {
-				$res['image_url'] = liberty_fetch_thumbnail_url( $res['image_attachment_path'], 'small' );
+				$res['image_url'] = liberty_fetch_thumbnail_url( $res['image_attachment_path'], $gBitSystem->getConfig( 'articles_image_size', 'small' ));
 			} else {
 				$isTopicUrl = FALSE;
 				$res['image_url'] = BitArticle::getImageUrl( $res , $isTopicUrl );

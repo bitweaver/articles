@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.127 2007/07/13 09:52:02 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.128 2007/07/14 08:17:32 lsces Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.127 2007/07/13 09:52:02 squareing Exp $
+ * $Id: BitArticle.php,v 1.128 2007/07/14 08:17:32 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.127 $ $Date: 2007/07/13 09:52:02 $ $Author: squareing $
+ * @version $Revision: 1.128 $ $Date: 2007/07/14 08:17:32 $ $Author: lsces $
  */
 
 /**
@@ -612,6 +612,15 @@ class BitArticle extends LibertyAttachable {
 		return $ret;
 	}
 
+    /**
+    * Returns include file that will setup vars for display
+    * @return the fully specified path to file to be included
+    */
+	function getRenderFile() {
+		return ARTICLES_PKG_PATH."display_article_inc.php";
+	}
+
+	
 	/**
 	 * Get a list of articles that are to be published in the future
 	 * 

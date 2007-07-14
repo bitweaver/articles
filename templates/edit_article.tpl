@@ -189,10 +189,6 @@
 
 			{/jstabs}
 		{/form}
-
-		<br /><br />
-		{include file="bitpackage:liberty/edit_help_inc.tpl"}
-
 	</div><!-- end .body -->
 </div><!-- end .article -->
 {/strip}

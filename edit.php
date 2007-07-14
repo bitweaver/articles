@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.39 2007/07/10 18:58:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.40 2007/07/14 14:50:34 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -14,9 +14,6 @@
  */
 require_once( '../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
-
-// get plugin help
-include_once( LIBERTY_PKG_PATH.'edit_help_inc.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );

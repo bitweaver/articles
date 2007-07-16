@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.128 2007/07/14 08:17:32 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.129 2007/07/16 15:27:20 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.128 2007/07/14 08:17:32 lsces Exp $
+ * $Id: BitArticle.php,v 1.129 2007/07/16 15:27:20 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.128 $ $Date: 2007/07/14 08:17:32 $ $Author: lsces $
+ * @version $Revision: 1.129 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
  */
 
 /**
@@ -39,10 +39,6 @@ class BitArticle extends LibertyAttachable {
 	var $mTypeId;
 	var $mTopicId;
 
-	// Admin permission for articles
-	var $mAdminContentPerm = 'p_articles_admin';
-	var $mEditContentPerm = 'p_articles_edit';
-
 	/**
 	* Initiate the articles class
 	* @param $pArticleId article id of the article we want to view
@@ -50,26 +46,25 @@ class BitArticle extends LibertyAttachable {
 	* @access private
 	**/
 	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
+		LibertyAttachable::LibertyAttachable();
+		$this->registerContentType(
+			BITARTICLE_CONTENT_TYPE_GUID, array(
+				'content_description' => 'Article',
+				'handler_class' => 'BitArticle',
+				'handler_package' => 'articles',
+				'handler_file' => 'BitArticle.php',
+				'maintainer_url' => 'http://www.bitweaver.org'
+		));
+		$this->mContentId = $pContentId;
 		$this->mArticleId = $pArticleId;
 		$this->mTypeId  = NULL;
 		$this->mTopicId = NULL;
-
-		LibertyAttachable::LibertyAttachable();
-		$this->registerContentType( BITARTICLE_CONTENT_TYPE_GUID, array(
-			'content_description' => 'Article',
-			'handler_class' => 'BitArticle',
-			'handler_package' => 'articles',
-			'handler_file' => 'BitArticle.php',
-			'maintainer_url' => 'http://www.bitweaver.org'
-		) );
-		$this->mContentId = $pContentId;
 		$this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
-		if( ! @$this->verifyId( $this->mArticleId ) ) {
-			$this->mArticleId = NULL;
-		}
-		if( ! @$this->verifyId( $this->mContentId ) ) {
-			$this->mContentId = NULL;
-		}
+
+		// Permission setup
+		$this->mViewContentPerm  = 'p_articles_read';
+		$this->mEditContentPerm  = 'p_articles_edit';
+		$this->mAdminContentPerm = 'p_articles_admin';
 	}
 
 	/**

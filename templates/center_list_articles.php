@@ -1,37 +1,36 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.14 2007/07/08 23:11:13 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.15 2007/07/27 14:37:43 squareing Exp $
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
 extract( $moduleParams );
 
-include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
-include_once(ARTICLES_PKG_PATH."lookup_article_inc.php");
+include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+include_once( ARTICLES_PKG_PATH."lookup_article_inc.php" );
 include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
-
 
 $listHash = array();
 
 if( $gBitUser->hasPermission( 'p_articles_admin' ) ) {
-    $_REQUEST['status_id']   = !empty( $_REQUEST['status_id'] )   ? $_REQUEST['status_id']   : ARTICLE_STATUS_APPROVED;
-    $_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig( 'articles_max_list' );
-    $_REQUEST['topic_id']    = !empty( $_REQUEST['topic_id'] )    ? $_REQUEST['topic_id']    : NULL;
-    $_REQUEST['type_id']     = !empty( $_REQUEST['type_id'] )     ? $_REQUEST['type_id']     : NULL;
+	$_REQUEST['status_id']   = !empty( $_REQUEST['status_id'] )   ? $_REQUEST['status_id']   : ARTICLE_STATUS_APPROVED;
+	$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig( 'articles_max_list' );
+	$_REQUEST['topic_id']    = !empty( $_REQUEST['topic_id'] )    ? $_REQUEST['topic_id']    : NULL;
+	$_REQUEST['type_id']     = !empty( $_REQUEST['type_id'] )     ? $_REQUEST['type_id']     : NULL;
 
-    $gBitSmarty->assign( 'futures', $gContent->getFutureList( $listHash ));
+	$gBitSmarty->assign( 'futures', $gContent->getFutureList( $listHash ));
 } else {
-    $_REQUEST['status_id']   = ARTICLE_STATUS_APPROVED;
-    $_REQUEST['max_records'] = $gBitSystem->getConfig( 'articles_max_list' );
+	$_REQUEST['status_id']   = ARTICLE_STATUS_APPROVED;
+	$_REQUEST['max_records'] = $gBitSystem->getConfig( 'articles_max_list' );
 }
 if ( !empty( $_REQUEST['topic'] ) ) {
-    $gBitSmarty->assign( 'topic', $_REQUEST['topic'] );
+	$gBitSmarty->assign( 'topic', $_REQUEST['topic'] );
 }
 
 if( !empty( $moduleParams )) {
-    $listHash = array_merge( $_REQUEST, $moduleParams['module_params'] );
+	$listHash = array_merge( $_REQUEST, $moduleParams['module_params'] );
 	$listHash['max_records'] = $module_rows;
 	//$listHash['parse_data'] = TRUE;
 	//$listHash['load_comments'] = TRUE;
 } else {
-    $listHash = $_REQUEST;
+	$listHash = $_REQUEST;
 }
 
 if( empty( $listHash['user_id'] )) {

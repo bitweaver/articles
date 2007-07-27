@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.129 2007/07/16 15:27:20 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.130 2007/07/27 09:47:33 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.129 2007/07/16 15:27:20 squareing Exp $
+ * $Id: BitArticle.php,v 1.130 2007/07/27 09:47:33 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.129 $ $Date: 2007/07/16 15:27:20 $ $Author: squareing $
+ * @version $Revision: 1.130 $ $Date: 2007/07/27 09:47:33 $ $Author: squareing $
  */
 
 /**
@@ -521,12 +521,14 @@ class BitArticle extends LibertyAttachable {
 			// this will show all articles at once - future, current and expired
 		} elseif( !empty( $pParamHash['show_future'] )) {
 			// hide expired articles
-			$whereSql .= " AND a.`expire_date` > ? ";
+			$whereSql .= " AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ) ";
 			$bindVars[] = ( int )$now;
+			$bindVars[] = 'y';
 		} elseif( !empty( $pParamHash['show_expired'] )) {
 			// hide future articles
-			$whereSql .= " AND a.`publish_date` < ?";
+			$whereSql .= " AND ( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) ";
 			$bindVars[] = ( int )$now;
+			$bindVars[] = 'y';
 		} elseif( !empty( $pParamHash['get_future'] )) {
 			// show only future
 			$whereSql .= " AND a.`publish_date` > ?";
@@ -537,9 +539,12 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = ( int )$now;
 		} else {
 			// hide future and expired articles
-			$whereSql .= " AND a.`publish_date` < ? AND a.`expire_date` > ? ";
+			// we need all these AND and ORs to ensure that other conditions such as status_id are respected as well
+			$whereSql .= " AND (( a.`publish_date` > a.`expire_date` ) OR (( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ))) ";
 			$bindVars[] = ( int )$now;
+			$bindVars[] = 'y';
 			$bindVars[] = ( int )$now;
+			$bindVars[] = 'y';
 		}
 
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
@@ -578,6 +583,7 @@ class BitArticle extends LibertyAttachable {
 		$query_cant = "SELECT COUNT( * )FROM `".BIT_DB_PREFIX."articles` a
 			INNER JOIN      `".BIT_DB_PREFIX."liberty_content`    lc ON lc.`content_id`   = a.`content_id`
 			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON atopic.`topic_id` = a.`topic_id` $joinSql
+			LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`   atype ON atype.`article_type_id` = a.`article_type_id`
 			WHERE lc.`content_type_guid` = ? $whereSql";
 
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );

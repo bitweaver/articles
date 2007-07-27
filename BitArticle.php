@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.130 2007/07/27 09:47:33 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.131 2007/07/27 14:38:20 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.130 2007/07/27 09:47:33 squareing Exp $
+ * $Id: BitArticle.php,v 1.131 2007/07/27 14:38:20 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.130 $ $Date: 2007/07/27 09:47:33 $ $Author: squareing $
+ * @version $Revision: 1.131 $ $Date: 2007/07/27 14:38:20 $ $Author: squareing $
  */
 
 /**
@@ -517,28 +517,36 @@ class BitArticle extends LibertyAttachable {
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing
 		$now = $gBitSystem->getUTCTime();
-		if( !empty( $pParamHash['show_future'] ) && !empty( $pParamHash['show_expired'] )) {
+		if( !empty( $pParamHash['show_future'] ) && !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// this will show all articles at once - future, current and expired
-		} elseif( !empty( $pParamHash['show_future'] )) {
+		} elseif( !empty( $pParamHash['show_future'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// hide expired articles
 			$whereSql .= " AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ) ";
 			$bindVars[] = ( int )$now;
 			$bindVars[] = 'y';
-		} elseif( !empty( $pParamHash['show_expired'] )) {
+		} elseif( !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// hide future articles
 			$whereSql .= " AND ( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) ";
 			$bindVars[] = ( int )$now;
 			$bindVars[] = 'y';
 		} elseif( !empty( $pParamHash['get_future'] )) {
 			// show only future
+			// if we're trying to view these articles, we better have the perms to do so
+			if( !$gBitUser->hasPermission( 'p_articles_admin' )) {
+				return array();
+			}
 			$whereSql .= " AND a.`publish_date` > ?";
 			$bindVars[] = ( int )$now;
 		} elseif( !empty( $pParamHash['get_expired'] )) {
 			// show only expired articles
+			// if we're trying to view these articles, we better have the perms to do so
+			if( !$gBitUser->hasPermission( 'p_articles_admin' )) {
+				return array();
+			}
 			$whereSql .= " AND a.`expire_date` < ? ";
 			$bindVars[] = ( int )$now;
 		} else {
-			// hide future and expired articles
+			// hide future and expired articles - this is the default behaviour
 			// we need all these AND and ORs to ensure that other conditions such as status_id are respected as well
 			$whereSql .= " AND (( a.`publish_date` > a.`expire_date` ) OR (( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ))) ";
 			$bindVars[] = ( int )$now;

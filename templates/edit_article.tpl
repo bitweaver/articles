@@ -70,7 +70,7 @@
 
 						{if count($types) == 1}
 							{section name=t loop=$types}
-								<input type="hidden" name="article_type_id" value="{$types[t].article_type_id}">
+								<input type="hidden" name="article_type_id" value="{$types[t].article_type_id}" />
 								{if $types[t].use_ratings eq 'y'}{assign var=ratings value=TRUE}{/if}
 							{/section}
 						{else}

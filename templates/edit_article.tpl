@@ -61,7 +61,7 @@
 											{/section}
 										</select>
 									{else}
-										{tr}No Topics set{/tr}. {smartlink ititle="Article Topics" ifile="admin/admin_topics.php"}
+										<span id="topic_id">{tr}No Topics set{/tr}</span>. {smartlink ititle="Article Topics" ifile="admin/admin_topics.php"}
 									{/if}
 									{formhelp note=""}
 								{/forminput}

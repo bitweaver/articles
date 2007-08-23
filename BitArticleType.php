@@ -1,8 +1,8 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.18 2007/06/22 11:12:28 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.19 2007/08/23 11:05:51 squareing Exp $
  * @package article
- * 
+ *
  * @copyright Copyright (c) 2004-2006, bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -28,33 +28,33 @@ class BitArticleType extends BitBase
 			$this->loadType($iTypeId);
 		}
 	}
-	
+
 	function isValid() {
 		return (@BitBase::verifyId($this->mTypeId));
 	}
-	
+
 	function loadType($iTypeId) {
 		$ret = NULL;
-		
+
 		if (!$this->mTypeId) {
 			$this->mTypeId = $iTypeId;
 		}
-		
+
 		if ($this->mTypeId) {
 			$sql = "SELECT * FROM `".BIT_DB_PREFIX."article_types` WHERE `article_type_id` = ?";
-			
+
 			if( $ret = $this->mDb->getRow( $sql, array( $this->mTypeId ) ) ) {
 				$ret['num_articles'] = $this->mDb->getOne('SELECT COUNT(*) FROM `'.BIT_DB_PREFIX.'articles` WHERE `article_type_id` = ?', array($ret['article_type_id']));
 			}
 		}
 		$this->mInfo = $ret;
-		
+
 		return $ret;
 	}
 
 	function verify(&$iParamHash) {
 		$isNewType = FALSE;
-		
+
 		// Validate the (optional) topic_id parameter
 		if (@BitBase::verifyId($iParamHash['article_type_id'])) {
 			$cleanHash['article_type_id'] = (int)$iParamHash['article_type_id'];
@@ -62,8 +62,8 @@ class BitArticleType extends BitBase
 			$isNewType = TRUE;
 			$cleanHash['article_type_id'] = NULL;
 		}
-		
-		if (!$isNewType) { 
+
+		if (!$isNewType) {
 			$cleanHash['use_ratings'] 		= (!empty($iParamHash['use_ratings']) ? ($iParamHash['use_ratings']) : 'n');
 			$cleanHash['show_pre_publ'] 	= (!empty($iParamHash['show_pre_publ']) ? ($iParamHash['show_pre_publ']) : 'n');
 			$cleanHash['show_post_expire'] 	= (!empty($iParamHash['show_post_expire']) ? ($iParamHash['show_post_expire']) : 'n');
@@ -73,7 +73,7 @@ class BitArticleType extends BitBase
 			$cleanHash['show_image'] 		= (!empty($iParamHash['show_image']) ? ($iParamHash['show_image']) : 'n');
 			$cleanHash['show_avatar'] 		= (!empty($iParamHash['show_avatar']) ? ($iParamHash['show_avatar']) : 'n');
 			$cleanHash['show_author']		= (!empty($iParamHash['show_author']) ? ($iParamHash['show_author']) : 'n');
-			$cleanHash['show_pubdate'] 		= (!empty($iParamHash['show_pubdate']) ? ($iParamHash['show_pubdate']) : 'n');			
+			$cleanHash['show_pubdate'] 		= (!empty($iParamHash['show_pubdate']) ? ($iParamHash['show_pubdate']) : 'n');
 			$cleanHash['show_expdate'] 		= (!empty($iParamHash['show_expdate']) ? ($iParamHash['show_expdate']) : 'n');
 			$cleanHash['show_reads'] 		= (!empty($iParamHash['show_reads']) ? ($iParamHash['show_reads']) : 'n');
 			$cleanHash['show_size'] 		= (!empty($iParamHash['show_size']) ? ($iParamHash['show_size']) : 'n');
@@ -82,23 +82,23 @@ class BitArticleType extends BitBase
 			if ($topicName) {
 				$cleanHash['topic_name'] = $topicName;
 			}
-		} else {		
+		} else {
 			// Was an acceptable name given?
 			if (empty($iParamHash['type_name']) || ($iParamHash['type_name'] == '')) {
 				$this->mErrors['type_name'] = tra("Invalid or blank article type name supplied");
-			} else {	
+			} else {
 				$cleanHash['type_name'] = $iParamHash['type_name'];
 			}
 		}
-		
-		$iParamHash = $cleanHash;	
+
+		$iParamHash = $cleanHash;
 		return(count($this->mErrors) == 0);
 	}
-	
+
 	function storeType(&$iParamHash) {
 		global $gLibertySystem;
 		global $gBitUser;
-		
+
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['article_type_id']) {
 				if (empty($this->mTopicId)) {
@@ -109,17 +109,17 @@ class BitArticleType extends BitBase
 			} else {
 				$typeId = $iParamHash['article_type_id'];
 			}
-			
+
 			if ($iParamHash['article_type_id']) {
-				$this->mDb->associateUpdate(BIT_DB_PREFIX."article_types", $iParamHash, array( 'article_type_id'=> $iParamHash['article_type_id']));				
+				$this->mDb->associateUpdate(BIT_DB_PREFIX."article_types", $iParamHash, array( 'article_type_id'=> $iParamHash['article_type_id']));
 			} else {
 				$iParamHash['article_type_id'] = $typeId;
-				$this->mDb->associateInsert(BIT_DB_PREFIX."article_types", $iParamHash);	
-			}			
+				$this->mDb->associateInsert(BIT_DB_PREFIX."article_types", $iParamHash);
+			}
 		}
 		$this->mTypeId = $iParamHash['article_type_id'];
 	}
-		
+
 	function removeType($iTypeId = NULL) {
 		if (!$iTypeId) {
 		 	if (!$this->mTypeId) {
@@ -127,18 +127,18 @@ class BitArticleType extends BitBase
 				return NULL;
 			} else {
 				$iTypeId = $this->mTypeId;
-			}			
+			}
 		} else {
 			$iTypeId = (int)($iTypeId);
 		}
-		
+
 		$sql = "DELETE FROM `".BIT_DB_PREFIX."article_types` WHERE `article_type_id` = ?";
 		$rs = $this->mDb->query($sql, array($iTypeId));
 	}
-	
+
 	function getTypeList() {
 		global $gBitSystem;
-		
+
 		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "article_types`";
 		$result = $gBitSystem->mDb->query( $query, array() );
         $ret = array();

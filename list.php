@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.19 2007/07/06 16:37:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.20 2007/08/23 08:10:21 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -17,6 +17,10 @@ $gBitSystem->verifyPackage( 'articles' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_articles_read' );
+
+// get services set up
+$gContent = new BitArticle();
+$gContent->invokeServices( 'content_list_function', $_REQUEST );
 
 // nuke articles if requested
 if( !empty( $_REQUEST['action'] ) ) {

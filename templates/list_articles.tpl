@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.20 2007/06/23 05:22:18 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.21 2007/08/23 08:10:21 squareing Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -26,10 +26,13 @@
 				{if $gBitSystem->isFeatureActive( 'articles_list_expire' )}
 					<li>{smartlink ititle='Expire Date' isort='expire_date' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
+				{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_sort'}
 			</ul>
 		</div>
 
 		<div class="clear"></div>
+
+		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_options'}
 
 		{include file="bitpackage:articles/article_filter_inc.tpl"}
 
@@ -37,20 +40,25 @@
 			<table class="data">
 				<caption>{tr}Articles Listing{/tr}</caption>
 				<tr>
+					{counter name=cols start=0 print=false}
 					{if $gBitSystem->isFeatureActive( 'articles_list_img' )}
 						<th style="width:10px;">{tr}Image{/tr}</th>
 					{/if}
 					{if $gBitSystem->isFeatureActive( 'articles_list_type' )}
 						<th>{smartlink ititle='Type' isort='type_name' offset=$offset type=$find_type topic=$find_topic}</th>
+						{counter name=cols assign=cols print=false}
 					{/if}
 					{if $gBitSystem->isFeatureActive( 'articles_list_topic' )}
 						<th>{smartlink ititle='Topic' isort='topic_name' offset=$offset type=$find_type topic=$find_topic}</th>
+						{counter name=cols assign=cols print=false}
 					{/if}
 					{if $gBitSystem->isFeatureActive( 'articles_list_status' )}
 						<th>{smartlink ititle='Status' isort='status_id' offset=$offset type=$find_type topic=$find_topic}</th>
+						{counter name=cols assign=cols print=false}
 					{/if}
 					{if $gBitSystem->isFeatureActive( 'articles_list_reads' )}
 						<th>{smartlink ititle='Reads' isort='hits' offset=$offset type=$find_type topic=$find_topic}</th>
+						{counter name=cols assign=cols print=false}
 					{/if}
 					<th>{tr}Action{/tr}</th>
 				</tr>
@@ -71,7 +79,7 @@
 							</td>
 						{/if}
 
-						<td colspan="5">
+						<td colspan="{$cols}">
 							{if $gBitSystem->isFeatureActive( 'articles_list_title' )}
 								<h2>
 									{if $gBitUser->hasPermission( 'p_articles_read' )}
@@ -96,11 +104,29 @@
 								{tr}Displayed until <strong>{$article.expire_date|bit_short_datetime}</strong>{/tr}
 							{/if}
 						</td>
+
+						<td style="text-align:right; vertical-align:top;">
+							{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_actions' serviceHash=$article}
+						</td>
 					</tr>
 
 					<tr class="{cycle}">
 						{if $gBitSystem->isFeatureActive( 'articles_list_type' )}
-							<td>{tr}{$article.type_name}{/tr}</td>
+							<td>
+								{tr}{$article.type_name}{/tr}
+								{if $article.use_ratings eq 'y'}
+									<br />
+									<span class="rating">
+										{repeat count=$article.rating}
+											{biticon ipackage=articles iname=rating iexplain="Article Rating"}
+										{/repeat}
+										{math assign=rating_off equation="5-x" x=$article.rating}
+										{repeat count=$rating_off}
+											{biticon ipackage=articles iname=rating_off iexplain="Article Rating"}
+										{/repeat}
+									</span>
+								{/if}
+							</td>
 						{/if}
 						{if $gBitSystem->isFeatureActive( 'articles_list_topic' )}
 							<td>{$article.topic_name}</td>

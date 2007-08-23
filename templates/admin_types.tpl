@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.8 2007/06/26 07:11:40 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.9 2007/08/23 11:15:23 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -9,7 +9,7 @@
 
 	<div class="body">
 		{formfeedback error=$gContent->mErrors}
-		
+
 		{jstabs}
 			{jstab title="Article Types"}
 				{form legend="Modify Article Types"}
@@ -26,7 +26,8 @@
 							<tr class="{cycle values="odd,even}">
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
-									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{tr}{$types[user].type_name}{/tr}</a>
+									<input type="text" name="type_name[{$types[user].article_type_id}]" value="{$types[user].type_name}" />
+									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{biticon iname=edit-find iexplain="List Articles"}</a>
 								</td>
 								{foreach from=$artTypes item=artType key=key}
 									<td style="text-align:center;"><input title="{$artType.name}" type="checkbox" name="{$key}[{$types[user].article_type_id}]" {if $types[user].$key eq 'y'}checked="checked"{/if} /></td>
@@ -88,7 +89,7 @@
 							</li>
 						</ul>
 					{/section}
-					
+
 					<div class="row submit">
 						<input type="submit" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>

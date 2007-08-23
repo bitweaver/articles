@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.19 2007/08/23 11:05:51 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleType.php,v 1.20 2007/08/23 11:15:23 squareing Exp $
  * @package article
  *
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -64,24 +64,21 @@ class BitArticleType extends BitBase
 		}
 
 		if (!$isNewType) {
-			$cleanHash['use_ratings'] 		= (!empty($iParamHash['use_ratings']) ? ($iParamHash['use_ratings']) : 'n');
-			$cleanHash['show_pre_publ'] 	= (!empty($iParamHash['show_pre_publ']) ? ($iParamHash['show_pre_publ']) : 'n');
-			$cleanHash['show_post_expire'] 	= (!empty($iParamHash['show_post_expire']) ? ($iParamHash['show_post_expire']) : 'n');
-			$cleanHash['heading_only'] 		= (!empty($iParamHash['heading_only']) ? ($iParamHash['heading_only']) : 'n');
-			$cleanHash['allow_comments'] 	= (!empty($iParamHash['allow_comments']) ? ($iParamHash['allow_comments']) : 'n');
+			$cleanHash['use_ratings']              = (!empty($iParamHash['use_ratings'])              ? ($iParamHash['use_ratings'])              : 'n');
+			$cleanHash['show_pre_publ']            = (!empty($iParamHash['show_pre_publ'])            ? ($iParamHash['show_pre_publ'])            : 'n');
+			$cleanHash['show_post_expire']         = (!empty($iParamHash['show_post_expire'])         ? ($iParamHash['show_post_expire'])         : 'n');
+			$cleanHash['heading_only']             = (!empty($iParamHash['heading_only'])             ? ($iParamHash['heading_only'])             : 'n');
+			$cleanHash['allow_comments']           = (!empty($iParamHash['allow_comments'])           ? ($iParamHash['allow_comments'])           : 'n');
 			$cleanHash['comment_can_rate_article'] = (!empty($iParamHash['comment_can_rate_article']) ? ($iParamHash['comment_can_rate_article']) : 'n');
-			$cleanHash['show_image'] 		= (!empty($iParamHash['show_image']) ? ($iParamHash['show_image']) : 'n');
-			$cleanHash['show_avatar'] 		= (!empty($iParamHash['show_avatar']) ? ($iParamHash['show_avatar']) : 'n');
-			$cleanHash['show_author']		= (!empty($iParamHash['show_author']) ? ($iParamHash['show_author']) : 'n');
-			$cleanHash['show_pubdate'] 		= (!empty($iParamHash['show_pubdate']) ? ($iParamHash['show_pubdate']) : 'n');
-			$cleanHash['show_expdate'] 		= (!empty($iParamHash['show_expdate']) ? ($iParamHash['show_expdate']) : 'n');
-			$cleanHash['show_reads'] 		= (!empty($iParamHash['show_reads']) ? ($iParamHash['show_reads']) : 'n');
-			$cleanHash['show_size'] 		= (!empty($iParamHash['show_size']) ? ($iParamHash['show_size']) : 'n');
-			$cleanHash['creator_edit'] 		= (!empty($iParamHash['creator_edit']) ? ($iParamHash['creator_edit']) : 'n');
-			$topicName = (!empty($iParamHash['topic_name']) ? $iParamHash['topic_name'] : NULL);
-			if ($topicName) {
-				$cleanHash['topic_name'] = $topicName;
-			}
+			$cleanHash['show_image']               = (!empty($iParamHash['show_image'])               ? ($iParamHash['show_image'])               : 'n');
+			$cleanHash['show_avatar']              = (!empty($iParamHash['show_avatar'])              ? ($iParamHash['show_avatar'])              : 'n');
+			$cleanHash['show_author']              = (!empty($iParamHash['show_author'])              ? ($iParamHash['show_author'])              : 'n');
+			$cleanHash['show_pubdate']             = (!empty($iParamHash['show_pubdate'])             ? ($iParamHash['show_pubdate'])             : 'n');
+			$cleanHash['show_expdate']             = (!empty($iParamHash['show_expdate'])             ? ($iParamHash['show_expdate'])             : 'n');
+			$cleanHash['show_reads']               = (!empty($iParamHash['show_reads'])               ? ($iParamHash['show_reads'])               : 'n');
+			$cleanHash['show_size']                = (!empty($iParamHash['show_size'])                ? ($iParamHash['show_size'])                : 'n');
+			$cleanHash['creator_edit']             = (!empty($iParamHash['creator_edit'])             ? ($iParamHash['creator_edit'])             : 'n');
+			$cleanHash['type_name']                = (!empty($iParamHash['type_name'])                ? ($iParamHash['type_name'])                : NULL);
 		} else {
 			// Was an acceptable name given?
 			if (empty($iParamHash['type_name']) || ($iParamHash['type_name'] == '')) {

@@ -1,9 +1,6 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.8 2006/04/11 17:52:09 squareing Exp $
-// Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-// All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
-// Initialization
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.9 2007/08/23 11:15:23 squareing Exp $
+
 require_once( '../../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
@@ -82,6 +79,7 @@ if( isset( $_REQUEST["add_type"] ) ) {
 		foreach( array_keys( $artTypes ) as $option ) {
 			$storeHash[$option] = !empty( $_REQUEST[$option][$this_type] ) ? 'y' : 'n';
 		}
+		$storeHash['type_name'] = $_REQUEST['type_name'][$this_type];
         $gContent->storeType( $storeHash );
     }
 }

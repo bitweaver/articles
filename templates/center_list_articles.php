@@ -1,7 +1,9 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.15 2007/07/27 14:37:43 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.16 2007/08/30 22:15:13 wjames5 Exp $
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
-extract( $moduleParams );
+if( !empty( $moduleParams ) ) {
+	extract( $moduleParams );
+}
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_PATH."lookup_article_inc.php" );

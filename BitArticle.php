@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.132 2007/08/23 08:10:21 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.133 2007/09/10 15:17:24 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.132 2007/08/23 08:10:21 squareing Exp $
+ * $Id: BitArticle.php,v 1.133 2007/09/10 15:17:24 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.132 $ $Date: 2007/08/23 08:10:21 $ $Author: squareing $
+ * @version $Revision: 1.133 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
  */
 
 /**
@@ -658,7 +658,7 @@ class BitArticle extends LibertyAttachable {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrl( $pArticleId = NULL) {
+	function getDisplayUrl( $pArticleId = NULL, $pParamHash = NULL ) {
 		global $gBitSystem;
 
 		$ret = NULL;
@@ -675,7 +675,10 @@ class BitArticle extends LibertyAttachable {
 			} else {
 				$ret = ARTICLES_PKG_URL."read.php?article_id=$pArticleId";
 			}
+		} else {
+			$ret = LibertyContent::getDisplayUrl( NULL, $pParamHash );
 		}
+
 		return $ret;
 	}
 

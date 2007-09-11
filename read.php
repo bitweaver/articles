@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.21 2007/07/06 16:37:22 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.22 2007/09/11 19:45:43 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -13,7 +13,6 @@ require_once( '../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
-$gBitSystem->verifyPermission( 'p_articles_read' );
 
 if( !@BitBase::verifyId( $_REQUEST["article_id"] )) {
 	$gBitSystem->fatalError( tra( "No article indicated" ));
@@ -25,6 +24,8 @@ include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
 if( !$gContent->isValid() ) {
 	$gBitSystem->fatalError( tra( 'Article cannot be found' ));
 }
+
+$gContent->verifyPermission( 'p_articles_read' );
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.
 if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {

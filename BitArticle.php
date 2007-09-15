@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.133 2007/09/10 15:17:24 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.134 2007/09/15 08:05:40 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.133 2007/09/10 15:17:24 squareing Exp $
+ * $Id: BitArticle.php,v 1.134 2007/09/15 08:05:40 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.133 $ $Date: 2007/09/10 15:17:24 $ $Author: squareing $
+ * @version $Revision: 1.134 $ $Date: 2007/09/15 08:05:40 $ $Author: squareing $
  */
 
 /**
@@ -71,8 +71,7 @@ class BitArticle extends LibertyAttachable {
 	* Load the data from the database
 	* @access public
 	**/
-	function load( $pVersion = 0 ) {
-		$pVersion = intval( $pVersion );
+	function load() {
 		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
@@ -80,24 +79,21 @@ class BitArticle extends LibertyAttachable {
 			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, ".( !empty( $pVersion ) ? "lch.`hits`, lc.`title`" : "lc.*" ).", atype.*, atopic.*,
+			$query = "SELECT a.*, lc.*, atype.*, atopic.*,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
-				lf.`storage_path` as `image_storage_path` $selectSql
+				lf.`storage_path` AS `image_storage_path`, la2.`attachment_id` AS `display_attachment_id` $selectSql
 				FROM `".BIT_DB_PREFIX."articles` a
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` ) ".
-					( !empty( $pVersion ) ? "LEFT JOIN `".BIT_DB_PREFIX."liberty_content_history` lchy ON( lchy.`content_id` = a.`content_id` )" : "" ) . "
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lch.`content_id` = lc.`content_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`  la2 ON( la2.`content_id` = lc.`content_id` AND la2.`is_primary` = 'y' )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`attachment_id` = a.`image_attachment_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` ) $joinSql
-				WHERE a.`$lookupColumn`=? $whereSql ".( !empty( $pVersion ) ? " AND lchy.version = ?" : "" );
-			if( !empty( $pVersion ) ) {
-				$bindVars[]=$pVersion;
-			}
+				WHERE a.`$lookupColumn`=? $whereSql";
 			$result = $this->mDb->query( $query, $bindVars );
 
 			global $gBitSystem;
@@ -106,7 +102,7 @@ class BitArticle extends LibertyAttachable {
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
 				$isTopicImage = false;
-				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo, $isTopicImage);
+				$this->mInfo['image_url'] = BitArticle::getImageUrl( $this->mInfo, $isTopicImage );
 				$this->mInfo['image_url_is_topic'] = $isTopicImage;
 
 				$this->mContentId = $this->mInfo['content_id'];
@@ -200,6 +196,7 @@ class BitArticle extends LibertyAttachable {
 			$pParamHash['article_store']['author_name'] = $pParamHash['author_name'];
 		}
 
+		/*
 		// if no image attachment id is given, we set it null. this way a user can remove an attached image
 		// TODO: since we allow custom image size for article images, we should create a resized image of the original here.
 		if( @$this->verifyId( $pParamHash['image_attachment_id'] ) ) {
@@ -207,6 +204,8 @@ class BitArticle extends LibertyAttachable {
 		} else {
 			$pParamHash['article_store']['image_attachment_id'] = NULL;
 		}
+		 */
+		$pParamHash['article_store']['image_attachment_id'] = NULL;
 
 		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
 			$pParamHash['article_store']['topic_id'] =( int )$pParamHash['topic_id'];
@@ -351,6 +350,7 @@ class BitArticle extends LibertyAttachable {
 			$data['parsed'] = preg_replace( LIBERTY_SPLIT_REGEX, "<hr />", $data['parsed'] );
 		}
 
+		/* this stuff is out of date since we're using attachments now
 		if( @$this->verifyId( $data['image_attachment_id'] ) ) {
 			$data['image_attachment_id'] = ( int )$data['image_attachment_id'];
 			$query = "SELECT lf.`storage_path` AS `image_storage_path`
@@ -359,11 +359,10 @@ class BitArticle extends LibertyAttachable {
 				WHERE la.attachment_id=?";
 			$data['image_storage_path'] = $this->mDb->getOne( $query, array( $data['image_attachment_id'] ) );
 			$isTopicUrl = false;
-			$data['image_url'] = BitArticle::getImageUrl( $data , $isTopicUrl);
+			$data['image_url'] = BitArticle::getImageUrl( $data , $isTopicUrl );
 			$data['image_url_is_topic'] = $isTopicUrl;
 		}
 
-		/* this stuff is out of date since we're using attachments now
 		if( !empty( $_FILES['article_image']['name'] ) ) {
 			// store the image in temp/articles/
 			$tmpImagePath = TEMP_PKG_PATH.ARTICLES_PKG_NAME.'/'.'temp_'.$_FILES['article_image']['name'];
@@ -410,14 +409,9 @@ class BitArticle extends LibertyAttachable {
 	* @return url to image
 	* @access public
 	**/
-	function getImageUrl( $pParamHash, &$pIsTopicImage, $pLoadAttachment = FALSE ) {
+	function getImageUrl( $pParamHash, &$pIsTopicImage ) {
 		$ret = NULL;
-		// if a custom image for the article exists, use that, then use an attachment, then use the topic image
-		if( $pLoadAttachment && @BitBase::verifyId( $pParamHash['primary_attachment_id'] )) {
-			// this is the new and improved way of how articles deal with images - primary_attachment_id
-			$attachment = $this->getAttachment( $pParamHash['primary_attachment_id'] );
-			$ret = $attachment['thumbnail_url']['small'];
-		} elseif( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
+		if( @$this->verifyId( $pParamHash['article_id'] ) && BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] ) ) {
 			// old style - deprecated
 			$ret = BitArticle::getArticleImageStorageUrl( $pParamHash['article_id'] );
 		} elseif( @$this->verifyId( $pParamHash['image_attachment_id'] ) && $pParamHash['image_attachment_id'] ) {
@@ -573,7 +567,7 @@ class BitArticle extends LibertyAttachable {
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
 				lch.`hits`, lf.`storage_path` AS `image_storage_path`,
-				atype.*, lc.*, lf2.storage_path AS `image_attachment_path` $selectSql
+				atype.*, lc.*, la2.`attachment_id` AS `display_attachment_id`, lf2.storage_path AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON lc.`content_id`         = a.`content_id`
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON astatus.`status_id`     = a.`status_id`
@@ -582,7 +576,7 @@ class BitArticle extends LibertyAttachable {
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`      atype ON atype.`article_type_id` = a.`article_type_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`attachment_id`      = a.`image_attachment_id`
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`  la2 ON la2.`attachment_id`     = lc.`primary_attachment_id`
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`  la2 ON la2.`content_id`        = lc.`content_id` AND la2.`is_primary` = 'y'
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`        lf2 ON lf2.`file_id`           = la2.`foreign_id`
 			   	$joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
@@ -629,7 +623,6 @@ class BitArticle extends LibertyAttachable {
 		return ARTICLES_PKG_PATH."display_article_inc.php";
 	}
 
-	
 	/**
 	 * Get a list of articles that are to be published in the future
 	 * 
@@ -846,6 +839,5 @@ class BitArticle extends LibertyAttachable {
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}
-
 }
 ?>

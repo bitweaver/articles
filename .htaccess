@@ -6,5 +6,6 @@
 	RewriteCond %{SCRIPT_FILENAME}  -f [OR]
 	RewriteCond %{SCRIPT_FILENAME}/read.php    -f
 	RewriteRule ^(.*)$            - [L]
+	RewriteRule ^view/(.*)$  read.php?article_id=$1  [L]
 	RewriteRule ^(.*)$  read.php?article_id=$1  [L]
 </IfModule>

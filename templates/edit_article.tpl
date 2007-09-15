@@ -131,7 +131,7 @@
 						</div>
 
 						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
-							{include file="bitpackage:liberty/edit_storage_list.tpl"}
+							{include file="bitpackage:liberty/edit_storage_list.tpl" primary_label="Article Image"}
 						{/if}
 					{/legend}
 				{/jstab}
@@ -159,23 +159,6 @@
 								{formhelp note="If the article type allows it, this article will not be displayed <strong>after</strong> this date."}
 							{/forminput}
 						</div>
-					{/legend}
-
-					{legend legend="Custom Article image"}
-						{if $article.image_url && !$article.image_url_is_topic}
-							<div class="row">
-								{formlabel label="Old Article Image"}
-								{forminput}
-									<img alt="{tr}Article image{/tr}" title="{$article.title|escape}" src="{$article.image_url}"/>
-									<br />
-									{formhelp note="You can replace this image by removing this image and uploading a new one below."}
-								{/forminput}
-							</div>
-						{/if}
-
-						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }
-							{include file="bitpackage:liberty/edit_primary_attachment_inc.tpl" label="Custom Article Image"}
-						{/if}
 					{/legend}
 				{/jstab}
 

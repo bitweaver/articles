@@ -11,6 +11,7 @@ $upgrades = array(
 
 	'BWR1' => array(
 		'BWR2' => array(
+
 // de-tikify tables
 array( 'DATADICT' => array(
 	array( 'RENAMETABLE' => array(
@@ -30,8 +31,78 @@ array( 'DATADICT' => array(
 		),
 	)),
 )),
+
+// we will try to convert article images to attachments
+array( 'PHP' => '
+	global $gBitSystem, $gBitUser;
+	require_once( LIBERTY_PKG_PATH."LibertyAttachable.php" );
+
+	$query = "
+		SELECT
+			a.`article_id`,
+			a.`content_id`,
+			c.`user_id`
+		FROM `'.BIT_DB_PREFIX.'articles` a
+		INNER JOIN `'.BIT_DB_PREFIX.'liberty_content` c ON( a.`content_id` = c.`content_id` )
+	";
+
+	if( $articles = $gBitSystem->mDb->getAll( $query ) ) {
+		foreach( $articles as $article ) {
+			// store article image
+			$image_name = "article_".$article["article_id"].".jpg";
+			vd($image_name);
+			vd($article);
+			if( is_file( STORAGE_PKG_PATH.ARTICLES_PKG_NAME."/".$image_name )) {
+				$storeRow["plugin_guid"]             = "bitfile";
+				$storeRow["user_id"]                 = $article["user_id"];
+				$storeRow["content_id"]              = $article["content_id"];
+				$storeRow["attachment_id"]           = $this->mDb->GenID( "liberty_attachments_id_seq" );
+				$storeRow["foreign_id"]              = $gBitSystem->mDb->GenID( "liberty_files_id_seq" );
+				$storeRow["user_id"]                 = !empty( $article["user_id"] ) ? $article["user_id"] : $gBitUser->mUserId;
+				$storeRow["upload"]["source_file"]   = STORAGE_PKG_PATH.ARTICLES_PKG_NAME."/".$image_name;
+				$storeRow["upload"]["attachment_id"] = $storeRow["attachment_id"];
+				$storeRow["upload"]["name"]          = $image_name;
+				$storeRow["upload"]["type"]          = "image/jpeg";
+				$storeRow["upload"]["size"]          = filesize( $storeRow["upload"]["source_file"] );
+				$storeRow["upload"]["dest_path"]     = LibertyAttachable::getStorageBranch( $storeRow["attachment_id"], $storeRow["user_id"], LibertyAttachable::getStorageSubDirName() );
+
+				$sql = "INSERT INTO `'.BIT_DB_PREFIX.'liberty_files` ( `storage_path`, `file_id`, `mime_type`, `file_size`, `user_id` ) VALUES ( ?, ?, ?, ?, ? )";
+				$gBitSystem->mDb->query( $sql, array(
+					$storeRow["upload"]["dest_path"].$storeRow["upload"]["name"],
+					$storeRow["foreign_id"],
+					$storeRow["upload"]["type"],
+					$storeRow["upload"]["size"],
+					$storeRow["user_id"],
+				));
+
+				$storeRow["upload"]["dest_file_path"] = liberty_process_upload( $storeRow );
+
+				$sql = "INSERT INTO `'.BIT_DB_PREFIX.'liberty_attachments` ( `content_id`, `attachment_id`, `attachment_plugin_guid`, `foreign_id`, `user_id` ) VALUES ( ?, ?, ?, ?, ? )";
+				$rs = $gBitSystem->mDb->query( $sql, array( $storeRow["content_id"], $storeRow["attachment_id"], $storeRow["plugin_guid"], (int)$storeRow["foreign_id"], $storeRow["user_id"] ) );
+
+				@unlink( $tmpImagePath );
+				unset( $storeHash );
+			}
+		}
+	}
+'),
+
+array( 'QUERY' =>
+	array( 'SQL92' => array(
+		// liberty upgrade has already happened. we'll set the image_attachment_id as the primary attachment
+		"UPDATE `".BIT_DB_PREFIX."liberty_attachments` la SET `is_primary` = 'y' WHERE articles.`image_attachment_id` = la.`attachment_id`"
+	)),
+),
+
+// we can drop the image_attachment_id column
+array( 'DATADICT' => array(
+	array( 'DROPCOLUMN' => array(
+		'articles' => array( '`image_attachment_id`' ),
+	)),
+)),
+
 		)
-	),
+	), // end BWR1 --> BWR2
 
 	'TIKIWIKI19' => array (
 		'TIKIWIKI18' => array (
@@ -129,7 +200,7 @@ array( 'DATADICT' => array(
 array( 'PHP' => '
 	global $gBitSystem;
 	// this define is needed for backwards compatability.
-	define( "ARTICLE_TOPIC_THUMBNAIL_SIZE", 160 ) );
+	define( "ARTICLE_TOPIC_THUMBNAIL_SIZE", 160 );
 	require_once( ARTICLES_PKG_PATH."BitArticle.php" );
 
 	// BitArticle has 3 sequences, each needs creating prior to execution

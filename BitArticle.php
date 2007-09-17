@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.134 2007/09/15 08:05:40 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.135 2007/09/17 11:19:13 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.134 2007/09/15 08:05:40 squareing Exp $
+ * $Id: BitArticle.php,v 1.135 2007/09/17 11:19:13 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.134 $ $Date: 2007/09/15 08:05:40 $ $Author: squareing $
+ * @version $Revision: 1.135 $ $Date: 2007/09/17 11:19:13 $ $Author: squareing $
  */
 
 /**
@@ -734,6 +734,12 @@ class BitArticle extends LibertyAttachable {
 	 * Image functions needed for backward compatability - these are needed to   *
 	 * handle old article image style images that are not attachments. generally *
 	 * these functions are deprecated but needed for legacy code                 *
+	 ****************************************************************************/
+
+	/*****************************************************************************
+	 * the legacy code below here will go soon. we will also remove the          *
+	 * image_attachment_id column from the articles table, since this now taken  *
+	 * care of by the is_primary column in liberty_attachments                   *
 	 ****************************************************************************/
 
 	/**

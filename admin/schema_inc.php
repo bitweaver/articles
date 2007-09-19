@@ -43,7 +43,6 @@ $tables = array(
 		content_id I4 NOTNULL,
 		description X,
 		author_name C(250),
-		image_attachment_id I4,
 		publish_date I4,
 		expire_date I4,
 		article_type_id I4,

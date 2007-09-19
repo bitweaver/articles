@@ -87,20 +87,6 @@ array( 'PHP' => '
 	}
 '),
 
-array( 'QUERY' =>
-	array( 'SQL92' => array(
-		// liberty upgrade has already happened. we'll set the image_attachment_id as the primary attachment
-		"UPDATE `".BIT_DB_PREFIX."liberty_attachments` la SET `is_primary` = 'y' WHERE articles.`image_attachment_id` = la.`attachment_id`"
-	)),
-),
-
-// we can drop the image_attachment_id column
-array( 'DATADICT' => array(
-	array( 'DROPCOLUMN' => array(
-		'articles' => array( '`image_attachment_id`' ),
-	)),
-)),
-
 		)
 	), // end BWR1 --> BWR2
 
@@ -177,7 +163,6 @@ array( 'DATADICT' => array(
 			'content_id' => array( '`content_id`', 'I4' ),
 			'description' => array( '`description`', 'X' ),
 			'status_id' => array( '`status_id`', 'I4' ),
-			'image_attachment_id' => array( '`image_attachment_id`', 'I4' ),
 			'article_type_id' => array( '`article_type_id`', 'I4' ),
 		),
 		'tiki_article_types' => array(

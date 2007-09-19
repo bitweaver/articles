@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.46 2007/09/15 08:05:40 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.47 2007/09/19 10:06:11 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -39,27 +39,17 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* deal with the article image if there is one *}
-			{if $article.show_image eq 'y'}
-				{if $article.display_attachment_id}
-					<div class="image">
-						{if $gContent->mStorage}
-							{assign var=image value=$gContent->mStorage[$article.display_attachment_id]}
-							{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
-							{jspopup notra=1 href=$image.source_url alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$image.thumbnail_url.$size}
-						{else}
-							{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
-								<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>
-								{if $showDescriptionsOnly and $article.has_more}</a>{/if}
-						{/if}
-					</div>
-				{elseif $article.image_url}
-					{* Support for legacy images and topic images. *}
-					<div class="image">
-						{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
-							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.image_url}"/>
-							{if $showDescriptionsOnly and $article.has_more}</a>{/if}
-					</div>
-				{/if}
+			{if $article.show_image eq 'y' and $article.thumbnail_url}
+				<div class="image">
+					{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
+					{if $showDescriptionsOnly and $article.has_more}
+						<a href="{$article.display_url}">
+							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url.$size}"/>
+						</a>
+					{else}
+						{jspopup notra=1 href=$article.thumbnail_url.large alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$article.thumbnail_url.$size}
+					{/if}
+				</div>
 			{/if}
 
 			{if $article.show_image ne 'y' }{assign var=showprimary value=y }{/if}

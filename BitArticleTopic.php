@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.38 2007/07/13 09:52:02 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.39 2007/09/19 10:06:11 squareing Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -312,7 +312,7 @@ class BitArticleTopic extends BitBase {
 	* @access public
 	**/
 	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
-		$path = BitArticle::getArticleImageStoragePath( NULL, TRUE );
+		$path = ArticleTopic::getArticleImageStoragePath( NULL, TRUE );
 
 		if( $pBasePathOnly ) {
 			return $path;
@@ -346,7 +346,7 @@ class BitArticleTopic extends BitBase {
 
 		// first we check to see if this is a new type thumbnail. if that fails we'll use the old method
 		if( !( $ret = BitArticleTopic::getTopicImageThumbUrl( $pTopicId ))) {
-			$url = BitArticle::getArticleImageStorageUrl( NULL, TRUE );
+			$url = ArticleTopic::getArticleImageStorageUrl( NULL, TRUE );
 			if( $pBasePathOnly ) {
 				return $url;
 			}
@@ -367,6 +367,99 @@ class BitArticleTopic extends BitBase {
 		return $ret;
 	}
 
+
+
+
+	/*****************************************************************************
+	 * Image functions needed for backward compatability - these are needed to   *
+	 * handle old article image style images that are not attachments. generally *
+	 * these functions are deprecated but needed for legacy code                 *
+	 *                                                                           *
+	 * the legacy code below here should go at some point. this code is old and  *
+	 * fugly. In fact, a lot of the code in here is fugly. we should use         *
+	 * pigoenholes to do this topic thing, now that pigoenholes can have primary *
+	 * attachments.                                                              *
+	 ****************************************************************************/
+
+	/**
+	 * Get the name of the article image file
+	 * 
+	 * @param array $pArticleId article id
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getArticleImageStorageName( $pArticleId = NULL ) {
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		return "article_$pArticleId.jpg";
+	}
+
+	/**
+	* Work out the path to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return path on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStoragePath( $pArticleId = NULL, $pBasePathOnly = FALSE ) {
+		$path = STORAGE_PKG_PATH.ARTICLES_PKG_NAME.'/';
+		if( !is_dir( $path ) ) {
+			mkdir_p( $path );
+		}
+
+		if( $pBasePathOnly ) {
+			return $path;
+		}
+
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( !empty( $pArticleId ) ) {
+			return $path.BitArticleTopic::getArticleImageStorageName( $pArticleId );
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	* Work out the URL to the image for this article
+	* @param $pArticleId id of the article we need the image path for
+	* @param $pBasePathOnly bool TRUE / FALSE - specify whether you want full path or just base path
+	* @return URL on success, FALSE on failure
+	* @access public
+	**/
+	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+		global $gBitSystem;
+		$url = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/';
+		if( $pBasePathOnly ) {
+			return $url;
+		}
+
+		if( !@BitBase::verifyId( $pArticleId ) ) {
+			if( $this->isValid() ) {
+				$pArticleId = $this->mArticleId;
+			} else {
+				return NULL;
+			}
+		}
+
+		if( is_file( ArticleTopic::getArticleImageStoragePath( NULL, TRUE ).ArticleTopic::getArticleImageStorageName( $pArticleId ) ) ) {
+			return $url.ArticleTopic::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		} else {
+			return FALSE;
+		}
+	}
 }
 
 ?>

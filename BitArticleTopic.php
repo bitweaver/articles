@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.39 2007/09/19 10:06:11 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.40 2007/09/19 10:59:50 squareing Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -312,7 +312,7 @@ class BitArticleTopic extends BitBase {
 	* @access public
 	**/
 	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
-		$path = ArticleTopic::getArticleImageStoragePath( NULL, TRUE );
+		$path = BitArticleTopic::getArticleImageStoragePath( NULL, TRUE );
 
 		if( $pBasePathOnly ) {
 			return $path;
@@ -346,7 +346,7 @@ class BitArticleTopic extends BitBase {
 
 		// first we check to see if this is a new type thumbnail. if that fails we'll use the old method
 		if( !( $ret = BitArticleTopic::getTopicImageThumbUrl( $pTopicId ))) {
-			$url = ArticleTopic::getArticleImageStorageUrl( NULL, TRUE );
+			$url = BitArticleTopic::getArticleImageStorageUrl( NULL, TRUE );
 			if( $pBasePathOnly ) {
 				return $url;
 			}
@@ -454,8 +454,8 @@ class BitArticleTopic extends BitBase {
 			}
 		}
 
-		if( is_file( ArticleTopic::getArticleImageStoragePath( NULL, TRUE ).ArticleTopic::getArticleImageStorageName( $pArticleId ) ) ) {
-			return $url.ArticleTopic::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		if( is_file( BitArticleTopic::getArticleImageStoragePath( NULL, TRUE ).BitArticleTopic::getArticleImageStorageName( $pArticleId ) ) ) {
+			return $url.BitArticleTopic::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 		} else {
 			return FALSE;
 		}

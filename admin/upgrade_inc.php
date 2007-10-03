@@ -50,8 +50,7 @@ array( 'PHP' => '
 		foreach( $articles as $article ) {
 			// store article image
 			$image_name = "article_".$article["article_id"].".jpg";
-			vd($image_name);
-			vd($article);
+			// debug: vd($image_name); vd($article);
 			if( is_file( STORAGE_PKG_PATH.ARTICLES_PKG_NAME."/".$image_name )) {
 				$storeRow["plugin_guid"]             = "bitfile";
 				$storeRow["user_id"]                 = $article["user_id"];

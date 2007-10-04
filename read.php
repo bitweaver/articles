@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.22 2007/09/11 19:45:43 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.23 2007/10/04 16:29:22 bitweaver Exp $
  * @package article
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ if( !$gContent->isValid() ) {
 	$gBitSystem->fatalError( tra( 'Article cannot be found' ));
 }
 
-$gContent->verifyPermission( 'p_articles_read' );
+$gContent->verifyViewPermission();
 
 // additionally we need to check if this article is a submission and see if user has perms to view it.
 if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {

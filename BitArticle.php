@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.136 2007/09/19 10:06:11 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.137 2007/10/06 07:53:48 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.136 2007/09/19 10:06:11 squareing Exp $
+ * $Id: BitArticle.php,v 1.137 2007/10/06 07:53:48 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.136 $ $Date: 2007/09/19 10:06:11 $ $Author: squareing $
+ * @version $Revision: 1.137 $ $Date: 2007/10/06 07:53:48 $ $Author: squareing $
  */
 
 /**
@@ -87,11 +87,11 @@ class BitArticle extends LibertyAttachable {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = a.`content_id` )
-					LEFT JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lch.`content_id` = lc.`content_id` )
-					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
-					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`content_id`         = lc.`content_id` AND la.`is_primary` = 'y'
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lch.`content_id` = lc.`content_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la ON( la.`content_id` = lc.`content_id` AND la.`is_primary` = 'y' )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf ON( lf.`file_id` = la.`foreign_id` )
 					$joinSql
 				WHERE a.`$lookupColumn`=? $whereSql";
 			$result = $this->mDb->query( $query, $bindVars );
@@ -499,14 +499,14 @@ class BitArticle extends LibertyAttachable {
 				lch.`hits`,
 				atype.*, lc.*, lf.storage_path AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
-				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON lc.`content_id`         = a.`content_id`
-				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON astatus.`status_id`     = a.`status_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON lc.`content_id`         = lch.`content_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON atopic.`topic_id`       = a.`topic_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`      atype ON atype.`article_type_id` = a.`article_type_id`
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON la.`content_id`         = lc.`content_id` AND la.`is_primary` = 'y'
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON lf.`file_id`            = la.`foreign_id`
-			   	$joinSql
+				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
+				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lc.`content_id`         = lch.`content_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON( atopic.`topic_id`       = a.`topic_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types`      atype ON( atype.`article_type_id` = a.`article_type_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments`   la ON( la.`content_id`         = lc.`content_id` AND la.`is_primary` = 'y' )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files`         lf ON( lf.`file_id`            = la.`foreign_id` )
+				$joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 

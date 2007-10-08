@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.137 2007/10/06 07:53:48 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.138 2007/10/08 17:06:30 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.137 2007/10/06 07:53:48 squareing Exp $
+ * $Id: BitArticle.php,v 1.138 2007/10/08 17:06:30 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.137 $ $Date: 2007/10/06 07:53:48 $ $Author: squareing $
+ * @version $Revision: 1.138 $ $Date: 2007/10/08 17:06:30 $ $Author: squareing $
  */
 
 /**
@@ -402,7 +402,9 @@ class BitArticle extends LibertyAttachable {
 		global $gBitSystem, $gBitUser, $gLibertySystem;
 
 		if( empty( $pParamHash['sort_mode'] ) ) {
-			$pParamHash['sort_mode'] = $gBitSystem->isFeatureActive('articles_auto_approve') ? 'order_key_desc' : 'publish_date_desc';
+			// no idea what this is supposed to do
+			//$pParamHash['sort_mode'] = $gBitSystem->isFeatureActive('articles_auto_approve') ? 'order_key_desc' : 'publish_date_desc';
+			$pParamHash['sort_mode'] = 'publish_date_desc';
 		}
 
 		LibertyContent::prepGetList( $pParamHash );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.41 2007/10/10 18:07:14 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.42 2007/11/10 10:51:19 joasch Exp $
  * @package article
  * @subpackage functions
  */
@@ -44,13 +44,14 @@ if( !empty( $_REQUEST['remove_image'] ) ) {
 	$_REQUEST['preview'] = 1;
 }
 
-// random image code
-if( !( $gContent->hasUserPermission( 'p_articles_approve_submission' ) || $gContent->hasUserPermission( 'p_articles_auto_approve' ) ) && !empty( $_REQUEST["save"] ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && ( !isset( $_SESSION['random_number'] ) || $_SESSION['random_number'] != $_REQUEST['rnd_img'] ) ) {
-	$feedback['error'] = tra( "You need to supply the correct code to submit." );
-	$_REQUEST['preview'] = TRUE;
-	unset( $_REQUEST['save'] );
+if( isset( $_REQUEST["save"] ) ) {
+	// random image code
+	if( !( $gContent->hasUserPermission( 'p_articles_approve_submission' ) || $gContent->hasUserPermission( 'p_articles_auto_approve' ) ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !$gBitUser->verifyCaptcha( $_REQUEST['captcha'] ) ) {
+	    $feedback['error'] = tra( "You need to supply the correct code to submit." );
+	    $_REQUEST['preview'] = TRUE;
+	    unset( $_REQUEST['save'] );
+	}
 }
-
 // If we are in preview mode then preview it!
 if( !empty( $_REQUEST['preview'] ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );

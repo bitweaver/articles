@@ -115,14 +115,9 @@
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
 						{if $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !( $gContent->mArticleId || ( $gContent->hasUserPermission('p_articles_approve_submission') || $gContent->hasUserPermission('p_articles_auto_approve') ) )}
-							<div class="row">
-								{formlabel label="Submission Code"}
-								{forminput}
-									<img src="{$smarty.const.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
-									<br /><input type="text" name="rnd_img" />
-									{formhelp note="Please enter the code in the image to submit this article."}
-								{/forminput}
-							</div>
+                            <hr />
+                            {formfeedback error=$errors.captcha}
+                            {captcha force=true variant=row}
 						{/if}
 
 						<div class="row submit">

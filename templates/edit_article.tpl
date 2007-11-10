@@ -115,9 +115,9 @@
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
 						{if $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !( $gContent->mArticleId || ( $gContent->hasUserPermission('p_articles_approve_submission') || $gContent->hasUserPermission('p_articles_auto_approve') ) )}
-                            <hr />
-                            {formfeedback error=$errors.captcha}
-                            {captcha force=true variant=row}
+							<hr />
+							{formfeedback error=$errors.captcha}
+							{captcha force=true variant=row}
 						{/if}
 
 						<div class="row submit">

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.42 2007/11/10 10:51:19 joasch Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.43 2007/11/10 10:57:47 squareing Exp $
  * @package article
  * @subpackage functions
  */
@@ -47,9 +47,9 @@ if( !empty( $_REQUEST['remove_image'] ) ) {
 if( isset( $_REQUEST["save"] ) ) {
 	// random image code
 	if( !( $gContent->hasUserPermission( 'p_articles_approve_submission' ) || $gContent->hasUserPermission( 'p_articles_auto_approve' ) ) && $gBitSystem->isFeatureActive( 'articles_submissions_rnd_img' ) && !$gBitUser->verifyCaptcha( $_REQUEST['captcha'] ) ) {
-	    $feedback['error'] = tra( "You need to supply the correct code to submit." );
-	    $_REQUEST['preview'] = TRUE;
-	    unset( $_REQUEST['save'] );
+		$feedback['error'] = tra( "You need to supply the correct code to submit." );
+		$_REQUEST['preview'] = TRUE;
+		unset( $_REQUEST['save'] );
 	}
 }
 // If we are in preview mode then preview it!

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.138 2007/10/08 17:06:30 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.139 2008/01/24 20:32:55 nickpalmer Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.138 2007/10/08 17:06:30 squareing Exp $
+ * $Id: BitArticle.php,v 1.139 2008/01/24 20:32:55 nickpalmer Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.138 $ $Date: 2007/10/08 17:06:30 $ $Author: squareing $
+ * @version $Revision: 1.139 $ $Date: 2008/01/24 20:32:55 $ $Author: nickpalmer $
  */
 
 /**
@@ -139,9 +139,9 @@ class BitArticle extends LibertyAttachable {
 	**/
 	function store( &$pParamHash ) {
 		global $gBitSystem;
+		$this->mDb->StartTrans();
 		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."articles";
-			$this->mDb->StartTrans();
 
 			if( $this->isValid() ) {
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], array( "article_id" => $pParamHash['article_id'] ) );

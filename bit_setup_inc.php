@@ -7,7 +7,6 @@ $registerHash = array(
 $gBitSystem->registerPackage( $registerHash );
 
 if( $gBitSystem->isPackageActive( 'articles' ) ) {
-	define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 
 	define( 'ARTICLE_STATUS_DENIED', 0 );
 	define( 'ARTICLE_STATUS_DRAFT', 100 );

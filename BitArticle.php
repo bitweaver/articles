@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.140 2008/02/26 15:58:28 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.141 2008/05/18 23:19:59 wjames5 Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.140 2008/02/26 15:58:28 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.141 2008/05/18 23:19:59 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.140 $ $Date: 2008/02/26 15:58:28 $ $Author: wjames5 $
+ * @version $Revision: 1.141 $ $Date: 2008/05/18 23:19:59 $ $Author: wjames5 $
  */
 
 /**
@@ -51,6 +51,7 @@ class BitArticle extends LibertyAttachable {
 		LibertyAttachable::LibertyAttachable();
 		$this->registerContentType(
 			BITARTICLE_CONTENT_TYPE_GUID, array(
+				'content_type_guid' => BITARTICLE_CONTENT_TYPE_GUID,
 				'content_description' => 'Article',
 				'handler_class' => 'BitArticle',
 				'handler_package' => 'articles',

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.40 2007/09/19 10:59:50 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.41 2008/05/31 06:10:22 squareing Exp $
  * @package article
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -155,7 +155,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( @BitBase::verifyId( $pTopicId )) {
-			$ret = LibertyAttachable::getStorageUrl( 'topics/'.$pTopicId );
+			$ret = LibertyMime::getStorageUrl( 'topics/'.$pTopicId );
 		}
 		return $ret;
 	}

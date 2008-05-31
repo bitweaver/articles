@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.141 2008/05/18 23:19:59 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.142 2008/05/31 06:10:22 squareing Exp $
  * @package article
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.141 2008/05/18 23:19:59 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.142 2008/05/31 06:10:22 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.141 $ $Date: 2008/05/18 23:19:59 $ $Author: wjames5 $
+ * @version $Revision: 1.142 $ $Date: 2008/05/31 06:10:22 $ $Author: squareing $
  */
 
 /**
@@ -24,7 +24,7 @@
  */
 require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
-require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
+require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
@@ -32,7 +32,7 @@ define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 /**
  * @package article
  */
-class BitArticle extends LibertyAttachable {
+class BitArticle extends LibertyMime {
 	/**
 	* Primary key for articles
 	* @access public
@@ -48,7 +48,7 @@ class BitArticle extends LibertyAttachable {
 	* @access private
 	**/
 	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
-		LibertyAttachable::LibertyAttachable();
+		LibertyMime::LibertyMime();
 		$this->registerContentType(
 			BITARTICLE_CONTENT_TYPE_GUID, array(
 				'content_type_guid' => BITARTICLE_CONTENT_TYPE_GUID,
@@ -123,7 +123,7 @@ class BitArticle extends LibertyAttachable {
 				$comment = &new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 
-				LibertyAttachable::load();
+				LibertyMime::load();
 
 				$this->mInfo['parsed'] = $this->parseData();
 			} else {
@@ -143,7 +143,7 @@ class BitArticle extends LibertyAttachable {
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		$this->mDb->StartTrans();
-		if( $this->verify( $pParamHash )&& LibertyAttachable::store( $pParamHash ) ) {
+		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."articles";
 
 			if( $this->isValid() ) {
@@ -376,7 +376,7 @@ class BitArticle extends LibertyAttachable {
 			$this->mDb->StartTrans();
 			$query = "DELETE FROM `".BIT_DB_PREFIX."articles` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-			if( LibertyAttachable::expunge() ) {
+			if( LibertyMime::expunge() ) {
 				$ret = TRUE;
 				$this->mDb->CompleteTrans();
 			} else {

@@ -1,7 +1,7 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.23 2007/10/04 16:29:22 bitweaver Exp $
- * @package article
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.24 2008/06/19 09:29:08 lsces Exp $
+ * @package articles
  * @subpackage functions
  */
 

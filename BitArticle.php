@@ -1,7 +1,7 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.142 2008/05/31 06:10:22 squareing Exp $
- * @package article
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.143 2008/06/19 09:29:08 lsces Exp $
+ * @package articles
  *
  * Copyright( c )2004 bitweaver.org
  * Copyright( c )2003 tikwiki.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.142 2008/05/31 06:10:22 squareing Exp $
+ * $Id: BitArticle.php,v 1.143 2008/06/19 09:29:08 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.142 $ $Date: 2008/05/31 06:10:22 $ $Author: squareing $
+ * @version $Revision: 1.143 $ $Date: 2008/06/19 09:29:08 $ $Author: lsces $
  */
 
 /**
@@ -30,7 +30,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 
 /**
- * @package article
+ * @package articles
  */
 class BitArticle extends LibertyMime {
 	/**
@@ -120,7 +120,7 @@ class BitArticle extends LibertyMime {
 				// here we have the displayed data without the ...split... stuff
 				$this->mInfo['data']          = preg_replace( LIBERTY_SPLIT_REGEX, "", $this->mInfo['data'] );
 
-				$comment = &new LibertyComment();
+				$comment = new LibertyComment();
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 
 				LibertyMime::load();

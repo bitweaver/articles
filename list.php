@@ -1,7 +1,7 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.20 2007/08/23 08:10:21 squareing Exp $
- * @package article
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.21 2008/06/19 09:29:08 lsces Exp $
+ * @package articles
  * @subpackage functions
  */
 

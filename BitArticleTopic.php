@@ -1,7 +1,7 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.41 2008/05/31 06:10:22 squareing Exp $
- * @package article
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.42 2008/06/19 09:29:08 lsces Exp $
+ * @package articles
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -16,7 +16,7 @@ require_once( KERNEL_PKG_PATH."BitBase.php" );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 /**
- * @package article
+ * @package articles
  */
 class BitArticleTopic extends BitBase {
 	var $mTopicId;

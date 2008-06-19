@@ -1,7 +1,7 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/article_filter_inc.php,v 1.5 2006/04/24 20:47:41 squareing Exp $
- * @package article
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/article_filter_inc.php,v 1.6 2008/06/19 09:29:08 lsces Exp $
+ * @package articles
  * @subpackage functions
  */
 

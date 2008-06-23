@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.42 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.43 2008/06/23 21:56:12 squareing Exp $
  * @package articles
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -175,7 +175,10 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( @BitBase::verifyId( $pTopicId )) {
-			$ret = liberty_fetch_thumbnail_url( BitArticleTopic::getTopicImageBaseUrl( $pTopicId ), $gBitSystem->getConfig( 'articles_image_size', 'small' ));
+			$ret = liberty_fetch_thumbnail_url( array(
+				'storage_path'  => BitArticleTopic::getTopicImageBaseUrl( $pTopicId ),
+				'default_image' => $gBitSystem->getConfig( 'articles_image_size', 'small' )
+			));
 		}
 		return $ret;
 	}

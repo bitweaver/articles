@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.143 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.144 2008/06/23 21:56:11 squareing Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.143 2008/06/19 09:29:08 lsces Exp $
+ * $Id: BitArticle.php,v 1.144 2008/06/23 21:56:11 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.143 $ $Date: 2008/06/19 09:29:08 $ $Author: lsces $
+ * @version $Revision: 1.144 $ $Date: 2008/06/23 21:56:11 $ $Author: squareing $
  */
 
 /**
@@ -357,11 +357,16 @@ class BitArticle extends LibertyMime {
 	function getImageThumbnails( $pParamHash ) {
 		global $gBitSystem, $gThumbSizes;
 		$ret = NULL;
+
+		$thumbHash['mime_image'] = FALSE;
 		if( !empty( $pParamHash['image_attachment_path'] )) {
-			$ret = liberty_fetch_thumbnails( $pParamHash['image_attachment_path'], NULL, NULL, FALSE );
+			$thumbHash['storage_path'] = $pParamHash['image_attachment_path'];
+			$ret = liberty_fetch_thumbnails( $thumbHash );
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
-			$ret = liberty_fetch_thumbnails( BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ), NULL, NULL, FALSE );
+			$thumbHash['storage_path'] = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
+			$ret = liberty_fetch_thumbnails( $thumbHash );
 		}
+
 		return $ret;
 	}
 

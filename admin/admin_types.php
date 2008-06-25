@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.9 2007/08/23 11:15:23 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.10 2008/06/25 22:21:06 spiderr Exp $
 
 require_once( '../../bit_setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -88,5 +88,5 @@ $types = BitArticleType::getTypeList();
 $gBitSmarty->assign( 'types', $types );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Edit Article Types') );
+$gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Edit Article Types') , array( 'display_mode' => 'admin' ));
 ?>

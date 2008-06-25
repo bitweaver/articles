@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/display_article_inc.php,v 1.2 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/display_article_inc.php,v 1.3 2008/06/25 22:21:06 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -28,5 +28,5 @@ if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 }
 
 // Display the Index Template
-$gBitSystem->display( 'bitpackage:articles/read_article.tpl', @$gContent->mInfo['title'] );
+$gBitSystem->display( 'bitpackage:articles/read_article.tpl', @$gContent->mInfo['title'] , array( 'display_mode' => 'display' ));
 ?>

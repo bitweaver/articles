@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.7 2007/03/20 17:36:08 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.8 2008/06/25 22:21:06 spiderr Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
@@ -27,5 +27,5 @@ if( isset( $_REQUEST["fSubmitAddTopic"] ) ) {
 $topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign( 'topics', $topics );
 
-$gBitSystem->display( 'bitpackage:articles/admin_topics.tpl', tra( 'Edit Topics' ) );
+$gBitSystem->display( 'bitpackage:articles/admin_topics.tpl', tra( 'Edit Topics' ) , array( 'display_mode' => 'admin' ));
 ?>

@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.10 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.11 2008/06/25 22:21:06 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -63,5 +63,5 @@ if( empty( $gContent ) ) {
 $rankList = $gContent->getContentRanking( $_REQUEST );
 $gBitSmarty->assign( 'rankList', $rankList );
 
-$gBitSystem->display( 'bitpackage:liberty/rankings.tpl', tra( "Article Rankings" ) );
+$gBitSystem->display( 'bitpackage:liberty/rankings.tpl', tra( "Article Rankings" ) , array( 'display_mode' => 'display' ));
 ?>

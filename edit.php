@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.44 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.45 2008/06/25 22:21:06 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -100,5 +100,5 @@ $gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 
 // Display the Index Template
 $gBitSmarty->assign( 'show_page_bar', 'n' );
-$gBitSystem->display( 'bitpackage:articles/edit_article.tpl', tra( "Articles" ) );
+$gBitSystem->display( 'bitpackage:articles/edit_article.tpl', tra( "Articles" ) , array( 'display_mode' => 'edit' ));
 ?>

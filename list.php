@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.21 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.22 2008/06/25 22:21:06 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -107,5 +107,5 @@ $gBitSmarty->assign( 'listInfo', $_REQUEST['listInfo'] );
 $gBitSmarty->assign( 'listpages', $listArticles );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ));
+$gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ), array( 'display_mode' => 'list' ));
 ?>

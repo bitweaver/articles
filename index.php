@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.23 2007/06/15 20:14:10 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/index.php,v 1.24 2008/06/25 22:21:06 spiderr Exp $
 // Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -22,5 +22,5 @@ $gDefaultCenter = 'bitpackage:articles/center_list_articles.tpl';
 $gBitSmarty->assign_by_ref( 'gDefaultCenter', $gDefaultCenter );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:kernel/dynamic.tpl', tra( 'Articles' ) );
+$gBitSystem->display( 'bitpackage:kernel/dynamic.tpl', tra( 'Articles' ) , array( 'display_mode' => 'display' ));
 ?>

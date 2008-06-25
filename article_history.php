@@ -37,7 +37,7 @@ if( !$gContent->isValid() || empty( $gContent->mInfo ) ) {
 // additionally we need to check if this article is a submission and see if user has perms to view it.
 if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gContent->hasUserPermission( 'p_articles_edit_submission' ) || $gBitUser->isAdmin() ) ) {
 	$gBitSmarty->assign( 'msg', tra( "Permission denied you cannot view this article" ) );
-	$gBitSystem->display( "error.tpl" );
+	$gBitSystem->display( "error.tpl" , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -59,5 +59,5 @@ $gBitSmarty->assign( 'numPages', $numPages );
 
 // Display the template
 $gBitSmarty->assign_by_ref( 'gContent', $gContent );
-$gBitSystem->display( 'bitpackage:articles/article_history.tpl');
+$gBitSystem->display( 'bitpackage:articles/article_history.tpl', NULL, array( 'display_mode' => 'display' ));
 ?>

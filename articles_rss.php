@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.23 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.24 2008/06/30 19:29:17 squareing Exp $
  * @package articles
  * @subpackage functions
  */
@@ -8,6 +8,8 @@
 /**
  * Initialization
  */
+// ensure that we use absolute URLs everywhere
+$_REQUEST['uri_mode'] = TRUE;
 require_once( "../bit_setup_inc.php" );
 
 $gBitSystem->verifyPackage( 'articles' );
@@ -37,13 +39,13 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	$feeds = $articles->getList( $listHash );
 
 	// set the rss link
-	$rss->link = 'http://'.$_SERVER['HTTP_HOST'].ARTICLES_PKG_URL;
+	$rss->link = ARTICLES_PKG_URI;
 
 	// get all the data ready for the feed creator
 	foreach( $feeds as $feed ) {
 		$item = new FeedItem();
 		$item->title = $feed['title'];
-		$item->link = BIT_BASE_URI.$articles->getDisplayUrl( $feed['article_id'] );
+		$item->link = $articles->getDisplayUrl( $feed['article_id'] );
 
 		// show the full article in the feed
 		$parseHash['content_id'] = $feed['content_id'];
@@ -52,7 +54,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 		$item->description = $articles->parseData( $parseHash );
 
 		$item->date = ( int )$feed['publish_date'];
-		$item->source = 'http://'.$_SERVER['HTTP_HOST'].BIT_ROOT_URL;
+		$item->source = BIT_ROOT_URI;
 		$item->author = $feed['author_name'];
 
 		$item->descriptionTruncSize = $gBitSystem->getConfig( 'rssfeed_truncate', 5000 );

@@ -27,6 +27,7 @@
 	<div class="body">
 		{form enctype="multipart/form-data" id="writearticle"}
 			<input type="hidden" name="article_id" value="{$gContent->mArticleId}" />
+			<input type="hidden" name="content_id" value="{$gContent->getField('content_id')}" />
 			<input type="hidden" name="preview_image_url" value="{$article.preview_image_url}" />
 			<input type="hidden" name="preview_image_path" value="{$article.preview_image_path}" />
 

@@ -159,9 +159,9 @@
 				{/jstab}
 
 				{if $gBitSystem->isFeatureActive( 'articles_attachments' ) && $gBitUser->hasPermission('p_liberty_attach_attachments') }
-					{jstab title="Attachment Browser"}
+					{jstab title="Attachments"}
 						{legend legend="Attachment Browser"}
-							{include file="bitpackage:liberty/edit_storage.tpl"}
+							{include file="bitpackage:liberty/edit_storage.tpl" formid="writearticle"}
 						{/legend}
 					{/jstab}
 				{/if}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.146 2008/07/07 21:47:37 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.147 2008/07/10 11:44:47 squareing Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.146 2008/07/07 21:47:37 squareing Exp $
+ * $Id: BitArticle.php,v 1.147 2008/07/10 11:44:47 squareing Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.146 $ $Date: 2008/07/07 21:47:37 $ $Author: squareing $
+ * @version $Revision: 1.147 $ $Date: 2008/07/10 11:44:47 $ $Author: squareing $
  */
 
 /**
@@ -85,7 +85,7 @@ class BitArticle extends LibertyMime {
 			$query = "SELECT a.*, lc.*, atype.*, atopic.*,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
-				lf.storage_path AS `image_attachment_path` $selectSql
+				la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
 				FROM `".BIT_DB_PREFIX."articles` a
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
@@ -124,6 +124,10 @@ class BitArticle extends LibertyMime {
 				$this->mInfo['num_comments'] = $comment->getNumComments( $this->mInfo['content_id'] );
 
 				LibertyMime::load();
+
+				if( !empty( $this->mInfo['primary_attachment_id'] ) && !empty( $this->mStorage[$this->mInfo['primary_attachment_id']] )) {
+					$this->mInfo['primary_attachment'] = &$this->mStorage[$this->mInfo['primary_attachment_id']];
+				}
 
 				$this->mInfo['parsed'] = $this->parseData();
 			} else {
@@ -507,7 +511,7 @@ class BitArticle extends LibertyMime {
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
 				lch.`hits`,
-				atype.*, lc.*, lf.storage_path AS `image_attachment_path` $selectSql
+				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )
@@ -537,6 +541,9 @@ class BitArticle extends LibertyMime {
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
 			$res['display_url']   = $this->getDisplayUrl( $res['article_id'] );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
+
+			// fetch the primary attachment that we can display the file on the front page if needed
+			$res['primary_attachment'] = $this->getAttachment( $res['primary_attachment_id'] );
 
 			$ret[] = $res;
 		}

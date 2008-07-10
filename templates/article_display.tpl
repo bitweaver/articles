@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.48 2007/09/26 06:35:28 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.49 2008/07/10 11:44:47 squareing Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -39,7 +39,7 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* deal with the article image if there is one *}
-			{if $article.show_image eq 'y' and $article.thumbnail_url}
+			{if $article.show_image eq 'y'}
 				<div class="image">
 					{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
 					{if $showDescriptionsOnly and $article.has_more}
@@ -47,12 +47,12 @@
 							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url.$size}"/>
 						</a>
 					{else}
-						{jspopup notra=1 href=$article.thumbnail_url.large alt=$article.topic_name|default:$article.title|escape title=$article.topic_name|default:$article.title|escape" img=$article.thumbnail_url.$size}
+						{include file=$gLibertySystem->getMimeTemplate('inline',$article.primary_attachment.attachment_plugin_guid) attachment=$article.primary_attachment thumbsize=$size}
 					{/if}
 				</div>
 			{/if}
 
-			{if $article.show_image eq 'y'}{assign var=hideprimary value=y }{/if}
+			{if $article.show_image eq 'y'}{assign var=hideprimary value=y}{/if}
 			{if $gBitSystem->isFeatureActive( 'articles_attachments' ) && $gBitSystem->isFeatureActive( 'liberty_auto_display_attachment_thumbs' )}
 				{include file="bitpackage:liberty/storage_thumbs.tpl"}
 			{/if}

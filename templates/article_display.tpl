@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.51 2008/07/25 15:53:38 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.52 2008/07/25 19:28:17 bitweaver Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -39,7 +39,7 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$article}
 			{* deal with the article image if there is one *}
-			{if $article.show_image eq 'y'}
+			{if $article.show_image eq 'y' && ( $article.thumbnail_url || $article.primary_attachment )}
 				<div class="image">
 					{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
 					{if $showDescriptionsOnly and $article.has_more}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.148 2008/07/25 19:16:06 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.149 2008/07/31 20:03:30 bitweaver Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.148 2008/07/25 19:16:06 bitweaver Exp $
+ * $Id: BitArticle.php,v 1.149 2008/07/31 20:03:30 bitweaver Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.148 $ $Date: 2008/07/25 19:16:06 $ $Author: bitweaver $
+ * @version $Revision: 1.149 $ $Date: 2008/07/31 20:03:30 $ $Author: bitweaver $
  */
 
 /**
@@ -668,4 +668,5 @@ class BitArticle extends LibertyMime {
 		}
 	}
 }
+
 ?>

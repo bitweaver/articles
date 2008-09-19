@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.22 2008/06/25 22:21:06 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.23 2008/09/19 01:34:36 laetzer Exp $
  * @package articles
  * @subpackage functions
  */
@@ -42,15 +42,16 @@ if( !empty( $_REQUEST['action'] ) ) {
 				$feedback['error'] = $tmpArt->mErrors;
 			}
 		}
-		$gBitSystem->setBrowserTitle( 'Confirm removal of '.$tmpArt->mInfo['title'] );
+		$gBitSystem->setBrowserTitle( tra('Confirm removal of'). ' ' .$tmpArt->mInfo['title'] );
 		$formHash['remove'] = TRUE;
 		$formHash['action'] = 'remove';
 		$formHash['status_id'] = ( !empty( $_REQUEST['status_id'] ) ? $_REQUEST['status_id'] : '' );
 		$formHash['remove_article_id'] = $_REQUEST['remove_article_id'];
 		$msgHash = array(
-			'label' => 'Remove Article',
+			'label' => tra('Remove Article'),
 			'confirm_item' => $tmpArt->mInfo['title'],
-			'warning' => 'This will remove the above article. This cannot be undone.',
+			'warning' => tra('Remove the above article.'),
+			'error' => tra('This cannot be undone!'),
 		);
 		$gBitSystem->confirmDialog( $formHash, $msgHash );
 	}

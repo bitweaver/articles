@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.45 2008/06/25 22:21:06 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.46 2008/10/03 17:20:15 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -20,6 +20,8 @@ $gBitSystem->verifyPackage( 'articles' );
 
 include_once('lookup_article_inc.php');
 
+/**
+ * This mess is deprecated - leave it here during perm upgrade incase we goofed the clean up below
 $isOwner = FALSE;
 if( $gContent->hasAdminPermission() || $gContent->hasUserPermission( 'p_articles_edit' ) || $gContent->isOwner() ) {
 	$isOwner = TRUE;
@@ -34,6 +36,13 @@ if( !$isOwner ) {
 	} else {
 		$gBitSystem->fatalPermission( 'p_articles_edit' );
 	}
+}
+*/
+
+if( $gContent->isValid() ){
+	$gContent->verifyEditPermission();
+}else{
+	$gContent->verifyCreatePermission();
 }
 
 // if we want to remove a custom image, just nuke all custom image settings at once

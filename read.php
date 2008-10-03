@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.25 2008/06/25 22:21:06 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.26 2008/10/03 17:20:15 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -36,7 +36,7 @@ if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED ) {
 
 // we also need to check and see if the article is future dated - we will display it if the user can edit it otherwise we pretend it does not exist.
 $timestamp = $gBitSystem->getUTCTime();
-if ( ($gContent->mInfo['publish_date'] > $timestamp) && !$gContent->hasUserPermission( 'p_articles_edit' ) ){
+if ( ($gContent->mInfo['publish_date'] > $timestamp) && !$gContent->hasEditPermission() ){
 	$gBitSystem->fatalError( tra( 'Article cannot be found' ));
 }
 

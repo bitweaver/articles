@@ -2,8 +2,8 @@
 <ul>
 	{if $gBitUser->hasPermission( 'p_articles_read' )}
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}index.php">{biticon ipackage="icons" iname="go-home" iexplain="Articles Home" ilocation=menu}</a></li>
-		{if $gBitUser->hasPermission( 'p_articles_edit') || $gBitUser->hasPermission('p_articles_submit') }
-			{if $gBitUser->hasPermission('p_articles_edit')}
+		{if $gBitUser->hasPermission( 'p_articles_create') || $gBitUser->hasPermission('p_articles_submit') }
+			{if $gBitUser->hasPermission('p_articles_create')}
 				{assign var=iexplain value="Write Article"}
 			{else}
 				{assign var=iexplain value="Submit Article"}

@@ -94,12 +94,12 @@ $gBitInstaller->registerSchemaDefault( ARTICLES_PKG_NAME, array(
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( ARTICLES_PKG_NAME, array(
-	array('p_articles_edit', 'Can edit articles', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_update', 'Can update articles', 'editors', ARTICLES_PKG_NAME),
 	array('p_articles_remove', 'Can remove articles', 'editors', ARTICLES_PKG_NAME),
 	array('p_articles_read', 'Can read articles', 'basic', ARTICLES_PKG_NAME),
 	array('p_articles_read_history', 'Can read article history', 'registered', ARTICLES_PKG_NAME),
 	array('p_articles_submit', 'Can submit articles', 'basic', ARTICLES_PKG_NAME),
-	array('p_articles_edit_submission', 'Can edit submissions', 'editors', ARTICLES_PKG_NAME),
+	array('p_articles_update_submission', 'Can update submissions', 'editors', ARTICLES_PKG_NAME),
 	array('p_articles_remove_submission', 'Can remove submissions', 'editors', ARTICLES_PKG_NAME),
 	array('p_articles_approve_submission', 'Can approve submissions', 'editors', ARTICLES_PKG_NAME),
 	array('p_articles_send', 'Can send articles to other sites', 'editors', ARTICLES_PKG_NAME),

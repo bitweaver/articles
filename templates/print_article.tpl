@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/print_article.tpl,v 1.6 2008/10/03 17:20:15 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/print_article.tpl,v 1.7 2008/10/20 21:40:08 spiderr Exp $ *}
 {* Index we display a wiki page here *}
 
 {include file="bitpackage:kernel/header.tpl"}
@@ -28,7 +28,7 @@
 	</div> {* end articleheading *}
 	<div class="articletrailer">
 		({$size} bytes
-			{if $gContent->hasEditPermission()}
+			{if $gContent->hasUpdatePermission()}
 				[<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article_id}">{tr}Edit{/tr}</a>] 
 			{/if}
 			{if $gContent->hasUserPermission( 'p_articles_remove' )}

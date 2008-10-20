@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.23 2008/09/19 01:34:36 laetzer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/list.php,v 1.24 2008/10/20 21:40:08 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -57,34 +57,6 @@ if( !empty( $_REQUEST['action'] ) ) {
 	}
 }
 
-/* this is a messed up version of a multiple articles removal section
-if( isset( $_REQUEST["multi_article"] ) && isset( $_REQUEST["checked"] ) && $_REQUEST["multi_article"] == "remove_articles" ) {
-	// Now check permissions to remove the selected articles
-	$gBitSystem->verifyPermission( 'p_articles_remove' );
-
-	if( !empty( $_REQUEST['cancel'] ) ) {
-		// user cancelled - just continue on, doing nothing
-	} elseif( empty( $_REQUEST['confirm'] ) ) {
-		$formHash['delete'] = TRUE;
-		$formHash['submit_mult'] = 'remove_articles';
-		foreach( $_REQUEST["checked"] as $del ) {
-			$formHash['input'][] = '<input type="hidden" name="checked[]" value="'.$del.'"/>';
-		}
-		$gBitSystem->confirmDialog( $formHash, array( 'warning' => 'Are you sure you want to delete '.count($_REQUEST["checked"] ).' articles?', 'error' => 'This cannot be undone!' ));
-	} else {
-		foreach( $_REQUEST["checked"] as $deleteId ) {
-			$tmpPage = new BitArticle( $deleteId );
-			if( !$tmpPage->load()|| !$tmpPage->expunge() ) {
-				array_merge( $errors, array_values( $tmpPage->mErrors ) );
-			}
-		}
-		if( !empty( $errors ) ) {
-			$gBitSmarty->assign( 'errors', $errors );
-		}
-	}
-}
-*/
-
 $article = new BitArticle();
 // change the status of an article first
 if( !empty( $_REQUEST['action'] ) ) {
@@ -93,7 +65,7 @@ if( !empty( $_REQUEST['action'] ) ) {
 	}
 }
 
-if( empty( $_REQUEST['status_id'] ) || (!(($gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered()) || $gBitUser->hasPermission( 'p_articles_edit_submission' ) || $gBitUser->hasPermission( 'p_articles_admin' ) ) ) ) {
+if( empty( $_REQUEST['status_id'] ) || (!(($gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered()) || $gBitUser->hasPermission( 'p_articles_update_submission' ) || $gBitUser->hasPermission( 'p_articles_admin' ) ) ) ) {
 	$_REQUEST['status_id'] = ARTICLE_STATUS_APPROVED;
 }
 $listArticles = $article->getList( $_REQUEST );

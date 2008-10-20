@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.46 2008/10/03 17:20:15 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/edit.php,v 1.47 2008/10/20 21:40:08 spiderr Exp $
  * @package articles
  * @subpackage functions
  */
@@ -20,27 +20,8 @@ $gBitSystem->verifyPackage( 'articles' );
 
 include_once('lookup_article_inc.php');
 
-/**
- * This mess is deprecated - leave it here during perm upgrade incase we goofed the clean up below
-$isOwner = FALSE;
-if( $gContent->hasAdminPermission() || $gContent->hasUserPermission( 'p_articles_edit' ) || $gContent->isOwner() ) {
-	$isOwner = TRUE;
-} elseif( !$gContent->mArticleId && $gContent->hasUserPermission( 'p_articles_submit' ) ) {
-	$isOwner = TRUE;
-}
-
-// Now check permissions to access this page
-if( !$isOwner ) {
-	if ( empty( $gContent->mArticleId )) {
-		$gBitSystem->fatalPermission( 'p_articles_submit' );
-	} else {
-		$gBitSystem->fatalPermission( 'p_articles_edit' );
-	}
-}
-*/
-
 if( $gContent->isValid() ){
-	$gContent->verifyEditPermission();
+	$gContent->verifyUpdatePermission();
 }else{
 	$gContent->verifyCreatePermission();
 }

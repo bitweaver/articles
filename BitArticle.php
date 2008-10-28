@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.151 2008/10/20 21:40:08 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.152 2008/10/28 01:27:53 wjames5 Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.151 2008/10/20 21:40:08 spiderr Exp $
+ * $Id: BitArticle.php,v 1.152 2008/10/28 01:27:53 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.151 $ $Date: 2008/10/20 21:40:08 $ $Author: spiderr $
+ * @version $Revision: 1.152 $ $Date: 2008/10/28 01:27:53 $ $Author: wjames5 $
  */
 
 /**
@@ -300,6 +300,11 @@ class BitArticle extends LibertyMime {
 
 		if ( array_search( $pParamHash['article_store']['status_id'], array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING ) ) ) {
 				$this->mInfo["no_index"] = true ;
+		}
+		
+		// if we have an error we get them all by checking parent classes for additional errors
+		if( count( $this->mErrors ) > 0 ){
+			parent::verify( $pParamHash );
 		}
 
 		return( count( $this->mErrors )== 0 );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.152 2008/10/28 01:27:53 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.153 2008/12/05 10:43:33 lsces Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.152 2008/10/28 01:27:53 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.153 2008/12/05 10:43:33 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.152 $ $Date: 2008/10/28 01:27:53 $ $Author: wjames5 $
+ * @version $Revision: 1.153 $ $Date: 2008/12/05 10:43:33 $ $Author: lsces $
  */
 
 /**
@@ -63,6 +63,8 @@ class BitArticle extends LibertyMime {
 		$this->mTypeId  = NULL;
 		$this->mTopicId = NULL;
 		$this->mContentTypeGuid = BITARTICLE_CONTENT_TYPE_GUID;
+		$offset = BitDate::get_display_offset();
+		$this->mDate = new BitDate($offset);
 
 		// Permission setup
 		$this->mViewContentPerm  = 'p_articles_read';
@@ -241,9 +243,16 @@ class BitArticle extends LibertyMime {
 		}
 
 		if( !empty( $pParamHash['publish_Month'] ) ) {
-			$dateString = $pParamHash['publish_Year'].'-'.$pParamHash['publish_Month'].'-'.$pParamHash['publish_Day'].' '.$pParamHash['publish_Hour'].':'.$pParamHash['publish_Minute'];
-			//$timestamp = strtotime( $dateString );
-			$timestamp = $gBitSystem->mServerTimestamp->getUTCFromDisplayDate( strtotime( $dateString ) );
+			$dateString = $this->mDate->gmmktime(
+				$pParamHash['publish_Hour'],
+				$pParamHash['publish_Minute'],
+				isset($pParamHash['publish_Second']) ? $pParamHash['publish_Second'] : 0,
+				$pParamHash['publish_Month'],
+				$pParamHash['publish_Day'],
+				$pParamHash['publish_Year']
+			);
+
+			$timestamp = $this->mDate->getUTCFromDisplayDate( $dateString );
 			if( $timestamp !== -1 ) {
 				$pParamHash['publish_date'] = $timestamp;
 			}
@@ -253,9 +262,16 @@ class BitArticle extends LibertyMime {
 		}
 
 		if( !empty( $pParamHash['expire_Month'] ) ) {
-			$dateString = $pParamHash['expire_Year'].'-'.$pParamHash['expire_Month'].'-'.$pParamHash['expire_Day'].' '.$pParamHash['expire_Hour'].':'.$pParamHash['expire_Minute'];
-			//$timestamp = strtotime( $dateString );
-			$timestamp = $gBitSystem->mServerTimestamp->getUTCFromDisplayDate( strtotime( $dateString ) );
+			$dateString = $this->mDate->gmmktime(
+				$pParamHash['expire_Hour'],
+				$pParamHash['expire_Minute'],
+				isset($pParamHash['expire_Second']) ? $pParamHash['expire_Second'] : 0,
+				$pParamHash['expire_Month'],
+				$pParamHash['expire_Day'],
+				$pParamHash['expire_Year']
+			);
+
+			$timestamp = $this->mDate->getUTCFromDisplayDate( $dateString );
 			if( $timestamp !== -1 ) {
 				$pParamHash['expire_date'] = $timestamp;
 			}

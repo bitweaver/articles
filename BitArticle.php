@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.153 2008/12/05 10:43:33 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.154 2009/01/23 18:44:54 bitweaver Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitArticle.php,v 1.153 2008/12/05 10:43:33 lsces Exp $
+ * $Id: BitArticle.php,v 1.154 2009/01/23 18:44:54 bitweaver Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.153 $ $Date: 2008/12/05 10:43:33 $ $Author: lsces $
+ * @version $Revision: 1.154 $ $Date: 2009/01/23 18:44:54 $ $Author: bitweaver $
  */
 
 /**
@@ -85,7 +85,7 @@ class BitArticle extends LibertyMime {
 			$bindVars[] = $lookupId = @BitBase::verifyId( $this->mArticleId ) ? $this->mArticleId : $this->mContentId;
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-			$query = "SELECT a.*, lc.*, atype.*, atopic.*,
+			$query = "SELECT a.*, lc.*, atype.*, atopic.*, lch.hits,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
 				la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql

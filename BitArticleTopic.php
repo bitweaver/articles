@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.43 2008/06/23 21:56:12 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.44 2009/03/19 14:50:45 bitweaver Exp $
  * @package articles
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -367,7 +367,7 @@ class BitArticleTopic extends BitBase {
 			}
 		}
 
-		return $ret;
+		return str_replace( "//", "/", $ret );
 	}
 
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.12 2006/09/03 20:04:53 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_topics.tpl,v 1.13 2009/04/14 19:51:33 dansut Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -72,7 +72,7 @@
 
 					<td align="right">
 						{smartlink ititle='edit' ibiticon="icons/accessories-text-editor" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
-						{smartlink ititle='permissions' ibiticon="icons/emblem-shared" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id`}
+						{* smartlink ititle='permissions' ibiticon="icons/emblem-shared" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id` *}
 						<br />
 						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage="icons" iname="edit-delete" iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />

@@ -1,8 +1,8 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.23 2007/07/13 09:52:02 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_articles_inc.php,v 1.24 2009/10/01 13:45:28 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 $formCmsSettings = array(
 /*
 	Feature is incomplete

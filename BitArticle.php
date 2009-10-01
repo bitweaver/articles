@@ -1,22 +1,22 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.156 2009/10/01 13:45:26 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.157 2009/10/01 14:16:57 wjames5 Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
  * Copyright( c )2003 tikwiki.org
  * Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitArticle.php,v 1.156 2009/10/01 13:45:26 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.157 2009/10/01 14:16:57 wjames5 Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.156 $ $Date: 2009/10/01 13:45:26 $ $Author: wjames5 $
+ * @version $Revision: 1.157 $ $Date: 2009/10/01 14:16:57 $ $Author: wjames5 $
  */
 
 /**

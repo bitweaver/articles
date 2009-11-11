@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.5 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.6 2009/11/11 22:37:00 lsces Exp $
  * @package articles
  * @subpackage functions
  */
@@ -47,7 +47,7 @@ if ( isset( $_REQUEST["article_id"] ) ) {
     $gBitSmarty->assign( 'image_type', $article_data["image_type"] );
     $gBitSmarty->assign( 'image_size', $article_data["image_size"] );
     $gBitSmarty->assign( 'image_data', urlencode( $article_data["image_data"] ) );
-    $gBitSmarty->assign( 'reads', $article_data["reads"] );
+    $gBitSmarty->assign( 'reads', $article_data["hits"] );
     $gBitSmarty->assign( 'size', $article_data["size"] );
 
     if ( strlen( $article_data["image_data"] ) > 0 ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.46 2009/10/01 14:16:57 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.47 2010/01/25 16:32:42 dansut Exp $
  * @package articles
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -112,7 +112,7 @@ class BitArticleTopic extends BitBase {
 
 		if ($this->verify($iParamHash)) {
 			if (!$iParamHash['topic_id']) {
-				$topicId = $this->mDb->GenID('articles_topics_id_seq');
+				$topicId = $this->mDb->GenID('article_topics_t_id_seq');
 			} else {
 				$topicId = $this->mTopicId;
 			}

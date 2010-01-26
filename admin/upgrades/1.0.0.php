@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/admin/upgrades/1.0.0.php,v 1.1 2010/01/25 20:36:38 dansut Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/admin/upgrades/1.0.0.php,v 1.2 2010/01/26 15:38:13 dansut Exp $
  */
 global $gBitInstaller;
 
@@ -17,7 +17,7 @@ $gBitInstaller->registerPackageUpgrade( $infoHash, array(
 			"article_types_a_t_id_seq" => "article_types_id_seq",
 			"articles_topics_id_seq" => "article_topics_id_seq",
 		)),
-		array( 'DROPTABLE' => array( 'article_topics_t_id_seq' ) ),
+		array( 'DROPSEQUENCE' => array( 'article_topics_t_id_seq' ) ),
 	)),
 ));
 ?>

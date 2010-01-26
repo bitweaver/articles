@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.22 2008/10/20 21:40:08 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.23 2010/01/26 15:49:44 dansut Exp $ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}
@@ -91,7 +91,7 @@
 							{/if}
 
 							{if $gBitSystem->isFeatureActive( 'articles_list_author' )}
-								{tr}Created by{/tr}: {displayname user=$article.author_name}
+								{tr}Created by{/tr}: {displayname user_id=$article.user_id}
 							{/if}
 
 							{if $gBitSystem->isFeatureActive( 'articles_list_date' ) or $gBitSystem->isFeatureActive( 'articles_list_expire' )}<br />{/if}

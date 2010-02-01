@@ -1,19 +1,21 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.8 2007/05/27 21:34:22 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.9 2010/02/01 17:45:22 dansut Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive( 'articles' )}
 	{bitmodule title="$moduleTitle" name=$smarty.const.ARTICLES_PKG_NAME}
-		<ol>
+		<{$listtype} id="modarticles-{$moduleParams.layout_area}{$moduleParams.pos}">
 			{foreach item=modArt from=$modArticles}
 				<li><a href="{$modArt.display_url}">{$modArt.title|escape}</a></li>
 			{foreachelse}
-				<li></li>
+				<li><em>{tr}No records found{/tr}</em></li>
 			{/foreach}
-			{if $params neq ''}
-				<li><a href="{$smarty.const.ARTICLES_PKG_URL}list.php?{$params}">{tr}more{/tr}: {$moduleTitle}</a></li>
-			{else}
-				<li><a href="{$smarty.const.ARTICLES_PKG_URL}list.php">{tr}more{/tr}</a></li>
+			{if !empty( $modArticles )}
+				{if $params neq ''}
+					<li><a href="{$smarty.const.ARTICLES_PKG_URL}list.php?{$params}">{tr}more{/tr}: {$moduleTitle}</a></li>
+				{else}
+					<li><a href="{$smarty.const.ARTICLES_PKG_URL}list.php">{tr}more{/tr}</a></li>
+				{/if}
 			{/if}
-		</ol>
+		</{$listtype}>
 	{/bitmodule}
 {/if}
 {/strip}

@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.16 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.17 2010/02/01 17:45:22 dansut Exp $
  * @package articles
  * @subpackage modules
  */
@@ -52,5 +52,7 @@ if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name
 }
 
 $gBitSmarty->assign( 'params', !empty( $moduleParams['params'] ) ? $moduleParams['params'] : '');
+$gBitSmarty->assign( 'listtype',
+	( isset($module_params['list_type']) && (strncasecmp($module_params['list_type'], 'u', 1) == 0) ) ? 'ul' : 'ol' );
 $gBitSmarty->assign( 'modArticles', $articles );
 ?>

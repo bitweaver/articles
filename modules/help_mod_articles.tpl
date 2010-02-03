@@ -13,6 +13,10 @@
 	<dd><em>{tr}String{/tr}</em></dd>
 	<dd><abbr class="default" title="{tr}default{/tr}">last_modifed_desc</abbr>, last_modifed_asc, created_asc, created_desc</dd>
 
-	<dt class="param"><kbd>topic</kbd></dt>
+	<dt class="param"><kbd>list_type</kbd></dt>
 	<dd><em>{tr}String{/tr}</em></dd>
+	<dd><abbr class="default" title="{tr}default{/tr}">ordered</abbr>, unordered</dd>
+
+	<dt class="param"><kbd>topic_id</kbd></dt>
+	<dd><em>{tr}Numeric{/tr}</em></dd>
 </dl>

@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.6 2009/11/11 22:37:00 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/print.php,v 1.7 2010/02/08 21:27:21 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH . 'art_lib.php' );
 

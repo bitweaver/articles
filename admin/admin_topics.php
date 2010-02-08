@@ -1,6 +1,6 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.8 2008/06/25 22:21:06 spiderr Exp $
-require_once( '../../bit_setup_inc.php' );
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_topics.php,v 1.9 2010/02/08 21:27:21 wjames5 Exp $
+require_once( '../../kernel/setup_inc.php' );
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_PATH.'lookup_article_topic_inc.php' );

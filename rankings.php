@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.11 2008/06/25 22:21:06 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/rankings.php,v 1.12 2010/02/08 21:27:21 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 include_once( LIBERTY_PKG_PATH . 'LibertyContent.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );

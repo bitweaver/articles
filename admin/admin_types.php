@@ -1,7 +1,7 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.10 2008/06/25 22:21:06 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.11 2010/02/08 21:27:21 wjames5 Exp $
 
-require_once( '../../bit_setup_inc.php' );
+require_once( '../../kernel/setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 

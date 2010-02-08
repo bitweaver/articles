@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.24 2008/06/30 19:29:17 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/articles_rss.php,v 1.25 2010/02/08 21:27:21 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -10,7 +10,7 @@
  */
 // ensure that we use absolute URLs everywhere
 $_REQUEST['uri_mode'] = TRUE;
-require_once( "../bit_setup_inc.php" );
+require_once( "../kernel/setup_inc.php" );
 
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.27 2008/10/20 21:40:08 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/read.php,v 1.28 2010/02/08 21:27:21 wjames5 Exp $
  * @package articles
  * @subpackage functions
  */
@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 

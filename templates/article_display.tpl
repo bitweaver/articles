@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.55 2009/01/08 21:21:59 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.56 2010/03/18 17:59:42 dansut Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -88,7 +88,9 @@
 				<a class="more" href="{$article.display_url}">{tr}Read More&hellip;{/tr}</a>
 			{/if}
 
-			{if $article.allow_comments eq 'y'}
+			{if $article.allow_comments eq 'y' &&
+			   ($gContent->hasUserPermission( 'p_articles_post_comments' ) ||
+			    $gContent->hasUserPermission( 'p_articles_read_comments' )) }
 				{if $spacer}&nbsp; &bull; &nbsp;{/if}
 				{if $showDescriptionsOnly}<a href="{$article.display_url}#editcomments">{/if}
 					{$article.num_comments} 

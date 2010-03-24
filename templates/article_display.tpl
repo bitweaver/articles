@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.56 2010/03/18 17:59:42 dansut Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.57 2010/03/24 17:39:15 dansut Exp $ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}
@@ -42,13 +42,13 @@
 			{if $article.show_image eq 'y' && ( $article.thumbnail_url || $article.primary_attachment )}
 				<div class="image">
 					{assign var=size value=$gBitSystem->getConfig('articles_image_size','small')}
-					{if $showDescriptionsOnly and $article.has_more}
-						<a href="{$article.display_url}">
-							<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url.$size}"/>
-						</a>
-					{else}
+					{if $showDescriptionsOnly and $article.has_more}<a href="{$article.display_url}">{/if}
+					{if $article.primary_attachment}
 						{include file=$gLibertySystem->getMimeTemplate('inline',$article.primary_attachment.attachment_plugin_guid) attachment=$article.primary_attachment thumbsize=$size}
+					{else}
+						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url.$size}"/>
 					{/if}
+					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
 				</div>
 			{/if}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.157 2009/10/01 14:16:57 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.158 2010/04/04 17:15:58 lsces Exp $
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitArticle.php,v 1.157 2009/10/01 14:16:57 wjames5 Exp $
+ * $Id: BitArticle.php,v 1.158 2010/04/04 17:15:58 lsces Exp $
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.157 $ $Date: 2009/10/01 14:16:57 $ $Author: wjames5 $
+ * @version $Revision: 1.158 $ $Date: 2010/04/04 17:15:58 $ $Author: lsces $
  */
 
 /**
@@ -367,8 +367,8 @@ class BitArticle extends LibertyMime {
 			$data['parsed'] = preg_replace( LIBERTY_SPLIT_REGEX, "<hr />", $data['parsed'] );
 		}
 
-		$articleType = &new BitArticleType( $data['article_type_id'] );
-		$articleTopic = &new BitArticleTopic( $data['topic_id'] );
+		$articleType = new BitArticleType( $data['article_type_id'] );
+		$articleTopic = new BitArticleTopic( $data['topic_id'] );
 		$data = array_merge( $data, $articleType->mInfo, $articleTopic->mInfo );
 
 		return $data;
@@ -554,7 +554,7 @@ class BitArticle extends LibertyMime {
 
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
-		$comment = &new LibertyComment();
+		$comment = new LibertyComment();
 		while( $res = $result->fetchRow() ) {
 			// get this stuff parsed
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );

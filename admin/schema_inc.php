@@ -137,4 +137,8 @@ if( defined( 'RSS_PKG_NAME' )) {
 $gBitInstaller->registerContentObjects( ARTICLES_PKG_NAME, array( 
 	'BitArticle'=>ARTICLES_PKG_PATH.'BitArticle.php',
 ));
-?>
+
+// Requirements
+$gBitInstaller->registerRequirements( ARTICLES_PKG_NAME, array(
+	'liberty' => array( 'min' => '2.1.4' ),
+));

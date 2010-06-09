@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticleTopic.php,v 1.49 2010/01/25 20:36:38 dansut Exp $
+ * @version $Header$
  * @package articles
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org

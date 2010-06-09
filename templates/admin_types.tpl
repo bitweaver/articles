@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_types.tpl,v 1.9 2007/08/23 11:15:23 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 

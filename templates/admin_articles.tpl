@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/admin_articles.tpl,v 1.13 2007/07/13 09:52:02 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 {form}
 	{jstabs}

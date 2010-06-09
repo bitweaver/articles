@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/display_article_inc.php,v 1.3 2008/06/25 22:21:06 spiderr Exp $
+ * @version $Header$
  * @package articles
  * @subpackage functions
  */

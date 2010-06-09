@@ -1,6 +1,6 @@
 <?php 
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.php,v 1.17 2010/02/01 17:45:22 dansut Exp $
+ * @version $Header$
  * @package articles
  * @subpackage modules
  */

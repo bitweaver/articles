@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/print_article.tpl,v 1.7 2008/10/20 21:40:08 spiderr Exp $ *}
+{* $Header$ *}
 {* Index we display a wiki page here *}
 
 {include file="bitpackage:kernel/header.tpl"}

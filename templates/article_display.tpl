@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_display.tpl,v 1.57 2010/03/24 17:39:15 dansut Exp $ *}
+{* $Header$ *}
 {strip}
 {if !$showDescriptionsOnly}
 	{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='nav' serviceHash=$article}

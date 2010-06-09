@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/admin/admin_types.php,v 1.11 2010/02/08 21:27:21 wjames5 Exp $
+// $Header$
 
 require_once( '../../kernel/setup_inc.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/preview_article.tpl,v 1.2 2005/08/13 09:34:09 squareing Exp $ *}
+{* $Header$ *}
 <h2>{tr}Preview{/tr} {$title}</h2>
 <div class="display articles">
 <div class="articleheader">

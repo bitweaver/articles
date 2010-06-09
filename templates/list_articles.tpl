@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/list_articles.tpl,v 1.23 2010/01/26 15:49:44 dansut Exp $ *}
+{* $Header$ *}
 <div class="floaticon">{bithelp}</div>
 
 {strip}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_articles/templates/center_list_articles.php,v 1.16 2007/08/30 22:15:13 wjames5 Exp $
+// $Header$
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
 if( !empty( $moduleParams ) ) {
 	extract( $moduleParams );

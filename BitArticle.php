@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/BitArticle.php,v 1.159 2010/04/17 22:46:07 wjames5 Exp $
+ * @version $Header$
  * @package articles
  *
  * Copyright( c )2004 bitweaver.org
@@ -9,14 +9,14 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitArticle.php,v 1.159 2010/04/17 22:46:07 wjames5 Exp $
+ * $Id$
  *
  * Article class is used when accessing BitArticles. It is based on TikiSample
  * and builds on core bitweaver functionality, such as the Liberty CMS engine.
  *
  * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
- * @version $Revision: 1.159 $ $Date: 2010/04/17 22:46:07 $ $Author: wjames5 $
+ * @version $Revision$
  */
 
 /**

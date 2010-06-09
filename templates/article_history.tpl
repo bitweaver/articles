@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/templates/article_history.tpl,v 1.8 2006/07/05 18:51:35 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="admin article display">
 	<div class="header">

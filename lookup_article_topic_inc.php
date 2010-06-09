@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_articles/lookup_article_topic_inc.php,v 1.4 2008/06/19 09:29:08 lsces Exp $
+ * @version $Header$
  * @package articles
  * @subpackage functions
  */

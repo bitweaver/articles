@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_articles/modules/mod_articles.tpl,v 1.9 2010/02/01 17:45:22 dansut Exp $ *}
+{* $Header$ *}
 {strip}
 {if $gBitSystem->isPackageActive( 'articles' )}
 	{bitmodule title="$moduleTitle" name=$smarty.const.ARTICLES_PKG_NAME}

@@ -77,7 +77,7 @@ class BitArticle extends LibertyMime {
 	* Load the data from the database
 	* @access public
 	**/
-	function load() {
+	function load( $pContentId = NULL, $pPluginParams = NULL ) {
 		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
@@ -117,7 +117,7 @@ class BitArticle extends LibertyMime {
 				$this->mInfo['thumbnail_url'] = BitArticle::getImageThumbnails( $this->mInfo );
 				$this->mInfo['creator']       = ( !empty( $this->mInfo['creator_real_name'] ) ? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
 				$this->mInfo['editor']        = ( !empty( $this->mInfo['modifier_real_name'] ) ? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
-				$this->mInfo['display_url']   = $this->getDisplayUrl();
+				$this->mInfo['display_url']   = $this->getContentUrl();
 				// we need the raw data to display in the textarea
 				$this->mInfo['raw']           = $this->mInfo['data'];
 				// here we have the displayed data without the ...split... stuff
@@ -561,7 +561,7 @@ class BitArticle extends LibertyMime {
 
 			$res['thumbnail_url'] = BitArticle::getImageThumbnails( $res );
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
-			$res['display_url']   = $this->getDisplayUrl( $res['article_id'] );
+			$res['display_url']   = $this->getContentUrl( $res['article_id'] );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
 
 			// fetch the primary attachment that we can display the file on the front page if needed
@@ -613,7 +613,7 @@ class BitArticle extends LibertyMime {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrl( $pArticleId = NULL, $pParamHash = NULL ) {
+	public static function getDisplayUrl( $pArticleId = NULL, $pParamHash = NULL ) {
 		global $gBitSystem;
 
 		$ret = NULL;
@@ -637,6 +637,13 @@ class BitArticle extends LibertyMime {
 		return $ret;
 	}
 
+	function getContentUrl( $pArticleId = NULL ) {
+		if( !@BitBase::verifyId( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		return self::getDisplayUrl($pArticleId);
+	}
 	/**
 	* get a list of all available statuses
 	* @return an array of available statuses

@@ -88,7 +88,7 @@ class BitArticle extends LibertyMime {
 			$query = "SELECT a.*, lc.*, atype.*, atopic.*, lch.hits,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
-				la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
+				la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 				FROM `".BIT_DB_PREFIX."articles` a
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
@@ -386,10 +386,10 @@ class BitArticle extends LibertyMime {
 
 		$thumbHash['mime_image'] = FALSE;
 		if( !empty( $pParamHash['image_attachment_path'] )) {
-			$thumbHash['storage_path'] = $pParamHash['image_attachment_path'];
+			$thumbHash['source_file'] = $pParamHash['image_attachment_path'];
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
-			$thumbHash['storage_path'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
+			$thumbHash['source_file'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		}
 
@@ -533,7 +533,7 @@ class BitArticle extends LibertyMime {
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
 				lch.`hits`,
-				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
+				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )

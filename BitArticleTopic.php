@@ -121,7 +121,7 @@ class BitArticleTopic extends BitBase {
 				$checkFunc = liberty_get_function( 'can_thumbnail' );
 				if( $checkFunc( $_FILES['upload']['type'] )) {
 					$fileHash = $_FILES['upload'];
-					$fileHash['dest_path'] = $this->getTopicImageBaseUrl( $topicId );
+					$fileHash['dest_branch'] = $this->getTopicImageBaseUrl( $topicId );
 					$fileHash['source_file'] = $fileHash['tmp_name'];
 					liberty_clear_thumbnails( $fileHash );
 					liberty_generate_thumbnails( $fileHash );

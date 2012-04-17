@@ -565,7 +565,7 @@ class BitArticle extends LibertyMime {
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
 
 			// fetch the primary attachment that we can display the file on the front page if needed
-			$res['primary_attachment'] = $this->getAttachment( $res['primary_attachment_id'] );
+			$res['primary_attachment'] = LibertyMime::loadAttachment( $res['primary_attachment_id'] );
 
 			$ret[] = $res;
 		}

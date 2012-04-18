@@ -45,7 +45,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	foreach( $feeds as $feed ) {
 		$item = new FeedItem();
 		$item->title = $feed['title'];
-		$item->link = $articles->getDisplayUrl( $feed['article_id'] );
+		$item->link = $articles->getDisplayUrl( $feed );
 
 		// show the full article in the feed
 		$parseHash['content_id'] = $feed['content_id'];

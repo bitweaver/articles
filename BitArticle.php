@@ -561,7 +561,7 @@ class BitArticle extends LibertyMime {
 
 			$res['thumbnail_url'] = BitArticle::getImageThumbnails( $res );
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
-			$res['display_url']   = $this->getDisplayUrl( $res['article_id'] );
+			$res['display_url']   = $this->getDisplayUrl( $res );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
 
 			// fetch the primary attachment that we can display the file on the front page if needed
@@ -613,25 +613,20 @@ class BitArticle extends LibertyMime {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrl( $pArticleId = NULL, $pParamHash = NULL ) {
+	function getDisplayUrlFromHash( $pParamHash = NULL ) {
 		global $gBitSystem;
 
 		$ret = NULL;
-		if( !@BitBase::verifyId( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
 
-		if( @$this->verifyId( $pArticleId ) ) {
+		if( @$this->verifyId( $pParamHash['article_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
-				$ret = ARTICLES_PKG_URL.$pArticleId;
+				$ret = ARTICLES_PKG_URL.$pParamHash['article_id'];
 			} else if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
-				$ret = ARTICLES_PKG_URL.$pArticleId;
+				$ret = ARTICLES_PKG_URL.$pParamHash['article_id'];
 			} else {
-				$ret = ARTICLES_PKG_URL."read.php?article_id=$pArticleId";
+				$ret = ARTICLES_PKG_URL."read.php?article_id=".$pParamHash['article_id'];
 			}
-		} else {
-			$ret = LibertyContent::getDisplayUrl( NULL, $pParamHash );
 		}
 
 		return $ret;

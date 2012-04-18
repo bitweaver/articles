@@ -77,7 +77,7 @@ class BitArticle extends LibertyMime {
 	* Load the data from the database
 	* @access public
 	**/
-	function load() {
+	function load( $pContentId = NULL, $pPluginParams = NULL ) {
 		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
@@ -88,7 +88,7 @@ class BitArticle extends LibertyMime {
 			$query = "SELECT a.*, lc.*, atype.*, atopic.*, lch.hits,
 				uue.`login` AS `modifier_user`, uue.`real_name` AS `modifier_real_name`,
 				uuc.`login` AS `creator_user`, uuc.`real_name` AS `creator_real_name` ,
-				la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
+				la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 				FROM `".BIT_DB_PREFIX."articles` a
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_types` atype ON( atype.`article_type_id` = a.`article_type_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics` atopic ON( atopic.`topic_id` = a.`topic_id` )
@@ -117,7 +117,7 @@ class BitArticle extends LibertyMime {
 				$this->mInfo['thumbnail_url'] = BitArticle::getImageThumbnails( $this->mInfo );
 				$this->mInfo['creator']       = ( !empty( $this->mInfo['creator_real_name'] ) ? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
 				$this->mInfo['editor']        = ( !empty( $this->mInfo['modifier_real_name'] ) ? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
-				$this->mInfo['display_url']   = $this->getDisplayUrl();
+				$this->mInfo['display_url']   = $this->getContentUrl();
 				// we need the raw data to display in the textarea
 				$this->mInfo['raw']           = $this->mInfo['data'];
 				// here we have the displayed data without the ...split... stuff
@@ -386,10 +386,10 @@ class BitArticle extends LibertyMime {
 
 		$thumbHash['mime_image'] = FALSE;
 		if( !empty( $pParamHash['image_attachment_path'] )) {
-			$thumbHash['storage_path'] = $pParamHash['image_attachment_path'];
+			$thumbHash['source_file'] = $pParamHash['image_attachment_path'];
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
-			$thumbHash['storage_path'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
+			$thumbHash['source_file'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		}
 
@@ -533,7 +533,7 @@ class BitArticle extends LibertyMime {
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
 				lch.`hits`,
-				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.storage_path AS `image_attachment_path` $selectSql
+				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )
@@ -561,11 +561,11 @@ class BitArticle extends LibertyMime {
 
 			$res['thumbnail_url'] = BitArticle::getImageThumbnails( $res );
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
-			$res['display_url']   = $this->getDisplayUrl( $res );
+			$res['display_url']   = $this->getDisplayUrlFromHash( $res );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
 
 			// fetch the primary attachment that we can display the file on the front page if needed
-			$res['primary_attachment'] = $this->getAttachment( $res['primary_attachment_id'] );
+			$res['primary_attachment'] = LibertyMime::loadAttachment( $res['primary_attachment_id'] );
 
 			$ret[] = $res;
 		}
@@ -632,6 +632,13 @@ class BitArticle extends LibertyMime {
 		return $ret;
 	}
 
+	function getContentUrl( $pArticleId = NULL ) {
+		if( !@BitBase::verifyId( $pArticleId ) && $this->isValid() ) {
+			$pArticleId = $this->mArticleId;
+		}
+
+		return self::getDisplayUrl($pArticleId);
+	}
 	/**
 	* get a list of all available statuses
 	* @return an array of available statuses

@@ -176,7 +176,7 @@ class BitArticleTopic extends BitBase {
 
 		if( @BitBase::verifyId( $pTopicId )) {
 			$ret = liberty_fetch_thumbnail_url( array(
-				'storage_path'  => BitArticleTopic::getTopicImageBaseUrl( $pTopicId ),
+				'source_file'   => BitArticleTopic::getTopicImageBaseUrl( $pTopicId ),
 				'default_image' => $gBitSystem->getConfig( 'articles_image_size', 'small' )
 			));
 		}

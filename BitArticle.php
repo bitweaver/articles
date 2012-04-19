@@ -613,7 +613,7 @@ class BitArticle extends LibertyMime {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	function getDisplayUrlFromHash( $pParamHash = NULL ) {
+	public static function getDisplayUrlFromHash( $pParamHash = NULL ) {
 		global $gBitSystem;
 
 		$ret = NULL;

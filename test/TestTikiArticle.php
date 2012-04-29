@@ -67,7 +67,7 @@ class TestBitArticle extends Test {
 
     function testUrlItem()
     {
-        Assert::equalsTrue($this->test->getContentUrl() != "");
+        Assert::equalsTrue($this->test->getDisplayUrl() != "");
     }
 
     function testExpungeItem()

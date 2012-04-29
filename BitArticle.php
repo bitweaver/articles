@@ -117,7 +117,7 @@ class BitArticle extends LibertyMime {
 				$this->mInfo['thumbnail_url'] = BitArticle::getImageThumbnails( $this->mInfo );
 				$this->mInfo['creator']       = ( !empty( $this->mInfo['creator_real_name'] ) ? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
 				$this->mInfo['editor']        = ( !empty( $this->mInfo['modifier_real_name'] ) ? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
-				$this->mInfo['display_url']   = $this->getContentUrl();
+				$this->mInfo['display_url']   = $this->getDisplayUrl();
 				// we need the raw data to display in the textarea
 				$this->mInfo['raw']           = $this->mInfo['data'];
 				// here we have the displayed data without the ...split... stuff
@@ -632,13 +632,6 @@ class BitArticle extends LibertyMime {
 		return $ret;
 	}
 
-	function getContentUrl( $pArticleId = NULL ) {
-		if( !@BitBase::verifyId( $pArticleId ) && $this->isValid() ) {
-			$pArticleId = $this->mArticleId;
-		}
-
-		return self::getDisplayUrl($pArticleId);
-	}
 	/**
 	* get a list of all available statuses
 	* @return an array of available statuses

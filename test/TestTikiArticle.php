@@ -3,11 +3,11 @@ require_once('../../kernel/setup_inc.php');
 require_once(ARTICLES_PKG_PATH.'BitArticle.php');
 
 class TestBitArticle extends Test {
-    
+
     var $test;
     var $id;
     var $count;
-    
+
     function TestBitArticle()
     {
         $this->test = new BitArticle();
@@ -46,19 +46,19 @@ class TestBitArticle extends Test {
 	);
         Assert::equalsTrue($this->test->store($newItemHash));
     }
-    
+
     function testIsValidItem()
     {
         Assert::equalsTrue($this->test->isValid());
     }
-    
+
     function testNullItem()
     {
 	$this->id = $this->test->mArticleId;
         $this->test = NULL;
         Assert::equals($this->test, NULL);
     }
-    
+
     function testLoadItem()
     {
         $this->test = new BitArticle($this->id);

@@ -2,7 +2,7 @@
 /**
  * @version $Header$
  * @package articles
- * 
+ *
  * @copyright Copyright (c) 2004-2006, bitweaver.org
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -289,7 +289,7 @@ class BitArticleTopic extends BitBase {
 
 	/**
 	 * Get the name of the article image file
-	 * 
+	 *
 	 * @param array $pTopicId article id
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
@@ -302,7 +302,7 @@ class BitArticleTopic extends BitBase {
 				return NULL;
 			}
 		}
-		
+
 		global $gBitSystem;
 		return "topic_$pTopicId.".$gBitSystem->getConfig( 'liberty_thumbnail_format', 'jpg' );
 	}
@@ -386,7 +386,7 @@ class BitArticleTopic extends BitBase {
 
 	/**
 	 * Get the name of the article image file
-	 * 
+	 *
 	 * @param array $pArticleId article id
 	 * @access public
 	 * @return TRUE on success, FALSE on failure

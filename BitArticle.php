@@ -317,7 +317,7 @@ class BitArticle extends LibertyMime {
 		if ( array_search( $pParamHash['article_store']['status_id'], array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING ) ) ) {
 				$this->mInfo["no_index"] = true ;
 		}
-		
+
 		// if we have an error we get them all by checking parent classes for additional errors
 		if( count( $this->mErrors ) > 0 ){
 			parent::verify( $pParamHash );
@@ -587,7 +587,7 @@ class BitArticle extends LibertyMime {
 
 	/**
 	 * Get a list of articles that are to be published in the future
-	 * 
+	 *
 	 * @param array $pParamHash contains listing options - same as getList()
 	 * @access public
 	 * @return array of articles
@@ -599,7 +599,7 @@ class BitArticle extends LibertyMime {
 
 	/**
 	 * Get list of articles that have expired and are not displayed on the site anymore
-	 * 
+	 *
 	 * @param array $pParamHash contains listing options - same as getList()
 	 * @access public
 	 * @return array of articles

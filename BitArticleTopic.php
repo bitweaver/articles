@@ -183,7 +183,7 @@ class BitArticleTopic extends BitBase {
 		return $ret;
 	}
 
-	function getTopicList( $pOptionHash=NULL ) {
+	public static function getTopicList( $pOptionHash=NULL ) {
 		global $gBitSystem;
 
 		$where = '';

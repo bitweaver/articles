@@ -133,7 +133,7 @@ class BitArticleType extends BitBase
 		$rs = $this->mDb->query($sql, array($iTypeId));
 	}
 
-	function getTypeList() {
+	public static function getTypeList() {
 		global $gBitSystem;
 
 		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "article_types`";

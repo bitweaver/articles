@@ -561,7 +561,7 @@ class BitArticle extends LibertyMime {
 
 			$res['thumbnail_url'] = BitArticle::getImageThumbnails( $res );
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
-			$res['display_url']   = $this->getDisplayUrlFromHash( $res );
+			$res['display_url']   = self::getDisplayUrlFromHash( $res );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );
 
 			// fetch the primary attachment that we can display the file on the front page if needed
@@ -618,7 +618,7 @@ class BitArticle extends LibertyMime {
 
 		$ret = NULL;
 
-		if( @$this->verifyId( $pParamHash['article_id'] ) ) {
+		if( @BitBase::verifyId( $pParamHash['article_id'] ) ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
 				$ret = ARTICLES_PKG_URL.$pParamHash['article_id'];
@@ -630,6 +630,15 @@ class BitArticle extends LibertyMime {
 		}
 
 		return $ret;
+	}
+
+    /**
+    * Function that returns link to display an image
+    * @return the url to display the gallery.
+    */
+	public function getDisplayUrl() {
+		$info = array( 'article_id' => $this->mArticleId );
+		return self::getDisplayUrlFromHash( $info );
 	}
 
 	/**

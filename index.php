@@ -14,7 +14,7 @@ $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPermission( 'p_articles_read' );
 
 if( !empty( $_REQUEST['article_id'] ) ) {
-	header( "location: ".ARTICLES_PKG_URL."read.php?article_id=".( ( int )$_REQUEST['article_id'] ) );
+	header( "location: ".BitArticle::getDisplayUrlFromHash( array ( 'article_id' => ( int )$_REQUEST['article_id'] ) ) );
 }
 
 // Display the template

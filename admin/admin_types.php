@@ -67,7 +67,7 @@ $artTypes = array(
 );
 $gBitSmarty->assign( 'artTypes', $artTypes );
 
-$gContent = &new BitArticleType( !empty( $_REQUEST['article_type_id'] ) ? $_REQUEST['article_type_id'] : NULL );
+$gContent = new BitArticleType( !empty( $_REQUEST['article_type_id'] ) ? $_REQUEST['article_type_id'] : NULL );
 
 if( isset( $_REQUEST["add_type"] ) ) {
     $gContent->storeType( $_REQUEST );

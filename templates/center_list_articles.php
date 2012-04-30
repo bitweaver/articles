@@ -38,7 +38,7 @@ if( !empty( $moduleParams )) {
 if( empty( $listHash['user_id'] )) {
 	if( !empty( $gQueryUserId )) {
 		$listHash['user_id'] = $gQueryUserId;
-	} elseif( $_REQUEST['user_id'] ) {
+	} elseif( isset( $_REQUEST['user_id'] ) ) {
 		$listHash['user_id'] = $_REQUEST['user_id'];
 	}
 }

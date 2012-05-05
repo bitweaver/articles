@@ -23,7 +23,7 @@ class BitArticleTopic extends BitBase {
 
 	function BitArticleTopic($iTopicId = NULL, $iTopicName = NULL) {
 		$this->mTopicId = NULL;
-		BitBase::BitBase();
+		parent::__construct();
 		if ($iTopicId || $iTopicName) {
 			$this->loadTopic(array('topic_id'=>$iTopicId, 'topic_name'=>$iTopicName));
 		}

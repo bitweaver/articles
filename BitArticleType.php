@@ -23,7 +23,7 @@ class BitArticleType extends BitBase
 
 	function BitArticleType($iTypeId = NULL) {
 		$this->mTypeId = NULL;
-		BitBase::BitBase();
+		parent::__construct();
 		if ($iTypeId) {
 			$this->loadType($iTypeId);
 		}

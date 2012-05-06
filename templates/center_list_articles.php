@@ -35,16 +35,7 @@ if( !empty( $moduleParams )) {
 	$listHash = $_REQUEST;
 }
 
-if( empty( $listHash['user_id'] )) {
-	if( !empty( $gQueryUserId )) {
-		$listHash['user_id'] = $gQueryUserId;
-	} elseif( isset( $_REQUEST['user_id'] ) ) {
-		$listHash['user_id'] = $_REQUEST['user_id'];
-	}
-}
-if( @BitBase::verifyId( $_REQUEST['group_id'] ) ) {
-	$listHash['group_id'] = $_REQUEST['group_id'];
-}
+BitUser::userCollection( $_REQUEST, $listHash );
 
 $articles = $gContent->getList( $listHash );
 $gBitSmarty->assign( 'articles', $articles );

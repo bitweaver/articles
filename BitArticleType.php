@@ -21,7 +21,7 @@ class BitArticleType extends BitBase
 {
 	var $mTypeId;
 
-	function BitArticleType($iTypeId = NULL) {
+	function __construct($iTypeId = NULL) {
 		$this->mTypeId = NULL;
 		parent::__construct();
 		if ($iTypeId) {

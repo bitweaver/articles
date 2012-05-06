@@ -21,7 +21,7 @@ require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 class BitArticleTopic extends BitBase {
 	var $mTopicId;
 
-	function BitArticleTopic($iTopicId = NULL, $iTopicName = NULL) {
+	function __construct($iTopicId = NULL, $iTopicName = NULL) {
 		$this->mTopicId = NULL;
 		parent::__construct();
 		if ($iTopicId || $iTopicName) {

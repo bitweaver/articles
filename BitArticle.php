@@ -48,7 +48,7 @@ class BitArticle extends LibertyMime {
 	* @access private
 	**/
 	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
-		LibertyMime::LibertyMime();
+		parent::__construct();
 		$this->registerContentType(
 			BITARTICLE_CONTENT_TYPE_GUID, array(
 				'content_type_guid' => BITARTICLE_CONTENT_TYPE_GUID,

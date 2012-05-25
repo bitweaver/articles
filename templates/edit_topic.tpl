@@ -43,7 +43,7 @@
 				{forminput}
 					{if $gContent->mInfo.has_topic_image eq 'y'}
 						<img src="{$gContent->mInfo.topic_image_url}" /> <br/>
-						<a href="{$smarty.server.PHP_SELF}?topic_id={$gContent->mTopicId}&amp;fRemoveTopicImage=1">Remove Topic Image</a>
+						<a href="{$smarty.server.SCRIPT_NAME}?topic_id={$gContent->mTopicId}&amp;fRemoveTopicImage=1">Remove Topic Image</a>
 					{else}
 						{tr}No Image found{/tr}
 					{/if}

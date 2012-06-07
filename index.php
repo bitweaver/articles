@@ -9,12 +9,15 @@ require_once( '../kernel/setup_inc.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
+require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_articles_read' );
 
 if( !empty( $_REQUEST['article_id'] ) ) {
-	header( "location: ".BitArticle::getDisplayUrlFromHash( array ( 'article_id' => ( int )$_REQUEST['article_id'] ) ) );
+	$param = array ( 'article_id' => ( int )$_REQUEST['article_id'] );
+	header( "Location: ".BitArticle::getDisplayUrlFromHash( $param ) );
+	exit;
 }
 
 // Display the template

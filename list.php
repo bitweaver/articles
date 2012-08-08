@@ -36,8 +36,7 @@ if( !empty( $_REQUEST['action'] ) ) {
 
 		if( isset( $_REQUEST["confirm"] ) ) {
 			if( $tmpArt->expunge() ) {
-				header( "Location: ".ARTICLES_PKG_URL.'list.php?status_id='.( !empty( $_REQUEST['status_id'] ) ? $_REQUEST['status_id'] : '' ) );
-				die;
+				bit_redirect( ARTICLES_PKG_URL.'list.php?status_id='.( !empty( $_REQUEST['status_id'] ) ? $_REQUEST['status_id'] : '' ) );
 			} else {
 				$feedback['error'] = $tmpArt->mErrors;
 			}

@@ -62,11 +62,10 @@ if( !empty( $_REQUEST['save'] ) ) {
 	if( empty( $_REQUEST['topic_id'] ) ) $_REQUEST['topic_id'] = 0;
 	if( $gContent->store( $_REQUEST ) ) {
 		if( isset ($gContent->mInfo['status_id']) and $gContent->mInfo['status_id'] == ARTICLE_STATUS_PENDING ) {
-			header ( "Location: " . ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
+			bit_redirect( ARTICLES_PKG_URL. "index.php?feedback=".urlencode( tra( 'Your article has been submitted and is awaiting approval.' ) ) );
 		} else {
-			header ( "Location: " . ARTICLES_PKG_URL . ( ($gBitSystem->isFeatureActive('pretty_urls_extended') || $gBitSystem->isFeatureActive('pretty_urls')) ? $gContent->mArticleId : "read.php?article_id=" . $gContent->mArticleId ) );
+			bit_redirect( ARTICLES_PKG_URL . ( ($gBitSystem->isFeatureActive('pretty_urls_extended') || $gBitSystem->isFeatureActive('pretty_urls')) ? $gContent->mArticleId : "read.php?article_id=" . $gContent->mArticleId ) );
 		}
-		die;
 	}
 }
 

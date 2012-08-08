@@ -31,6 +31,7 @@ if( isset( $_REQUEST["fSubmitSaveTopic"] ) ) {
     $gContent->storeTopic( $_REQUEST );
 	$gContent->loadTopic();
     header( "Location: " . ARTICLES_PKG_URL . "admin/admin_topics.php" );
+    die;
 } elseif( isset( $_REQUEST['fRemoveTopicImage'] ) ) {
 	$gContent->removeTopicImage();
 }

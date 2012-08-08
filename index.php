@@ -17,7 +17,7 @@ $gBitSystem->verifyPermission( 'p_articles_read' );
 if( !empty( $_REQUEST['article_id'] ) ) {
 	$param = array ( 'article_id' => ( int )$_REQUEST['article_id'] );
 	header( "Location: ".BitArticle::getDisplayUrlFromHash( $param ) );
-	exit;
+	die;
 }
 
 // Display the template

@@ -30,7 +30,7 @@ $gBitSmarty->assign_by_ref( 'topic_info', $gContent->mInfo);
 if( isset( $_REQUEST["fSubmitSaveTopic"] ) ) {
     $gContent->storeTopic( $_REQUEST );
 	$gContent->loadTopic();
-    bit_redirect(( ARTICLES_PKG_URL . "admin/admin_topics.php" );
+    bit_redirect( ARTICLES_PKG_URL . "admin/admin_topics.php" );
 } elseif( isset( $_REQUEST['fRemoveTopicImage'] ) ) {
 	$gContent->removeTopicImage();
 }

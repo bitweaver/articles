@@ -27,7 +27,7 @@
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
 									<input type="text" name="type_name[{$types[user].article_type_id}]" value="{$types[user].type_name}" />
-									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{biticon iname=edit-find iexplain="List Articles"}</a>
+									<a href="{$smarty.const.ARTICLES_PKG_URL}index.php?type_id={$types[user].article_type_id}">{booticon iname="icon-search"   iexplain="List Articles"}</a>
 								</td>
 								{foreach from=$artTypes item=artType key=key}
 									<td style="text-align:center;"><input title="{$artType.name}" type="checkbox" name="{$key}[{$types[user].article_type_id}]" {if $types[user].$key eq 'y'}checked="checked"{/if} /></td>

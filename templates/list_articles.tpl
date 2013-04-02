@@ -139,7 +139,7 @@
 						{/if}
 						<td style="text-align:right;">
 							{if $article.status_id eq $smarty.const.ARTICLE_STATUS_PENDING and $gBitUser->hasPermission( 'p_articles_approve_submission' )}
-								{smartlink ititle="Approve Article" ibiticon="icons/dialog-ok" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id content_id=$article.content_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
+								{smartlink ititle="Approve Article" booticon="icon-ok" sort_mode=$sort_mode status_id=$smarty.request.status_id article_id=$article.article_id content_id=$article.content_id set_status_id=$smarty.const.ARTICLE_STATUS_APPROVED action=approve}
 							{/if}
 
 							{if $gBitUser->hasPermission( 'p_articles_update' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}

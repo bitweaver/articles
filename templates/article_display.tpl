@@ -13,7 +13,7 @@
 		{if $gContent->hasUpdatePermission()}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{booticon iname="icon-edit" ipackage="icons" iexplain=edit}</a>
 		{/if}
-		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="document-print" iexplain=print}</a>*}
+		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{booticon iname="icon-print"  ipackage="icons"  iexplain=print}</a>*}
 		{if $gContent->hasUserPermission( 'p_articles_remove' )}
 			{smartlink ititle="Remove" ipackage=articles ifile="list.php" booticon="icon-trash" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}

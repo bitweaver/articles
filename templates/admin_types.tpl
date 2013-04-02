@@ -82,7 +82,7 @@
 							{/foreach}
 							<li>
 								{if $types[user].article_cnt eq 0}
-									<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php?remove_type={$types[user].article_type_id}">{biticon ipackage="icons" iname="edit-delete" iexplain=remove}</a> {tr}Remove Type{/tr}
+									<a title="{tr}Remove{/tr}" href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_types.php?remove_type={$types[user].article_type_id}">{booticon iname="icon-trash" ipackage="icons" iexplain=remove}</a> {tr}Remove Type{/tr}
 								{else}
 									{tr}Number of Entries{/tr}: {$types[user].article_cnt}
 								{/if}

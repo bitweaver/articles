@@ -11,7 +11,7 @@
 			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="icons/appointment-new" article_id=$article.article_id}
 		{/if}
 		{if $gContent->hasUpdatePermission()}
-			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain=edit}</a>
+			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{booticon iname="icon-edit" ipackage="icons" iexplain=edit}</a>
 		{/if}
 		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="document-print" iexplain=print}</a>*}
 		{if $gContent->hasUserPermission( 'p_articles_remove' )}

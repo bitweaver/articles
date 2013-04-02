@@ -74,9 +74,9 @@
 						{smartlink ititle='edit' ibiticon="icons/accessories-text-editor" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
 						{* smartlink ititle='permissions' ibiticon="icons/emblem-shared" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id` *}
 						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage="icons" iname="edit-delete" iforce=icon_text iexplain="Remove Topic"}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{booticon iname="icon-trash" ipackage="icons" iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />
-						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{biticon ipackage="icons" iname="edit-delete" iforce=icon_text iexplain="Remove Topic and its Articles"}</a>
+						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopicAll=1&amp;topic_id={$topics[user].topic_id}">{booticon iname="icon-trash" ipackage="icons" iforce=icon_text iexplain="Remove Topic and its Articles"}</a>
 					</td>
 				</tr>
 			{sectionelse}

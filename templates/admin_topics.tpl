@@ -14,7 +14,7 @@
 		{form legend="Create a new Topic" enctype="multipart/form-data"}
 			<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Topic Title" for="topic_name"}
 				{forminput}
 					<input type="text" id="topic_name" name="topic_name" />
@@ -22,7 +22,7 @@
 				{/forminput}
 			</div> 
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Upload Image" for="t-image"}
 				{forminput}
 					<input name="upload" id="t-image" type="file" />
@@ -30,7 +30,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row submit">
+			<div class="control-group submit">
 				<input type="submit" name="fSubmitAddTopic" value="{tr}Add Topic{/tr}" />
 			</div>
 		{/form}

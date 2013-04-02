@@ -105,7 +105,7 @@
 		</div>
 
 		{if $article.status_id == $smarty.const.ARTICLE_STATUS_PENDING && !$preview}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Approve or deny Submission"}
 				{forminput}
 					{if $gContent->hasUserPermission( 'p_articles_approve_submission' )}

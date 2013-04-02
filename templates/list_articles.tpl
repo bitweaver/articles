@@ -13,7 +13,7 @@
 
 		<div class="navbar">
 			<ul>
-				<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
+				<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 				{if $gBitSystem->isFeatureActive( 'articles_list_title' )}
 					<li>{smartlink ititle='Title' isort='title' offset=$offset type=$find_type topic=$find_topic}</li>
 				{/if}
@@ -143,11 +143,11 @@
 							{/if}
 
 							{if $gBitUser->hasPermission( 'p_articles_update' ) or ( $article.author eq $user and $article.creator_edit eq 'y' )}
-								{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" article_id=$article.article_id}
+								{smartlink ititle="Edit" ifile="edit.php" booticon="icon-edit" article_id=$article.article_id}
 							{/if}
 
 							{if $gBitUser->hasPermission( 'p_articles_remove' )}
-								{smartlink ititle="Remove" ibiticon="icons/edit-delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
+								{smartlink ititle="Remove" booticon="icon-trash" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 							{/if}
 						</td>
 					</tr>

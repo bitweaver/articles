@@ -8,14 +8,14 @@
 	<div class="floaticon">
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='icon' serviceHash=$article}
 		{if $gContent->hasUserPermission( 'p_articles_read_history' ) && !$version && $article.version > 1}
-			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" ibiticon="icons/appointment-new" article_id=$article.article_id}
+			{smartlink ititle="View History" ipackage=articles ifile="article_history.php" booticon="icon-time" article_id=$article.article_id}
 		{/if}
 		{if $gContent->hasUpdatePermission()}
 			<a href="{$smarty.const.ARTICLES_PKG_URL}edit.php?article_id={$article.article_id}">{booticon iname="icon-edit" ipackage="icons" iexplain=edit}</a>
 		{/if}
 		{*<a style="display:none;" href="{$smarty.const.ARTICLES_PKG_URL}print.php?article_id={$article.article_id}">{biticon ipackage="icons" iname="document-print" iexplain=print}</a>*}
 		{if $gContent->hasUserPermission( 'p_articles_remove' )}
-			{smartlink ititle="Remove" ipackage=articles ifile="list.php" ibiticon="icons/edit-delete" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
+			{smartlink ititle="Remove" ipackage=articles ifile="list.php" booticon="icon-trash" action=remove remove_article_id=$article.article_id status_id=$smarty.request.status_id}
 		{/if}
 	</div><!-- end .footer -->
 

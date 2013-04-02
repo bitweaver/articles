@@ -34,7 +34,7 @@
 								{/foreach}
 								<td style="text-align:center;">
 									{if $types[user].article_cnt eq 0}
-										{smartlink ititle="remove" ibiticon="icons/edit-delete" remove_type=`$types[user].article_type_id`}
+										{smartlink ititle="remove" booticon="icon-trash" remove_type=`$types[user].article_type_id`}
 									{else}
 										{$types[user].article_cnt}
 									{/if}

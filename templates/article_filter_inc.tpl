@@ -16,7 +16,7 @@
 					{html_options options=$filter.topic values=$filter.topic name=topic_id selected=$smarty.request.topic_id}
 				</td>
 				<td>
-					<input type="submit" value="Apply filter">
+					<input type="submit" class="btn" value="Apply filter">
 				</td>
 			</tr>
 		</table>

@@ -45,7 +45,7 @@
 					{formhelp note='hover over the number to see the column header'}
 
 					<div class="control-group submit">
-						<input type="submit" name="update_type" value="{tr}Apply changes{/tr}" /><br />
+						<input type="submit" class="btn" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
 
@@ -91,7 +91,7 @@
 					{/section}
 
 					<div class="control-group submit">
-						<input type="submit" name="update_type" value="{tr}Apply changes{/tr}" /><br />
+						<input type="submit" class="btn" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
 			{/jstab}
@@ -107,7 +107,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" name="add_type" value="{tr}Create new article type{/tr}" />
+						<input type="submit" class="btn" name="add_type" value="{tr}Create new article type{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

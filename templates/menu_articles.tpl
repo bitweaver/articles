@@ -1,5 +1,6 @@
 {strip}
-<ul>
+<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>
+<ul class="{$packageMenuClass}">
 	{if $gBitUser->hasPermission( 'p_articles_read' )}
 		<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}index.php">{booticon iname="icon-home" ipackage="icons" iexplain="Articles Home" ilocation=menu}</a></li>
 		{if $gBitUser->hasPermission( 'p_articles_approve_submission ' ) ||
@@ -19,7 +20,7 @@
 			$gBitUser->hasPermission( 'p_articles_approve_submission ' ) ||
 			$gBitUser->hasPermission( 'p_articles_remove_submission ' ) ||
 			($gBitSystem->isFeatureActive('articles_auto_approve') && $gBitUser->isRegistered())}
-			<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id={$smarty.const.ARTICLE_STATUS_PENDING}">{booticon iname="icon-list" ipackage="icons" iexplain="List Submissions" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.ARTICLES_PKG_URL}list.php?status_id="{$smarty.const.ARTICLE_STATUS_PENDING}">{booticon iname="icon-list" ipackage="icons" iexplain="List Submissions" ilocation="menu"}</a></li>
 		{/if}
 	{/if}
 	{if $gBitUser->hasPermission( 'p_articles_admin' )}

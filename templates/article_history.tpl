@@ -63,7 +63,7 @@
 				<tr class="odd">
 					<td colspan="4">
 						<a href="{$gContent->mInfo.display_url}">{tr}Current{/tr}</a>
-						&nbsp;&bull;&nbsp;{smartlink ititle="Source" article_id=`$gContent->mArticleId` source="current"}
+						&nbsp;&bull;&nbsp;{smartlink ititle="Source" article_id=$gContent->mArticleId source="current"}
 					</td>
 				</tr>
 
@@ -76,13 +76,13 @@
 					</tr>
 					<tr class="{cycle values='even,odd'}">
 						<td colspan="3">
-							{smartlink ititle="View" article_id=`$gContent->mArticleId` preview=`$item.version`}
-							&nbsp;&bull;&nbsp;{smartlink ititle="Compare" article_id=`$gContent->mArticleId` compare=`$item.version`}
-							&nbsp;&bull;&nbsp;{smartlink ititle="Difference" article_id=`$gContent->mArticleId` diff2=`$item.version`}
-							&nbsp;&bull;&nbsp;{smartlink ititle="Source" article_id=`$gContent->mArticleId` source=`$item.version`}
+							{smartlink ititle="View" article_id=$gContent->mArticleId preview=$item.version}
+							&nbsp;&bull;&nbsp;{smartlink ititle="Compare" article_id=$gContent->mArticleId compare=$item.version}
+							&nbsp;&bull;&nbsp;{smartlink ititle="Difference" article_id=$gContent->mArticleId diff2=$item.version}
+							&nbsp;&bull;&nbsp;{smartlink ititle="Source" article_id=$gContent->mArticleId source=$item.version}
 							{* Articles doesnt have rollback option yet
 							{if $gContent->hasUserPermission( 'p_articles_rollback' )}
-								&nbsp;&bull;&nbsp;{smartlink iurl="rollback.php" ititle="Rollback" article_id=`$gContent->mArticleId` version=`$item.version`}
+								&nbsp;&bull;&nbsp;{smartlink iurl="rollback.php" ititle="Rollback" article_id=$gContent->mArticleId version=$item.version}
 							{/if}
 							*}
 						</td>

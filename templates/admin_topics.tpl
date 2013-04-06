@@ -64,15 +64,15 @@
 
 					<td style="text-align:center;">
 						{if $topics[user].active_topic eq 'n'}
-							{smartlink ititle='activate' booticon="icon-remove-circle" fActivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='activate' booticon="icon-remove-circle" fActivateTopic=1 topic_id=$topics[user].topic_id}
 						{else}
-							{smartlink ititle='deactivate' booticon="icon-ok-circle" fDeactivateTopic=1 topic_id=`$topics[user].topic_id`}
+							{smartlink ititle='deactivate' booticon="icon-ok-circle" fDeactivateTopic=1 topic_id=$topics[user].topic_id}
 						{/if}
 					</td>
 
 					<td align="right">
-						{smartlink ititle='edit' booticon="icon-edit" ifile='edit_topic.php' topic_id=`$topics[user].topic_id`}
-						{* smartlink ititle='permissions' booticon="icon-key" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=`$topics[user].topic_id` *}
+						{smartlink ititle='edit' booticon="icon-edit" ifile='edit_topic.php' topic_id=$topics[user].topic_id}
+						{* smartlink ititle='permissions' booticon="icon-key" ipackage='kernel' ifile='object_permissions.php' objectName="Topic `$topics[user].name`" object_type=topic permType=topics object_id=$topics[user].topic_id *}
 						<br />
 						<a href="{$smarty.const.ARTICLES_PKG_URL}admin/admin_topics.php?fRemoveTopic=1&amp;topic_id={$topics[user].topic_id}">{booticon iname="icon-trash" ipackage="icons" iforce=icon_text iexplain="Remove Topic"}</a>
 						<br />

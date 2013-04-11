@@ -44,15 +44,15 @@ $getHash['topic_id']      = !empty( $module_params['topic_id'] ) ? $module_param
 $articles = $articles->getList( $getHash );
 
 if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name'] ) ) && empty($moduleParams['title']) && !empty( $articles ) ) {
-	$gBitSmarty->assign( 'moduleTitle', $articles[0]['topic_name'] );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $articles[0]['topic_name'] );
 } elseif( !empty($moduleParams['title']) ) {
-	$gBitSmarty->assign( 'moduleTitle', $moduleParams['title'] );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $moduleParams['title'] );
 } else {
-	$gBitSmarty->assign( 'moduleTitle', "Articles" );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( "Articles" );
 }
 
-$gBitSmarty->assign( 'params', !empty( $moduleParams['params'] ) ? $moduleParams['params'] : '');
+$_template->tpl_vars['params'] = new Smarty_variable( !empty( $moduleParams['params'] );
 $gBitSmarty->assign( 'listtype',
 	( isset($module_params['list_type']) && (strncasecmp($module_params['list_type'], 'u', 1) == 0) ) ? 'ul' : 'ol' );
-$gBitSmarty->assign( 'modArticles', $articles );
+$_template->tpl_vars['modArticles'] = new Smarty_variable( $articles );
 ?>

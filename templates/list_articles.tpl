@@ -37,7 +37,7 @@
 		{include file="bitpackage:articles/article_filter_inc.tpl"}
 
 		{form}
-			<table class="data">
+			<table class="table data">
 				<caption>{tr}Articles Listing{/tr}</caption>
 				<tr>
 					{counter name=cols start=0 print=false}

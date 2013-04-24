@@ -35,7 +35,7 @@
 			</div>
 		{/form}
 
-		<table class="data">
+		<table class="table data">
 			<caption>{tr}List of Topics{/tr}</caption>
 			<tr>
 				<th>{tr}Image{/tr}</th>

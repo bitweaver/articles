@@ -13,7 +13,7 @@
 		{jstabs}
 			{jstab title="Article Types"}
 				{form legend="Modify Article Types"}
-					<table class="data">
+					<table class="table data">
 						<caption>{tr}Article Types{/tr}</caption>
 						<tr>
 							<th style="width:30%;" title="{tr}Name{/tr}">{tr}Name{/tr}</th>

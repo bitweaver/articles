@@ -23,11 +23,10 @@
 			</div>
 
 			<div class="control-group">
-				{formlabel label="Topic Enabled" for="topic_enabled"}
-				{forminput}
-					<input type="checkbox" id="topic_enabled" name="active_topic" {if $gContent->mInfo.active_topic == 'y'}checked="checked"{/if} />
+				<label class="checkbox">
+					<input type="checkbox" id="topic_enabled" name="active_topic" {if $gContent->mInfo.active_topic == 'y'}checked="checked"{/if} />Topic Enabled
 					{formhelp note=""}
-				{/forminput}
+				</label>
 			</div>
 
 			<div class="control-group">

@@ -17,13 +17,13 @@ if( $gBitUser->hasPermission( 'p_articles_admin' ) ) {
 	$_REQUEST['topic_id']    = !empty( $_REQUEST['topic_id'] )    ? $_REQUEST['topic_id']    : NULL;
 	$_REQUEST['type_id']     = !empty( $_REQUEST['type_id'] )     ? $_REQUEST['type_id']     : NULL;
 
-	$gBitSmarty->assign( 'futures', $gContent->getFutureList( $listHash ));
+	$_template->tpl_vars['futures'] = new Smarty_variable( $gContent->getFutureList( $listHash ) );
 } else {
 	$_REQUEST['status_id']   = ARTICLE_STATUS_APPROVED;
 	$_REQUEST['max_records'] = $gBitSystem->getConfig( 'articles_max_list' );
 }
 if ( !empty( $_REQUEST['topic'] ) ) {
-	$gBitSmarty->assign( 'topic', $_REQUEST['topic'] );
+	$_template->tpl_vars['topic'] = new Smarty_variable( $_REQUEST['topic'] );
 }
 
 if( !empty( $moduleParams )) {
@@ -38,8 +38,9 @@ if( !empty( $moduleParams )) {
 BitUser::userCollection( $_REQUEST, $listHash );
 
 $articles = $gContent->getList( $listHash );
-$gBitSmarty->assign( 'articles', $articles );
-$gBitSmarty->assign( 'listInfo', $listHash['listInfo'] );
+$_template->tpl_vars['gContent'] = new Smarty_variable( $gContent );
+$_template->tpl_vars['articles'] = new Smarty_variable( $articles );
+$_template->tpl_vars['listInfo'] = new Smarty_variable( $listHash['listInfo'] );
 
 // show only descriptions on listing page
 $gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
@@ -48,6 +49,6 @@ $gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
 if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {
 	$listHash = array( 'status_id' => ARTICLE_STATUS_PENDING );
 	$submissions = $gContent->getList( $listHash );
-	$gBitSmarty->assign( 'submissions', $submissions );
+	$_template->tpl_vars['submissions'] = new Smarty_variable( $submissions );
 }
 ?>

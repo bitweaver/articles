@@ -41,7 +41,7 @@ $getHash['sort_mode']     = $sort_mode;
 $getHash['max_records']   = !empty( $module_rows ) ? $module_rows : $gBitSystem->getConfig( 'articles_max_list' );
 $getHash['topic_name']    = !empty( $module_params['topic_name'] ) ? $module_params['topic_name'] : NULL;
 $getHash['topic_id']      = !empty( $module_params['topic_id'] ) ? $module_params['topic_id'] : NULL;
-$articles = $articles->getList( $getHash );
+$articlelist = $articles->getList( $getHash );
 
 if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name'] ) ) && empty($moduleParams['title']) && !empty( $articles ) ) {
 	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $articles[0]['topic_name'] );
@@ -53,5 +53,5 @@ if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name
 
 $_template->tpl_vars['params'] = new Smarty_variable( !empty( $moduleParams['params'] ) );
 $_template->tpl_vars['listtype'] = new Smarty_variable(  ( isset($module_params['list_type']) && (strncasecmp($module_params['list_type'], 'u', 1) == 0) ) ? 'ul' : 'ol' );
-$_template->tpl_vars['modArticles'] = new Smarty_variable( $articles );
+$_template->tpl_vars['modArticles'] = new Smarty_variable( $articlelist );
 ?>

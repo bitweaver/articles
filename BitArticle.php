@@ -389,8 +389,12 @@ class BitArticle extends LibertyMime {
 			$thumbHash['source_file'] = $pParamHash['image_attachment_path'];
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
-			$thumbHash['source_file'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
-			$ret = liberty_fetch_thumbnails( $thumbHash );
+			if( $topicImage = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ) ) {
+				global $gThumbSizes;
+				foreach( array_keys( $gThumbSizes ) as $size ) {
+					$ret[$size] = $topicImage;
+				}
+			}
 		}
 
 		return $ret;
@@ -532,10 +536,11 @@ class BitArticle extends LibertyMime {
 				a.`article_id`, a.`description`, a.`author_name`, a.`publish_date`, a.`expire_date`, a.`rating`,
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
-				lch.`hits`,
+				lch.`hits`, uu.`login`,
 				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
+				INNER JOIN      `".BIT_DB_PREFIX."users_users`           uu ON( uu.`user_id`            = lc.`user_id` )
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lc.`content_id`         = lch.`content_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON( atopic.`topic_id`       = a.`topic_id` )

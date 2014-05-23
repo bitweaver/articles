@@ -175,10 +175,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( @BitBase::verifyId( $pTopicId )) {
-			$ret = liberty_fetch_thumbnail_url( array(
-				'source_file'   => BitArticleTopic::getTopicImageBaseUrl( $pTopicId ),
-				'default_image' => $gBitSystem->getConfig( 'articles_image_size', 'small' )
-			));
+			$ret = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/topic_'.$pTopicId.'.jpg';
 		}
 		return $ret;
 	}
@@ -207,7 +204,7 @@ class BitArticleTopic extends BitBase {
         while( $res = $result->fetchRow() ) {
 			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
 			if( empty( $res['topic_image_url'] ) && $res['has_topic_image'] == 'y' ) {
-				$res['topic_image_url'] = BitArticleTopic::getTopicImageStorageUrl( $res['topic_id'] );
+				$res['topic_image_url'] = self::getTopicImageStorageUrl( $res['topic_id'] );
 			}
 
             $ret[] = $res;
@@ -315,7 +312,7 @@ class BitArticleTopic extends BitBase {
 	* @access public
 	**/
 	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
-		$path = BitArticleTopic::getArticleImageStoragePath( NULL, TRUE );
+		$path = self::getArticleImageStoragePath( NULL, TRUE );
 
 		if( $pBasePathOnly ) {
 			return $path;
@@ -330,7 +327,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( !empty( $pTopicId ) ) {
-			return $path.BitArticleTopic::getTopicImageStorageName( $pTopicId );
+			return $path.self::getTopicImageStorageName( $pTopicId );
 		} else {
 			return FALSE;
 		}
@@ -348,8 +345,8 @@ class BitArticleTopic extends BitBase {
 		$ret = FALSE;
 
 		// first we check to see if this is a new type thumbnail. if that fails we'll use the old method
-		if( !( $ret = BitArticleTopic::getTopicImageThumbUrl( $pTopicId ))) {
-			$url = BitArticleTopic::getArticleImageStorageUrl( NULL, TRUE );
+		if( !( $ret = self::getTopicImageThumbUrl( $pTopicId ))) {
+			$url = self::getArticleImageStorageUrl( NULL, TRUE );
 			if( $pBasePathOnly ) {
 				return $url;
 			}
@@ -362,8 +359,8 @@ class BitArticleTopic extends BitBase {
 				}
 			}
 
-			if( is_file( BitArticleTopic::getTopicImageStoragePath( NULL, TRUE ).BitArticleTopic::getTopicImageStorageName( $pTopicId ))) {
-				$ret = $url.BitArticleTopic::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+			if( is_file( self::getTopicImageStoragePath( NULL, TRUE ).self::getTopicImageStorageName( $pTopicId ))) {
+				$ret = $url.self::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 			}
 		}
 
@@ -429,7 +426,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( !empty( $pArticleId ) ) {
-			return $path.BitArticleTopic::getArticleImageStorageName( $pArticleId );
+			return $path.self::getArticleImageStorageName( $pArticleId );
 		} else {
 			return FALSE;
 		}
@@ -457,8 +454,8 @@ class BitArticleTopic extends BitBase {
 			}
 		}
 
-		if( is_file( BitArticleTopic::getArticleImageStoragePath( NULL, TRUE ).BitArticleTopic::getArticleImageStorageName( $pArticleId ) ) ) {
-			return $url.BitArticleTopic::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+		if( is_file( self::getArticleImageStoragePath( NULL, TRUE ).self::getArticleImageStorageName( $pArticleId ) ) ) {
+			return $url.self::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 		} else {
 			return FALSE;
 		}

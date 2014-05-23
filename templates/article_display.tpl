@@ -25,7 +25,7 @@
 			<div class="date">
 				{if $article.show_author eq 'y'}
 					{* can't really use the link here since it only works when the user uses his login name *}
-					{$article.author_name}&nbsp;
+					{displayname hash=$article}&nbsp;
 				{/if}
 
 				{if $article.show_pubdate eq 'y'}

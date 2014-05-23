@@ -43,7 +43,7 @@ $_template->tpl_vars['articles'] = new Smarty_variable( $articles );
 $_template->tpl_vars['listInfo'] = new Smarty_variable( $listHash['listInfo'] );
 
 // show only descriptions on listing page
-$gBitSmarty->assign( 'showDescriptionsOnly', TRUE );
+$_template->tpl_vars['showDescriptionsOnly'] = new Smarty_variable( TRUE );
 
 // display submissions if we have the perm to approve them
 if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {

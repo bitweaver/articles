@@ -51,7 +51,7 @@
 			</div>
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="fSubmitSaveTopic" value="{tr}Update Topic{/tr}" />
+				<input type="submit" class="btn btn-default" name="fSubmitSaveTopic" value="{tr}Update Topic{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

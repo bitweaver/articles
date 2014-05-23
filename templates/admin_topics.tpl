@@ -31,7 +31,7 @@
 			</div>
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="fSubmitAddTopic" value="{tr}Add Topic{/tr}" />
+				<input type="submit" class="btn btn-default" name="fSubmitAddTopic" value="{tr}Add Topic{/tr}" />
 			</div>
 		{/form}
 

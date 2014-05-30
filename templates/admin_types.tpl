@@ -44,7 +44,7 @@
 					</table>
 					{formhelp note='hover over the number to see the column header'}
 
-					<div class="control-group submit">
+					<div class="form-group submit">
 						<input type="submit" class="btn btn-default" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
@@ -90,7 +90,7 @@
 						</ul>
 					{/section}
 
-					<div class="control-group submit">
+					<div class="form-group submit">
 						<input type="submit" class="btn btn-default" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
@@ -98,7 +98,7 @@
 
 			{jstab title="Add Article Type"}
 				{form legend="Create New Article Type"}
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Create new Type" for="add_type"}
 						{forminput}
 							<input type="text" id="add_type" name="type_name" />
@@ -106,7 +106,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group submit">
+					<div class="form-group submit">
 						<input type="submit" class="btn btn-default" name="add_type" value="{tr}Create new article type{/tr}" />
 					</div>
 				{/form}

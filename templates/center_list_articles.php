@@ -1,7 +1,7 @@
 <?php
 // $Header$
 global $gBitSmarty, $gBitSystem, $gQueryUserId, $moduleParams;
-if( !empty( $moduleParams ) ) {
+if ( !empty( $moduleParams ) ) {
 	extract( $moduleParams );
 }
 
@@ -11,7 +11,7 @@ include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
 
 $listHash = array();
 
-if( $gBitUser->hasPermission( 'p_articles_admin' ) ) {
+if ( $gBitUser->hasPermission( 'p_articles_admin' ) ) {
 	$_REQUEST['status_id']   = !empty( $_REQUEST['status_id'] )   ? $_REQUEST['status_id']   : ARTICLE_STATUS_APPROVED;
 	$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig( 'articles_max_list' );
 	$_REQUEST['topic_id']    = !empty( $_REQUEST['topic_id'] )    ? $_REQUEST['topic_id']    : NULL;
@@ -26,7 +26,7 @@ if ( !empty( $_REQUEST['topic'] ) ) {
 	$_template->tpl_vars['topic'] = new Smarty_variable( $_REQUEST['topic'] );
 }
 
-if( !empty( $moduleParams )) {
+if ( !empty( $moduleParams )) {
 	$listHash = array_merge( $_REQUEST, $moduleParams['module_params'] );
 	$listHash['max_records'] = $module_rows;
 	//$listHash['parse_data'] = TRUE;
@@ -46,9 +46,8 @@ $_template->tpl_vars['listInfo'] = new Smarty_variable( $listHash['listInfo'] );
 $_template->tpl_vars['showDescriptionsOnly'] = new Smarty_variable( TRUE );
 
 // display submissions if we have the perm to approve them
-if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {
+if ( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || ( $gBitSystem->isFeatureActive( 'articles_auto_approve' ) && $gBitUser->isRegistered() )) {
 	$listHash = array( 'status_id' => ARTICLE_STATUS_PENDING );
 	$submissions = $gContent->getList( $listHash );
 	$_template->tpl_vars['submissions'] = new Smarty_variable( $submissions );
 }
-?>

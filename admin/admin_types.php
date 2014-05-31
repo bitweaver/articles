@@ -1,7 +1,7 @@
 <?php
 // $Header$
 
-require_once( '../../kernel/setup_inc.php' );
+require_once '../../kernel/setup_inc.php';
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
 
@@ -89,4 +89,3 @@ $gBitSmarty->assign( 'types', $types );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/admin_types.tpl',  tra('Edit Article Types') , array( 'display_mode' => 'admin' ));
-?>

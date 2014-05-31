@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
 
@@ -80,4 +80,3 @@ $gBitSmarty->assign( 'listpages', $listArticles );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:articles/list_articles.tpl', tra( "Articles" ), array( 'display_mode' => 'list' ));
-?>

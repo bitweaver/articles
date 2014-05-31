@@ -388,7 +388,6 @@ array( 'DATADICT' => array(
 	),
 );
 
-if( isset( $upgrades[$gUpgradeFrom][$gUpgradeTo] ) ) {
+if ( isset( $upgrades[$gUpgradeFrom][$gUpgradeTo] ) ) {
 	$gBitSystem->registerUpgrade( ARTICLES_PKG_NAME, $upgrades[$gUpgradeFrom][$gUpgradeTo] );
 }
-?>

@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 
 include_once( LIBERTY_PKG_PATH . 'LibertyContent.php' );
 include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
@@ -64,4 +64,3 @@ $rankList = $gContent->getContentRanking( $_REQUEST );
 $gBitSmarty->assign( 'rankList', $rankList );
 
 $gBitSystem->display( 'bitpackage:liberty/rankings.tpl', tra( "Article Rankings" ) , array( 'display_mode' => 'display' ));
-?>

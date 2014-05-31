@@ -20,4 +20,3 @@ $gBitInstaller->registerPackageUpgrade( $infoHash, array(
 		array( 'DROPSEQUENCE' => array( 'article_topics_t_id_seq' ) ),
 	)),
 ));
-?>

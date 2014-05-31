@@ -16,7 +16,7 @@
 /**
  * required setup
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
@@ -56,8 +56,6 @@ $gBitSmarty->assign_by_ref( 'listInfo', $history['listInfo'] );
 $numPages = ceil( $gContent->getHistoryCount() / $gBitSystem->getConfig('max_records', 20) );
 $gBitSmarty->assign( 'numPages', $numPages );
 
-
 // Display the template
 $gBitSmarty->assign_by_ref( 'gContent', $gContent );
 $gBitSystem->display( 'bitpackage:articles/article_history.tpl', NULL, array( 'display_mode' => 'display' ));
-?>

@@ -54,4 +54,3 @@ if( ( !empty( $module_params['topic_id'] ) || !empty( $module_params['topic_name
 $_template->tpl_vars['params'] = new Smarty_variable( !empty( $moduleParams['params'] ) );
 $_template->tpl_vars['listtype'] = new Smarty_variable(  ( isset($module_params['list_type']) && (strncasecmp($module_params['list_type'], 'u', 1) == 0) ) ? 'ul' : 'ol' );
 $_template->tpl_vars['modArticles'] = new Smarty_variable( $articlelist );
-?>

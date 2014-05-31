@@ -1,6 +1,6 @@
 <?php 
 // $Header$
-require_once( '../../kernel/setup_inc.php' );
+require_once '../../kernel/setup_inc.php';
 
 include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_PATH.'lookup_article_topic_inc.php' );
@@ -28,4 +28,3 @@ $topics = BitArticleTopic::getTopicList();
 $gBitSmarty->assign( 'topics', $topics );
 
 $gBitSystem->display( 'bitpackage:articles/admin_topics.tpl', tra( 'Edit Topics' ) , array( 'display_mode' => 'admin' ));
-?>

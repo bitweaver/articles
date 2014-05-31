@@ -27,4 +27,3 @@ if( $gBitSystem->isFeatureActive( 'articles_display_filter_bar' ) && ( $gBitUser
 
 	$gBitSmarty->assign( 'filter', $filter );
 }
-?>

@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 
 include_once( ARTICLES_PKG_PATH . 'art_lib.php' );
 
@@ -65,10 +65,6 @@ if ( isset( $_REQUEST["article_id"] ) ) {
     $heading = $article_data["heading"];
     $gBitSmarty->assign( 'parsed_body', $tikilib->parse_data( $body ) );
     $gBitSmarty->assign( 'parsed_heading', $tikilib->parse_data( $heading ) );
-} 
-
-
+}
 
 $gBitSmarty->display( "bitpackage:articles/print_article.tpl" );
-
-?>

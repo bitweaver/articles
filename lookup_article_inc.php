@@ -30,4 +30,3 @@ if( empty( $gContent ) || !is_object( $gContent ) ) {
 	$gBitSmarty->clear_assign( 'gContent' );
 	$gBitSmarty->assign( 'gContent', $gContent );
 }
-?>

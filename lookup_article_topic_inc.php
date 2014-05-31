@@ -26,4 +26,3 @@
 		}
 		$gBitSmarty->assign_by_ref( 'gContent', $gContent );
 	}
-?>

@@ -26,4 +26,3 @@ if( $gBitSystem->isPackageActive( 'articles' ) ) {
 
 	$gBitSystem->registerNotifyEvent( array( "article_submitted" => tra( "A user submits an article" ) ) );
 }
-?>

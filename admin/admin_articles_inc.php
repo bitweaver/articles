@@ -100,4 +100,3 @@ if( !empty( $_REQUEST['store_settings'] )) {
 	simple_set_int( "articles_description_length", ARTICLES_PKG_NAME );
 	simple_set_value( "articles_image_size", ARTICLES_PKG_NAME );
 }
-?>

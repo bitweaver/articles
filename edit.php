@@ -12,17 +12,17 @@
 /**
  * Initialization
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 require_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
 
-include_once('lookup_article_inc.php');
+include_once 'lookup_article_inc.php';
 
-if( $gContent->isValid() ){
+if ( $gContent->isValid() ) {
 	$gContent->verifyUpdatePermission();
-}else{
+} else {
 	$gContent->verifyCreatePermission();
 }
 
@@ -90,4 +90,3 @@ $gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 // Display the Index Template
 $gBitSmarty->assign( 'show_page_bar', 'n' );
 $gBitSystem->display( 'bitpackage:articles/edit_article.tpl', tra( "Articles" ) , array( 'display_mode' => 'edit' ));
-?>

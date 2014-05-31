@@ -10,7 +10,7 @@
  */
 // ensure that we use absolute URLs everywhere
 $_REQUEST['uri_mode'] = TRUE;
-require_once( "../kernel/setup_inc.php" );
+require_once '../kernel/setup_inc.php';
 
 $gBitSystem->verifyPackage( 'articles' );
 $gBitSystem->verifyPackage( 'rss' );
@@ -53,7 +53,7 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 		$parseHash['data'] = preg_replace( LIBERTY_SPLIT_REGEX, "", $feed['data'] );
 		$item->description = $articles->parseData( $parseHash );
 
-		$item->date = ( int )$feed['publish_date'];
+		$item->date = (int) $feed['publish_date'];
 		$item->source = BIT_ROOT_URI;
 		$item->author = $feed['author_name'];
 
@@ -67,4 +67,3 @@ if( !$gBitUser->hasPermission( 'p_articles_read' ) ) {
 	// finally we are ready to serve the data
 	echo $rss->saveFeed( $rss_version_name, $cacheFile );
 }
-?>

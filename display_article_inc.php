@@ -29,4 +29,3 @@ if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 
 // Display the Index Template
 $gBitSystem->display( 'bitpackage:articles/read_article.tpl', @$gContent->mInfo['title'] , array( 'display_mode' => 'display' ));
-?>

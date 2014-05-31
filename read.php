@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once( '../kernel/setup_inc.php' );
+require_once '../kernel/setup_inc.php';
 
 require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
 
@@ -62,4 +62,3 @@ if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 
 // Display the Index Template
 $gBitSystem->display( 'bitpackage:articles/read_article.tpl', @$gContent->mInfo['title'] , array( 'display_mode' => 'display' ));
-?>

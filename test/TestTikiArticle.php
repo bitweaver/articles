@@ -1,20 +1,20 @@
 <?php
-require_once('../../kernel/setup_inc.php');
+require_once '../../kernel/setup_inc.php';
 require_once(ARTICLES_PKG_PATH.'BitArticle.php');
 
-class TestBitArticle extends Test {
+class TestBitArticle extends Test
+{
+    public $test;
+    public $id;
+    public $count;
 
-    var $test;
-    var $id;
-    var $count;
-
-    function TestBitArticle()
+    public function TestBitArticle()
     {
         $this->test = new BitArticle();
         Assert::equalsTrue($this->test != NULL, 'Error during initialisation');
     }
 
-    function testGetItems()
+    public function testGetItems()
     {
 	$filter = array();
         $list = $this->test->getList($filter);
@@ -22,7 +22,7 @@ class TestBitArticle extends Test {
         Assert::equalsTrue(is_array($list));
     }
 
-    function testStoreItem()
+    public function testStoreItem()
     {
 	$newItemHash = array(
 		"title" => "Test Title",
@@ -47,35 +47,35 @@ class TestBitArticle extends Test {
         Assert::equalsTrue($this->test->store($newItemHash));
     }
 
-    function testIsValidItem()
+    public function testIsValidItem()
     {
         Assert::equalsTrue($this->test->isValid());
     }
 
-    function testNullItem()
+    public function testNullItem()
     {
 	$this->id = $this->test->mArticleId;
         $this->test = NULL;
         Assert::equals($this->test, NULL);
     }
 
-    function testLoadItem()
+    public function testLoadItem()
     {
         $this->test = new BitArticle($this->id);
         Assert::equals($this->test->load(), 37);
     }
 
-    function testUrlItem()
+    public function testUrlItem()
     {
         Assert::equalsTrue($this->test->getDisplayUrl() != "");
     }
 
-    function testExpungeItem()
+    public function testExpungeItem()
     {
         Assert::equalsTrue($this->test->expunge());
     }
 
-    function testCountItems()
+    public function testCountItems()
     {
 	$filter = array();
         $count = count($this->test->getList($filter));
@@ -83,4 +83,3 @@ class TestBitArticle extends Test {
     }
 
 }
-?>

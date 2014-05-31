@@ -42,7 +42,8 @@ $gLibertySystem->registerPlugin( PLUGIN_GUID_DATAARTICLES, $pluginParams );
 $gLibertySystem->registerDataTag( $pluginParams['tag'], PLUGIN_GUID_DATAARTICLES );
 
 // Help Routine
-function data_articles_help() {
+function data_articles_help()
+{
 	$help =
 		'<table class="data help">'
 			.'<tr>'
@@ -150,4 +151,3 @@ function data_articles($data, $params) { // No change in the parameters with Cly
 		return "<div class=error>The articles package is not active.</div>";
 	}
 }
-?>

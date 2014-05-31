@@ -19,9 +19,10 @@ require_once(ARTICLES_PKG_PATH.'BitArticle.php');
  */
 class BitArticleType extends BitBase
 {
-	var $mTypeId;
+	public $mTypeId;
 
-	function __construct($iTypeId = NULL) {
+	public function __construct($iTypeId = NULL)
+	{
 		$this->mTypeId = NULL;
 		parent::__construct();
 		if ($iTypeId) {
@@ -29,11 +30,13 @@ class BitArticleType extends BitBase
 		}
 	}
 
-	function isValid() {
+	public function isValid()
+	{
 		return (@BitBase::verifyId($this->mTypeId));
 	}
 
-	function loadType($iTypeId) {
+	public function loadType($iTypeId)
+	{
 		$ret = NULL;
 
 		if (!$this->mTypeId) {
@@ -52,12 +55,13 @@ class BitArticleType extends BitBase
 		return $ret;
 	}
 
-	function verify(&$iParamHash) {
+	public function verify(&$iParamHash)
+	{
 		$isNewType = FALSE;
 
 		// Validate the (optional) topic_id parameter
 		if (@BitBase::verifyId($iParamHash['article_type_id'])) {
-			$cleanHash['article_type_id'] = (int)$iParamHash['article_type_id'];
+			$cleanHash['article_type_id'] = (int) $iParamHash['article_type_id'];
 		} else {
 			$isNewType = TRUE;
 			$cleanHash['article_type_id'] = NULL;
@@ -92,7 +96,8 @@ class BitArticleType extends BitBase
 		return(count($this->mErrors) == 0);
 	}
 
-	function storeType(&$iParamHash) {
+	public function storeType(&$iParamHash)
+	{
 		global $gLibertySystem;
 		global $gBitUser;
 
@@ -117,7 +122,8 @@ class BitArticleType extends BitBase
 		$this->mTypeId = $iParamHash['article_type_id'];
 	}
 
-	function removeType($iTypeId = NULL) {
+	public function removeType($iTypeId = NULL)
+	{
 		if (!$iTypeId) {
 		 	if (!$this->mTypeId) {
 				$this->mErrors[] = tra("Invalid type id given");
@@ -133,7 +139,8 @@ class BitArticleType extends BitBase
 		$rs = $this->mDb->query($sql, array($iTypeId));
 	}
 
-	public static function getTypeList() {
+	public static function getTypeList()
+	{
 		global $gBitSystem;
 
 		$query = "SELECT * FROM `" . BIT_DB_PREFIX . "article_types`";

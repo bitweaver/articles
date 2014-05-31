@@ -32,14 +32,14 @@ define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 /**
  * @package articles
  */
-class BitArticle extends LibertyMime {
+class BitArticle extends LibertyMime
+{
 	/**
 	* Primary key for articles
-	* @access public
 	*/
-	var $mArticleId;
-	var $mTypeId;
-	var $mTopicId;
+	public $mArticleId;
+	public $mTypeId;
+	public $mTopicId;
 
 	/**
 	* Initiate the articles class
@@ -47,7 +47,8 @@ class BitArticle extends LibertyMime {
 	* @param $pContentId content id of the article we want to view
 	* @access private
 	**/
-	function BitArticle( $pArticleId=NULL, $pContentId=NULL ) {
+	public function BitArticle($pArticleId=NULL, $pContentId=NULL)
+	{
 		parent::__construct();
 		$this->registerContentType(
 			BITARTICLE_CONTENT_TYPE_GUID, array(
@@ -77,8 +78,9 @@ class BitArticle extends LibertyMime {
 	* Load the data from the database
 	* @access public
 	**/
-	function load( $pContentId = NULL, $pPluginParams = NULL ) {
-		if( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
+	public function load($pContentId = NULL, $pPluginParams = NULL)
+	{
+		if ( @$this->verifyId( $this->mArticleId ) || @$this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
 			$lookupColumn = @$this->verifyId( $this->mArticleId ) ? 'article_id' : 'content_id';
@@ -103,7 +105,7 @@ class BitArticle extends LibertyMime {
 			$result = $this->mDb->query( $query, $bindVars );
 
 			global $gBitSystem;
-			if( $result && $result->numRows() ) {
+			if ( $result && $result->numRows() ) {
 				$this->mInfo = $result->fetchRow();
 
 				// if a custom image for the article exists, use that, then use an attachment, then use the topic image
@@ -128,7 +130,7 @@ class BitArticle extends LibertyMime {
 
 				LibertyMime::load();
 
-				if( !empty( $this->mInfo['primary_attachment_id'] ) && !empty( $this->mStorage[$this->mInfo['primary_attachment_id']] )) {
+				if ( !empty( $this->mInfo['primary_attachment_id'] ) && !empty( $this->mStorage[$this->mInfo['primary_attachment_id']] )) {
 					$this->mInfo['primary_attachment'] = &$this->mStorage[$this->mInfo['primary_attachment_id']];
 				}
 
@@ -147,17 +149,18 @@ class BitArticle extends LibertyMime {
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
 	* @access public
 	**/
-	function store( &$pParamHash ) {
+	public function store(&$pParamHash)
+	{
 		global $gBitSystem;
 		$this->mDb->StartTrans();
-		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
+		if ( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."articles";
 
-			if( $this->isValid() ) {
+			if ( $this->isValid() ) {
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['article_store'], array( "article_id" => $this->mArticleId ));
 			} else {
 				$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
-				if( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
+				if ( isset( $pParamHash['article_id'] )&& is_numeric( $pParamHash['article_id'] ) ) {
 					// if pParamHash['article_id'] is set, someone is requesting a particular article_id. Use with caution!
 					$pParamHash['article_store']['article_id'] = $pParamHash['article_id'];
 				} else {
@@ -180,56 +183,57 @@ class BitArticle extends LibertyMime {
 	* @return bool TRUE on success, FALSE if verify failed. If FALSE, $this->mErrors will have reason why
 	* @access private
 	**/
-	function verify( &$pParamHash ) {
+	public function verify(&$pParamHash)
+	{
 		global $gBitUser, $gBitSystem;
 
 		// make sure we're all loaded up of we have a mArticleId
-		if( $this->mArticleId && empty( $this->mInfo ) ) {
+		if ( $this->mArticleId && empty( $this->mInfo ) ) {
 			$this->load();
 		}
 
-		if( @$this->verifyId( $this->mInfo['content_id'] ) ) {
+		if ( @$this->verifyId( $this->mInfo['content_id'] ) ) {
 			$pParamHash['content_id'] = $this->mInfo['content_id'];
 		}
 
 		// It is possible a derived class set this to something different
-		if( empty( $pParamHash['content_type_guid'] )&& !empty( $this->mContentTypeGuid ) ) {
+		if ( empty( $pParamHash['content_type_guid'] )&& !empty( $this->mContentTypeGuid ) ) {
 			$pParamHash['content_type_guid'] = $this->mContentTypeGuid;
 		}
 
-		if( @$this->verifyId( $pParamHash['content_id'] ) ) {
+		if ( @$this->verifyId( $pParamHash['content_id'] ) ) {
 			$pParamHash['article_store']['content_id'] = $pParamHash['content_id'];
 		}
 
-		if( !empty( $pParamHash['author_name'] ) ) {
+		if ( !empty( $pParamHash['author_name'] ) ) {
 			$pParamHash['article_store']['author_name'] = $pParamHash['author_name'];
 		}
 
-		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
-			$pParamHash['article_store']['topic_id'] =( int )$pParamHash['topic_id'];
+		if ( @$this->verifyId( $pParamHash['topic_id'] ) ) {
+			$pParamHash['article_store']['topic_id'] =(int) $pParamHash['topic_id'];
 		}
 
-		if( @$this->verifyId( $pParamHash['article_type_id'] ) ) {
-			$pParamHash['article_store']['article_type_id'] =( int )$pParamHash['article_type_id'];
+		if ( @$this->verifyId( $pParamHash['article_type_id'] ) ) {
+			$pParamHash['article_store']['article_type_id'] =(int) $pParamHash['article_type_id'];
 		}
 
-		if( !empty( $pParamHash['format_guid'] ) ) {
+		if ( !empty( $pParamHash['format_guid'] ) ) {
 			$pParamHash['content_store']['format_guid'] = $pParamHash['format_guid'];
 		}
 
 		// we do the substr on load. otherwise we need to store the same data twice.
-		if( !empty( $pParamHash['edit'] ) ) {
+		if ( !empty( $pParamHash['edit'] ) ) {
 			$pParamHash['content_store']['data'] = $pParamHash['edit'];
 		}
 
-		if( !empty( $pParamHash['rating'] ) ) {
-			$pParamHash['article_store']['rating'] =( int )( $pParamHash['rating'] );
+		if ( !empty( $pParamHash['rating'] ) ) {
+			$pParamHash['article_store']['rating'] =(int) ( $pParamHash['rating'] );
 		}
 
 		// check for name issues, first truncate length if too long
-		if( !empty( $pParamHash['title'] ) ) {
-			if( !$this->isValid() ) {
-				if( empty( $pParamHash['title'] ) ) {
+		if ( !empty( $pParamHash['title'] ) ) {
+			if ( !$this->isValid() ) {
+				if ( empty( $pParamHash['title'] ) ) {
 					$this->mErrors['title'] = 'You must specify a title.';
 				} else {
 					$pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, BIT_CONTENT_MAX_TITLE_LEN );
@@ -237,12 +241,12 @@ class BitArticle extends LibertyMime {
 			} else {
 				$pParamHash['content_store']['title'] =( isset( $pParamHash['title'] ))? substr( $pParamHash['title'], 0, BIT_CONTENT_MAX_TITLE_LEN ): '';
 			}
-		} else if( empty( $pParamHash['title'] ) ) {
+		} elseif ( empty( $pParamHash['title'] ) ) {
 			// no name specified
 			$this->mErrors['title'] = 'You must specify a title';
 		}
 
-		if( !empty( $pParamHash['publish_Month'] ) ) {
+		if ( !empty( $pParamHash['publish_Month'] ) ) {
 			$dateString = $this->mDate->gmmktime(
 				$pParamHash['publish_Hour'],
 				$pParamHash['publish_Minute'],
@@ -253,15 +257,15 @@ class BitArticle extends LibertyMime {
 			);
 
 			$timestamp = $this->mDate->getUTCFromDisplayDate( $dateString );
-			if( $timestamp !== -1 ) {
+			if ($timestamp !== -1) {
 				$pParamHash['publish_date'] = $timestamp;
 			}
 		}
-		if( !empty( $pParamHash['publish_date'] ) ) {
+		if ( !empty( $pParamHash['publish_date'] ) ) {
 			$pParamHash['article_store']['publish_date'] = $pParamHash['publish_date'];
 		}
 
-		if( !empty( $pParamHash['expire_Month'] ) ) {
+		if ( !empty( $pParamHash['expire_Month'] ) ) {
 			$dateString = $this->mDate->gmmktime(
 				$pParamHash['expire_Hour'],
 				$pParamHash['expire_Minute'],
@@ -272,28 +276,28 @@ class BitArticle extends LibertyMime {
 			);
 
 			$timestamp = $this->mDate->getUTCFromDisplayDate( $dateString );
-			if( $timestamp !== -1 ) {
+			if ($timestamp !== -1) {
 				$pParamHash['expire_date'] = $timestamp;
 			}
 		}
-		if( !empty( $pParamHash['expire_date'] ) ) {
+		if ( !empty( $pParamHash['expire_date'] ) ) {
 			$pParamHash['article_store']['expire_date'] = $pParamHash['expire_date'];
 		}
 
-		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
-			if( $pParamHash['status_id'] > ARTICLE_STATUS_PENDING ) {
-				if( $gBitUser->hasPermission( 'p_articles_approve_submission' )) {
-					$pParamHash['article_store']['status_id'] =( int )( $pParamHash['status_id'] );
+		if ( @$this->verifyId( $pParamHash['status_id'] ) ) {
+			if ($pParamHash['status_id'] > ARTICLE_STATUS_PENDING) {
+				if ( $gBitUser->hasPermission( 'p_articles_approve_submission' )) {
+					$pParamHash['article_store']['status_id'] =(int) ( $pParamHash['status_id'] );
 				} else {
 					$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;
 				}
 			} else {
-				$pParamHash['article_store']['status_id'] =( int )( $pParamHash['status_id'] );
+				$pParamHash['article_store']['status_id'] =(int) ( $pParamHash['status_id'] );
 			}
-		} elseif( @$this->verifyId( $this->mInfo['status_id'] ) ) {
+		} elseif ( @$this->verifyId( $this->mInfo['status_id'] ) ) {
 			$pParamHash['article_store']['status_id'] = $this->mInfo['status_id'];
 		} else {
-			if( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || $gBitUser->hasPermission( 'p_articles_auto_approve' ) ) {
+			if ( $gBitUser->hasPermission( 'p_articles_approve_submission' ) || $gBitUser->hasPermission( 'p_articles_auto_approve' ) ) {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_APPROVED;
 			} else {
 				$pParamHash['article_store']['status_id'] = ARTICLE_STATUS_PENDING;		// Default status
@@ -302,12 +306,12 @@ class BitArticle extends LibertyMime {
 
 		// content preferences
 		$prefs = array();
-		if( $gBitUser->hasPermission( 'p_liberty_enter_html' ) ) {
+		if ( $gBitUser->hasPermission( 'p_liberty_enter_html' ) ) {
 			$prefs[] = 'content_enter_html';
 		}
 
-		foreach( $prefs as $pref ) {
-			if( !empty( $pParamHash['preferences'][$pref] ) ) {
+		foreach ($prefs as $pref) {
+			if ( !empty( $pParamHash['preferences'][$pref] ) ) {
 				$pParamHash['preferences_store'][$pref] = $pParamHash['preferences'][$pref];
 			} else {
 				$pParamHash['preferences_store'][$pref] = NULL;
@@ -319,7 +323,7 @@ class BitArticle extends LibertyMime {
 		}
 
 		// if we have an error we get them all by checking parent classes for additional errors
-		if( count( $this->mErrors ) > 0 ){
+		if ( count( $this->mErrors ) > 0 ) {
 			parent::verify( $pParamHash );
 		}
 
@@ -332,7 +336,8 @@ class BitArticle extends LibertyMime {
 	* @return array of data compatible with article form
 	* @access public
 	**/
-	function preparePreview( $pParamHash ) {
+	public function preparePreview($pParamHash)
+	{
 		global $gBitSystem, $gBitUser;
 
 		$data = $pParamHash;
@@ -340,27 +345,27 @@ class BitArticle extends LibertyMime {
 		$data = array_merge( $pParamHash, $data['content_store'], $data['article_store'] );
 		$data['raw'] = $data['edit'];
 
-		if( empty( $data['user_id'] ) ) {
+		if ( empty( $data['user_id'] ) ) {
 			$data['user_id'] = $gBitUser->mUserId;
 		}
 
-		if( empty( $data['hits'] ) ) {
+		if ( empty( $data['hits'] ) ) {
 			$data['hits'] = 0;
 		}
 
-		if( empty( $data['publish_date'] ) ) {
+		if ( empty( $data['publish_date'] ) ) {
 			$data['publish_date'] = $gBitSystem->getUTCTime();
 		}
 
-		if( empty( $data['article_type_id'] ) ) {
+		if ( empty( $data['article_type_id'] ) ) {
 			$data['article_type_id'] = 1;
 		}
 
-		if( empty( $data['topic_id'] ) ) {
+		if ( empty( $data['topic_id'] ) ) {
 			$data['topic_id'] = 1;
 		}
 
-		if( empty( $data['parsed'] ) ) {
+		if ( empty( $data['parsed'] ) ) {
 			$data['no_cache']    = TRUE;
 			$data['parsed'] = $this->parseData( $data );
 			// replace the split syntax with a horizontal rule
@@ -380,21 +385,18 @@ class BitArticle extends LibertyMime {
 	* @return url to image
 	* @access public
 	**/
-	function getImageThumbnails( $pParamHash ) {
+	public function getImageThumbnails($pParamHash)
+	{
 		global $gBitSystem, $gThumbSizes;
 		$ret = NULL;
 
 		$thumbHash['mime_image'] = FALSE;
-		if( !empty( $pParamHash['image_attachment_path'] )) {
+		if ( !empty( $pParamHash['image_attachment_path'] )) {
 			$thumbHash['source_file'] = $pParamHash['image_attachment_path'];
 			$ret = liberty_fetch_thumbnails( $thumbHash );
-		} elseif( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
-			if( $topicImage = BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ) ) {
-				global $gThumbSizes;
-				foreach( array_keys( $gThumbSizes ) as $size ) {
-					$ret[$size] = $topicImage;
-				}
-			}
+		} elseif ( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
+			$thumbHash['source_file'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
+			$ret = liberty_fetch_thumbnails( $thumbHash );
 		}
 
 		return $ret;
@@ -405,13 +407,14 @@ class BitArticle extends LibertyMime {
 	* @return bool TRUE on success, FALSE on failure
 	* @access public
 	**/
-	function expunge() {
+	public function expunge()
+	{
 		$ret = FALSE;
-		if( $this->isValid() ) {
+		if ( $this->isValid() ) {
 			$this->mDb->StartTrans();
 			$query = "DELETE FROM `".BIT_DB_PREFIX."articles` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-			if( LibertyMime::expunge() ) {
+			if ( LibertyMime::expunge() ) {
 				$ret = TRUE;
 				$this->mDb->CompleteTrans();
 			} else {
@@ -426,7 +429,8 @@ class BitArticle extends LibertyMime {
 	* @return bool TRUE on success, FALSE on failure
 	* @access public
 	**/
-	function isValid() {
+	public function isValid()
+	{
 		return( $this->verifyId( $this->mArticleId ) && $this->verifyId( $this->mContentId ) );
 	}
 
@@ -436,10 +440,11 @@ class BitArticle extends LibertyMime {
 	* @return array of articles
 	* @access public
 	**/
-	function getList( &$pParamHash ) {
+	public function getList(&$pParamHash)
+	{
 		global $gBitSystem, $gBitUser, $gLibertySystem;
 
-		if( empty( $pParamHash['sort_mode'] ) ) {
+		if ( empty( $pParamHash['sort_mode'] ) ) {
 			// no idea what this is supposed to do
 			//$pParamHash['sort_mode'] = $gBitSystem->isFeatureActive('articles_auto_approve') ? 'order_key_desc' : 'publish_date_desc';
 			$pParamHash['sort_mode'] = 'publish_date_desc';
@@ -454,75 +459,75 @@ class BitArticle extends LibertyMime {
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
 		$find = $pParamHash['find'];
-		if( is_array( $find ) ) {
+		if ( is_array( $find ) ) {
 			// you can use an array of articles
 			$whereSql .= " AND lc.`title` IN( ".implode( ',',array_fill( 0, count( $find ),'?' ) )." )";
 			$bindVars = array_merge( $bindVars, $find );
-		} elseif( is_string( $find ) ) {
+		} elseif ( is_string( $find ) ) {
 			// or a string
 			$whereSql .= " AND UPPER( lc.`title` ) LIKE ? ";
 			$bindVars[] = '%'.strtoupper( $find ).'%';
-		} elseif( @$this->verifyId( $pParamHash['user_id'] ) ) {
+		} elseif ( @$this->verifyId( $pParamHash['user_id'] ) ) {
 			// or gate on a user
 			$whereSql .= " AND lc.`user_id` = ? ";
-			$bindVars[] = (int)$pParamHash['user_id'];
+			$bindVars[] = (int) $pParamHash['user_id'];
 		}
 
-		if( @$this->verifyId( $pParamHash['status_id'] ) ) {
+		if ( @$this->verifyId( $pParamHash['status_id'] ) ) {
 			$whereSql .= " AND a.`status_id` = ? ";
 			$bindVars[] = $pParamHash['status_id'];
 		}
 
-		if( @$this->verifyId( $pParamHash['type_id'] ) ) {
+		if ( @$this->verifyId( $pParamHash['type_id'] ) ) {
 			$whereSql .= " AND a.`article_type_id` = ? ";
-			$bindVars[] = ( int )$pParamHash['type_id'];
+			$bindVars[] = (int) $pParamHash['type_id'];
 		}
 
 		// TODO: we need to check if the article wants to be viewed before / after respective dates
 		// someone better at SQL please get this working without an additional db call - xing
 		$now = $gBitSystem->getUTCTime();
-		if( !empty( $pParamHash['show_future'] ) && !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
+		if ( !empty( $pParamHash['show_future'] ) && !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// this will show all articles at once - future, current and expired
-		} elseif( !empty( $pParamHash['show_future'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
+		} elseif ( !empty( $pParamHash['show_future'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// hide expired articles
 			$whereSql .= " AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ) ";
-			$bindVars[] = ( int )$now;
+			$bindVars[] = (int) $now;
 			$bindVars[] = 'y';
-		} elseif( !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
+		} elseif ( !empty( $pParamHash['show_expired'] ) && $gBitUser->hasPermission( 'p_articles_admin' )) {
 			// hide future articles
 			$whereSql .= " AND ( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) ";
-			$bindVars[] = ( int )$now;
+			$bindVars[] = (int) $now;
 			$bindVars[] = 'y';
-		} elseif( !empty( $pParamHash['get_future'] )) {
+		} elseif ( !empty( $pParamHash['get_future'] )) {
 			// show only future
 			// if we're trying to view these articles, we better have the perms to do so
-			if( !$gBitUser->hasPermission( 'p_articles_admin' )) {
+			if ( !$gBitUser->hasPermission( 'p_articles_admin' )) {
 				return array();
 			}
 			$whereSql .= " AND a.`publish_date` > ?";
-			$bindVars[] = ( int )$now;
-		} elseif( !empty( $pParamHash['get_expired'] )) {
+			$bindVars[] = (int) $now;
+		} elseif ( !empty( $pParamHash['get_expired'] )) {
 			// show only expired articles
 			// if we're trying to view these articles, we better have the perms to do so
-			if( !$gBitUser->hasPermission( 'p_articles_admin' )) {
+			if ( !$gBitUser->hasPermission( 'p_articles_admin' )) {
 				return array();
 			}
 			$whereSql .= " AND a.`expire_date` < ? ";
-			$bindVars[] = ( int )$now;
+			$bindVars[] = (int) $now;
 		} else {
 			// hide future and expired articles - this is the default behaviour
 			// we need all these AND and ORs to ensure that other conditions such as status_id are respected as well
 			$whereSql .= " AND (( a.`publish_date` > a.`expire_date` ) OR (( a.`publish_date` < ? OR atype.`show_pre_publ` = ? ) AND ( a.`expire_date` > ? OR atype.`show_post_expire` = ? ))) ";
-			$bindVars[] = ( int )$now;
+			$bindVars[] = (int) $now;
 			$bindVars[] = 'y';
-			$bindVars[] = ( int )$now;
+			$bindVars[] = (int) $now;
 			$bindVars[] = 'y';
 		}
 
-		if( @$this->verifyId( $pParamHash['topic_id'] ) ) {
+		if ( @$this->verifyId( $pParamHash['topic_id'] ) ) {
 			$whereSql .= " AND a.`topic_id` = ? ";
-			$bindVars[] = ( int )$pParamHash['topic_id'];
-		} elseif( !empty( $pParamHash['topic'] ) ) {
+			$bindVars[] = (int) $pParamHash['topic_id'];
+		} elseif ( !empty( $pParamHash['topic'] ) ) {
 			$whereSql .= " AND UPPER( atopic.`topic_name` ) = ? ";
 			$bindVars[] = strtoupper( $pParamHash['topic'] );
 		} else {
@@ -536,11 +541,10 @@ class BitArticle extends LibertyMime {
 				a.`article_id`, a.`description`, a.`author_name`, a.`publish_date`, a.`expire_date`, a.`rating`,
 				atopic.`topic_id`, atopic.`topic_name`, atopic.`has_topic_image`, atopic.`active_topic`,
 				astatus.`status_id`, astatus.`status_name`,
-				lch.`hits`, uu.`login`,
+				lch.`hits`,
 				atype.*, lc.*, la.`attachment_id` AS `primary_attachment_id`, lf.`file_name` AS `image_attachment_path` $selectSql
 			FROM `".BIT_DB_PREFIX."articles` a
 				INNER JOIN      `".BIT_DB_PREFIX."liberty_content`       lc ON( lc.`content_id`         = a.`content_id` )
-				INNER JOIN      `".BIT_DB_PREFIX."users_users`           uu ON( uu.`user_id`            = lc.`user_id` )
 				INNER JOIN      `".BIT_DB_PREFIX."article_status`   astatus ON( astatus.`status_id`     = a.`status_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON( lc.`content_id`         = lch.`content_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."article_topics`    atopic ON( atopic.`topic_id`       = a.`topic_id` )
@@ -560,7 +564,7 @@ class BitArticle extends LibertyMime {
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 		$ret = array();
 		$comment = new LibertyComment();
-		while( $res = $result->fetchRow() ) {
+		while ( $res = $result->fetchRow() ) {
 			// get this stuff parsed
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
 
@@ -586,7 +590,8 @@ class BitArticle extends LibertyMime {
     * Returns include file that will setup vars for display
     * @return the fully specified path to file to be included
     */
-	function getRenderFile() {
+	public function getRenderFile()
+	{
 		return ARTICLES_PKG_PATH."display_article_inc.php";
 	}
 
@@ -597,7 +602,8 @@ class BitArticle extends LibertyMime {
 	 * @access public
 	 * @return array of articles
 	 */
-	function getFutureList( &$pParamHash ) {
+	public function getFutureList(&$pParamHash)
+	{
 		$pParamHash['get_future'] = TRUE;
 		return( $this->getList( $pParamHash ));
 	}
@@ -609,7 +615,8 @@ class BitArticle extends LibertyMime {
 	 * @access public
 	 * @return array of articles
 	 */
-	function getExpiredList( &$pParamHash ) {
+	public function getExpiredList(&$pParamHash)
+	{
 		$pParamHash['get_expired'] = TRUE;
 		return( $this->getList( $pParamHash ));
 	}
@@ -618,16 +625,17 @@ class BitArticle extends LibertyMime {
 	* Generates the URL to the article
 	* @return the link to the full article
 	*/
-	public static function getDisplayUrlFromHash( &$pParamHash ) {
+	public static function getDisplayUrlFromHash(&$pParamHash)
+	{
 		global $gBitSystem;
 
 		$ret = NULL;
 
-		if( @BitBase::verifyId( $pParamHash['article_id'] ) ) {
-			if( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
+		if ( @BitBase::verifyId( $pParamHash['article_id'] ) ) {
+			if ( $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				// Not needed since it's a number:  $ret = ARTICLES_PKG_URL."view/".$this->mArticleId;
 				$ret = ARTICLES_PKG_URL.$pParamHash['article_id'];
-			} else if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
+			} elseif ( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
 				$ret = ARTICLES_PKG_URL.$pParamHash['article_id'];
 			} else {
 				$ret = ARTICLES_PKG_URL."read.php?article_id=".$pParamHash['article_id'];
@@ -641,7 +649,8 @@ class BitArticle extends LibertyMime {
     * Function that returns link to display an image
     * @return the url to display the gallery.
     */
-	public function getDisplayUrl() {
+	public function getDisplayUrl()
+	{
 		$info = array( 'article_id' => $this->mArticleId );
 		return self::getDisplayUrlFromHash( $info );
 	}
@@ -651,7 +660,8 @@ class BitArticle extends LibertyMime {
 	* @return an array of available statuses
 	* @access public
 	**/
-	function getStatusList() {
+	public function getStatusList()
+	{
 		global $gBitSystem;
 		$query = "SELECT * FROM `".BIT_DB_PREFIX."article_status`";
 		$result = $gBitSystem->mDb->query( $query );
@@ -665,11 +675,12 @@ class BitArticle extends LibertyMime {
 	* @return new status of article on success - else returns NULL
 	* @access public
 	**/
-	function setStatus( $pStatusId, $pArticleId = NULL, $pContentId = NULL ) {
+	public function setStatus($pStatusId, $pArticleId = NULL, $pContentId = NULL)
+	{
 		global $gBitSystem;
 		$validStatuses = array( ARTICLE_STATUS_DENIED, ARTICLE_STATUS_DRAFT, ARTICLE_STATUS_PENDING, ARTICLE_STATUS_APPROVED, ARTICLE_STATUS_RETIRED );
 
-		if( !in_array( $pStatusId, $validStatuses ) ) {
+		if ( !in_array( $pStatusId, $validStatuses ) ) {
 			$this->mErrors[] = "Invalid article status";
 			return FALSE;
 		}
@@ -679,15 +690,15 @@ class BitArticle extends LibertyMime {
 		if( !empty( $pContentId ) and !$this->isValid()) $this->mContentId = $pContentId ;
 		if( !empty( $pArticleId ) and !$this->isValid()) $this->mArticleId = $pArticleId ;
 
-		if( empty( $pArticleId ) && $this->isValid() ) {
+		if ( empty( $pArticleId ) && $this->isValid() ) {
 			$pArticleId = $this->mArticleId;
 		}
 
-		if( @$this->verifyId( $pArticleId ) ) {
+		if ( @$this->verifyId( $pArticleId ) ) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."articles` SET `status_id` = ? WHERE `article_id` = ?";
 			$rs = $this->mDb->query( $sql, array( $pStatusId, $pArticleId ));
 			// Calling the index function for approved articles ...
-			if( $gBitSystem->isPackageActive( 'search' ) ) {
+			if ( $gBitSystem->isPackageActive( 'search' ) ) {
 				include_once( SEARCH_PKG_PATH.'refresh_functions.php' );
 				if ($pStatusId == ARTICLE_STATUS_APPROVED) {
 					refresh_index($this);
@@ -699,5 +710,3 @@ class BitArticle extends LibertyMime {
 		}
 	}
 }
-
-?>

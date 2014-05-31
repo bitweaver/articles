@@ -23,7 +23,7 @@
 							<th style="width:5%" title="{tr}Remove Type{/tr}">{counter name=th}</th>
 						</tr>
 						{section name=user loop=$types}
-							<tr class="{cycle values="odd,even}">
+							<tr class="{cycle values="odd,even"}">
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
 									<input type="text" name="type_name[{$types[user].article_type_id}]" value="{$types[user].type_name}" />
@@ -45,7 +45,7 @@
 					{formhelp note='hover over the number to see the column header'}
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" name="update_type" value="{tr}Apply changes{/tr}" /><br />
+						<input type="submit" class="ink-button" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
 
@@ -91,14 +91,14 @@
 					{/section}
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" name="update_type" value="{tr}Apply changes{/tr}" /><br />
+						<input type="submit" class="ink-button" name="update_type" value="{tr}Apply changes{/tr}" /><br />
 					</div>
 				{/form}
 			{/jstab}
 
 			{jstab title="Add Article Type"}
 				{form legend="Create New Article Type"}
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Create new Type" for="add_type"}
 						{forminput}
 							<input type="text" id="add_type" name="type_name" />
@@ -107,7 +107,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" name="add_type" value="{tr}Create new article type{/tr}" />
+						<input type="submit" class="ink-button" name="add_type" value="{tr}Create new article type{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

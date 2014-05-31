@@ -28,9 +28,7 @@
 	{/if}
 
 	{foreach from=$articles item=article}
-		<div class="clear">
-			{include file="bitpackage:articles/article_display.tpl"}
-		</div>
+		{include file="bitpackage:articles/article_display.tpl"}
 	{foreachelse}
 		<p class="norecords">
 			{tr}No records found{/tr}<br />

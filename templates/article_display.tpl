@@ -25,7 +25,7 @@
 			<div class="date">
 				{if $article.show_author eq 'y'}
 					{* can't really use the link here since it only works when the user uses his login name *}
-					{displayname hash=$article}&nbsp;
+					{$article.author_name}&nbsp;
 				{/if}
 
 				{if $article.show_pubdate eq 'y'}
@@ -105,7 +105,7 @@
 		</div>
 
 		{if $article.status_id == $smarty.const.ARTICLE_STATUS_PENDING && !$preview}
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				{formlabel label="Approve or deny Submission"}
 				{forminput}
 					{if $gContent->hasUserPermission( 'p_articles_approve_submission' )}

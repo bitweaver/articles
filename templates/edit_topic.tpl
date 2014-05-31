@@ -14,7 +14,7 @@
 
 			{formfeedback success=$gContent->mSuccess error=$gContent->mErrors}
 
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				{formlabel label="Topic Name" for="topic_name"}
 				{forminput}
 					<input type="text" id="topic_name" name="topic_name" value="{$gContent->mInfo.topic_name}" />
@@ -22,14 +22,14 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				<label class="checkbox">
 					<input type="checkbox" id="topic_enabled" name="active_topic" {if $gContent->mInfo.active_topic == 'y'}checked="checked"{/if} />Topic Enabled
 					{formhelp note=""}
 				</label>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				{formlabel label="Upload Image" for="t-image"}
 				{forminput}
 					<input name="upload" id="t-image" type="file" />
@@ -37,7 +37,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				{formlabel label="Current Image"}
 				{forminput}
 					{if $gContent->mInfo.has_topic_image eq 'y'}
@@ -51,7 +51,7 @@
 			</div>
 
 			<div class="control-group submit">
-				<input type="submit" class="btn btn-default" name="fSubmitSaveTopic" value="{tr}Update Topic{/tr}" />
+				<input type="submit" class="ink-button" name="fSubmitSaveTopic" value="{tr}Update Topic{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

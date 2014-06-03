@@ -7,7 +7,7 @@
 
 			{legend legend="CMS Settings"}
 				{foreach from=$formCmsSettings key=feature item=output}
-					<div class="control-group column-group gutters">
+					<div class="form-group">
 						{formlabel label=$output.label for=$feature}
 						{forminput}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
@@ -16,7 +16,7 @@
 					</div>
 				{/foreach}
 
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Maximum Articles" for="articles-maxhome"}
 					{forminput}
 						<input size="5" type="text" name="articles_max_list" id="articles-maxhome" value="{$gBitSystem->getConfig('articles_max_list')|escape}" />
@@ -24,7 +24,7 @@
 					{/forminput}
 				</div>
 
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Article Description Length" for="articles-descrlength"}
 					{forminput}
 						<input size="5" type="text" name="articles_description_length" id="articles-descrlength" value="{$gBitSystem->getConfig('articles_description_length')|escape}" /> {tr}characters{/tr}
@@ -32,7 +32,7 @@
 					{/forminput}
 				</div>
 
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Article Image Size" for="article_topic_thumbnail_size"}
 					{forminput}
 						{html_options values=$imageSizes options=$imageSizes name="articles_image_size" selected=$gBitSystem->getConfig('articles_image_size')|default:small}
@@ -45,7 +45,7 @@
 		{jstab title="Article Listings"}
 			{legend legend="CMS Settings"}
 				{foreach from=$formArticleListing key=feature item=output}
-					<div class="control-group column-group gutters">
+					<div class="form-group">
 						{formlabel label=$output.label for=$feature}
 						{forminput}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
@@ -57,8 +57,8 @@
 		{/jstab}
 	{/jstabs}
 
-	<div class="control-group submit">
-		<input type="submit" class="ink-button" name="store_settings" value="{tr}Change preferences{/tr}" />
+	<div class="form-group submit">
+		<input type="submit" class="btn btn-default" name="store_settings" value="{tr}Change preferences{/tr}" />
 	</div>
 {/form}
 {/strip}

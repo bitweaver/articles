@@ -23,7 +23,7 @@
 							<th style="width:5%" title="{tr}Remove Type{/tr}">{counter name=th}</th>
 						</tr>
 						{section name=user loop=$types}
-							<tr class="{cycle values="odd,even}">
+							<tr class="{cycle values="odd,even"}">
 								<td>
 									<input type="hidden" name="type_array[{$types[user].article_type_id}]" />
 									<input type="text" name="type_name[{$types[user].article_type_id}]" value="{$types[user].type_name}" />

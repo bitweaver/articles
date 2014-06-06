@@ -34,7 +34,7 @@
 			{jstabs}
 				{jstab title="Article Body"}
 					{legend legend="Article Body"}
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" name="title" id="title" value="{$article.title|escape}" size="50" />
@@ -42,7 +42,7 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Author Name" for="author_name"}
 							{forminput}
 								<input type="text" name="author_name" id="author_name" value="{$article.author_name|escape}" />
@@ -51,7 +51,7 @@
 						</div>
 
 						{if $topics or $gContent->hasUserPermission( 'p_articles_admin' )}
-							<div class="control-group">
+							<div class="form-group">
 								{formlabel label="Topic" for="topic_id"}
 								{forminput}
 									{if $topics}
@@ -75,7 +75,7 @@
 								{if $types[t].use_ratings eq 'y'}{assign var=ratings value=TRUE}{/if}
 							{/section}
 						{else}
-							<div class="control-group">
+							<div class="form-group">
 								{formlabel label="Type" for="article_type_id"}
 								{forminput}
 									<select id="article_type_id" name="article_type_id">
@@ -89,7 +89,7 @@
 						{/if}
 
 						{if $ratings}
-							<div id="ratingedit" class="control-group">
+							<div id="ratingedit" class="form-group">
 								{formlabel label="Rating" for="rating"}
 								{forminput}
 									<select name="rating" id="rating">
@@ -121,7 +121,7 @@
 							{captcha force=true variant=row}
 						{/if}
 
-						<div class="control-group submit">
+						<div class="form-group submit">
 							<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />&nbsp;
 							<input type="submit" class="btn btn-default" name="save" value="{tr}Save{/tr}" />
 						</div>
@@ -136,7 +136,7 @@
 
 				{jstab title="Advanced"}
 					{legend legend="Publication and Expiration Dates"}
-						<div class="control-group">
+						<div class="form-group">
 							<input type="hidden" name="publishDateInput" value="1" />
 							{formlabel label="Publish Date" for=""}
 							{forminput}
@@ -146,7 +146,7 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="form-group">
 							<input type="hidden" name="expireDateInput" value="1" />
 							{formlabel label="Expiration Date" for=""}
 							{forminput}

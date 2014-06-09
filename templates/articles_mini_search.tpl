@@ -1,6 +1,6 @@
 {form method="get" ipackage="articles" ifile="list.php"}
 	<input type="text" name="find" value="{$find|escape}" />
-	<input type="submit" class="ink-button" value="{tr}find{/tr}" name="search" />
+	<input type="submit" class="btn btn-default" value="{tr}find{/tr}" name="search" />
 	<input type="hidden" name="sort_mode" value="{$sort_mode|escape}" />
 	<select name="type">
 		<option value="" {if $find_type eq ''}selected="selected"{/if}>{tr}all{/tr}</option>

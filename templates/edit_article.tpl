@@ -122,8 +122,8 @@
 						{/if}
 
 						<div class="form-group submit">
-							<input type="submit" class="ink-button" name="preview" value="{tr}Preview{/tr}" />&nbsp;
-							<input type="submit" class="ink-button" name="save" value="{tr}Save{/tr}" />
+							<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />&nbsp;
+							<input type="submit" class="btn btn-default" name="save" value="{tr}Save{/tr}" />
 						</div>
 
 						{if $gBitSystem->isFeatureActive( 'articles_attachments' ) }

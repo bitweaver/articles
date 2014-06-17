@@ -116,7 +116,7 @@ class BitArticle extends LibertyMime
 				$this->mTopicId   = $this->mInfo['topic_id'];
 				$this->mTypeId	  = $this->mInfo['article_type_id'];
 
-				$this->mInfo['thumbnail_url'] = BitArticle::getImageThumbnails( $this->mInfo );
+				$this->mInfo['thumbnail_url'] = static::getImageThumbnails( $this->mInfo );
 				$this->mInfo['creator']       = ( !empty( $this->mInfo['creator_real_name'] ) ? $this->mInfo['creator_real_name'] : $this->mInfo['creator_user'] );
 				$this->mInfo['editor']        = ( !empty( $this->mInfo['modifier_real_name'] ) ? $this->mInfo['modifier_real_name'] : $this->mInfo['modifier_user'] );
 				$this->mInfo['display_url']   = $this->getDisplayUrl();
@@ -385,7 +385,7 @@ class BitArticle extends LibertyMime
 	* @return url to image
 	* @access public
 	**/
-	public function getImageThumbnails($pParamHash)
+	public static function getImageThumbnails($pParamHash)
 	{
 		global $gBitSystem, $gThumbSizes;
 		$ret = NULL;
@@ -568,7 +568,7 @@ class BitArticle extends LibertyMime
 			// get this stuff parsed
 			$res = array_merge( $this->parseSplit( $res, $gBitSystem->getConfig( 'articles_description_length', 500 )), $res );
 
-			$res['thumbnail_url'] = BitArticle::getImageThumbnails( $res );
+			$res['thumbnail_url'] = static::getImageThumbnails( $res );
 			$res['num_comments']  = $comment->getNumComments( $res['content_id'] );
 			$res['display_url']   = self::getDisplayUrlFromHash( $res );
 			$res['display_link']  = $this->getDisplayLink( $res['title'], $res );

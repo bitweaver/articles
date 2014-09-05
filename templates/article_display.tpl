@@ -46,7 +46,7 @@
 					{if $article.primary_attachment}
 						{include file=$gLibertySystem->getMimeTemplate('inline',$article.primary_attachment.attachment_plugin_guid) attachment=$article.primary_attachment thumbsize=$size}
 					{else}
-						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url.$size}"/>
+						<img class="icon" alt="{$article.topic_name|default:$article.title|escape}" title="{$article.topic_name|default:$article.title|escape}" src="{$article.thumbnail_url}"/>
 					{/if}
 					{if $showDescriptionsOnly and $article.has_more}</a>{/if}
 				</div>

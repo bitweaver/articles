@@ -1,4 +1,4 @@
-<?php 
+<?php
 // $Header$
 require_once '../../kernel/setup_inc.php';
 

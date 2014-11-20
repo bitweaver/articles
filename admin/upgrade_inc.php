@@ -74,7 +74,7 @@ array( 'PHP' => '
 					$storeRow["user_id"],
 				));
 
-				$storeRow["upload"]["dest_file_path"] = liberty_process_upload( $storeRow );
+				$storeRow["upload"]["dest_file_path"] = liberty_process_upload( $storeRow[\'upload\'] );
 
 				$sql = "INSERT INTO `'.BIT_DB_PREFIX.'liberty_attachments` ( `content_id`, `attachment_id`, `attachment_plugin_guid`, `foreign_id`, `user_id` ) VALUES ( ?, ?, ?, ?, ? )";
 				$rs = $gBitSystem->mDb->query( $sql, array( $storeRow["content_id"], $storeRow["attachment_id"], $storeRow["plugin_guid"], (int)$storeRow["foreign_id"], $storeRow["user_id"] ) );

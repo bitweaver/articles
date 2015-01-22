@@ -1,6 +1,4 @@
-{* $Header$ *}
 <div class="floaticon">{bithelp}</div>
-
 {strip}
 <div class="listing articles">
 	<div class="header">

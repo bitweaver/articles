@@ -1,9 +1,12 @@
 <?php
 /**
+ * Article class is used when accessing BitArticles. It is based on TikiSample
+ * and builds on core bitweaver functionality, such as the Liberty CMS engine.
+ *
  * @version $Header$
  * @package articles
  *
- * Copyright( c )2004 bitweaver.org
+ * @copyright 2004-15 bitweaver.org
  * Copyright( c )2003 tikwiki.org
  * Copyright( c )2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * All Rights Reserved. See below for details and a complete list of authors.
@@ -11,10 +14,6 @@
  *
  * $Id$
  *
- * Article class is used when accessing BitArticles. It is based on TikiSample
- * and builds on core bitweaver functionality, such as the Liberty CMS engine.
- *
- * created 2004/8/15
  * @author wolffy <wolff_borg@yahoo.com.au>
  * @version $Revision$
  */
@@ -47,7 +46,7 @@ class BitArticle extends LibertyMime
 	* @param $pContentId content id of the article we want to view
 	* @access private
 	**/
-	public function BitArticle($pArticleId=NULL, $pContentId=NULL)
+	function __construct($pArticleId=NULL, $pContentId=NULL)
 	{
 		parent::__construct();
 		$this->registerContentType(

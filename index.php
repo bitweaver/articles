@@ -20,8 +20,8 @@ if ( !empty( $_REQUEST['article_id'] ) ) {
 }
 
 // Display the template
-$gDefaultCenter = 'bitpackage:articles/center_list_articles.tpl';
-$gBitSmarty->assign_by_ref( 'gDefaultCenter', $gDefaultCenter );
+$gDefaultCenter = 'bitpackage:articles/center_display_articles.tpl';
+$gBitSmarty->assignByRef( 'gDefaultCenter', $gDefaultCenter );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:kernel/dynamic.tpl', tra( 'Articles' ) , array( 'display_mode' => 'display' ));

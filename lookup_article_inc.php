@@ -27,6 +27,6 @@ if( empty( $gContent ) || !is_object( $gContent ) ) {
 	} else {
 		$gContent->load();
 	}
-	$gBitSmarty->clear_assign( 'gContent' );
+	$gBitSmarty->clearAssign( 'gContent' );
 	$gBitSmarty->assign( 'gContent', $gContent );
 }

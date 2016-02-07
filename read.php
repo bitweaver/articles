@@ -41,14 +41,14 @@ if ( ($gContent->mInfo['publish_date'] > $timestamp) && !$gContent->hasUpdatePer
 }
 
 $gContent->addHit();
-$gBitSmarty->assign_by_ref( 'article', $gContent->mInfo );
+$gBitSmarty->assignByRef( 'article', $gContent->mInfo );
 
 // get all the services that want to display something on this page
 $displayHash = array( 'perm_name' => 'p_articles_read' );
 $gContent->invokeServices( 'content_display_function', $displayHash );
 
 $topics = BitArticleTopic::getTopicList();
-$gBitSmarty->assign_by_ref( 'topics', $topics );
+$gBitSmarty->assignByRef( 'topics', $topics );
 
 // Comments engine!
 if( @$gContent->mInfo['allow_comments'] == 'y' ) {

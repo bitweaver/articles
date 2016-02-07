@@ -47,13 +47,13 @@ if( !empty( $_REQUEST['preview'] ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );
 	$gBitSmarty->assign( 'preview', TRUE );
 	$gContent->invokeServices( 'content_preview_function', $_REQUEST );
-	$gBitSmarty->assign_by_ref( 'article', $article );
+	$gBitSmarty->assignByRef( 'article', $article );
 } else {
 	$gContent->invokeServices( 'content_edit_function' );
 	if( empty( $gContent->mInfo['author_name'] ) ) {
 		$gContent->mInfo['author_name'] = $gBitUser->getDisplayName();
 	}
-	$gBitSmarty->assign_by_ref('article', $gContent->mInfo);
+	$gBitSmarty->assignByRef('article', $gContent->mInfo);
 }
 
 // If the article was saved, show feedback or show result
@@ -71,20 +71,20 @@ if( !empty( $_REQUEST['save'] ) ) {
 
 // Get a topic list
 $topics = BitArticleTopic::getTopicList( array( 'active_topic' => TRUE ) );
-$gBitSmarty->assign_by_ref( 'topics', $topics );
+$gBitSmarty->assignByRef( 'topics', $topics );
 if ( !empty( $_REQUEST['topic'] ) ) {
 	$gBitSmarty->assign( 'topic', $_REQUEST['topic'] );
 }
 // get list of valid types
 $types = BitArticleType::getTypeList();
-$gBitSmarty->assign_by_ref( 'types', $types );
+$gBitSmarty->assignByRef( 'types', $types );
 
 if ( !empty( $gContent->mErrors ) || !empty( $feedback ) ) {
 	$article = $gContent->preparePreview( $_REQUEST );
-	$gBitSmarty->assign_by_ref( 'article', $article );
+	$gBitSmarty->assignByRef( 'article', $article );
 }
 
-$gBitSmarty->assign_by_ref( 'errors', $gContent->mErrors );
+$gBitSmarty->assignByRef( 'errors', $gContent->mErrors );
 $gBitSmarty->assign( 'feedback', ( !empty( $feedback ) ? $feedback : NULL ) );
 
 // Display the Index Template

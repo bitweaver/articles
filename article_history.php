@@ -47,8 +47,8 @@ include_once( LIBERTY_PKG_PATH.'content_history_inc.php' );
 $gBitSmarty->assign( 'page', $page = !empty( $_REQUEST['list_page'] ) ? $_REQUEST['list_page'] : 1 );
 $offset = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );
 $history = $gContent->getHistory( NULL, NULL, $offset, $gBitSystem->getConfig( 'max_records' ) );
-$gBitSmarty->assign_by_ref( 'data', $history['data'] );
-$gBitSmarty->assign_by_ref( 'listInfo', $history['listInfo'] );
+$gBitSmarty->assignByRef( 'data', $history['data'] );
+$gBitSmarty->assignByRef( 'listInfo', $history['listInfo'] );
 
 //vd($gContent->getHistoryCount());
 
@@ -57,5 +57,5 @@ $numPages = ceil( $gContent->getHistoryCount() / $gBitSystem->getConfig('max_rec
 $gBitSmarty->assign( 'numPages', $numPages );
 
 // Display the template
-$gBitSmarty->assign_by_ref( 'gContent', $gContent );
+$gBitSmarty->assignByRef( 'gContent', $gContent );
 $gBitSystem->display( 'bitpackage:articles/article_history.tpl', NULL, array( 'display_mode' => 'display' ));

@@ -151,7 +151,7 @@ class BitArticle extends LibertyMime
 	public function store(&$pParamHash)
 	{
 		global $gBitSystem;
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if ( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."articles";
 
@@ -169,7 +169,7 @@ class BitArticle extends LibertyMime
 				$result = $this->mDb->associateInsert( $table, $pParamHash['article_store'] );
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			$this->load();
 		}
 		return ( count( $this->mErrors ) == 0 );
@@ -410,14 +410,14 @@ class BitArticle extends LibertyMime
 	{
 		$ret = FALSE;
 		if ( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$query = "DELETE FROM `".BIT_DB_PREFIX."articles` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if ( LibertyMime::expunge() ) {
 				$ret = TRUE;
-				$this->mDb->CompleteTrans();
+				$this->CompleteTrans();
 			} else {
-				$this->mDb->RollbackTrans();
+				$this->RollbackTrans();
 			}
 		}
 		return $ret;

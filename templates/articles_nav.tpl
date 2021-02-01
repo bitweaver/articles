@@ -1,4 +1,4 @@
-<div class="navbar">
+<div class="list-inline navbar">
 	<ul>
 		<li><a href="{$smarty.const.ARTICLES_PKG_URL}index.php">{tr}View articles{/tr}</a></li>
 		<li><a href="{$smarty.const.ARTICLES_PKG_URL}list.php">{tr}List articles{/tr}</a></li>

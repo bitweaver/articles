@@ -5,7 +5,7 @@ if ( !empty( $moduleParams ) ) {
 	extract( $moduleParams );
 }
 
-include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+include_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_PATH."lookup_article_inc.php" );
 include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
 

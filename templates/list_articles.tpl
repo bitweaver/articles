@@ -1,34 +1,31 @@
 <div class="floaticon">{bithelp}</div>
 {strip}
 <div class="listing articles">
-	<div class="header">
+	<header>
+		<ul class="list-inline floaticon">
+			<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
+			{if $gBitSystem->isFeatureActive( 'articles_list_title' )}
+				<li>{smartlink ititle='Title' isort='title' offset=$offset type=$find_type topic=$find_topic}</li>
+			{/if}
+			{if $gBitSystem->isFeatureActive( 'articles_list_author' )}
+				<li>{smartlink ititle='Author' isort='author_name' offset=$offset type=$find_type topic=$find_topic}</li>
+			{/if}
+			{if $gBitSystem->isFeatureActive( 'articles_list_date' )}
+				<li>{smartlink ititle='Publish Date' isort='publish_date' offset=$offset type=$find_type topic=$find_topic}</li>
+			{/if}
+			{if $gBitSystem->isFeatureActive( 'articles_list_expire' )}
+				<li>{smartlink ititle='Expire Date' isort='expire_date' offset=$offset type=$find_type topic=$find_topic}</li>
+			{/if}
+			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_sort'}
+		</ul>
+
 		<h1>{tr}Articles{/tr}</h1>
-	</div>
+
+	</header>
 
 	<div class="body">
 
 		{formfeedback hash=$feedback}
-
-		<div class="navbar">
-			<ul>
-				<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
-				{if $gBitSystem->isFeatureActive( 'articles_list_title' )}
-					<li>{smartlink ititle='Title' isort='title' offset=$offset type=$find_type topic=$find_topic}</li>
-				{/if}
-				{if $gBitSystem->isFeatureActive( 'articles_list_author' )}
-					<li>{smartlink ititle='Author' isort='author_name' offset=$offset type=$find_type topic=$find_topic}</li>
-				{/if}
-				{if $gBitSystem->isFeatureActive( 'articles_list_date' )}
-					<li>{smartlink ititle='Publish Date' isort='publish_date' offset=$offset type=$find_type topic=$find_topic}</li>
-				{/if}
-				{if $gBitSystem->isFeatureActive( 'articles_list_expire' )}
-					<li>{smartlink ititle='Expire Date' isort='expire_date' offset=$offset type=$find_type topic=$find_topic}</li>
-				{/if}
-				{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_sort'}
-			</ul>
-		</div>
-
-		<div class="clear"></div>
 
 		{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='list_options'}
 

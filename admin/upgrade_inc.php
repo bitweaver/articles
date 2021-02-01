@@ -1,7 +1,7 @@
 <?php
 
 global $gBitSystem, $gUpgradeFrom, $gUpgradeTo;
-require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 if( !defined( 'BITARTICLE_CONTENT_TYPE_GUID' ) ) {
 	define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );

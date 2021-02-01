@@ -9,7 +9,7 @@
  * Initialization
  */
 	global $gContent;
-	require_once( ARTICLES_PKG_PATH.'BitArticle.php');
+	require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php');
 	
 	// if we already have a gContent, we assume someone else created it for us, and has properly loaded everything up.
 	if( empty( $gContent ) || !is_object( $gContent ) ) {

@@ -21,8 +21,8 @@
 /**
  * Required setup
  */
-require_once( ARTICLES_PKG_PATH.'BitArticleTopic.php' );
-require_once( ARTICLES_PKG_PATH.'BitArticleType.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticleTopic.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticleType.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
 require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
 
@@ -55,7 +55,7 @@ class BitArticle extends LibertyMime
 				'content_name' => 'Article',
 				'handler_class' => 'BitArticle',
 				'handler_package' => 'articles',
-				'handler_file' => 'BitArticle.php',
+				'handler_file' => 'includes/classes/BitArticle.php',
 				'maintainer_url' => 'http://www.bitweaver.org'
 		));
 		$this->mContentId = $pContentId;
@@ -394,6 +394,7 @@ class BitArticle extends LibertyMime
 			$thumbHash['source_file'] = $pParamHash['image_attachment_path'];
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		} elseif ( !empty( $pParamHash['has_topic_image'] ) && $pParamHash['has_topic_image'] == 'y' ) {
+return BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
 			$thumbHash['source_file'] = preg_replace( "#^/+#", "", BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] ));
 			$ret = liberty_fetch_thumbnails( $thumbHash );
 		}

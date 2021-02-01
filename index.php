@@ -9,7 +9,7 @@ require_once '../kernel/setup_inc.php';
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
-require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 // Now check permissions to access this page
 $gBitSystem->verifyPermission( 'p_articles_read' );

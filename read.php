@@ -10,7 +10,7 @@
  */
 require_once '../kernel/setup_inc.php';
 
-require_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 $gBitSystem->verifyPackage( 'articles' );
 

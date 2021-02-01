@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-include_once( ARTICLES_PKG_PATH.'BitArticle.php' );
+include_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 extract( $moduleParams );
 

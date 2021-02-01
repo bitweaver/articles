@@ -50,7 +50,7 @@ class BitArticleTopic extends BitBase {
 				$this->mTopicId = $this->mInfo['topic_id'];
 
 				if ($this->mInfo['has_topic_image']) {
-					$this->mInfo['topic_image_url'] = $this->getTopicImageStorageUrl(NULL, FALSE, TRUE);
+					$this->mInfo['topic_image_url'] = static::getTopicImageStorageUrl($this->mTopicId, FALSE, TRUE);
 				} else {
 					$this->mInfo['topic_image_url'] = NULL;
 				}
@@ -167,13 +167,8 @@ class BitArticleTopic extends BitBase {
 	 * @access public
 	 * @return Path to thumbnail, FALSE on failure
 	 */
-	function getTopicImageThumbUrl( $pTopicId = NULL ) {
-		global $gBitSystem;
+	public static function getTopicImageThumbUrl( $pTopicId ) {
 		$ret = FALSE;
-		if( !@BitBase::verifyId( $pTopicId ) && $this->isValid() ) {
-			$pTopicId = $this->mTopicId;
-		}
-
 		if( @BitBase::verifyId( $pTopicId )) {
 			$ret = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/topic_'.$pTopicId.'.jpg';
 		}
@@ -204,7 +199,7 @@ class BitArticleTopic extends BitBase {
         while( $res = $result->fetchRow() ) {
 			$res["num_articles"] = $gBitSystem->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."articles` WHERE `topic_id`= ?", array( $res["topic_id"] ) );
 			if( empty( $res['topic_image_url'] ) && $res['has_topic_image'] == 'y' ) {
-				$res['topic_image_url'] = self::getTopicImageStorageUrl( $res['topic_id'] );
+				$res['topic_image_url'] = static::getTopicImageStorageUrl( $res['topic_id'] );
 			}
 
             $ret[] = $res;
@@ -312,7 +307,7 @@ class BitArticleTopic extends BitBase {
 	* @access public
 	**/
 	function getTopicImageStoragePath( $pTopicId = NULL, $pBasePathOnly = FALSE ) {
-		$path = self::getArticleImageStoragePath( NULL, TRUE );
+		$path = static::getArticleImageStoragePath( NULL, TRUE );
 
 		if( $pBasePathOnly ) {
 			return $path;
@@ -327,7 +322,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( !empty( $pTopicId ) ) {
-			return $path.self::getTopicImageStorageName( $pTopicId );
+			return $path.static::getTopicImageStorageName( $pTopicId );
 		} else {
 			return FALSE;
 		}
@@ -340,27 +335,19 @@ class BitArticleTopic extends BitBase {
 	* @return URL on success, FALSE on failure
 	* @access public
 	**/
-	function getTopicImageStorageUrl( $pTopicId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+	public static function getTopicImageStorageUrl( $pTopicId, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
 		global $gBitSystem;
 		$ret = FALSE;
 
 		// first we check to see if this is a new type thumbnail. if that fails we'll use the old method
-		if( !( $ret = self::getTopicImageThumbUrl( $pTopicId ))) {
-			$url = self::getArticleImageStorageUrl( NULL, TRUE );
+		if( !( $ret = static::getTopicImageThumbUrl( $pTopicId ))) {
+			$url = static::getArticleImageStorageUrl( $this->mArticleId, NULL, TRUE );
 			if( $pBasePathOnly ) {
 				return $url;
 			}
 
-			if( !@BitBase::verifyId( $pTopicId ) ) {
-				if( $this->isValid() ) {
-					$pTopicId = $this->mTopicId;
-				} else {
-					return NULL;
-				}
-			}
-
-			if( is_file( self::getTopicImageStoragePath( NULL, TRUE ).self::getTopicImageStorageName( $pTopicId ))) {
-				$ret = $url.self::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
+			if( is_file( static::getTopicImageStoragePath( NULL, TRUE ).static::getTopicImageStorageName( $pTopicId ))) {
+				$ret = $url.static::getTopicImageStorageName( $pTopicId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 			}
 		}
 
@@ -388,16 +375,12 @@ class BitArticleTopic extends BitBase {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
-	function getArticleImageStorageName( $pArticleId = NULL ) {
-		if( !@BitBase::verifyId( $pArticleId ) ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
-			}
+	public function getArticleImageStorageName( $pArticleId ) {
+		$ret = FALSE;
+		if( BitBase::verifyId( $pArticleId ) ) {
+			$ret = "article_$pArticleId.jpg";
 		}
-
-		return "article_$pArticleId.jpg";
+		return $ret;
 	}
 
 	/**
@@ -426,7 +409,7 @@ class BitArticleTopic extends BitBase {
 		}
 
 		if( !empty( $pArticleId ) ) {
-			return $path.self::getArticleImageStorageName( $pArticleId );
+			return $path.static::getArticleImageStorageName( $pArticleId );
 		} else {
 			return FALSE;
 		}
@@ -439,27 +422,21 @@ class BitArticleTopic extends BitBase {
 	* @return URL on success, FALSE on failure
 	* @access public
 	**/
-	function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
+	public static function getArticleImageStorageUrl( $pArticleId = NULL, $pBasePathOnly = FALSE, $pForceRefresh = FALSE ) {
 		global $gBitSystem;
+
+		$ret = FALSE;
 		$url = STORAGE_PKG_URL.ARTICLES_PKG_NAME.'/';
 		if( $pBasePathOnly ) {
 			return $url;
 		}
 
-		if( !@BitBase::verifyId( $pArticleId ) ) {
-			if( $this->isValid() ) {
-				$pArticleId = $this->mArticleId;
-			} else {
-				return NULL;
+		if( BitBase::verifyId( $pArticleId ) ) {
+			if( is_file( static::getArticleImageStoragePath( NULL, TRUE ).static::getArticleImageStorageName( $pArticleId ) ) ) {
+				$ret = $url.static::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
 			}
 		}
-
-		if( is_file( self::getArticleImageStoragePath( NULL, TRUE ).self::getArticleImageStorageName( $pArticleId ) ) ) {
-			return $url.self::getArticleImageStorageName( $pArticleId ).( $pForceRefresh ? "?".$gBitSystem->getUTCTime() : '' );
-		} else {
-			return FALSE;
-		}
+		return $ret;
 	}
 }
 
-?>

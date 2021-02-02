@@ -23,8 +23,8 @@
  */
 require_once( ARTICLES_PKG_CLASS_PATH.'BitArticleTopic.php' );
 require_once( ARTICLES_PKG_CLASS_PATH.'BitArticleType.php' );
-require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
-require_once( LIBERTY_PKG_PATH.'LibertyComment.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyMime.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyComment.php' );
 
 define( 'BITARTICLE_CONTENT_TYPE_GUID', 'bitarticle' );
 
@@ -592,7 +592,7 @@ return BitArticleTopic::getTopicImageStorageUrl( $pParamHash['topic_id'] );
     */
 	public function getRenderFile()
 	{
-		return ARTICLES_PKG_PATH."display_article_inc.php";
+		return ARTICLES_PKG_INCLUDE_PATH.'display_article_inc.php';
 	}
 
 	/**

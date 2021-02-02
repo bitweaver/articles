@@ -9,9 +9,9 @@
  * Initialization
  */
 require_once '../kernel/setup_inc.php';
-require_once( ARTICLES_PKG_PATH."BitArticle.php" );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
-include_once( ARTICLES_PKG_PATH."lookup_article_topic_inc.php" );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_topic_inc.php' );
 
 if ( !$gBitSystem->verifyPackage( 'articles' ) ) {
    $gBitSmarty->assign( 'msg', tra( "This package is disabled" ) . ": Articles" );

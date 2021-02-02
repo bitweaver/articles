@@ -18,7 +18,7 @@ if( !@BitBase::verifyId( $_REQUEST["article_id"] )) {
 	$gBitSystem->fatalError( tra( "No article indicated" ));
 }
 
-include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_inc.php' );
 
 // Check if we actually have some content
 if( !$gContent->isValid() ) {
@@ -57,7 +57,7 @@ if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 	$comments_object_var='article';
 	$commentsParentId = $gContent->mContentId;
 	$comments_return_url = $_SERVER['SCRIPT_NAME']."?article_id=".$_REQUEST['article_id'];
-	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
+	include_once( LIBERTY_PKG_INCLUDE_PATH.'comments_inc.php' );
 }
 
 // Display the Index Template

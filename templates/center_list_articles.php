@@ -6,8 +6,8 @@ if ( !empty( $moduleParams ) ) {
 }
 
 include_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
-include_once( ARTICLES_PKG_PATH."lookup_article_inc.php" );
-include_once( ARTICLES_PKG_PATH.'article_filter_inc.php' );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_inc.php' );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'article_filter_inc.php' );
 
 $listHash = array();
 

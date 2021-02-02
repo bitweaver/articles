@@ -85,7 +85,7 @@ function data_articles($data, $params) { // No change in the parameters with Cly
 		$pluginParams = $gLibertySystem->mPlugins[PLUGIN_GUID_DATAARTICLES];
 
 		require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php');
-		require_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
+		require_once( LIBERTY_PKG_INCLUDE_PATH.'lookup_content_inc.php' );
 
 		$module_params = $params;
 		$articlesObject = new BitArticle();

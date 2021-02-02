@@ -135,7 +135,7 @@ if( defined( 'RSS_PKG_NAME' )) {
 
 // ### Register content types
 $gBitInstaller->registerContentObjects( ARTICLES_PKG_NAME, array( 
-	'BitArticle'=>ARTICLES_PKG_PATH.'BitArticle.php',
+	'BitArticle'=>ARTICLES_PKG_CLASS_PATH.'BitArticle.php',
 ));
 
 // Requirements

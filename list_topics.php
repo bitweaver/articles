@@ -11,7 +11,7 @@
 require_once '../kernel/setup_inc.php';
 
 include_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
-include_once( ARTICLES_PKG_PATH.'lookup_article_topic_inc.php' );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_topic_inc.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );

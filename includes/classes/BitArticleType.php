@@ -11,8 +11,8 @@
 /**
  * Required setup
  */
-require_once (KERNEL_PKG_PATH."BitBase.php");
-require_once(ARTICLES_PKG_CLASS_PATH.'BitArticle.php');
+require_once( KERNEL_PKG_CLASS_PATH.'BitBase.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 /**
  * @package articles

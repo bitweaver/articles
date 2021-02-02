@@ -13,12 +13,12 @@
  * Initialization
  */
 require_once '../kernel/setup_inc.php';
-require_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
+require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'articles' );
 
-include_once 'lookup_article_inc.php';
+require_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_inc.php' );
 
 if ( $gContent->isValid() ) {
 	$gContent->verifyUpdatePermission();

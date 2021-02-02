@@ -35,7 +35,7 @@ array( 'DATADICT' => array(
 // we will try to convert article images to attachments
 array( 'PHP' => '
 	global $gBitSystem, $gBitUser;
-	require_once( LIBERTY_PKG_PATH."LibertyAttachable.php" );
+	require_once( LIBERTY_PKG_CLASS_PATH.'LibertyAttachable.php' );
 
 	$query = "
 		SELECT
@@ -185,7 +185,7 @@ array( 'PHP' => '
 	global $gBitSystem;
 	// this define is needed for backwards compatability.
 	define( "ARTICLE_TOPIC_THUMBNAIL_SIZE", 160 );
-	require_once( ARTICLES_PKG_PATH."BitArticle.php" );
+	require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 	// BitArticle has 3 sequences, each needs creating prior to execution
 	$max_articles = $gBitSystem->mDb->getOne( "SELECT MAX(`article_id`) FROM `'.BIT_DB_PREFIX.'tiki_articles`" );

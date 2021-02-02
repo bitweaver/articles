@@ -24,7 +24,7 @@ if( @$gContent->mInfo['allow_comments'] == 'y' ) {
 	$comments_object_var='article';
 	$commentsParentId = $gContent->mContentId;
 	$comments_return_url = $_SERVER['SCRIPT_NAME']."?article_id=".$_REQUEST['article_id'];
-	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
+	include_once( LIBERTY_PKG_INCLUDE_PATH.'comments_inc.php' );
 }
 
 // Display the Index Template

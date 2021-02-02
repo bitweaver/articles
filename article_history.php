@@ -27,7 +27,7 @@ if( !isset( $_REQUEST["article_id"] ) ) {
 	$gBitSystem->fatalError( tra( "No article indicated" ));
 }
 
-include_once( ARTICLES_PKG_PATH.'lookup_article_inc.php' );
+include_once( ARTICLES_PKG_INCLUDE_PATH.'lookup_article_inc.php' );
 
 //vd($gContent->mPageId);vd($gContent->mInfo);
 if( !$gContent->isValid() || empty( $gContent->mInfo ) ) {
@@ -42,7 +42,7 @@ if( $gContent->getField( 'status_id' ) != ARTICLE_STATUS_APPROVED && !( $gConten
 }
 
 $smartyContentRef = 'article';
-include_once( LIBERTY_PKG_PATH.'content_history_inc.php' );
+include_once( LIBERTY_PKG_INCLUDE_PATH.'content_history_inc.php' );
 
 $gBitSmarty->assign( 'page', $page = !empty( $_REQUEST['list_page'] ) ? $_REQUEST['list_page'] : 1 );
 $offset = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );

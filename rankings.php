@@ -10,8 +10,8 @@
  */
 require_once '../kernel/setup_inc.php';
 
-include_once( LIBERTY_PKG_PATH . 'LibertyContent.php' );
-include_once( ARTICLES_PKG_PATH . 'BitArticle.php' );
+include_once( LIBERTY_PKG_CLASS_PATH.'LibertyContent.php' );
+include_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 
 $gBitSystem->isPackageActive( 'articles' );
 $gBitSystem->isFeatureActive( 'articles_rankings' );

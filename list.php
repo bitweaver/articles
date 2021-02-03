@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-require_once '../kernel/setup_inc.php';
+require_once '../kernel/includes/setup_inc.php';
 require_once( ARTICLES_PKG_CLASS_PATH.'BitArticle.php' );
 include_once( ARTICLES_PKG_INCLUDE_PATH.'article_filter_inc.php' );
 
